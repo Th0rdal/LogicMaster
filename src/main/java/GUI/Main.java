@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class main extends Application{
+public class Main extends Application{
 
     public static void main(String[] args) {
         System.out.println("Hello world!");
@@ -16,7 +16,7 @@ public class main extends Application{
     @Override
     public void start(Stage stage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/baseScene.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/board.fxml"));
             Controller controller = Controller.getController(stage);
             loader.setController(controller);
             Parent root = loader.load();
