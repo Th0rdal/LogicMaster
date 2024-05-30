@@ -1,5 +1,6 @@
 package GUI;
 
+import GUI.utilities.BoardCoordinate;
 import javafx.scene.layout.StackPane;
 
 /**

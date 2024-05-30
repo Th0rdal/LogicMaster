@@ -1,7 +1,8 @@
-package GUI;
+package GUI.utilities;
 
 public class BoardCoordinate {
 
+    // the locations are between 1 and 8!!!
     private int xLocation, yLocation;
 
     public BoardCoordinate(int x, int y) {
@@ -16,6 +17,11 @@ public class BoardCoordinate {
     @Override
     public String toString() {
         char xChar = (char) ('A' + xLocation);
+        return "" + xChar + (char) (yLocation + '0');
+    }
+
+    public String toLowerCaseString() {
+        char xChar = (char) ('a' + xLocation);
         return "" + xChar + (char) (yLocation + '0');
     }
 
