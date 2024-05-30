@@ -1,9 +1,10 @@
 package GUI;
 
+import GUI.piece.*;
+import GUI.utilities.BoardCoordinate;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -14,7 +15,7 @@ import java.util.Objects;
 
 public class Controller {
 
-    private Stage stage;
+    private final Stage stage;
     private static Controller controller = null;
 
     @FXML
@@ -30,19 +31,38 @@ public class Controller {
     boolean selected = false; //true if a pane is currently selected
     BoardCoordinate startCoordinates;   //saves the start coordinations of the selected pane
     boolean whiteSideDown = true;   //TODO change. just a placeholder for board rotation. if true, white is starting on the bottom
-    int[][] boardPiecesArray = new int[8][8];
+    private final ArrayList<Piece> pieces = new ArrayList<>();
 
 
 
     private Controller(Stage stage) {
         this.stage = stage;
-        for (int[] tempArray : boardPiecesArray) {
-            for (int temp : tempArray) {
-                temp = 0;
-            }
+
+        // add all black pieces
+        for (int i = 1; i <= 8; i++) {
+            pieces.add(new Pawn(new BoardCoordinate(i, 7), false));
         }
-        boardPiecesArray[1][1] = 1;
-        boardPiecesArray[2][2] = 1;
+        pieces.add(new Rook(new BoardCoordinate(1, 8), false));
+        pieces.add(new Rook(new BoardCoordinate(8, 8), false));
+        pieces.add(new King(new BoardCoordinate(5, 8), false));
+        pieces.add(new Queen(new BoardCoordinate(4, 8), false));
+        pieces.add(new Knight(new BoardCoordinate(2, 8), false));
+        pieces.add(new Knight(new BoardCoordinate(7, 8), false));
+        pieces.add(new Bishop(new BoardCoordinate(3, 8), false));
+        pieces.add(new Bishop(new BoardCoordinate(6, 8), false));
+
+        // add all white pieces
+        for (int i = 1; i <= 8; i++) {
+            pieces.add(new Pawn(new BoardCoordinate(i, 2), true));
+        }
+        pieces.add(new Rook(new BoardCoordinate(1, 1), true));
+        pieces.add(new Rook(new BoardCoordinate(8, 1), true));
+        pieces.add(new King(new BoardCoordinate(5, 1), true));
+        pieces.add(new Queen(new BoardCoordinate(4, 1), true));
+        pieces.add(new Knight(new BoardCoordinate(2, 1), true));
+        pieces.add(new Knight(new BoardCoordinate(7, 1), true));
+        pieces.add(new Bishop(new BoardCoordinate(3, 1), true));
+        pieces.add(new Bishop(new BoardCoordinate(6, 1), true));
     }
 
     public static Controller getController(Stage stage) {
@@ -55,7 +75,7 @@ public class Controller {
 
 
     public void loadBoard() {
-        /**
+        /*
          * This function loads the board with squares and gives each square a chess board color
          */
 
@@ -71,13 +91,8 @@ public class Controller {
             }
         }
 
-        // add pieces to board
-        for (int row = 0; row < size; row++) {
-            for (int col = 0; col < size; col++) {
-                if (boardPiecesArray[row][col] == 1) {
-                    board.add(this.addPiece(), row, col);
-                }
-            }
+        for (Piece piece : pieces) {
+            board.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
         }
 
         board.setOnMousePressed(event -> {
@@ -129,7 +144,6 @@ public class Controller {
 
             if (!Objects.equals(startCoordinates, tempCoordinates)) {
                 //TODO add code here when a player moved a piece
-                int moved;
                 selected = false;
                 //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
                 selectedPane = null;
@@ -148,7 +162,6 @@ public class Controller {
                 tempView.setLayoutX(round((int) event.getX(), 2));
                 tempView.setLayoutY(round((int) event.getY(), 2));
                 //TODO add code here when a player moved a piece
-                int moved;
                 selected = false;
                 //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
                 selectedPane = null;
@@ -158,7 +171,7 @@ public class Controller {
     }
 
     private int round(int value, int position) {
-        /**
+        /*
          * Rounds value up to the nearest integer value based on position.
          * @param value: value of the integer to round.
          * @param position: position round up to. 1 = ones position, 2 = tens position, ...
@@ -175,20 +188,4 @@ public class Controller {
 
     }
 
-    private Pane addPiece() {
-        Image image = new Image(getClass().getResourceAsStream("/images/pawn.png"));
-        ImageView imageView = new ImageView(image);
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
-
-        Pane pane = new Pane();
-        pane.prefWidthProperty().bind(imageView.fitWidthProperty());
-        pane.prefHeightProperty().bind(imageView.fitHeightProperty());
-        pane.getChildren().add(imageView);
-        imageView.setLayoutX(0);
-        imageView.setLayoutY(0);
-
-        return pane;
-    }
 }

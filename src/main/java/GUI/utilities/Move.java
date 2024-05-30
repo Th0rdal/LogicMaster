@@ -43,7 +43,7 @@ public class Move {
         }
 
         StringBuilder builder = new StringBuilder();
-        builder.append(PIECE_ID.toAbbriviation(this.piece_ID));
+        builder.append(PIECE_ID.toAbbreviation(this.piece_ID));
         if (this.ambiguous) {
             builder.append(oldPosition.toLowerCaseString());
         }
@@ -53,7 +53,7 @@ public class Move {
         builder.append(newPosition.toLowerCaseString());
 
         if (this.specialMove == SPECIAL_MOVE.PROMOTION) {
-            builder.append("=").append(PIECE_ID.toAbbriviation(this.promotion_ID));
+            builder.append("=").append(PIECE_ID.toAbbreviation(this.promotion_ID));
         } else if (this.specialMove == SPECIAL_MOVE.EN_PASSANT) {
             builder.append(" e.p.");
         }
