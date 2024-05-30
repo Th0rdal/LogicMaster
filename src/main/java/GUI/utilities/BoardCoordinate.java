@@ -9,6 +9,24 @@ public class BoardCoordinate {
         xLocation = x;
         yLocation = y;
     }
+    public BoardCoordinate(String coordinate) {
+        if (coordinate.length() != 2) {
+            //TODO change to useful Error
+            throw new RuntimeException("coordinate is not 2 character!");
+        }
+
+        char row = coordinate.charAt(0);
+        if (Character.isDigit(row)) {
+            xLocation = Integer.parseInt(coordinate);
+        } else {
+            if (Character.isLowerCase(row)) {
+                xLocation = Character.getNumericValue(row - 'a');
+            } else {
+                xLocation = Character.getNumericValue(row - 'A');
+            }
+        }
+        yLocation = Character.getNumericValue(coordinate.charAt(1));
+    }
 
     public int getLocationInt() {
         return xLocation * 10 + yLocation;
