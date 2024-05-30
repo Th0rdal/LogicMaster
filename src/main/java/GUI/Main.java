@@ -1,5 +1,6 @@
 package GUI;
 
+import GUI.utilities.boardConverter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,6 +11,7 @@ public class Main extends Application{
 
     public static void main(String[] args) {
         System.out.println("Hello world!");
+        boardConverter.loadFEN("rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 1");
         launch();
     }
 
@@ -22,7 +24,7 @@ public class Main extends Application{
             Parent root = loader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-            controller.loadBoard();
+            controller.startNewBoard();
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
