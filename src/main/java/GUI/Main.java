@@ -22,6 +22,7 @@ public class Main extends Application{
             Parent root = loader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            controller.loadBoard();
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
