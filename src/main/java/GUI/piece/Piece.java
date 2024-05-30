@@ -52,4 +52,15 @@ public abstract class Piece {
         return this.coordinate.getYLocation();
     }
 
+    public BoardCoordinate getCoordinates() {
+        return this.coordinate;
+    }
+
+    public PIECE_ID getID() {
+        return this.id;
+    }
+
+    public boolean isWhite() {
+        return this.isWhite;
+    }
 }

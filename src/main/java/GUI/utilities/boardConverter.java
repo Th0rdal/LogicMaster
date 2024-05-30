@@ -2,7 +2,6 @@ package GUI.utilities;
 
 import GUI.piece.*;
 
-import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 
 public class boardConverter {
@@ -62,7 +61,6 @@ public class boardConverter {
                 colCounter=1;
             }
         }
-        System.out.println(whiteTurn);
         return pieces;
     }
 

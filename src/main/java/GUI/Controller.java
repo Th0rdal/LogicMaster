@@ -10,16 +10,15 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Controller {
 
-    private final Stage stage;
+    private Stage stage = null;
     private static Controller controller = null;
 
     @FXML
-    private GridPane board;
+    private GridPane visualBoard;
     @FXML
     private AnchorPane anchorPane;
 
@@ -31,38 +30,11 @@ public class Controller {
     boolean selected = false; //true if a pane is currently selected
     BoardCoordinate startCoordinates;   //saves the start coordinations of the selected pane
     boolean whiteSideDown = true;   //TODO change. just a placeholder for board rotation. if true, white is starting on the bottom
-    private final ArrayList<Piece> pieces = new ArrayList<>();
-
+    Board board;
 
 
     private Controller(Stage stage) {
         this.stage = stage;
-
-        // add all black pieces
-        for (int i = 1; i <= 8; i++) {
-            pieces.add(new Pawn(new BoardCoordinate(i, 7), false));
-        }
-        pieces.add(new Rook(new BoardCoordinate(1, 8), false));
-        pieces.add(new Rook(new BoardCoordinate(8, 8), false));
-        pieces.add(new King(new BoardCoordinate(5, 8), false));
-        pieces.add(new Queen(new BoardCoordinate(4, 8), false));
-        pieces.add(new Knight(new BoardCoordinate(2, 8), false));
-        pieces.add(new Knight(new BoardCoordinate(7, 8), false));
-        pieces.add(new Bishop(new BoardCoordinate(3, 8), false));
-        pieces.add(new Bishop(new BoardCoordinate(6, 8), false));
-
-        // add all white pieces
-        for (int i = 1; i <= 8; i++) {
-            pieces.add(new Pawn(new BoardCoordinate(i, 2), true));
-        }
-        pieces.add(new Rook(new BoardCoordinate(1, 1), true));
-        pieces.add(new Rook(new BoardCoordinate(8, 1), true));
-        pieces.add(new King(new BoardCoordinate(5, 1), true));
-        pieces.add(new Queen(new BoardCoordinate(4, 1), true));
-        pieces.add(new Knight(new BoardCoordinate(2, 1), true));
-        pieces.add(new Knight(new BoardCoordinate(7, 1), true));
-        pieces.add(new Bishop(new BoardCoordinate(3, 1), true));
-        pieces.add(new Bishop(new BoardCoordinate(6, 1), true));
     }
 
     public static Controller getController(Stage stage) {
@@ -72,7 +44,16 @@ public class Controller {
         return Controller.controller;
     }
 
+    public void clearBoard() {
+        this.visualBoard.getChildren().clear();
+    }
 
+    public void startNewBoard() {
+        this.clearBoard();
+        this.board = new Board();
+        this.board.loadStartPosition();
+        this.loadBoard();
+    }
 
     public void loadBoard() {
         /*
@@ -84,31 +65,35 @@ public class Controller {
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 Square square = new Square(row, col);
-                this.board.add(square, row, col, 1, 1);
+                this.visualBoard.add(square, row, col, 1, 1);
                 Color color = (row + col) % 2 == 0 ? this.color1 : this.color2;
                 square.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
 
             }
         }
 
-        for (Piece piece : pieces) {
-            board.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
+        for (Piece piece : this.board.getPieces()) {
+            visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
         }
 
-        board.setOnMousePressed(event -> {
-            for (Node node : board.getChildren()) {
+        visualBoard.setOnMousePressed(event -> {
+            for (Node node : visualBoard.getChildren()) {
                 if (node instanceof Pane && !(node instanceof StackPane)) {
                     Pane tempPane = (Pane) node;
                     if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) { // mouse is in a pane
-                        selectedPane = tempPane;
                         //tempPane.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null))); if change of selected pane is needed
                         startCoordinates = new BoardCoordinate((int) Math.floor(event.getX()/100), whiteSideDown ? 8 - (int) Math.floor(event.getY()/100) : (int) Math.floor(event.getY()/100));
+                        if (this.board.isUsablePiece(startCoordinates)) {
+                            selectedPane = tempPane;
+                        } else {
+                            startCoordinates = null;
+                        }
                     }
                 }
             }
         });
 
-        board.setOnMouseDragged(event -> {
+        visualBoard.setOnMouseDragged(event -> {
             if (selectedPane == null) {
                 return;
             }
@@ -121,53 +106,58 @@ public class Controller {
             tempView.setLayoutY(tempY);
         });
 
-        board.setOnMouseReleased(event -> {
+        visualBoard.setOnMouseReleased(event -> {
             if (selectedPane == null) {
                 return;
             }
 
-            ImageView tempView = (ImageView) selectedPane.getChildren().get(0);
-
-            if (event.getX() < 0 || event.getX() > board.getWidth() ||event.getY() < 0 || event.getY() > board.getHeight()) {
-                tempView.setLayoutX(0);
-                tempView.setLayoutY(0);
-                return;
-            }
-
-            int tempX = (round((int) (event.getX()), 2) / 100);
-            int tempY = (round((int) (event.getY()), 2) / 100);
-            BoardCoordinate tempCoordinates = new BoardCoordinate(tempX, whiteSideDown ? 8 - (int) Math.floor(event.getY()/100) : tempY);
-            GridPane.setRowIndex(selectedPane, tempY);
-            GridPane.setColumnIndex(selectedPane, tempX);
-            tempView.setLayoutX(0);
-            tempView.setLayoutY(0);
-
-            if (!Objects.equals(startCoordinates, tempCoordinates)) {
-                //TODO add code here when a player moved a piece
-                selected = false;
-                //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
-                selectedPane = null;
-            }
-
+            this.makeMove((int) event.getX(), (int) event.getY());
         });
 
-        board.setOnMouseClicked(event -> {
+        visualBoard.setOnMouseClicked(event -> {
             if (selectedPane == null) {
                 return;
             }
 
             if (selected) {
-                selected = false;
-                ImageView tempView = (ImageView) selectedPane.getChildren().get(0);
-                tempView.setLayoutX(round((int) event.getX(), 2));
-                tempView.setLayoutY(round((int) event.getY(), 2));
-                //TODO add code here when a player moved a piece
-                selected = false;
-                //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
-                selectedPane = null;
+                this.makeMove((int) event.getX(), (int) event.getY());
             }
         });
         stage.show();
+    }
+
+    private void makeMove(int x, int y) {
+        ImageView tempView = (ImageView) selectedPane.getChildren().get(0);
+
+        // if this is true, the mouse is outside the board
+        if (x < 0 || x > visualBoard.getWidth() || y < 0 || y > visualBoard.getHeight()) {
+            tempView.setLayoutX(0);
+            tempView.setLayoutY(0);
+            return;
+        }
+
+        int tempX = (round((int) (x), 2) / 100);
+        int tempY = (round((int) (y), 2) / 100);
+
+        if (tempY >= 8 || tempX >= 8) { // if tempX/Y is 8 or more, it is outside the board
+            tempView.setLayoutX(0);
+            tempView.setLayoutY(0);
+            return;
+        }
+
+        BoardCoordinate tempCoordinates = new BoardCoordinate(tempX, whiteSideDown ? 8 - (int) (double) (y / 100) : tempY);
+        GridPane.setRowIndex(selectedPane, tempY);
+        GridPane.setColumnIndex(selectedPane, tempX);
+        tempView.setLayoutX(0);
+        tempView.setLayoutY(0);
+
+        if (!Objects.equals(startCoordinates, tempCoordinates)) {
+            //TODO add code here when a player moved a piece
+            selected = false;
+            //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
+            selectedPane = null;
+            board.makeMove(startCoordinates, tempCoordinates);
+        }
     }
 
     private int round(int value, int position) {
