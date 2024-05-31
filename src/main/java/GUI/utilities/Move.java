@@ -2,15 +2,20 @@ package GUI.utilities;
 
 import GUI.piece.PIECE_ID;
 
+/**
+ * Represents a move
+ * IDEA: get this from the algorithm and convert it into this form to save it in the DB later on
+ */
 public class Move {
-    /**
-     * IDEA: get this from the algorithm and convert it into this form to save it in the DB later on
-     */
 
-    private BoardCoordinate oldPosition, newPosition;
-    private PIECE_ID piece_ID, promotion_ID;
-    private boolean capture, check, checkmate, ambiguous;
-    private SPECIAL_MOVE specialMove;
+
+    private BoardCoordinate oldPosition, newPosition; // board start and end position of the piece
+
+
+    private PIECE_ID piece_ID; // piece that moved if castling, the king should be the piece_id
+    private PIECE_ID promotion_ID; // piece promotion ID
+    private boolean capture, check, checkmate, ambiguous; // different flags
+    private SPECIAL_MOVE specialMove; // represents if a special move was made (e.g., en passant)
 
 
     public Move(PIECE_ID piece_ID,

@@ -2,9 +2,12 @@ package GUI;
 
 import GUI.piece.*;
 import GUI.utilities.BoardCoordinate;
+import GUI.utilities.Calculator;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -21,6 +24,12 @@ public class Controller {
     private GridPane visualBoard;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private Label clockOpponentLabel;
+    @FXML
+    private Label clockPlayerLabel;
+    @FXML
+    private Label moveHistoryTextField;
 
     // colors used for the board
     Color color1 = Color.SIENNA;
@@ -35,6 +44,7 @@ public class Controller {
 
     private Controller(Stage stage) {
         this.stage = stage;
+        this.board = new Board();
     }
 
     public static Controller getController(Stage stage) {
@@ -44,17 +54,27 @@ public class Controller {
         return Controller.controller;
     }
 
+    /**
+     * Resets the board
+     */
     public void clearBoard() {
         this.visualBoard.getChildren().clear();
+        this.board.clearBoard();
     }
 
+    /**
+     * Clears everything and starts a new board
+     */
     public void startNewBoard() {
         this.clearBoard();
-        this.board = new Board();
         this.board.loadStartPosition();
         this.loadBoard();
     }
 
+    /**
+     * creates the board visually and adds all the pieces based on the board variable
+     * adds event listeners for piece movement
+     */
     public void loadBoard() {
         /*
          * This function loads the board with squares and gives each square a chess board color
@@ -75,6 +95,8 @@ public class Controller {
         for (Piece piece : this.board.getPieces()) {
             visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
         }
+
+        this.board.loadClocks(this.clockOpponentLabel, this.clockPlayerLabel);
 
         visualBoard.setOnMousePressed(event -> {
             for (Node node : visualBoard.getChildren()) {
@@ -111,7 +133,7 @@ public class Controller {
                 return;
             }
 
-            this.makeMove((int) event.getX(), (int) event.getY());
+            this.checkMovePossible((int) event.getX(), (int) event.getY());
         });
 
         visualBoard.setOnMouseClicked(event -> {
@@ -120,13 +142,18 @@ public class Controller {
             }
 
             if (selected) {
-                this.makeMove((int) event.getX(), (int) event.getY());
+                this.checkMovePossible((int) event.getX(), (int) event.getY());
             }
         });
         stage.show();
     }
 
-    private void makeMove(int x, int y) {
+    /**
+     * handles a made move
+     * @param x: x position of the mouse
+     * @param y: y position of the mouse
+     */
+    private void checkMovePossible(int x, int y) {
         ImageView tempView = (ImageView) selectedPane.getChildren().get(0);
 
         // if this is true, the mouse is outside the board
@@ -136,8 +163,8 @@ public class Controller {
             return;
         }
 
-        int tempX = (round((int) (x), 2) / 100);
-        int tempY = (round((int) (y), 2) / 100);
+        int tempX = (Calculator.round((x), 2) / 100);
+        int tempY = (Calculator.round((y), 2) / 100);
 
         if (tempY >= 8 || tempX >= 8) { // if tempX/Y is 8 or more, it is outside the board
             tempView.setLayoutX(0);
@@ -152,30 +179,17 @@ public class Controller {
         tempView.setLayoutY(0);
 
         if (!Objects.equals(startCoordinates, tempCoordinates)) {
-            //TODO add code here when a player moved a piece
-            selected = false;
-            //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
-            selectedPane = null;
-            board.makeMove(startCoordinates, tempCoordinates);
+            this.makeMove(tempCoordinates);
         }
     }
 
-    private int round(int value, int position) {
-        /*
-         * Rounds value up to the nearest integer value based on position.
-         * @param value: value of the integer to round.
-         * @param position: position round up to. 1 = ones position, 2 = tens position, ...
-         */
-
-        int divider = (int) Math.pow(10, position);
-        float tempValue = (float) value / divider;
-        int tempChooser = value % divider;
-        if (tempChooser > 85) { // value is bigger than 75 (e.g., 278 -> 300)
-            return (int) (Math.ceil(tempValue) * divider);
-        } else {
-            return (int) (Math.floor(tempValue) * divider);
-        }
-
+    private void makeMove(BoardCoordinate tempCoordinates) {
+        selected = false;
+        //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
+        selectedPane = null;
+        board.makeMove(startCoordinates, tempCoordinates);
     }
+
+
 
 }

@@ -4,29 +4,31 @@ import GUI.utilities.BoardCoordinate;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+/**
+ * Represents a piece on the board
+ */
 public abstract class Piece {
-    /**
-     * Represents a Piece on the Board.
-     */
 
-    protected BoardCoordinate coordinate;
-    protected String path;
-    protected PIECE_ID id;
-    boolean isWhite;
+    protected BoardCoordinate coordinate; // coordinates of the piece
+    protected String path; // path to the image TODO replace with a new class that loads and returns based on id
+    protected PIECE_ID id; // piece ID
+    boolean isWhite; // true if the piece is white
 
     public Piece(PIECE_ID id, BoardCoordinate coordinate, boolean isWhite) {
         this.id = id;
         this.coordinate = coordinate;
         this.isWhite = isWhite;
     }
+
     public abstract void getMoves(); // get this from algorithm and just return it
     public abstract void makeMove(BoardCoordinate newCoordinates); // change to be a move from a movelist
 
+    /**
+     * Prepares the Pane to be added to the board
+     * @param imageView:  ImageView representing the image
+     * @return Pane wrapped around the ImageView
+     */
     protected Pane prepareImage(ImageView imageView) {
-        /*
-         * prepares the Pane to be added to the board
-         * @param imageView: ImageView representing the image
-         */
         //image config
         imageView.setPreserveRatio(true);
         imageView.setFitWidth(100);
@@ -42,6 +44,7 @@ public abstract class Piece {
         imageView.setLayoutY(0);
         return pane;
     }
+
     public abstract Pane getPieceImage();
 
     public int getLocationX() {

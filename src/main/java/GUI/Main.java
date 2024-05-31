@@ -11,7 +11,6 @@ public class Main extends Application{
 
     public static void main(String[] args) {
         System.out.println("Hello world!");
-        boardConverter.loadFEN("rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 1");
         launch();
     }
 

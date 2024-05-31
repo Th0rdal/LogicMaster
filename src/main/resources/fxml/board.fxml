@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane fx:id="visualBoard" layoutX="125.0" layoutY="50.0" prefHeight="800.0" prefWidth="800.0">
         <columnConstraints>
@@ -29,5 +30,8 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
+      <Label fx:id="clockOpponentLabel" layoutX="20.0" layoutY="230.0" prefHeight="40.0" prefWidth="65.0" text="Label" />
+      <Label fx:id="clockPlayerLabel" layoutX="20.0" layoutY="630.0" prefHeight="40.0" prefWidth="65.0" text="Label" />
+      <Label fx:id="moveHistoryTextField" alignment="TOP_LEFT" layoutX="940.0" layoutY="50.0" prefHeight="800.0" prefWidth="140.0" text="Label" />
    </children>
 </AnchorPane>
