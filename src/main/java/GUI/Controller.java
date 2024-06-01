@@ -3,11 +3,11 @@ package GUI;
 import GUI.piece.*;
 import GUI.utilities.BoardCoordinate;
 import GUI.utilities.Calculator;
+import GUI.utilities.BoardConverter;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
@@ -106,6 +106,8 @@ public class Controller {
         }
 
         this.board.loadClocks(this.clockOpponentLabel, this.clockPlayerLabel);
+
+        BoardConverter.toBitboard(this.board);
 
         visualBoard.setOnMousePressed(event -> {
             for (Node node : visualBoard.getChildren()) {

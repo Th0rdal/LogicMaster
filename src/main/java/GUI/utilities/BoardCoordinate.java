@@ -29,7 +29,7 @@ public class BoardCoordinate {
     }
 
     public int getLocationInt() {
-        return xLocation * 10 + yLocation;
+        return xLocation + (yLocation - 1) * 8 - 1;
     }
 
     @Override

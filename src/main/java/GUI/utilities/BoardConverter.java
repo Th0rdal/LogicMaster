@@ -5,7 +5,7 @@ import GUI.piece.*;
 
 import java.util.ArrayList;
 
-public class boardConverter {
+public class BoardConverter {
 
     /**
      * loads FEN notation and converts it into a board
@@ -56,9 +56,9 @@ public class boardConverter {
             }
             if (Character.isLetter(c)) {
                 if (Character.isUpperCase(c)) {
-                    pieces.add(boardConverter.getPiece(Character.toLowerCase(c), true, rowCounter, colCounter));
+                    pieces.add(BoardConverter.getPiece(Character.toLowerCase(c), true, rowCounter, colCounter));
                 } else {
-                    pieces.add(boardConverter.getPiece(c, false, rowCounter, colCounter));
+                    pieces.add(BoardConverter.getPiece(c, false, rowCounter, colCounter));
                 }
             } else if (Character.isDigit(c)) {
                 colCounter += Character.getNumericValue(c);
@@ -106,4 +106,34 @@ public class boardConverter {
         //TODO exchange with useful message and Error
         throw new RuntimeException(message);
     }
+
+    public static long[] toBitboard(Board board) {
+        long[] bitboard = new long[9];
+        for (int i = 0; i < 9; i++) {
+            bitboard[i] = 0;
+        }
+        int occupancy = 0;
+        int pawn = 1, knight = 2, bishop = 3, rook = 4, queen = 5, king = 6;
+        int white = 7, black = 8;
+
+        for (Piece piece : board.getPieces()) {
+            long mask = 1L << piece.getCoordinates().getLocationInt();
+            bitboard[occupancy] |= mask;
+            switch (piece.getID()) {
+                case PAWN -> bitboard[pawn] |= mask;
+                case KNIGHT -> bitboard[knight] |= mask;
+                case BISHOP -> bitboard[bishop] |= mask;
+                case ROOK -> bitboard[rook] |= mask;
+                case QUEEN -> bitboard[queen] |= mask;
+                case KING -> bitboard[king] |= mask;
+            }
+            if (piece.isWhite()) {
+                bitboard[white] |= mask;
+            } else {
+                bitboard[black] |= mask;
+            }
+        }
+        return bitboard;
+    }
+
 }
