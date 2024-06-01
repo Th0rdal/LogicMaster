@@ -34,7 +34,7 @@ public class BoardCoordinate {
 
     @Override
     public String toString() {
-        char xChar = (char) ('A' + xLocation);
+        char xChar = (char) ('@' + xLocation);
         return "" + xChar + (char) (yLocation + '0');
     }
 

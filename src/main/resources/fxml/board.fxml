@@ -30,8 +30,8 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Label fx:id="clockOpponentLabel" layoutX="20.0" layoutY="230.0" prefHeight="40.0" prefWidth="65.0" text="Label" />
-      <Label fx:id="clockPlayerLabel" layoutX="20.0" layoutY="630.0" prefHeight="40.0" prefWidth="65.0" text="Label" />
+      <Label fx:id="clockOpponentLabel" layoutX="10.0" layoutY="230.0" prefHeight="40.0" prefWidth="85.0" text="Label" />
+      <Label fx:id="clockPlayerLabel" layoutX="10.0" layoutY="630.0" prefHeight="40.0" prefWidth="85.0" text="Label" />
       <Label fx:id="moveHistoryTextField" alignment="TOP_LEFT" layoutX="940.0" layoutY="50.0" prefHeight="800.0" prefWidth="140.0" text="Label" />
    </children>
 </AnchorPane>

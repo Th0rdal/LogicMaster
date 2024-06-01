@@ -4,9 +4,13 @@ import GUI.piece.*;
 import GUI.utilities.BoardCoordinate;
 import GUI.utilities.Calculator;
 import GUI.utilities.Move;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -21,7 +25,7 @@ public class Board {
     private static Board instance = null;
 
     // hard coded Clock time = 10 minutes
-    private static final int CLOCKTIME = 1 * 60 * 10;
+    private static final int CLOCKTIME = 1 * 60 * 60 * 10;
 
     private ArrayList<Piece> pieces = new ArrayList<>(); // contains all pieces currently on the board
 
@@ -155,7 +159,19 @@ public class Board {
         this.firstMoveMade = true;
     }
 
-
+    /**
+     * removes a piece from the piece list.
+     * @param coordinates: Coordinates of the piece to remove
+     * @return true if piece was removed, else false
+     */
+    public boolean removePiece(BoardCoordinate coordinates) {
+        Piece piece = this.getPieceAtCoordinates(coordinates);
+        if (piece != null) {
+            this.pieces.remove(piece);
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Loads and configures the clocks
@@ -166,27 +182,53 @@ public class Board {
         this.clockOpponentCounter = CLOCKTIME;
         this.clockPlayerCounter = CLOCKTIME;
 
+        // creates Timelines that trigger every 0.1 seconds
         this.clockOpponent = new Timeline( // defines new Timeline for the opponents clock (top of board)
             new KeyFrame(Duration.seconds(0.1), event -> {
                 clockOpponentCounter--;
-
                 opponentLabel.setText(Calculator.getClockTimeInFormat(clockOpponentCounter));
             })
         );
         this.clockPlayer = new Timeline( // defines new Timeline for the player clock (bottom of the board)
             new KeyFrame(Duration.seconds(0.1), event -> {
                 clockPlayerCounter--;
-                playerLabel.setText(String.valueOf(Calculator.getClockTimeInFormat(clockPlayerCounter)));
+                playerLabel.setText(Calculator.getClockTimeInFormat(clockPlayerCounter));
             })
         );
+
+        // changes background olor of the running clock to black and text color to white
+        this.clockOpponent.statusProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Timeline.Status.PAUSED) {
+                opponentLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+                opponentLabel.setTextFill(Color.BLACK);
+            }
+        });
+        this.clockOpponent.statusProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Timeline.Status.RUNNING) {
+                opponentLabel.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+                opponentLabel.setTextFill(Color.WHITE);
+            }
+        });
+        this.clockPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Timeline.Status.PAUSED) {
+                playerLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+                playerLabel.setTextFill(Color.BLACK);
+            }
+        });
+        this.clockPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == Timeline.Status.RUNNING) {
+                playerLabel.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+                playerLabel.setTextFill(Color.WHITE);
+            }
+        });
 
         //set clock time
         this.clockOpponent.setCycleCount(CLOCKTIME);
         this.clockPlayer.setCycleCount(CLOCKTIME);
 
         //sets clocks for the first time
-        opponentLabel.setText(String.valueOf(this.clockOpponentCounter));
-        playerLabel.setText(String.valueOf(this.clockPlayerCounter));
+        opponentLabel.setText(Calculator.getClockTimeInFormat(clockOpponentCounter));
+        playerLabel.setText(Calculator.getClockTimeInFormat(clockPlayerCounter));
     }
 
     /**
@@ -216,6 +258,7 @@ public class Board {
         this.currentTimeStopped = temp;
 
     }
+
 
     public void loadConfiguration(
             ArrayList<Piece> pieces,

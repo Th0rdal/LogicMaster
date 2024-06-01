@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 
@@ -41,6 +42,9 @@ public class Controller {
     boolean whiteSideDown = true;   //TODO change. just a placeholder for board rotation. if true, white is starting on the bottom
     Board board;
 
+    //TODO change this to be better. currently saving the same thing here and on board
+    private Label clockCurrentlyRunning;
+    private Label clockCurrentlyNotRunning;
 
     private Controller(Stage stage) {
         this.stage = stage;
@@ -80,6 +84,11 @@ public class Controller {
          * This function loads the board with squares and gives each square a chess board color
          */
 
+        this.clockOpponentLabel.setFont(Font.font("Arial", 22));
+        this.clockPlayerLabel.setFont(Font.font("Arial", 22));
+        clockOpponentLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        clockPlayerLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+
         // adding squares to board
         int size = 8;
         for (int row = 0; row < size; row++) {
@@ -104,7 +113,7 @@ public class Controller {
                     Pane tempPane = (Pane) node;
                     if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) { // mouse is in a pane
                         //tempPane.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null))); if change of selected pane is needed
-                        startCoordinates = new BoardCoordinate((int) Math.floor(event.getX()/100), whiteSideDown ? 8 - (int) Math.floor(event.getY()/100) : (int) Math.floor(event.getY()/100));
+                        startCoordinates = new BoardCoordinate((int) Math.floor(event.getX()/100)+1, whiteSideDown ? 8 - (int) Math.floor(event.getY()/100) : (int) Math.floor(event.getY()/100));
                         if (this.board.isUsablePiece(startCoordinates)) {
                             selectedPane = tempPane;
                         } else {
@@ -119,6 +128,8 @@ public class Controller {
             if (selectedPane == null) {
                 return;
             }
+
+            selectedPane.toFront();
 
             ImageView tempView = (ImageView) selectedPane.getChildren().get(0);
 
@@ -172,7 +183,22 @@ public class Controller {
             return;
         }
 
-        BoardCoordinate tempCoordinates = new BoardCoordinate(tempX, whiteSideDown ? 8 - (int) (double) (y / 100) : tempY);
+        BoardCoordinate tempCoordinates = new BoardCoordinate(tempX+1, whiteSideDown ? 8 - (int) (double) (y / 100) : tempY);
+
+        //TODO with movelist. this is just substitute until that is implemented
+        System.out.println(tempCoordinates);
+        Piece piece = this.board.getPieceAtCoordinates(tempCoordinates);
+        if (piece != null) {
+            if (piece.isWhite() == board.isWhiteTurn()) {
+                tempView.setLayoutX(0);
+                tempView.setLayoutY(0);
+                return;
+            } else if (piece.isWhite() != board.isWhiteTurn()) {
+                this.visualBoard.getChildren().remove(piece.getPieceImage());
+                this.board.removePiece(tempCoordinates);
+            }
+        }
+
         GridPane.setRowIndex(selectedPane, tempY);
         GridPane.setColumnIndex(selectedPane, tempX);
         tempView.setLayoutX(0);
@@ -189,7 +215,6 @@ public class Controller {
         selectedPane = null;
         board.makeMove(startCoordinates, tempCoordinates);
     }
-
 
 
 }

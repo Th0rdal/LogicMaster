@@ -12,7 +12,8 @@ public abstract class Piece {
     protected BoardCoordinate coordinate; // coordinates of the piece
     protected String path; // path to the image TODO replace with a new class that loads and returns based on id
     protected PIECE_ID id; // piece ID
-    boolean isWhite; // true if the piece is white
+    protected boolean isWhite; // true if the piece is white
+    private Pane thisPane = null;
 
     public Piece(PIECE_ID id, BoardCoordinate coordinate, boolean isWhite) {
         this.id = id;
@@ -29,6 +30,10 @@ public abstract class Piece {
      * @return Pane wrapped around the ImageView
      */
     protected Pane prepareImage(ImageView imageView) {
+        if (this.thisPane != null) {
+            return this.thisPane;
+        }
+
         //image config
         imageView.setPreserveRatio(true);
         imageView.setFitWidth(100);
@@ -42,6 +47,7 @@ public abstract class Piece {
 
         imageView.setLayoutX(0);
         imageView.setLayoutY(0);
+        this.thisPane = pane;
         return pane;
     }
 
@@ -65,5 +71,9 @@ public abstract class Piece {
 
     public boolean isWhite() {
         return this.isWhite;
+    }
+
+    public Pane getThisPane() {
+        return this.thisPane;
     }
 }

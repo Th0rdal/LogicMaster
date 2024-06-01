@@ -27,10 +27,13 @@ public class Calculator {
      */
     public static String getClockTimeInFormat(int timeInTensOfSecond) {
         java.time.Duration duration = java.time.Duration.ofMillis(timeInTensOfSecond* 100L);
-        long minutes = duration.toMinutes();
         String time;
-        if (minutes == 0) { // if last minute, show first digit of ms as well
-            long seconds = duration.toSeconds();
+        long hours = duration.toHours();
+        long minutes = duration.minusHours(hours).toMinutes();
+        long seconds = duration.minusHours(hours).minusMinutes(minutes).toSeconds();
+        if (hours > 0) {
+            time = String.format("%01d:%02d:%02d", hours, minutes, seconds);
+        } else if (minutes == 0) { // if last minute, show first digit of ms as well
             time = String.format("%02d:%02d:%01d", minutes, seconds, duration.minusSeconds(seconds).toMillis() / 100);
         } else {
             time = String.format("%02d:%02d", minutes, duration.minusMinutes(minutes).toSeconds());
