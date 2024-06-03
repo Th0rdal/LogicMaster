@@ -35,13 +35,22 @@ public class Pawn extends Piece{
         this.coordinate = newCoordinates;
     }
 
-    @Override
-    public Pane getPieceImage() {
-        return this.prepareImage(new ImageView(ImageLoader.getImage(this.id, this.isWhite)));
-    }
-
-    public Queen promote() {
-        return new Queen(this.coordinate, this.isWhite);
+    public Piece promote(PIECE_ID id) {
+        switch (id) {
+            case BISHOP -> {
+                return new Bishop(this.coordinate, this.isWhite);
+            }
+            case KNIGHT -> {
+                return new Knight(this.coordinate, this.isWhite);
+            }
+            case ROOK -> {
+                return new Rook(this.coordinate, this.isWhite);
+            }
+            case QUEEN -> {
+                return new Queen(this.coordinate, this.isWhite);
+            }
+        }
+        return null;
     }
 
 }

@@ -1,6 +1,7 @@
 package GUI.piece;
 
 import GUI.utilities.BoardCoordinate;
+import GUI.utilities.ImageLoader;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
@@ -90,7 +91,9 @@ public abstract class Piece {
         throw new RuntimeException(message);
     }
 
-    public abstract Pane getPieceImage();
+    public Pane getPieceImage() {
+        return this.prepareImage(new ImageView(ImageLoader.getImage(this.id, this.isWhite)));
+    }
 
     public int getLocationX() {
         return this.coordinate.getXLocation();

@@ -34,9 +34,4 @@ public class Rook extends Piece{
         this.coordinate = newCoordinates;
     }
 
-    @Override
-    public Pane getPieceImage() {
-        return this.prepareImage(new ImageView(ImageLoader.getImage(this.id, this.isWhite)));
-    }
-
 }

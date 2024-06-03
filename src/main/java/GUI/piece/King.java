@@ -33,9 +33,4 @@ public class King extends Piece{
     public void makeMove(BoardCoordinate newCoordinates) {
         this.coordinate = newCoordinates;
     }
-
-    @Override
-    public Pane getPieceImage() {
-        return this.prepareImage(new ImageView(ImageLoader.getImage(this.id, this.isWhite)));
-    }
 }
