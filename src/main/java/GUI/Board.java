@@ -4,7 +4,6 @@ import GUI.piece.*;
 import GUI.utilities.BoardCoordinate;
 import GUI.utilities.Calculator;
 import GUI.utilities.Move;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
@@ -14,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 
 /**
  * Represents the chess board (not visual) and handles all calculations.
@@ -48,9 +49,32 @@ public class Board {
     // MOVE HISTORY
     private ArrayList<Move> moveHistory; // represents the moves taken
 
+    private final Semaphore semaphore = new Semaphore(0);
     private int promotableRowWhite = 8;
     private int promotableRowBlack = 0;
-    private Queen promotionQueen = null;
+    private Piece promotionPiece = null;
+
+    private void debugPrint() {
+        StringBuilder fen = new StringBuilder();
+        String[][] piecesChars = new String[8][8];
+
+        for (Piece piece : this.getPieces()) {
+            piecesChars[piece.getLocationX()-1][8-piece.getLocationY()] = PIECE_ID.toFenAbbreviation(piece.getID(), piece.isWhite());
+        }
+
+        int counter = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (piecesChars[j][i] == null) {
+                    fen.append("0 ");
+                } else {
+                    fen.append(piecesChars[j][i]).append(" ");
+                }
+            }
+            fen.append("\n");
+        }
+        System.out.println(fen);
+    }
     /**
      * This function handles everything that is needed to be done, when a move was made.
      * TODO should take Move as parameter because move is chosen from Move list
@@ -67,12 +91,9 @@ public class Board {
         if (capture) { // remove piece if already at end position
             this.removePiece(endCoordinate);
         }
+
         piece.makeMove(endCoordinate);
-        if (this.promotionQueen != null) {
-            this.removePiece(endCoordinate);
-            pieces.add(promotionQueen);
-            this.promotionQueen = null;
-        }
+
         if (this.firstMoveMade) {
             this.firstMoveMade = false;
             this.startClocks(true);
@@ -84,15 +105,46 @@ public class Board {
         } else {
             this.halfmoveClock++;
         }
-    }
 
-    public Queen promotable(Piece piece, BoardCoordinate startCoordinates, BoardCoordinate endCoordinate) {
-        if (piece.getID() == PIECE_ID.PAWN) {
-            if (piece.isWhite() && endCoordinate.getYLocation() == 8 || !piece.isWhite() && endCoordinate.getYLocation() == 1) {
-                this.promotionQueen = new Queen(endCoordinate, piece.isWhite());
+        if (this.promotable(endCoordinate, endCoordinate) && this.promotionPiece == null) { // temp promotion code later removed for moveList
+            try {
+                this.semaphore.acquire();
+                this.removePiece(endCoordinate);
+                if (this.promotionPiece == null) {
+                    System.out.println("PROMOTION PIECE IS NULL");
+                }
+                pieces.add(promotionPiece);
+                this.promotionPiece = null;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-        return this.promotionQueen;
+    }
+
+    public Semaphore getSemaphore() {
+        return this.semaphore;
+    }
+
+    public boolean promotable(BoardCoordinate startCoordinates, BoardCoordinate endCoordinate) {
+        Piece piece = this.getPieceAtCoordinates(startCoordinates);
+        if (piece.getID() == PIECE_ID.PAWN) {
+            //this.promotionPiece = ((Pawn) piece).promote(promotedTo);
+            return piece.isWhite() && endCoordinate.getYLocation() == 8 || !piece.isWhite() && endCoordinate.getYLocation() == 1;
+        }
+        return false;
+    }
+
+    public Piece promotePawn(Piece piece, PIECE_ID promoteTo) {
+        if (piece.getID() != PIECE_ID.PAWN) {
+            // TODO change
+            throw new RuntimeException("trying to promote something that is not a pawn");
+        }
+        this.promotionPiece = ((Pawn) piece).promote(promoteTo);
+        return this.promotionPiece;
+    }
+
+    public Piece getPromotionPiece() {
+        return this.promotionPiece;
     }
 
     /**

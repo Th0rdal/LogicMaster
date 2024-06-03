@@ -5,16 +5,20 @@ import GUI.utilities.BoardCoordinate;
 import GUI.utilities.Calculator;
 import GUI.utilities.BoardConverter;
 import GUI.utilities.ImageLoader;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 
+import java.awt.event.MouseMotionListener;
 import java.util.Objects;
 
 public class Controller {
@@ -46,6 +50,46 @@ public class Controller {
     Board board;
 
     private Pane promotionSelectedPane = null;
+    private Piece promotionPiece = null;
+    EventHandler<MouseEvent> onMouseMoveHandler = event -> {
+        if (this.promotionSelectedPane != null) {
+            if (this.promotionSelectedPane.getBoundsInParent().contains(event.getX(), event.getY())) {
+                return;
+            } else {
+                this.promotionSelectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+            }
+        }
+        for (Node node : this.promotionPane.getChildren()) {
+            if (node instanceof Pane) {
+                Pane tempPane = (Pane) node;
+                if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) {
+                    promotionSelectedPane = tempPane;
+                    promotionSelectedPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+                }
+            }
+        }
+    };
+
+    EventHandler<MouseEvent> onMouseClickHandler = event -> {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            // chosen
+            Piece piece = switch (this.promotionSelectedPane.getId()) {
+                case "KNIGHT" -> this.board.promotePawn(this.promotionPiece, PIECE_ID.KNIGHT);
+                case "QUEEN" -> this.board.promotePawn(this.promotionPiece, PIECE_ID.QUEEN);
+                case "BISHOP" -> this.board.promotePawn(this.promotionPiece, PIECE_ID.BISHOP);
+                case "ROOK" -> this.board.promotePawn(this.promotionPiece, PIECE_ID.ROOK);
+                default -> throw new RuntimeException("Promoting piece that into something that is not allowed");
+            };
+            this.visualBoard.getChildren().remove(this.promotionPiece.getPieceImage());
+            this.visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
+            this.board.getSemaphore().release();
+            this.promotionPane.setOnMouseMoved(null);
+            this.promotionPane.setOnMouseClicked(null);
+            this.promotionPane.setVisible(false);
+        } else if (event.getButton() == MouseButton.SECONDARY) {
+            this.promotionSelectedPane.setVisible(false);
+        }
+    };
 
     //TODO change this to be better. currently saving the same thing here and on board
     private Label clockCurrentlyRunning;
@@ -78,6 +122,49 @@ public class Controller {
         this.clearBoard();
         this.board.loadStartPosition();
         this.loadBoard();
+    }
+
+    public void loadPromotionPane(boolean isWhite) {
+        //399 because of weird calc with border.
+        ImageView view = new ImageView(ImageLoader.getImage(PIECE_ID.ROOK, isWhite));
+        Pane pane = new Pane(view);
+        view.setFitWidth(399);
+        view.setFitHeight(399);
+        this.promotionPane.getChildren().add(pane);
+        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        pane.setId("ROOK");
+
+        view = new ImageView(ImageLoader.getImage(PIECE_ID.BISHOP, isWhite));
+        pane = new Pane(view);
+        view.setFitWidth(399);
+        view.setFitHeight(399);
+        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.promotionPane.getChildren().add(pane);
+        pane.setLayoutX(400);
+        pane.setLayoutY(0);
+        pane.setId("BISHOP");
+
+
+        view = new ImageView(ImageLoader.getImage(PIECE_ID.KNIGHT, isWhite));
+        pane = new Pane(view);
+        view.setFitWidth(399);
+        view.setFitHeight(399);
+        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.promotionPane.getChildren().add(pane);
+        pane.setLayoutX(400);
+        pane.setLayoutY(400);
+        pane.setId("KNIGHT");
+
+
+        view = new ImageView(ImageLoader.getImage(PIECE_ID.QUEEN, isWhite));
+        pane = new Pane(view);
+        view.setFitWidth(399);
+        view.setFitHeight(399);
+        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.promotionPane.getChildren().add(pane);
+        pane.setLayoutX(0);
+        pane.setLayoutY(400);
+        pane.setId("QUEEN");
     }
 
     /**
@@ -113,64 +200,10 @@ public class Controller {
         this.board.loadClocks(this.clockOpponentLabel, this.clockPlayerLabel);
 
         promotionPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-        //promotionPane.setVisible(false);
+        promotionPane.setVisible(false);
 
-        //TODO change this. currently for testing of the logic. should be in a function and maybe made more efficient
-        //399 because of weird calc with border.
-        ImageView view = new ImageView(ImageLoader.getImage(PIECE_ID.ROOK, true));
-        Pane pane = new Pane(view);
-        view.setFitWidth(399);
-        view.setFitHeight(399);
-        this.promotionPane.getChildren().add(pane);
-        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
-
-        view = new ImageView(ImageLoader.getImage(PIECE_ID.BISHOP, true));
-        pane = new Pane(view);
-        view.setFitWidth(399);
-        view.setFitHeight(399);
-        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
-        this.promotionPane.getChildren().add(pane);
-        pane.setLayoutX(400);
-        pane.setLayoutY(0);
-
-        view = new ImageView(ImageLoader.getImage(PIECE_ID.KNIGHT, true));
-        pane = new Pane(view);
-        view.setFitWidth(399);
-        view.setFitHeight(399);
-        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
-        this.promotionPane.getChildren().add(pane);
-        pane.setLayoutX(400);
-        pane.setLayoutY(400);
-
-        view = new ImageView(ImageLoader.getImage(PIECE_ID.QUEEN, true));
-        pane = new Pane(view);
-        view.setFitWidth(399);
-        view.setFitHeight(399);
-        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
-        this.promotionPane.getChildren().add(pane);
-        pane.setLayoutX(0);
-        pane.setLayoutY(400);
-
-
-        //TODO so it only works while promotionPane is visible, remove and re-add the handler when needed, or just if not visibile return
-        this.promotionPane.setOnMouseMoved(event -> {
-            if (this.promotionSelectedPane != null) {
-                if (this.promotionSelectedPane.getBoundsInParent().contains(event.getX(), event.getY())) {
-                    return;
-                } else {
-                    this.promotionSelectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
-                }
-            }
-            for (Node node : this.promotionPane.getChildren()) {
-                if (node instanceof Pane) {
-                    Pane tempPane = (Pane) node;
-                    if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) {
-                        promotionSelectedPane = tempPane;
-                        promotionSelectedPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
-                    }
-                }
-            }
-        });
+        //TODO so it only works while promotionPane is visible, remove and re-add the handler when needed, or just if not visible return
+        //this.promotionPane.setOnMouseMoved(this.onMouseMoveHandler);
 
         visualBoard.setOnMousePressed(event -> {
             for (Node node : visualBoard.getChildren()) {
@@ -252,9 +285,10 @@ public class Controller {
 
         //TODO with movelist. this is just substitute until that is implemented
         Piece piece = this.board.getPieceAtCoordinates(tempCoordinates);
-        boolean capture = false;
+        boolean capture;
         if (piece != null) { //TODO make this function of board. Calculations should be in board not visual board
             if (piece.isWhite() == board.isWhiteTurn()) {
+                capture = false;
                 tempView.setLayoutX(0);
                 tempView.setLayoutY(0);
                 return;
@@ -262,7 +296,11 @@ public class Controller {
                 this.visualBoard.getChildren().remove(piece.getPieceImage());
                 //this.board.removePiece(tempCoordinates);
                 capture = true;
+            } else {
+                capture = false;
             }
+        } else {
+            capture = false;
         }
 
         GridPane.setRowIndex(selectedPane, tempY);
@@ -271,13 +309,16 @@ public class Controller {
         tempView.setLayoutY(0);
 
         if (!Objects.equals(startCoordinates, tempCoordinates)) {
-            Piece tempPiece = this.board.getPieceAtCoordinates(this.startCoordinates);
-            Queen tempQueen = this.board.promotable(tempPiece, startCoordinates, tempCoordinates);
-            if (tempQueen != null) { //TODO change this to be better. Should disappear with movelist
-                this.visualBoard.getChildren().remove(tempPiece.getPieceImage());
-                this.visualBoard.add(tempQueen.getPieceImage(), tempQueen.getLocationX()-1, whiteSideDown ? 8 - tempQueen.getLocationY() : tempQueen.getLocationY());
+            if (this.board.promotable(startCoordinates, tempCoordinates)) { // promotion logic
+                this.promotionPiece = this.board.getPieceAtCoordinates(startCoordinates);
+                loadPromotionPane(this.promotionPiece.isWhite());
+                this.promotionPane.setVisible(true);
+                this.promotionPane.setOnMouseMoved(this.onMouseMoveHandler);
+                this.promotionPane.setOnMouseClicked(this.onMouseClickHandler);
             }
-            this.makeMove(tempCoordinates, capture);
+            new Thread(() -> {
+                this.makeMove(tempCoordinates, capture);
+            }).start();
         }
     }
 
