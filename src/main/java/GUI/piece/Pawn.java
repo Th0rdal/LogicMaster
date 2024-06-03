@@ -40,4 +40,8 @@ public class Pawn extends Piece{
         return this.prepareImage(new ImageView(image));
     }
 
+    public Queen promote() {
+        return new Queen(this.coordinate, this.isWhite);
+    }
+
 }

@@ -51,6 +51,45 @@ public abstract class Piece {
         return pane;
     }
 
+    /**
+     * Converts piece abbreviation, color and coordinates into a Piece
+     * @param pieceChar: piece abbreviation
+     * @param colCounter: counter position of the piece
+     * @param rowCounter: row position of the piece
+     * @return Piece subclass corresponding to the char piece
+     */
+    public static Piece createFromChar(char pieceChar, int colCounter, int rowCounter) {
+        switch (pieceChar) {
+            case 'p':
+                return new Pawn(new BoardCoordinate(colCounter, rowCounter), false);
+            case 'b':
+                return new Bishop(new BoardCoordinate(colCounter, rowCounter), false);
+            case 'n':
+                return new Knight(new BoardCoordinate(colCounter, rowCounter), false);
+            case 'k':
+                return new King(new BoardCoordinate(colCounter, rowCounter), false);
+            case 'q':
+                return new Queen(new BoardCoordinate(colCounter, rowCounter), false);
+            case 'r':
+                return new Rook(new BoardCoordinate(colCounter, rowCounter), false);
+            case 'P':
+                return new Pawn(new BoardCoordinate(colCounter, rowCounter), true);
+            case 'B':
+                return new Bishop(new BoardCoordinate(colCounter, rowCounter), true);
+            case 'N':
+                return new Knight(new BoardCoordinate(colCounter, rowCounter), true);
+            case 'K':
+                return new King(new BoardCoordinate(colCounter, rowCounter), true);
+            case 'Q':
+                return new Queen(new BoardCoordinate(colCounter, rowCounter), true);
+            case 'R':
+                return new Rook(new BoardCoordinate(colCounter, rowCounter), true);
+        }
+        String message = "piece value is unexpected (" + pieceChar + ")";
+        //TODO exchange with useful message and Error
+        throw new RuntimeException(message);
+    }
+
     public abstract Pane getPieceImage();
 
     public int getLocationX() {

@@ -188,16 +188,17 @@ public class Controller {
         BoardCoordinate tempCoordinates = new BoardCoordinate(tempX+1, whiteSideDown ? 8 - (int) (double) (y / 100) : tempY);
 
         //TODO with movelist. this is just substitute until that is implemented
-        System.out.println(tempCoordinates);
         Piece piece = this.board.getPieceAtCoordinates(tempCoordinates);
-        if (piece != null) {
+        boolean capture = false;
+        if (piece != null) { //TODO make this function of board. Calculations should be in board not visual board
             if (piece.isWhite() == board.isWhiteTurn()) {
                 tempView.setLayoutX(0);
                 tempView.setLayoutY(0);
                 return;
             } else if (piece.isWhite() != board.isWhiteTurn()) {
                 this.visualBoard.getChildren().remove(piece.getPieceImage());
-                this.board.removePiece(tempCoordinates);
+                //this.board.removePiece(tempCoordinates);
+                capture = true;
             }
         }
 
@@ -207,15 +208,21 @@ public class Controller {
         tempView.setLayoutY(0);
 
         if (!Objects.equals(startCoordinates, tempCoordinates)) {
-            this.makeMove(tempCoordinates);
+            Piece tempPiece = this.board.getPieceAtCoordinates(this.startCoordinates);
+            Queen tempQueen = this.board.promotable(tempPiece, startCoordinates, tempCoordinates);
+            if (tempQueen != null) { //TODO change this to be better. Should disappear with movelist
+                this.visualBoard.getChildren().remove(tempPiece.getPieceImage());
+                this.visualBoard.add(tempQueen.getPieceImage(), tempQueen.getLocationX()-1, whiteSideDown ? 8 - tempQueen.getLocationY() : tempQueen.getLocationY());
+            }
+            this.makeMove(tempCoordinates, capture);
         }
     }
 
-    private void makeMove(BoardCoordinate tempCoordinates) {
+    private void makeMove(BoardCoordinate tempCoordinates, boolean capture) {
         selected = false;
         //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
         selectedPane = null;
-        board.makeMove(startCoordinates, tempCoordinates);
+        board.makeMove(startCoordinates, tempCoordinates, capture);
     }
 
 

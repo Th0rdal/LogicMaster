@@ -39,7 +39,7 @@ public class BoardCoordinate {
     }
 
     public String toLowerCaseString() {
-        char xChar = (char) ('a' + xLocation);
+        char xChar = (char) ('`' + xLocation);
         return "" + xChar + (char) (yLocation + '0');
     }
 

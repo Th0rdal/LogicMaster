@@ -48,25 +48,51 @@ public class Board {
     // MOVE HISTORY
     private ArrayList<Move> moveHistory; // represents the moves taken
 
+    private int promotableRowWhite = 8;
+    private int promotableRowBlack = 0;
+    private Queen promotionQueen = null;
     /**
      * This function handles everything that is needed to be done, when a move was made.
      * TODO should take Move as parameter because move is chosen from Move list
      * @param startCoordinates
      * @param endCoordinate
+     * @param capture: temp var until movelist is implemented
      */
-    public void makeMove(BoardCoordinate startCoordinates, BoardCoordinate endCoordinate) {
+    public void makeMove(BoardCoordinate startCoordinates, BoardCoordinate endCoordinate, boolean capture) {
         Piece piece = this.getPieceAtCoordinates(startCoordinates);
         if (piece == null) {
             //TODO make this a useful Error
             throw new RuntimeException("UNEXPECTED. THIS SHOULD NEVER HAPPEN. piece is null in makeMove");
         }
+        if (capture) { // remove piece if already at end position
+            this.removePiece(endCoordinate);
+        }
         piece.makeMove(endCoordinate);
+        if (this.promotionQueen != null) {
+            this.removePiece(endCoordinate);
+            pieces.add(promotionQueen);
+            this.promotionQueen = null;
+        }
         if (this.firstMoveMade) {
             this.firstMoveMade = false;
             this.startClocks(true);
         }
         this.swapTurn();
+        this.fullmoveClock++;
+        if (piece.getID() == PIECE_ID.PAWN || capture) {
+            this.halfmoveClock = 0;
+        } else {
+            this.halfmoveClock++;
+        }
+    }
 
+    public Queen promotable(Piece piece, BoardCoordinate startCoordinates, BoardCoordinate endCoordinate) {
+        if (piece.getID() == PIECE_ID.PAWN) {
+            if (piece.isWhite() && endCoordinate.getYLocation() == 8 || !piece.isWhite() && endCoordinate.getYLocation() == 1) {
+                this.promotionQueen = new Queen(endCoordinate, piece.isWhite());
+            }
+        }
+        return this.promotionQueen;
     }
 
     /**
@@ -323,19 +349,19 @@ public class Board {
         return whiteTurn;
     }
 
-    public boolean isWhiteQCastle() {
+    public boolean canWhiteQCastle() {
         return whiteQCastle;
     }
 
-    public boolean isWhiteKCastle() {
+    public boolean canWhiteKCastle() {
         return whiteKCastle;
     }
 
-    public boolean isBlackQCastle() {
+    public boolean canBlackQCastle() {
         return blackQCastle;
     }
 
-    public boolean isBlackKCastle() {
+    public boolean canBlackKCastle() {
         return blackKCastle;
     }
 

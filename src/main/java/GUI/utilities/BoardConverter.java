@@ -55,11 +55,7 @@ public class BoardConverter {
                     continue;
             }
             if (Character.isLetter(c)) {
-                if (Character.isUpperCase(c)) {
-                    pieces.add(BoardConverter.getPiece(Character.toLowerCase(c), true, rowCounter, colCounter));
-                } else {
-                    pieces.add(BoardConverter.getPiece(c, false, rowCounter, colCounter));
-                }
+                pieces.add(Piece.createFromChar(c, colCounter, rowCounter));
             } else if (Character.isDigit(c)) {
                 colCounter += Character.getNumericValue(c);
             } else if (c == '/') {
@@ -79,34 +75,56 @@ public class BoardConverter {
                 fullmoveNumber);
     }
 
-    /**
-     * Converts piece abbreviation, color and coordinates into a Piece
-     * @param piece: piece abbreviation
-     * @param isWhite: true if piece is white, else black
-     * @param rowCounter: row position of the piece
-     * @param colCounter: counter position of the piece
-     * @return Piece subclass corresponding to the char piece
-     */
-    private static Piece getPiece(char piece, boolean isWhite,  int rowCounter, int colCounter) {
-        switch (piece) {
-            case 'p':
-                return new Pawn(new BoardCoordinate(colCounter, rowCounter), isWhite);
-            case 'b':
-                return new Bishop(new BoardCoordinate(colCounter, rowCounter), isWhite);
-            case 'n':
-                return new Knight(new BoardCoordinate(colCounter, rowCounter), isWhite);
-            case 'k':
-                return new King(new BoardCoordinate(colCounter, rowCounter), isWhite);
-            case 'q':
-                return new Queen(new BoardCoordinate(colCounter, rowCounter), isWhite);
-            case 'r':
-                return new Rook(new BoardCoordinate(colCounter, rowCounter), isWhite);
+    public static String createFEN(Board board) {
+        StringBuilder fen = new StringBuilder();
+        String[][] piecesChars = new String[8][8];
+
+        for (Piece piece : board.getPieces()) {
+            piecesChars[piece.getLocationX()-1][8-piece.getLocationY()] = PIECE_ID.toFenAbbreviation(piece.getID(), piece.isWhite());
         }
-        String message = "piece value is unexpected (" + piece + ")";
-        //TODO exchange with useful message and Error
-        throw new RuntimeException(message);
+
+        int counter = 0;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (piecesChars[i][j] == null) {
+                    counter++;
+                } else {
+                    fen.append(counter);
+                    counter = 0;
+                    fen.append(piecesChars[i][j]);
+                }
+            }
+            fen.append("/");
+        }
+
+        fen.append(" ");
+        fen.append(board.isWhiteTurn() ? 'w' : 'b');
+
+        fen.append(" ");
+        fen.append(board.canWhiteKCastle() ? 'K' : "");
+        fen.append(board.canWhiteQCastle() ? 'Q' : "");
+        fen.append(board.canBlackKCastle() ? 'k' : "");
+        fen.append(board.canBlackQCastle() ? 'q' : "");
+
+        fen.append(" ");
+        fen.append(board.getEnPassantCoordinates().toLowerCaseString());
+
+        fen.append(" ");
+        fen.append(board.getHalfmoveClock());
+
+        fen.append(" ");
+        fen.append(board.getFullmoveClock());
+
+        return fen.toString();
     }
 
+    /**
+     * Converts a board into a bitboard representation based on the
+     * algorithm.
+     * TODO write documents
+     * @param board The board to create the bitboard from
+     * @return bitboard array
+     */
     public static long[] toBitboard(Board board) {
         long[] bitboard = new long[9];
         for (int i = 0; i < 9; i++) {
