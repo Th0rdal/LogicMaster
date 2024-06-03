@@ -4,6 +4,7 @@ import GUI.piece.*;
 import GUI.utilities.BoardCoordinate;
 import GUI.utilities.Calculator;
 import GUI.utilities.BoardConverter;
+import GUI.utilities.ImageLoader;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -31,6 +32,8 @@ public class Controller {
     private Label clockPlayerLabel;
     @FXML
     private Label moveHistoryTextField;
+    @FXML
+    private Pane promotionPane;
 
     // colors used for the board
     Color color1 = Color.SIENNA;
@@ -41,6 +44,8 @@ public class Controller {
     BoardCoordinate startCoordinates;   //saves the start coordinations of the selected pane
     boolean whiteSideDown = true;   //TODO change. just a placeholder for board rotation. if true, white is starting on the bottom
     Board board;
+
+    private Pane promotionSelectedPane = null;
 
     //TODO change this to be better. currently saving the same thing here and on board
     private Label clockCurrentlyRunning;
@@ -85,8 +90,8 @@ public class Controller {
          */
 
         this.clockOpponentLabel.setFont(Font.font("Arial", 22));
-        this.clockPlayerLabel.setFont(Font.font("Arial", 22));
         clockOpponentLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.clockPlayerLabel.setFont(Font.font("Arial", 22));
         clockPlayerLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
 
         // adding squares to board
@@ -107,7 +112,65 @@ public class Controller {
 
         this.board.loadClocks(this.clockOpponentLabel, this.clockPlayerLabel);
 
-        BoardConverter.toBitboard(this.board);
+        promotionPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
+        //promotionPane.setVisible(false);
+
+        //TODO change this. currently for testing of the logic. should be in a function and maybe made more efficient
+        //399 because of weird calc with border.
+        ImageView view = new ImageView(ImageLoader.getImage(PIECE_ID.ROOK, true));
+        Pane pane = new Pane(view);
+        view.setFitWidth(399);
+        view.setFitHeight(399);
+        this.promotionPane.getChildren().add(pane);
+        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+
+        view = new ImageView(ImageLoader.getImage(PIECE_ID.BISHOP, true));
+        pane = new Pane(view);
+        view.setFitWidth(399);
+        view.setFitHeight(399);
+        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.promotionPane.getChildren().add(pane);
+        pane.setLayoutX(400);
+        pane.setLayoutY(0);
+
+        view = new ImageView(ImageLoader.getImage(PIECE_ID.KNIGHT, true));
+        pane = new Pane(view);
+        view.setFitWidth(399);
+        view.setFitHeight(399);
+        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.promotionPane.getChildren().add(pane);
+        pane.setLayoutX(400);
+        pane.setLayoutY(400);
+
+        view = new ImageView(ImageLoader.getImage(PIECE_ID.QUEEN, true));
+        pane = new Pane(view);
+        view.setFitWidth(399);
+        view.setFitHeight(399);
+        pane.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.promotionPane.getChildren().add(pane);
+        pane.setLayoutX(0);
+        pane.setLayoutY(400);
+
+
+        //TODO so it only works while promotionPane is visible, remove and re-add the handler when needed, or just if not visibile return
+        this.promotionPane.setOnMouseMoved(event -> {
+            if (this.promotionSelectedPane != null) {
+                if (this.promotionSelectedPane.getBoundsInParent().contains(event.getX(), event.getY())) {
+                    return;
+                } else {
+                    this.promotionSelectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+                }
+            }
+            for (Node node : this.promotionPane.getChildren()) {
+                if (node instanceof Pane) {
+                    Pane tempPane = (Pane) node;
+                    if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) {
+                        promotionSelectedPane = tempPane;
+                        promotionSelectedPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+                    }
+                }
+            }
+        });
 
         visualBoard.setOnMousePressed(event -> {
             for (Node node : visualBoard.getChildren()) {
