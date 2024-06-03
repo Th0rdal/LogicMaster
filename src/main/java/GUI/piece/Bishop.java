@@ -1,6 +1,7 @@
 package GUI.piece;
 
 import GUI.utilities.BoardCoordinate;
+import GUI.utilities.ImageLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -35,7 +36,6 @@ public class Bishop extends Piece{
 
     @Override
     public Pane getPieceImage() {
-        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(this.path)));
-        return this.prepareImage(new ImageView(image));
+        return this.prepareImage(new ImageView(ImageLoader.getImage(this.id, this.isWhite)));
     }
 }
