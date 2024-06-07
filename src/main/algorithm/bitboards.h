@@ -64,9 +64,15 @@ typedef struct { // diagonals go from left bottom to right top e.g., A1 - H8
                           
 } DiagonalBitboards;
 
+typedef struct {
+    const int size;
+    const uint64_t boards[64];
+} KnightMoveDictionary;
+
 extern const FileBitboards fileBitboards;
 extern const RankBitboards rankBitboards;
 extern const DiagonalBitboards diagonalBitboards;
 extern const DiagonalBitboards antiDiagonalBitboards;
-extern const uint64_t fileA;
+extern const KnightMoveDictionary knightMoveDictionary;
+
 #endif

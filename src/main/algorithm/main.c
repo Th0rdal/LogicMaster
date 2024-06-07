@@ -40,8 +40,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    for (int i = 0; i < rankBitboards.size; i++) {
-        printBoard(fileBitboards.boards[i]);
+    for (int i = 0; i < knightMoveDictionary.size; i++) {
+        printBoard(knightMoveDictionary.boards[i]);
     }
 
     return 0;
