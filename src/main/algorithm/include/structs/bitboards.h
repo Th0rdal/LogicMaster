@@ -2,6 +2,7 @@
 #define BITBOARDS_H
 
 #include <stdint.h>
+#include <stdio.h>
 
 typedef struct {
    uint64_t occupancy;
@@ -68,6 +69,8 @@ typedef struct {
     const int size;
     const uint64_t boards[64];
 } KnightMoveDictionary;
+
+extern Bitboards bitboardsInit();
 
 extern const FileBitboards fileBitboards;
 extern const RankBitboards rankBitboards;

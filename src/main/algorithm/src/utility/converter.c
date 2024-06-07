@@ -1,3 +1,9 @@
+#include "utility/converter.h"
+
+static void getFenPart(char* fen, short* startIndex, char* part);
+static void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboards);
+static void convertCharArrayToPosition(char* fenChar, Position* position);
+
 /**
  * Converts a fen notation char array into a bitboard struct and writes it into the bitboard struct
  * Expects en Passant position in format a-h1-8 e.g., a5, e3
@@ -7,37 +13,41 @@
  *
  * */
 void fenToBitboard(char* fen, Gamestate* gamestate) {
+    short maxLoopCounter = 0;
     short counter = 0;
     short partCounter = 0;
+    short pieceCounter = 0;
     char fenChar = fen[0];
-    Bitboards* bitboards = gamestate->bitboards;
+    char* part = "";
 
-    while (fenChar != '\0') {
+    while (fen[counter] != '\0' && maxLoopCounter < 127) {
+        maxLoopCounter++;
         fenChar = fen[counter];
         
         if (isspace(fenChar)) {
+            counter++;
             partCounter++;
             continue;
         }
         
-        switch (counter) {
+        switch (partCounter) {
             case 1:
-                gamestate->flags->isWhiteTurn = fenChar == 'w';
+                gamestate->flags.isWhiteTurn = fenChar == 'w';
                 counter++;
                 continue;
             case 2:
                 switch (fenChar) {
                     case 'K':
-                        gamestate->flags->whiteKCastle = true;
+                        gamestate->flags.whiteKCastle = true;
                         break;
                     case 'Q':
-                        gamestate->flags->whiteQCastle = true;
+                        gamestate->flags.whiteQCastle = true;
                         break;
                     case 'k':
-                        gamestate->flags->blackKCastle = true;
+                        gamestate->flags.blackKCastle = true;
                         break;
                     case 'q':
-                        gamestate->flags->blackQCastle = true;
+                        gamestate->flags.blackQCastle = true;
                         break;
                 }
                 counter++;
@@ -46,38 +56,41 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
                 if (fenChar == '-') {
                     continue;
                 }
-                gamestate->flags->canEnPassant = true;
-                char* tempChar = getFenPart(fenChar, &counter);
-                convertCharToPosition(tempChar, gamestate->enPassantPosition);
+                gamestate->flags.canEnPassant = true;
+                char* tempChar = "";
+                getFenPart(&fenChar, &counter, tempChar);
+                convertCharArrayToPosition(tempChar, &gamestate->enPassantPosition);
                 counter++;
                 continue;
             case 4:
-                char* part = getFenPart(fen, &counter);
-                gamestate->counter->halfMove = atoi(part);
+                getFenPart(fen, &counter, part);
+                gamestate->counters.halfMove = atoi(part);
                 counter++;
                 continue;
             case 5:
-                char* part = getFenPart(fen, &counter);
-                gamestate->counter->fullMove = atoi(part);
+                getFenPart(fen, &counter, part);
+                gamestate->counters.fullMove = atoi(part);
                 counter++;
                 continue;
         }
-        
-        if (islower(fenChar) { // lower case piece means black piece
-            uint64_t temp = pow(2, 63 - counter);
-            bitboards->black += temp;
-            bitboards->occupancy += temp;
-            setPieceOnBitboard(fenChar, temp, bitboards);
-        } else if (isUpper(fenChar) { // upper case piece means white piece
-            uint64_t temp = pow(2, 63 -counter);
-            bitboards->white += temp;
-            bitboards->occupancy += temp;
-            setPieceOnbitboard(fenChar, temp, bitboards);
-        } else if (isdigit(fenChar) { // digit means that many spaces are empty
-            counter += fenChar - '0';
-        } else if (isspace(fenChar) { // if space, next part
+       
+        if (islower(fenChar)) { // lower case piece means black piece
+            uint64_t temp = pow(2, 63 - pieceCounter);
+            gamestate->bitboards.black += temp;
+            gamestate->bitboards.occupancy += temp;
+            setPieceOnBitboard(fenChar, temp, &gamestate->bitboards);
+      pieceCounter++;
+        } else if (isupper(fenChar)) { // upper case piece means white piece
+            uint64_t temp = pow(2, 63 - pieceCounter);
+            gamestate->bitboards.white += temp;
+            gamestate->bitboards.occupancy += temp;
+            setPieceOnBitboard(fenChar, temp, &gamestate->bitboards);
+            pieceCounter++;
+        } else if (isdigit(fenChar)) { // digit means that many spaces are empty
+            pieceCounter += fenChar - '0';
+        } else if (isspace(fenChar)) { // if space, next part
             partCounter++;
-        } else if (fenChar = '/') { // used to say next line. not needed here
+        } else if (fenChar == '/') { // used to say next line. not needed here
             counter++;
             continue;
         }
@@ -94,7 +107,7 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
  * @param bitboards: Bitboard struct pointer representing the board
  *
  */
-void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboards) {
+static void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboards) {
     switch (fenChar) {
         case 'k':
         case 'K':
@@ -121,7 +134,7 @@ void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboards) {
             bitboards->bishop += value;
             break;
         default:
-            fprintf(stderr, "Error in converting fen notation to bitboards: character '%s' not defined.\n", fenChar);
+            fprintf(stderr, "Error in converting fen notation to bitboards: character '%c' not defined.\n", fenChar);
             exit(ERROR_FEN_CHAR_NOT_DEFINED);            
     }
 }
@@ -131,26 +144,25 @@ void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboards) {
  *
  * @param fen: the complete fen notation char pointer
  * @param startIndex: pointer of counter, representing the first index of the next fen notation part. THIS MUST NOT BE SPACE!
+ * @param part: char array to save the result in
  *
  * @exit ERROR_FETCHING_FEN_PART: If after completing fetching, the next character is not a space
  *
  */
-char* getFenPart(char* fen, short* startIndex) {
-    char part[128];
+static void getFenPart(char* fen, short* startIndex, char* part) {
     int i;
 
-    for (i = 0; i < 128 || !isspace(fen[*startIndex+i]; i++) {
-        if (isspace(fen[*startIndex+i]) {
+    for (i = 0; i < 128 || !isspace(fen[*startIndex+i]); i++) {
+        if (isspace(fen[*startIndex+i])) {
             break;
         }
         part[i] = fen[*startIndex+i];
     }
-    if (!isspace(fen[*startIndex+i]) { // sanity check if the next character is space. Can happen if part is longer than 128 character
-        fprintf(stderr, "Error in trying to fetch next fen notation part.\n", fenChar);
+    if (!isspace(fen[*startIndex+i])) { // sanity check if the next character is space. Can happen if part is longer than 128 character
+        fprintf(stderr, "Error in trying to fetch next fen notation part. Next character after fetching '%s' from '%s' is not a space\n", part, fen);
         exit(ERROR_FETCHING_FEN_PART);
     }
     *startIndex += i; // add i -1 to the current counter. i-1 because space is needed in other parts of the fen notation loading
-    return part;
 }
 
 /*
@@ -162,50 +174,34 @@ char* getFenPart(char* fen, short* startIndex) {
  * @exit ERROR_CANNOT_CONVERT_POSITION: either value cannot be converted to number between 1 and 8 or is not defined
  *
  */
-void convertCharArrayToPosition(char fenChar*, Position* position) {
+static void convertCharArrayToPosition(char* fenChar, Position* position) {
     short temp;
     char rank = *fenChar;
-    char file = *(fenChar+1)
+    char file = *(fenChar+1);
 
-    if (isalpha(rank) {
+    if (isalpha(rank)) {
         temp = rank - 'a';
         if (temp > 8 || temp < 1) {
-            fprintf(stderr, "Error in converting char position to Position struct: character file '%s' does not convert to a number between 1 and 8.\n", rank);
+            fprintf(stderr, "Error in converting char position to Position struct: character file '%c' does not convert to a number between 1 and 8.\n", rank);
             exit(ERROR_CANNOT_CONVERT_POSITION);
         }
         position->file = temp;
     } else {
-        fprintf(stderr, "Error in converting char position to Position struct: character '%s' not defined.\n", rank);
+        fprintf(stderr, "Error in converting char position to Position struct: character '%c' not defined.\n", rank);
         exit(ERROR_CANNOT_CONVERT_POSITION);
     }
 
-    if (isdigit(file) {
+    if (isdigit(file)) {
         temp = file - '0';
         if (temp > 8 || temp < 0) {
-            fprintf(stderr, "Error in converting char position to Position struct: character rank '%s' does not convert to a number between 1 and 8.\n", file);
+            fprintf(stderr, "Error in converting char position to Position struct: character rank '%c' does not convert to a number between 1 and 8.\n", file);
             exit(ERROR_CANNOT_CONVERT_POSITION);
         }
         position->rank = temp;
     } else {
-        fprintf(stderr, "Error in converting char position to Position struct: character '%s' not defined.\n", file);
+        fprintf(stderr, "Error in converting char position to Position struct: character '%c' not defined.\n", file);
         exit(ERROR_CANNOT_CONVERT_POSITION);
     }
 }
 
-/*
- * converts a char array into an integer
- *
- * @param charNumber: pointer to array to convert to number
- *
- * @exit ERROR_CONVERTING_CHARARRAY_TO_INT: if there is an unexpected character in the array
- *
- */
-int convertCharArrayToInt(char* charNumber) {
-    for (int i = 0; charNumber[i] != '\0'; i++) {
-        if (!isdigit(charNumber[i]) { // character that is not a digit
-            fprintf(stderr, "Error in converting char array to int: '%s' of '%s' is not a digit.\n" charNumber[i], charNumber);
-            exit(ERROR_CONVERTING_CHARARRAY_TO_INT);
-        }
-    }
-    return atoi(charNumber);
-}
+

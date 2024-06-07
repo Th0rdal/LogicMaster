@@ -6,10 +6,11 @@ set SRC_PATH=src\main\algorithm
 set TARGET_DIR=target
 set OBJECT_DIR=%TARGET_DIR%\object
 set ASSEMBLY_DIR=%TARGET_DIR%\assembly
+set ROOT_DIR=src\main\algorithm
 
 REM Compiler and flags
 set CC=gcc
-set CFLAGS=-Wall -Wextra -pedantic -std=c11
+set CFLAGS=-Wall -Wextra -pedantic -std=c11 -I%ROOT_DIR%\include
 
 REM Target executable
 set TARGET=%TARGET_DIR%\algorithm.exe
@@ -51,12 +52,12 @@ if not exist "%ASSEMBLY_DIR%" (
     )
 )
 
-REM Compile all source files in the source directory
+REM Compile all source files in the source directory and subdirectories
 echo Compiling files...
 setlocal enabledelayedexpansion
-for %%f in (%SRC_PATH%\*.c) do (
+for /R "%ROOT_DIR%" %%f in (*.c) do (
     echo Compiling %%f...
-    set TEMPFILE=%OBJECT_DIR%\%%~nf.o
+    set TEMPFILE=%OBJECT_DIR%\%%~nxf.o
     echo !TEMPFILE!
     echo Command: %CC% %CFLAGS% -c "%%f" -o !TEMPFILE!
     %CC% %CFLAGS% -c "%%f" -o !TEMPFILE!
@@ -64,7 +65,6 @@ for %%f in (%SRC_PATH%\*.c) do (
         echo ERROR: Compilation failed for %%f
         exit /b 1
     )
-
     echo Generating assembly file for %%f...
     set ASSEMBLY_FILE=%ASSEMBLY_DIR%\%%~nf.s
     echo Command: %CC% %CFLAGS% -S "%%f" -o !ASSEMBLY_FILE!

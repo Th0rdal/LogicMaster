@@ -8,7 +8,9 @@
 #include <stdint.h>
 
 #include "errorCodes.h"
+#include "structs/bitboards.h"
+#include "structs/gamestate.h"
 
-uint64_t* fenToBitboard(char* fen, Gamestate* gamestate);
+void fenToBitboard(char* fen, Gamestate* gamestate);
 
 #endif

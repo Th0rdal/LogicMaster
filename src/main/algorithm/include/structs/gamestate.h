@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+#include "bitboards.h"
+
 enum PIECE {
     PAWN,
     ROOK,
@@ -10,11 +12,11 @@ enum PIECE {
     BISHOP,
     QUEEN,
     KING
-}
+};
 
-typedef struct {
-    short int rank;
-    short int file;
+typedef struct { // initialized to 0
+    short rank; // row
+    short file; //column
 } Position;
 
 typedef struct {
@@ -35,7 +37,7 @@ typedef struct {
 } MoveFlags;
 
 typedef struct {
-    PIECE piece;
+    enum PIECE piece;
     Position startPosition;
     Position endPosition;
     MoveFlags flags;
@@ -47,7 +49,7 @@ typedef struct {
     int halfMove;
 } Counters;
 
-typedef struct {
+typedef struct { // all initialized to false
     bool whiteKCastle;
     bool whiteQCastle;
     bool blackKCastle;
@@ -63,9 +65,7 @@ typedef struct {
     Position enPassantPosition;
 } Gamestate;
 
-void gamestateCorrectlyLoadedCheck(Gamestate* gamestate);
-Gamestate* gameStateInit();
-
-extern Gamestate gamestate;
+Gamestate gamestateInit();
+Position positionInit();
 
 #endif

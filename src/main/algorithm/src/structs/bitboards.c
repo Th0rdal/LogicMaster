@@ -1,6 +1,28 @@
-#include "bitboards.h"
-#include <stdio.h>
-const uint64_t fileA = 0x8080808080808080ULL;
+#include "structs/bitboards.h"
+
+/*
+ * creates and initializes a bitboard struct. All values will be initialized with 0.
+ *
+ * @return: initialized bitboard
+ *
+ */
+Bitboards bitboardsInit() {
+    Bitboards bitboards;
+    bitboards.occupancy = 0;
+    bitboards.pawn = 0;
+    bitboards.knight = 0;
+    bitboards.bishop = 0;
+    bitboards.rook = 0;
+    bitboards.queen = 0;
+    bitboards.king = 0;
+    bitboards.white = 0;
+    bitboards.black = 0;
+    return bitboards;
+}
+
+// variable to initialize fileBoards. not actually used anywhere else
+static const uint64_t fileA = 0x8080808080808080ULL;
+
 const FileBitboards fileBitboards = {
                 .fileA = fileA,
                 .fileB = fileA >> 1,
