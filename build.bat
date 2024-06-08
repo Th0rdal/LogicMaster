@@ -52,26 +52,29 @@ if not exist "%ASSEMBLY_DIR%" (
     )
 )
 
-REM Compile all source files in the source directory and subdirectories
+REM Compile all source files in the source directory and subdirectories, excluding the tests folder
 echo Compiling files...
 setlocal enabledelayedexpansion
 for /R "%ROOT_DIR%" %%f in (*.c) do (
-    echo Compiling %%f...
-    set TEMPFILE=%OBJECT_DIR%\%%~nxf.o
-    echo !TEMPFILE!
-    echo Command: %CC% %CFLAGS% -c "%%f" -o !TEMPFILE!
-    %CC% %CFLAGS% -c "%%f" -o !TEMPFILE!
+    echo %%f | find "\src\main\algorithm\tests\" >nul
     if errorlevel 1 (
-        echo ERROR: Compilation failed for %%f
-        exit /b 1
-    )
-    echo Generating assembly file for %%f...
-    set ASSEMBLY_FILE=%ASSEMBLY_DIR%\%%~nf.s
-    echo Command: %CC% %CFLAGS% -S "%%f" -o !ASSEMBLY_FILE!
-    %CC% %CFLAGS% -S "%%f" -o !ASSEMBLY_FILE!
-    if errorlevel 1 (
-        echo ERROR: Failed to generate assembly file for %%f
-        exit /b 1
+        echo Compiling %%f...
+        set TEMPFILE=%OBJECT_DIR%\%%~nf.o
+        echo !TEMPFILE!
+        echo Command: %CC% %CFLAGS% -c "%%f" -o !TEMPFILE!
+        %CC% %CFLAGS% -c "%%f" -o !TEMPFILE!
+        if errorlevel 1 (
+            echo ERROR: Compilation failed for %%f
+            exit /b 1
+        )
+        echo Generating assembly file for %%f...
+        set ASSEMBLY_FILE=%ASSEMBLY_DIR%\%%~nf.s
+        echo Command: %CC% %CFLAGS% -S "%%f" -o !ASSEMBLY_FILE!
+        %CC% %CFLAGS% -S "%%f" -o !ASSEMBLY_FILE!
+        if errorlevel 1 (
+            echo ERROR: Failed to generate assembly file for %%f
+            exit /b 1
+        )
     )
 )
 
