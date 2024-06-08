@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "errorCodes.h"
+#include "errors.h"
 
 int convertCharArrayToInt(char* charNumber);
 

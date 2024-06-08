@@ -11,10 +11,12 @@ set OBJECT_DIR=%TARGET_DIR%\object
 set TEST_OBJECT_DIR=%TARGET_DIR%\tests
 set TEST_INCLUDE_DIR=%ROOT_DIR%\include
 set TEST_EXE=%TARGET_DIR%\tests.exe
+set SHARED_LIB=%TARGET_DIR%\tests\libmockexit.dll
 
 REM Compiler and flags
 set CC=gcc
 set CFLAGS=-Wall -Wextra -pedantic -std=c11 
+set LDFLAGS=
 
 REM Remove old .o files if they exist
 if exist "%TEST_OBJECT_DIR%\*.o" (
@@ -38,24 +40,36 @@ setlocal enabledelayedexpansion
 for %%f in (%ROOT_DIR%\*.c) do (
     echo Compiling %%f...
     set TEMPFILE=%TEST_OBJECT_DIR%\%%~nxf.o
-    %CC% %CFLAGS% -I%TEST_INCLUDE_DIR% -I%SRC_INCLUDE_DIR% -c "%%f" -o "!TEMPFILE!"
-    if errorlevel 1 (
-        echo ERROR: Compilation failed for %%f
-        exit /b 1
+    if not "%%~nxf"=="mockExit.c" (
+        %CC% %CFLAGS% -I%TEST_INCLUDE_DIR% -I%SRC_INCLUDE_DIR% -c "%%f" -o "!TEMPFILE!"
+        if errorlevel 1 (
+            echo ERROR: Compilation failed for %%f
+            exit /b 1
+        )
     )
+)
+
+REM Compile the static library
+echo Compiling static library...
+%CC% %CFLAGS% -c %ROOT_DIR%\mockExit.c -o %TARGET_DIR%\libmockexit.o
+ar rcs %TARGET_DIR%\libmockexit.a %TARGET_DIR%\libmockexit.o
+if errorlevel 1 (
+    echo ERROR: Compilation of the static library failed.
+    exit /b 1
 )
 
 REM Link object files to produce the final test executable
 echo Linking object files...
 set LINK_FILES=
 for %%f in (%OBJECT_DIR%\*.o) do (
-    if not "%%~nxf"=="main.o" (
+    if not "%%~nxf"=="main.o" if not "%%~nxf"=="errors.o" (
         set LINK_FILES=!LINK_FILES! "%%f"
     )
 )
 for %%f in (%TEST_OBJECT_DIR%\*.o) do (
     set LINK_FILES=!LINK_FILES! "%%f"
 )
+set LINK_FILES=!LINK_FILES! "%TARGET_DIR%\libmockexit.a"
 %CC% %CFLAGS% -o "%TEST_EXE%" !LINK_FILES!
 if errorlevel 1 (
     echo ERROR: Linking failed.
@@ -65,11 +79,16 @@ if errorlevel 1 (
 REM Check if the build was successful
 echo Build successful.
 echo Test executable created at: %TEST_EXE%
+echo Static library created at: %TARGET_DIR%\libmockexit.a
 
-REM Check if the build was successful
-echo Build successful.
-echo Starting the executable...
-echo.
+REM Run the test executable
+echo Running tests...
 "%TEST_EXE%"
+
+REM Check if the execution was successful
+if errorlevel 1 (
+    echo ERROR: Test execution failed.
+    exit /b 1
+)
 
 endlocal

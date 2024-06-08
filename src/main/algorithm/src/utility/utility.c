@@ -1,7 +1,7 @@
 #include "utility/utility.h"
 
 /*
- * converts a char array into an integer
+ * converts a char array into an integer. Allows negative number
  *
  * @param charNumber: pointer to array to convert to number
  *
@@ -10,10 +10,12 @@
  *
  */
 int convertCharArrayToInt(char* charNumber) {
-    for (int i = 0; charNumber[i] != '\0'; i++) {
+    if (charNumber[0] != '-' && !isdigit(charNumber[0])) {
+       throwError(ERROR_CONVERTING_CHARARRAY_TO_INT,"Error in converting char array to int: '%c' of '%s' is not a digit or '-' sign\n", charNumber[0], charNumber);
+    }
+    for (int i = 1; charNumber[i] != '\0'; i++) {
         if (!isdigit(charNumber[i])) { // character that is not a digit
-            fprintf(stderr, "Error in converting char array to int: '%c' of '%s' is not a digit.\n", charNumber[i], charNumber);
-            exit(ERROR_CONVERTING_CHARARRAY_TO_INT);
+            throwError(ERROR_CONVERTING_CHARARRAY_TO_INT, "Error in converting char array to int: '%c' of '%s' is not a digit.\n", charNumber[i], charNumber);
         }
     }
     return atoi(charNumber);

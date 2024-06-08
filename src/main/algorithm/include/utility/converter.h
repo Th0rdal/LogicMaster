@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "errorCodes.h"
+#include "errors.h"
 #include "structs/bitboards.h"
 #include "structs/gamestate.h"
 
