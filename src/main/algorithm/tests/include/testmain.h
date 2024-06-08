@@ -2,12 +2,6 @@
 #define TESTMAIN_H
 
 #include "unity.h"
-#include "errors.h"
-#include "utility/utility.h"
+#include "tests\test_convertCharArrayToInt.h"
 
-#ifdef throwError
-#undef throwError
-#endif
-
-#include "mockExit.h"
 #endif

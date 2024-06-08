@@ -37,7 +37,7 @@ REM Compile test files
 echo Compiling test files...
 setlocal enabledelayedexpansion
 
-for %%f in (%ROOT_DIR%\*.c) do (
+for /R %ROOT_DIR% %%f in (*.c) do (
     echo Compiling %%f...
     set TEMPFILE=%TEST_OBJECT_DIR%\%%~nxf.o
     if not "%%~nxf"=="mockExit.c" (
