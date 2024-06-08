@@ -39,7 +39,7 @@ setlocal enabledelayedexpansion
 
 for /R %ROOT_DIR% %%f in (*.c) do (
     echo Compiling %%f...
-    set TEMPFILE=%TEST_OBJECT_DIR%\%%~nxf.o
+    set TEMPFILE=%TEST_OBJECT_DIR%\%%~nf.o
     if not "%%~nxf"=="mockExit.c" (
         %CC% %CFLAGS% -I%TEST_INCLUDE_DIR% -I%SRC_INCLUDE_DIR% -c "%%f" -o "!TEMPFILE!"
         if errorlevel 1 (
@@ -51,8 +51,8 @@ for /R %ROOT_DIR% %%f in (*.c) do (
 
 REM Compile the static library
 echo Compiling static library...
-%CC% %CFLAGS% -c %ROOT_DIR%\mockExit.c -o %TARGET_DIR%\libmockexit.o
-ar rcs %TARGET_DIR%\libmockexit.a %TARGET_DIR%\libmockexit.o
+%CC% %CFLAGS% -c %ROOT_DIR%\mockExit.c -o %TEST_OBJECT_DIR%\libmockexit.o
+ar rcs %TEST_OBJECT_DIR%\libmockexit.a %TEST_OBJECT_DIR%\libmockexit.o
 if errorlevel 1 (
     echo ERROR: Compilation of the static library failed.
     exit /b 1
@@ -67,9 +67,11 @@ for %%f in (%OBJECT_DIR%\*.o) do (
     )
 )
 for %%f in (%TEST_OBJECT_DIR%\*.o) do (
-    set LINK_FILES=!LINK_FILES! "%%f"
+    if not "%%~nxf"=="libmockexit.o" (
+        set LINK_FILES=!LINK_FILES! "%%f"
+    )
 )
-set LINK_FILES=!LINK_FILES! "%TARGET_DIR%\libmockexit.a"
+set LINK_FILES=!LINK_FILES! "%TARGET_DIR%\tests\libmockexit.a"
 %CC% %CFLAGS% -o "%TEST_EXE%" !LINK_FILES!
 if errorlevel 1 (
     echo ERROR: Linking failed.
@@ -79,7 +81,7 @@ if errorlevel 1 (
 REM Check if the build was successful
 echo Build successful.
 echo Test executable created at: %TEST_EXE%
-echo Static library created at: %TARGET_DIR%\libmockexit.a
+echo Static library created at: %TEST_OBJECT_DIR%\libmockexit.a
 
 REM Run the test executable
 echo Running tests...
