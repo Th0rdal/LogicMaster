@@ -21,6 +21,11 @@ extern "C"
 
 #include "unity_internals.h"
 
+//CHANGE my changes all here
+#define UNITY_OUTPUT_COLOR
+void UnitySetTestFile(const char* filename);
+//CHANGE END
+
 /*-------------------------------------------------------
  * Test Setup / Teardown
  *-------------------------------------------------------*/

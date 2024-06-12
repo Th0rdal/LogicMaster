@@ -2,11 +2,10 @@
 
 
 void setUp() {
-    printf("\x1b[0m");
+    setupThrow(); //sets shouldThrow false and exit_status 0
 }
 
 void tearDown() {
-    printf("\x1b[32m");
 }
 
 
@@ -15,10 +14,8 @@ int main(void) {
     UNITY_BEGIN();
 
     // start test cases
-    
-    
-    convertCharArrayToInt_includeTests();
-
+    includeTests_convertCharArrayToInt();
+    includeTests_fenToBitboard();
     // end test cases
     printf("\x1b[0m");
     return UNITY_END();

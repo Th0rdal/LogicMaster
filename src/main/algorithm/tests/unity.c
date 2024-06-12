@@ -24,10 +24,10 @@ void UNITY_OUTPUT_CHAR(int);
 struct UNITY_STORAGE_T Unity;
 
 #ifdef UNITY_OUTPUT_COLOR
-const char UNITY_PROGMEM UnityStrOk[]                            = "\033[42mOK\033[0m";
-const char UNITY_PROGMEM UnityStrPass[]                          = "\033[42mPASS\033[0m";
-const char UNITY_PROGMEM UnityStrFail[]                          = "\033[41mFAIL\033[0m";
-const char UNITY_PROGMEM UnityStrIgnore[]                        = "\033[43mIGNORE\033[0m";
+const char UNITY_PROGMEM UnityStrOk[]                            = "\033[32mOK\033[0m";
+const char UNITY_PROGMEM UnityStrPass[]                          = "\033[32mPASS\033[0m";
+const char UNITY_PROGMEM UnityStrFail[]                          = "\033[31mFAIL\033[0m";
+const char UNITY_PROGMEM UnityStrIgnore[]                        = "\033[33mIGNORE\033[0m";
 #else
 const char UNITY_PROGMEM UnityStrOk[]                            = "OK";
 const char UNITY_PROGMEM UnityStrPass[]                          = "PASS";
@@ -89,11 +89,17 @@ static void UnityPrintChar(const char* pch)
         UNITY_OUTPUT_CHAR('r');
     }
     /* write escaped line feeds */
+    //CHANGED added linefeed and tab as possibilities, because needed
     else if (*pch == 10)
     {
-        UNITY_OUTPUT_CHAR('\\');
-        UNITY_OUTPUT_CHAR('n');
+        //UNITY_OUTPUT_CHAR('\\');
+        UNITY_OUTPUT_CHAR('\n');
     }
+    else if (*pch == 9) 
+    {
+        UNITY_OUTPUT_CHAR('\t');
+    }
+    //CHANGED END
     /* unprintable characters are shown as codes */
     else
     {
@@ -2151,7 +2157,11 @@ void UnityFail(const char* msg, const UNITY_LINE_TYPE line)
         {
             UNITY_OUTPUT_CHAR(' ');
         }
+        //CHANDED added red color
+        printf("\x1b[31m");
         UnityPrint(msg);
+        printf("\x1b[0m");
+        //CHANGED END
     }
 
     UNITY_FAIL_AND_BAIL;

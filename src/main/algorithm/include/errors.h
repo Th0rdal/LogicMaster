@@ -1,4 +1,4 @@
-
+#ifndef ERRORCODES_H
 #define ERRORCODES_H
 
 #include <stdio.h>

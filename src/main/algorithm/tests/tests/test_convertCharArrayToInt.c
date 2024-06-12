@@ -16,7 +16,6 @@ void test_convertCharArrayToInt_perfect_input(void) {
     int actual3 = convertCharArrayToInt(testValue3);
     int actual4 = convertCharArrayToInt(testValue4);
 
-    printf("\x1b[31m");
     TEST_ASSERT_EQUAL_INT(expected1, actual1);
     TEST_ASSERT_EQUAL_INT(expected2, actual2);
     TEST_ASSERT_EQUAL_INT(expected3, actual3);
@@ -24,11 +23,11 @@ void test_convertCharArrayToInt_perfect_input(void) {
 }
 
 void test_convertCharArrayToInt_nonDigit_input(void) {
+    shouldThrow = true;
+
     char* testValue1 = "d";
     char* testValue2 = "3IAN";
     char* testValue3 = "-3f";
-
-    printf("\x1b[31m");
 
     exit_status = 0;
     if (setjmp(exit_jump) == 0) {
@@ -51,7 +50,18 @@ void test_convertCharArrayToInt_nonDigit_input(void) {
     
 }
 
-void convertCharArrayToInt_includeTests() {
+static void __loadTests() {
     RUN_TEST(test_convertCharArrayToInt_perfect_input);
     RUN_TEST(test_convertCharArrayToInt_nonDigit_input);
+}
+
+void runTests_convertCharArrayToInt() {
+    UNITY_BEGIN();
+    __loadTests();
+    UNITY_END();
+}
+
+void includeTests_convertCharArrayToInt() {
+    UnitySetTestFile(__FILE__);
+    __loadTests();
 }
