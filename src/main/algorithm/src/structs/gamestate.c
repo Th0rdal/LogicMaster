@@ -1,7 +1,5 @@
 #include "structs/gamestate.h"
 
-static Counters countersInit();
-static GamestateFlags gamestateFlagInit();
 
 /**
  * initializes all variables with values and returns an initialized gamestate.
@@ -24,7 +22,7 @@ Gamestate gamestateInit() {
  * @return: initialized Counters struct
  *
  */
-static Counters countersInit() {
+Counters countersInit() {
     Counters counters;
     counters.fullMove = 0;
     counters.halfMove = 0;
@@ -37,7 +35,7 @@ static Counters countersInit() {
  * @return: initialized GamestateFlags struct
  *
  */
-static GamestateFlags gamestateFlagInit() {
+GamestateFlags gamestateFlagInit() {
     GamestateFlags flags;
     flags.whiteKCastle = false;
     flags.whiteQCastle = false;

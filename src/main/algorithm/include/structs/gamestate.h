@@ -67,5 +67,7 @@ typedef struct {
 
 Gamestate gamestateInit();
 Position positionInit();
+Counters countersInit();
+GamestateFlags gamestateFlagInit();
 
 #endif

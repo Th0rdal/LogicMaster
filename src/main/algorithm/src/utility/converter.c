@@ -18,9 +18,9 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
     short partCounter = 0;
     short pieceCounter = 0;
     char fenChar = fen[0];
-    char* part = "";
+    char part[128];
 
-    while (fen[counter] != '\0' && maxLoopCounter < 127) {
+    while (fen[counter] != '\0' && maxLoopCounter < 256) {
         maxLoopCounter++;
         fenChar = fen[counter];
         
@@ -36,6 +36,8 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
                 counter++;
                 continue;
             case 2:
+                // no need to filter for - (no castling anymore), because it switches away
+                // from case 2 after the first counter. 
                 switch (fenChar) {
                     case 'K':
                         gamestate->flags.whiteKCastle = true;
@@ -54,23 +56,21 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
                 continue;
             case 3:
                 if (fenChar == '-') {
+                    counter++;
                     continue;
                 }
                 gamestate->flags.canEnPassant = true;
-                char* tempChar = "";
-                getFenPart(&fenChar, &counter, tempChar);
-                convertCharArrayToPosition(tempChar, &gamestate->enPassantPosition);
-                counter++;
+                getFenPart(fen, &counter, part);
+                part[0] = 'k';
+                convertCharArrayToPosition(part, &gamestate->enPassantPosition);
                 continue;
             case 4:
                 getFenPart(fen, &counter, part);
                 gamestate->counters.halfMove = atoi(part);
-                counter++;
                 continue;
             case 5:
                 getFenPart(fen, &counter, part);
                 gamestate->counters.fullMove = atoi(part);
-                counter++;
                 continue;
         }
        
@@ -79,7 +79,7 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
             gamestate->bitboards.black += temp;
             gamestate->bitboards.occupancy += temp;
             setPieceOnBitboard(fenChar, temp, &gamestate->bitboards);
-      pieceCounter++;
+            pieceCounter++;
         } else if (isupper(fenChar)) { // upper case piece means white piece
             uint64_t temp = pow(2, 63 - pieceCounter);
             gamestate->bitboards.white += temp;
@@ -95,6 +95,9 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
             continue;
         }
         counter++;
+    }
+    if (maxLoopCounter >= 127) {
+        printf("ERROR"); //TODO make throwWarning with new max loop count reached
     }
 
 }
@@ -134,8 +137,7 @@ static void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboard
             bitboards->bishop += value;
             break;
         default:
-            fprintf(stderr, "Error in converting fen notation to bitboards: character '%c' not defined.\n", fenChar);
-            exit(ERROR_FEN_CHAR_NOT_DEFINED);            
+            throwError(ERROR_FEN_CHAR_NOT_DEFINED, "Error in converting fen notation to bitboards: character '%c' not defined.\n", fenChar);   
     }
 }
 
@@ -149,20 +151,17 @@ static void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboard
  * @exit ERROR_FETCHING_FEN_PART: If after completing fetching, the next character is not a space
  *
  */
-static void getFenPart(char* fen, short* startIndex, char* part) {
+static void getFenPart(char* fen, short* startIndex, char* toWrite) {
+    memset(toWrite, '\0', strlen(toWrite)+1); // reset toWrite string
     int i;
 
-    for (i = 0; i < 128 || !isspace(fen[*startIndex+i]); i++) {
-        if (isspace(fen[*startIndex+i])) {
-            break;
-        }
-        part[i] = fen[*startIndex+i];
+    for (i = 0; i < 4 && !isspace(fen[*startIndex+i]) && fen[*startIndex+i] != '\0'; i++) {
+        toWrite[i] = fen[*startIndex+i];
     }
-    if (!isspace(fen[*startIndex+i])) { // sanity check if the next character is space. Can happen if part is longer than 128 character
-        fprintf(stderr, "Error in trying to fetch next fen notation part. Next character after fetching '%s' from '%s' is not a space\n", part, fen);
-        exit(ERROR_FETCHING_FEN_PART);
+    if (!isspace(fen[*startIndex+i]) && fen[*startIndex+i] != '\0') { // sanity check if the next character is space. Can happen if part is longer than 128 character
+        throwError(ERROR_FETCHING_FEN_PART, "Error in trying to fetch next fen notation part. Next character after fetching '%s' from '%s' is not a space\n", toWrite, fen);
     }
-    *startIndex += i; // add i -1 to the current counter. i-1 because space is needed in other parts of the fen notation loading
+    *startIndex += i; // add i to the current counter.
 }
 
 /*
@@ -176,31 +175,27 @@ static void getFenPart(char* fen, short* startIndex, char* part) {
  */
 static void convertCharArrayToPosition(char* fenChar, Position* position) {
     short temp;
-    char rank = *fenChar;
-    char file = *(fenChar+1);
+    char file = *fenChar;
+    char rank = *(fenChar+1);
 
-    if (isalpha(rank)) {
-        temp = rank - 'a';
+    if (isdigit(rank)) {
+        temp = rank - '0';
         if (temp > 8 || temp < 1) {
-            fprintf(stderr, "Error in converting char position to Position struct: character file '%c' does not convert to a number between 1 and 8.\n", rank);
-            exit(ERROR_CANNOT_CONVERT_POSITION);
-        }
-        position->file = temp;
-    } else {
-        fprintf(stderr, "Error in converting char position to Position struct: character '%c' not defined.\n", rank);
-        exit(ERROR_CANNOT_CONVERT_POSITION);
-    }
-
-    if (isdigit(file)) {
-        temp = file - '0';
-        if (temp > 8 || temp < 0) {
-            fprintf(stderr, "Error in converting char position to Position struct: character rank '%c' does not convert to a number between 1 and 8.\n", file);
-            exit(ERROR_CANNOT_CONVERT_POSITION);
+            throwError(ERROR_CANNOT_CONVERT_POSITION, "Error in converting char position to Position struct: rank: character file '%c' does not convert to a number between 1 and 8.\n", rank);
         }
         position->rank = temp;
     } else {
-        fprintf(stderr, "Error in converting char position to Position struct: character '%c' not defined.\n", file);
-        exit(ERROR_CANNOT_CONVERT_POSITION);
+        throwError(ERROR_CANNOT_CONVERT_POSITION, "Error in converting char position to Position struct: rank: character '%c' not defined.\n", rank);
+    }
+
+    if (isalpha(file)) {
+        temp = file - '`';
+        if (temp > 8 || temp < 0) {
+            throwError(ERROR_CANNOT_CONVERT_POSITION, "Error in converting char position to Position struct: file: character rank '%c' does not convert to a number between 1 and 8.\n", file);
+        }
+        position->file = temp;
+    } else {
+        throwError(ERROR_CANNOT_CONVERT_POSITION, "Error in converting char position to Position struct: file: character '%c' not defined.\n", file);
     }
 }
 

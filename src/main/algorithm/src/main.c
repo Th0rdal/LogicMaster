@@ -27,6 +27,5 @@ int main(int argc, char *argv[]) {
     Gamestate gamestate = gamestateInit();
     char* fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     fenToBitboard(fen, &gamestate);
-
     return 0;
 }
