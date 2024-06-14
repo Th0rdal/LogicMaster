@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #include "bitboards.h"
+#include "position.h"
 
 enum PIECE {
     PAWN,
@@ -13,11 +14,6 @@ enum PIECE {
     QUEEN,
     KING
 };
-
-typedef struct { // initialized to 0
-    short rank; // row
-    short file; //column
-} Position;
 
 typedef struct {
     bool capture;
@@ -66,7 +62,6 @@ typedef struct {
 } Gamestate;
 
 Gamestate gamestateInit();
-Position positionInit();
 Counters countersInit();
 GamestateFlags gamestateFlagInit();
 

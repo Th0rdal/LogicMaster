@@ -2,7 +2,7 @@
 
 
 void setUp() {
-    setupThrow(); //sets shouldThrow false and exit_status 0
+    shouldThrow = false;
 }
 
 void tearDown() {
@@ -16,6 +16,7 @@ int main(void) {
     // start test cases
     includeTests_convertCharArrayToInt();
     includeTests_fenToBitboard();
+    includeTests_positionStruct();
     // end test cases
     printf("\x1b[0m");
     return UNITY_END();

@@ -29,23 +29,17 @@ void test_convertCharArrayToInt_nonDigit_input(void) {
     char* testValue2 = "3IAN";
     char* testValue3 = "-3f";
 
-    exit_status = 0;
-    if (setjmp(exit_jump) == 0) {
-        convertCharArrayToInt(testValue1);
-    }
-    TEST_ASSERT_EQUAL_MESSAGE(ERROR_CONVERTING_CHARARRAY_TO_INT, exit_status, "Single character 'd' does not make it fail");
+    TEST_ASSERT_EQUAL_THROW(ERROR_CONVERTING_CHARARRAY_TO_INT);
+    convertCharArrayToInt(testValue1);
+    THROW_CLEANUP();
 
-    exit_status = 0;
-    if (setjmp(exit_jump) == 0) {
-        convertCharArrayToInt(testValue2);
-    }
-    TEST_ASSERT_EQUAL_MESSAGE(ERROR_CONVERTING_CHARARRAY_TO_INT, exit_status, "Illegal character 'I' after number does not make it fail");
+    TEST_ASSERT_EQUAL_THROW_MESSAGE(ERROR_CONVERTING_CHARARRAY_TO_INT, "Illegal character 'I' after number does not make it fail");
+    convertCharArrayToInt(testValue2);
+    THROW_CLEANUP();
     
-    exit_status = 0;
-    if (setjmp(exit_jump) == 0) {
-        convertCharArrayToInt(testValue3);
-    }
-    TEST_ASSERT_EQUAL_MESSAGE(ERROR_CONVERTING_CHARARRAY_TO_INT, exit_status, "Illegal character 'f' after number and minus sign does not make it fail");
+    TEST_ASSERT_EQUAL_THROW_MESSAGE(ERROR_CONVERTING_CHARARRAY_TO_INT, "Illegal character 'f' after number and minus sign does not make it fail");
+    convertCharArrayToInt(testValue3);
+    THROW_CLEANUP();
         
     
 }

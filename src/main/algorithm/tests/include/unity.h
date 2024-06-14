@@ -22,6 +22,7 @@ extern "C"
 #include "unity_internals.h"
 
 //CHANGE my changes all here
+#include "mockExit.h"
 #define UNITY_OUTPUT_COLOR
 void UnitySetTestFile(const char* filename);
 //CHANGE END
@@ -136,6 +137,13 @@ void verifyTest(void);
 /*-------------------------------------------------------
  * Test Asserts (simple)
  *-------------------------------------------------------*/
+
+//CHANGE added throw test
+#define TEST_ASSERT_EQUAL_THROW(expected)                                                          UNITY_TEST_ASSERT_THROW((expected), __LINE__, NULL)
+#define TEST_ASSERT_EQUAL_THROW_MESSAGE(expected, message)                                         UNITY_TEST_ASSERT_THROW((expected), __LINE__, message)
+#define THROW_CLEANUP()                                                                            UNITY_THROW_CLEANUP(__LINE__, NULL)
+#define THROW_CLEANUP_MESSAGE(message)                                                             UNITY_THROW_CLEANUP(__LINE__, message)
+//CHANGE END
 
 /* Boolean */
 #define TEST_ASSERT(condition)                                                                     UNITY_TEST_ASSERT(       (condition), __LINE__, " Expression Evaluated To FALSE")

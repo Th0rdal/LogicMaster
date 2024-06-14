@@ -73,6 +73,8 @@ static const char UNITY_PROGMEM UnityStrDetail2Name[]            = " " UNITY_DET
  * Pretty Printers & Test Result Output Handlers
  *-----------------------------------------------*/
 
+
+
 /*-----------------------------------------------*/
 /* Local helper function to print characters. */
 static void UnityPrintChar(const char* pch)
@@ -2495,4 +2497,49 @@ int UnityTestMatches(void)
 }
 
 #endif /* UNITY_USE_COMMAND_LINE_ARGS */
+
+// CHANGE add test functions for throwError
+void UnityAssertEqualExitCode(
+        const UNITY_INT expected,
+        const char* msg,
+        const UNITY_LINE_TYPE lineNumber,
+        const UNITY_DISPLAY_STYLE_T style) {
+    
+    RETURN_IF_FAIL_OR_IGNORE;
+    
+    
+    volatile UNITY_INT volatileExpected = expected; // declare volatile so it survives the jump
+
+    if (setjmp(exit_jump) == 0) {
+        return;    
+    }
+    
+    UNITY_INT exitStatus = exit_status;
+    if (volatileExpected != exitStatus) {
+        UnityTestResultsFailBegin(lineNumber);
+        UnityPrint(UnityStrExpected);
+        UnityPrintNumberByStyle(volatileExpected, style);
+        UnityPrint(UnityStrWas);
+        UnityPrintNumberByStyle(exit_status, style);
+        UnityAddMsgIfSpecified(msg);
+        UNITY_FAIL_AND_BAIL;
+    }
+}
+
+void UnityThrowCleanup(
+        const char* msg,
+        const UNITY_LINE_TYPE lineNumber) {
+
+    if (shouldThrow && exit_status == 0) { // means it didnt throw
+        UnityTestResultsFailBegin(lineNumber);
+        UnityPrint(UnityStrExpected);
+        UnityPrint("throwError, but did not throw");
+        UnityAddMsgIfSpecified(msg);
+        exit_status = 0;
+        UNITY_FAIL_AND_BAIL;
+    }
+    exit_status = 0;
+}
+// END CHANGE
+
 /*-----------------------------------------------*/

@@ -594,6 +594,15 @@ void UnityPrintFloat(const UNITY_DOUBLE input_number);
  *  convention and will pull in file and line information
  *  for you. */
 
+//CHANGE added definitions
+void UnityAssertEqualExitCode(const UNITY_INT expected,
+                              const char* msg,
+                              const UNITY_LINE_TYPE lineNumber,
+                              const UNITY_DISPLAY_STYLE_T style);
+
+void UnityThrowCleanup(const char* msg,
+                       const UNITY_LINE_TYPE lineNumber);
+//CHANGE END
 void UnityAssertEqualNumber(const UNITY_INT expected,
                             const UNITY_INT actual,
                             const char* msg,
@@ -880,6 +889,11 @@ int UnityTestMatches(void);
 #define UNITY_TEST_ASSERT_NOT_NULL(pointer, line, message)                                       UNITY_TEST_ASSERT(((pointer) != NULL),  (line), (message))
 #define UNITY_TEST_ASSERT_EMPTY(pointer, line, message)                                          UNITY_TEST_ASSERT(((pointer[0]) == 0),  (line), (message))
 #define UNITY_TEST_ASSERT_NOT_EMPTY(pointer, line, message)                                      UNITY_TEST_ASSERT(((pointer[0]) != 0),  (line), (message))
+
+// CHANGE added throw test assertion
+#define UNITY_TEST_ASSERT_THROW(expected, line, message)                                         UnityAssertEqualExitCode((UNITY_INT)(expected), (message), (UNITY_LINE_TYPE)(line), UNITY_DISPLAY_STYLE_INT)
+#define UNITY_THROW_CLEANUP(line, message)                                                       UnityThrowCleanup((message), (UNITY_LINE_TYPE)(line))
+// CHANGE END
 
 #define UNITY_TEST_ASSERT_EQUAL_INT(expected, actual, line, message)                             UnityAssertEqualNumber((UNITY_INT)(expected), (UNITY_INT)(actual), (message), (UNITY_LINE_TYPE)(line), UNITY_DISPLAY_STYLE_INT)
 #define UNITY_TEST_ASSERT_EQUAL_INT8(expected, actual, line, message)                            UnityAssertEqualNumber((UNITY_INT)(UNITY_INT8 )(expected), (UNITY_INT)(UNITY_INT8 )(actual), (message), (UNITY_LINE_TYPE)(line), UNITY_DISPLAY_STYLE_INT8)
