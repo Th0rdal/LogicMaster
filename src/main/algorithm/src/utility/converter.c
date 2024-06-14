@@ -2,7 +2,6 @@
 
 static void getFenPart(char* fen, short* startIndex, char* part);
 static void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboards);
-static void convertCharArrayToPosition(char* fenChar, Position* position);
 
 /**
  * Converts a fen notation char array into a bitboard struct and writes it into the bitboard struct
@@ -61,7 +60,6 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
                 }
                 gamestate->flags.canEnPassant = true;
                 getFenPart(fen, &counter, part);
-                part[0] = 'k';
                 convertCharArrayToPosition(part, &gamestate->enPassantPosition);
                 continue;
             case 4:
@@ -164,39 +162,5 @@ static void getFenPart(char* fen, short* startIndex, char* toWrite) {
     *startIndex += i; // add i to the current counter.
 }
 
-/*
- * convert a char Array to a position. This function expects a char array with length 2. All further characters will be ignored!
- *
- * @param fenChar: char array with the position to convert
- * @param position: Position struct to save the position in
- *
- * @exit ERROR_CANNOT_CONVERT_POSITION: either value cannot be converted to number between 1 and 8 or is not defined
- *
- */
-static void convertCharArrayToPosition(char* fenChar, Position* position) {
-    short temp;
-    char file = *fenChar;
-    char rank = *(fenChar+1);
-
-    if (isdigit(rank)) {
-        temp = rank - '0';
-        if (temp > 8 || temp < 1) {
-            throwError(ERROR_CANNOT_CONVERT_POSITION, "Error in converting char position to Position struct: rank: character file '%c' does not convert to a number between 1 and 8.\n", rank);
-        }
-        position->rank = temp;
-    } else {
-        throwError(ERROR_CANNOT_CONVERT_POSITION, "Error in converting char position to Position struct: rank: character '%c' not defined.\n", rank);
-    }
-
-    if (isalpha(file)) {
-        temp = file - '`';
-        if (temp > 8 || temp < 0) {
-            throwError(ERROR_CANNOT_CONVERT_POSITION, "Error in converting char position to Position struct: file: character rank '%c' does not convert to a number between 1 and 8.\n", file);
-        }
-        position->file = temp;
-    } else {
-        throwError(ERROR_CANNOT_CONVERT_POSITION, "Error in converting char position to Position struct: file: character '%c' not defined.\n", file);
-    }
-}
 
 

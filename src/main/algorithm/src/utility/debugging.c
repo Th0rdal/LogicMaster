@@ -1,4 +1,4 @@
-#include "debug/debugging.h"
+#include "utility/debugging.h"
 
 /*
  * prints a bitboard out in a chess board pattern

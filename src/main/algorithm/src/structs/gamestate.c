@@ -46,16 +46,5 @@ GamestateFlags gamestateFlagInit() {
     return flags;
 }
 
-/*
- * creates and initializes a Position struct. Initialization with 0
- *
- * @return: initialized Position struct
- *
- */
-Position positionInit() {
-    Position position;
-    position.rank = 0;
-    position.file = 0;
-    return position;
-}
+
 

@@ -4,12 +4,21 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "structs/gamestate.h"
+// utility functions
 #include "utility/converter.h"
-#include "structs/bitboards.h"
-#include "debug/debugging.h"
+#include "utility/debugging.h"
 
-#define TRUE 1
-#define FALSE 0
+// structs
+#include "structs/gamestate.h"
+#include "structs/bitboards.h"
+
+// algorithm includes
+#include "minimax/minimax.h"
+
+
+typedef enum {
+    FEN,
+    NONE
+}INPUTFORMAT; 
 
 #endif

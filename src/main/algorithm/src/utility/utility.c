@@ -20,3 +20,4 @@ int convertCharArrayToInt(char* charNumber) {
     }
     return atoi(charNumber);
 }
+
