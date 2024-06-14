@@ -1,0 +1,12 @@
+
+algorithmus hat 3 parts
+
+1) preprocessing
+    In diesem Schritt werden alle Möglichen Züge gefunden, solange die maximale Tiefe nicht erreicht ist
+
+2) core
+    Der eigendliche Algorithmus. Beurteilt die Endergebnisse (Gamestate bei maximaler Tiefe) mithilfe von fitness Funktion.
+    Verwendet minimax um dann den besten Zug zu finden
+
+3) postprocessing
+    Räumt alles auf (z.B. variablen).
