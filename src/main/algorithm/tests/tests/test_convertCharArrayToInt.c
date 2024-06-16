@@ -1,6 +1,6 @@
 #include "tests/test_convertCharArrayToInt.h"
 
-void test_convertCharArrayToInt_perfect_input(void) {
+void test_utility_convertCharArrayToInt_perfectInput(void) {
     char* testValue1 = "123";
     char* testValue2 = "4";
     char* testValue3 = "59";
@@ -22,7 +22,7 @@ void test_convertCharArrayToInt_perfect_input(void) {
     TEST_ASSERT_EQUAL_INT(expected4, actual4);
 }
 
-void test_convertCharArrayToInt_nonDigit_input(void) {
+void test_utility_convertCharArrayToInt_nonDigitInput(void) {
     shouldThrow = true;
 
     char* testValue1 = "d";
@@ -45,8 +45,8 @@ void test_convertCharArrayToInt_nonDigit_input(void) {
 }
 
 static void __loadTests() {
-    RUN_TEST(test_convertCharArrayToInt_perfect_input);
-    RUN_TEST(test_convertCharArrayToInt_nonDigit_input);
+    RUN_TEST(test_utility_convertCharArrayToInt_perfectInput);
+    RUN_TEST(test_utility_convertCharArrayToInt_nonDigitInput);
 }
 
 void runTests_convertCharArrayToInt() {

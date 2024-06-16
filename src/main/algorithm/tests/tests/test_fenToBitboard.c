@@ -1,6 +1,6 @@
 #include "tests/test_fenToBitboard.h"
 
-void test_fenToBitboard_working_input1(void) {
+void test_converter_fenToBitboard_workingInput1(void) {
     Gamestate gamestate = gamestateInit();
     char* fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     
@@ -54,7 +54,7 @@ void test_fenToBitboard_working_input1(void) {
 
 }
 
-void test_fenToBitboard_working_input2(void) {
+void test_converter_fenToBitboard_workingInput2(void) {
     Gamestate gamestate = gamestateInit();
     char* fen = "rnbq1bnr/ppppkppp/8/4p3/3P4/2N5/PPP1PPPP/1RBQKBNR b K - 3 3"; 
         
@@ -108,7 +108,7 @@ void test_fenToBitboard_working_input2(void) {
 
 }
 
-void test_fenToBitboard_working_input3(void) {
+void test_converter_fenToBitboard_workingInput3(void) {
     Gamestate gamestate = gamestateInit();
     char* fen = "6k1/3qbp2/4n1p1/3QP2p/7P/1B3NP1/5PK1/8 b - - 3 40"; 
 
@@ -162,7 +162,7 @@ void test_fenToBitboard_working_input3(void) {
 
 }
 
-void test_fenToBitboard_working_input4(void) {
+void test_converter_fenToBitboard_workingInput4(void) {
     //setupJump();
     if (exit_status != 0) {
         return;
@@ -221,10 +221,10 @@ void test_fenToBitboard_working_input4(void) {
 }
 
 static void __loadTests() {
-    RUN_TEST(test_fenToBitboard_working_input1); 
-    RUN_TEST(test_fenToBitboard_working_input2);
-    RUN_TEST(test_fenToBitboard_working_input3);
-    RUN_TEST(test_fenToBitboard_working_input4);
+    RUN_TEST(test_converter_fenToBitboard_workingInput1); 
+    RUN_TEST(test_converter_fenToBitboard_workingInput2);
+    RUN_TEST(test_converter_fenToBitboard_workingInput3);
+    RUN_TEST(test_converter_fenToBitboard_workingInput4);
 }
 
 void runTests_fenToBitboard() {

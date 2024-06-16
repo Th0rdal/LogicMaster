@@ -17,6 +17,7 @@ int main(void) {
     includeTests_convertCharArrayToInt();
     includeTests_fenToBitboard();
     includeTests_positionStruct();
+    includeTests_reverseBitboard();
     // end test cases
     printf("\x1b[0m");
     return UNITY_END();

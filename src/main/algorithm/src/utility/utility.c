@@ -21,3 +21,13 @@ int convertCharArrayToInt(char* charNumber) {
     return atoi(charNumber);
 }
 
+uint64_t reverseBitboard(uint64_t bitboard) {
+    uint64_t reverse = bitboard;
+    reverse = ((reverse & 0x5555555555555555) << 1) | ((reverse >> 1) & 0x5555555555555555);
+    reverse = ((reverse & 0x3333333333333333) << 2) | ((reverse >> 2) & 0x3333333333333333);
+    reverse = ((reverse & 0x0f0f0f0f0f0f0f0f) << 4) | ((reverse >> 4) & 0x0f0f0f0f0f0f0f0f);
+    reverse = ((reverse & 0x00ff00ff00ff00ff) << 8) | ((reverse >> 8) & 0x00ff00ff00ff00ff);
+    reverse = ((reverse & 0x0000ffff0000ffff) << 16) | ((reverse >> 16) & 0x0000ffff0000ffff);
+    reverse = (reverse << 32) | (reverse >> 32);
+    return reverse;
+}
