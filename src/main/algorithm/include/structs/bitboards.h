@@ -70,6 +70,11 @@ typedef struct {
     const uint64_t boards[64];
 } KnightMoveDictionary;
 
+typedef struct {
+    const int size;
+    const uint64_t boards[64];
+} KingMoveDictionary;
+
 extern Bitboards bitboardsInit();
 
 extern const FileBitboards fileBitboards;

@@ -18,6 +18,7 @@ int main(void) {
     includeTests_fenToBitboard();
     includeTests_positionStruct();
     includeTests_reverseBitboard();
+    includeTests_moveCalculator();
     // end test cases
     printf("\x1b[0m");
     return UNITY_END();

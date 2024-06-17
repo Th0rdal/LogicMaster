@@ -6,5 +6,6 @@
 #include "tests\test_fenToBitboard.h"
 #include "tests\test_positionStruct.h"
 #include "tests\test_reverseBitboard.h"
+#include "tests\test_moveCalculator.h"
 
 #endif

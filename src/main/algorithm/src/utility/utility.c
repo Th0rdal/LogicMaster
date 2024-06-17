@@ -21,6 +21,14 @@ int convertCharArrayToInt(char* charNumber) {
     return atoi(charNumber);
 }
 
+/*
+ * reverses a uint64_t bitwise
+ *
+ * @param: number to reverse
+ *
+ * @return: number bitwise reversed
+ *
+ */
 uint64_t reverseBitboard(uint64_t bitboard) {
     uint64_t reverse = bitboard;
     reverse = ((reverse & 0x5555555555555555) << 1) | ((reverse >> 1) & 0x5555555555555555);

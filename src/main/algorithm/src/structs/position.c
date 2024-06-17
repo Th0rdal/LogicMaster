@@ -114,3 +114,34 @@ void convertCharArrayToPosition(char* fenChar, Position* position) {
         throwError(ERROR_POSITION_VALUE_OUTSIDE_EXPECTED, "Error in converting char position to Position struct: file: character '%c' not defined.\n", file);
     }
 }
+
+/*
+ * converts the position into the index needed for the diagonal
+ *
+ * @param position: the position to convert
+ *
+ * @return: index of diagonal
+ *
+ * */
+short getDiagonalIndexFromPosition(Position* position) {
+    return 8 - position->rank + (8 - position->file);
+}
+
+short getDiagonalIndexFromShort(short position) {
+    return 8 - (position/8+1) + (8 - position%8) - 1;
+}
+
+/*
+ * converts the position into the index needed for the anti-diagonal
+ *
+ * @param position: the position to convert
+ *
+ * @return: index of anti-diagonal
+ *
+ * */short getAntiDiagonalIndexFromPosition(Position* position) {
+    return 8 - position->rank + (8 - (8 - position->file));
+}
+
+short getAntiDiagonalIndexFromShort(short position) {
+    return 8 - (position/8+1) + (8 - (8 - position%8));
+}
