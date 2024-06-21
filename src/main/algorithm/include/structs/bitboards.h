@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "position.h"
+
 typedef struct {
    uint64_t occupancy;
    
@@ -14,8 +16,7 @@ typedef struct {
    uint64_t queen;
    uint64_t king;
 
-   uint64_t white;
-   uint64_t black;
+   uint64_t color[2]; // index black = 0, index white = 1
 } Bitboards;
 
 typedef struct {
@@ -29,6 +30,7 @@ typedef struct {
     const uint64_t fileH;
     const int size;
     const uint64_t boards[8];
+    const uint64_t reverseBoards[8];
 } FileBitboards;
 
 typedef struct {
@@ -42,6 +44,9 @@ typedef struct {
     const uint64_t rank8;
     const int size;
     const uint64_t boards[8];
+    const uint64_t reverseBoards[8];
+    const short pawnPromotionRank[2];
+    const short pawn2SquareMoveRank[2];
 } RankBitboards;
 
 typedef struct { // diagonals go from left bottom to right top e.g., A1 - H8
@@ -68,12 +73,18 @@ typedef struct { // diagonals go from left bottom to right top e.g., A1 - H8
 typedef struct {
     const int size;
     const uint64_t boards[64];
-} KnightMoveDictionary;
+} MoveDictionary;
 
 typedef struct {
-    const int size;
-    const uint64_t boards[64];
-} KingMoveDictionary;
+    const uint64_t queenCastle[2]; // mask for all squares that need to be looked at for queen castling
+    const uint64_t kingCastle[2]; // mask for all squares that need to be looked at for king castling
+    const Position queenCastlePositions[2][2];
+    const Position kingCastlePositions[2][2];
+    const short pawn1SquareAdd[2];
+    const short pawn2SquareAdd[2];
+    const short pawnCaptureRight[2];
+    const short pawnCaptureLeft[2];
+} SpecialMoveDictionary;
 
 extern Bitboards bitboardsInit();
 
@@ -81,6 +92,10 @@ extern const FileBitboards fileBitboards;
 extern const RankBitboards rankBitboards;
 extern const DiagonalBitboards diagonalBitboards;
 extern const DiagonalBitboards antiDiagonalBitboards;
-extern const KnightMoveDictionary knightMoveDictionary;
+extern const MoveDictionary knightMoveDictionary;
+extern const MoveDictionary kingMoveDictionary;
+extern const MoveDictionary positionDictionary;
+extern const MoveDictionary reversePositionDictionary;
+extern const SpecialMoveDictionary specialMoveDictionary;
 
 #endif

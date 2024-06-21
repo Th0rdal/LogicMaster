@@ -36,14 +36,14 @@ void test_converter_fenToBitboard_workingInput1(void) {
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate.bitboards.king, "king bitboard");
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate.bitboards.occupancy, "occupancy bitboard");
 
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.white, "white bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.black, "black bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.color[1], "white bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.color[0], "black bitboard");
 
     TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.isWhiteTurn, "isWhiteTurn");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.whiteKCastle, "white king castle");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.whiteQCastle, "white queen castle");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.blackKCastle, "black king castle");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.blackQCastle, "black queen castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.kCastle[1], "white king castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.qCastle[1], "white queen castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.kCastle[0], "black king castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.kCastle[0], "black queen castle");
     TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.canEnPassant, "can en passant");
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate.enPassantPosition.rank, "en passant rank");
@@ -90,14 +90,14 @@ void test_converter_fenToBitboard_workingInput2(void) {
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate.bitboards.king, "king bitboard");
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate.bitboards.occupancy, "occupancy bitboard");
 
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.white, "white bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.black, "black bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.color[1], "white bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.color[0], "black bitboard");
 
     TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.isWhiteTurn, "isWhiteTurn");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.whiteKCastle, "white king castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.whiteQCastle, "white queen castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.blackKCastle, "black king castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.blackQCastle, "black queen castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.kCastle[1], "white king castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.qCastle[1], "white queen castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.kCastle[0], "black king castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.qCastle[0], "black queen castle");
     TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.canEnPassant, "can en passant");
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate.enPassantPosition.rank, "en passant rank");
@@ -144,14 +144,14 @@ void test_converter_fenToBitboard_workingInput3(void) {
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate.bitboards.king, "king bitboard");
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate.bitboards.occupancy, "occupancy bitboard");
 
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.white, "white bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.black, "black bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.color[1], "white bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.color[0], "black bitboard");
 
     TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.isWhiteTurn, "isWhiteTurn");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.whiteKCastle, "white king castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.whiteQCastle, "white queen castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.blackKCastle, "black king castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.blackQCastle, "black queen castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.kCastle[1], "white king castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.qCastle[1], "white queen castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.kCastle[0], "black king castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.qCastle[0], "black queen castle");
     TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.canEnPassant, "can en passant");
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate.enPassantPosition.rank, "en passant rank");
@@ -202,14 +202,14 @@ void test_converter_fenToBitboard_workingInput4(void) {
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate.bitboards.king, "king bitboard");
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate.bitboards.occupancy, "occupancy bitboard");
 
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.white, "white bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.black, "black bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.color[1], "white bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.color[0], "black bitboard");
 
     TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.isWhiteTurn, "isWhiteTurn");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.whiteKCastle, "white king castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.whiteQCastle, "white queen castle");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.blackKCastle, "black king castle");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.blackQCastle, "black queen castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.kCastle[1], "white king castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.qCastle[1], "white queen castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.kCastle[0], "black king castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.qCastle[0], "black queen castle");
     TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.canEnPassant, "can en passant");
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate.enPassantPosition.rank, "en passant rank");

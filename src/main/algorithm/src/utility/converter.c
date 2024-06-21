@@ -39,16 +39,16 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
                 // from case 2 after the first counter. 
                 switch (fenChar) {
                     case 'K':
-                        gamestate->flags.whiteKCastle = true;
+                        gamestate->flags.kCastle[1] = true;
                         break;
                     case 'Q':
-                        gamestate->flags.whiteQCastle = true;
+                        gamestate->flags.qCastle[1] = true;
                         break;
                     case 'k':
-                        gamestate->flags.blackKCastle = true;
+                        gamestate->flags.kCastle[0] = true;
                         break;
                     case 'q':
-                        gamestate->flags.blackQCastle = true;
+                        gamestate->flags.qCastle[0] = true;
                         break;
                 }
                 counter++;
@@ -74,13 +74,13 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
        
         if (islower(fenChar)) { // lower case piece means black piece
             uint64_t temp = pow(2, 63 - pieceCounter);
-            gamestate->bitboards.black += temp;
+            gamestate->bitboards.color[0] += temp;
             gamestate->bitboards.occupancy += temp;
             setPieceOnBitboard(fenChar, temp, &gamestate->bitboards);
             pieceCounter++;
         } else if (isupper(fenChar)) { // upper case piece means white piece
             uint64_t temp = pow(2, 63 - pieceCounter);
-            gamestate->bitboards.white += temp;
+            gamestate->bitboards.color[1] += temp;
             gamestate->bitboards.occupancy += temp;
             setPieceOnBitboard(fenChar, temp, &gamestate->bitboards);
             pieceCounter++;

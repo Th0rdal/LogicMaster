@@ -1,6 +1,5 @@
 #include "structs/gamestate.h"
 
-
 /**
  * initializes all variables with values and returns an initialized gamestate.
  * This should be the only way to get a new gamestate.
@@ -8,11 +7,14 @@
  * @return: Gamestate struct after initialization
  */
 Gamestate gamestateInit() {
-    Gamestate gamestate;
-    gamestate.bitboards = bitboardsInit();
-    gamestate.flags = gamestateFlagInit();
-    gamestate.counters = countersInit();
-    gamestate.enPassantPosition = positionInit();
+    Gamestate gamestate = {
+        .bitboards = bitboardsInit(),
+        .flags = gamestateFlagInit(),
+        .counters = countersInit(),
+        .enPassantPosition = positionInit(),
+        .move = moveInit(),
+        .config = gamestateConfigInit(),
+    };
     return gamestate;
 }
 
@@ -23,9 +25,10 @@ Gamestate gamestateInit() {
  *
  */
 Counters countersInit() {
-    Counters counters;
-    counters.fullMove = 0;
-    counters.halfMove = 0;
+    Counters counters = {
+        .fullMove = 0,
+        .halfMove = 0
+    };
     return counters;
 }
 
@@ -36,15 +39,25 @@ Counters countersInit() {
  *
  */
 GamestateFlags gamestateFlagInit() {
-    GamestateFlags flags;
-    flags.whiteKCastle = false;
-    flags.whiteQCastle = false;
-    flags.blackKCastle = false;
-    flags.blackQCastle = false;
-    flags.isWhiteTurn = false;
-    flags.canEnPassant = false;
+    GamestateFlags flags = {
+        .kCastle = {false, false},
+        .qCastle = {false, false},
+        .isWhiteTurn = false,
+        .canEnPassant = false,
+    };
     return flags;
 }
 
-
+/**
+ * creates and initializes a GamestateConfig struct. Initializes it with false/Null
+ *
+ * @return: initialized GamestateConfig
+ *
+ * */
+GamestateConfig gamestateConfigInit() {
+    GamestateConfig config;
+    config.checkedCheck = false;
+    config.lastGamestate = NULL;
+    return config;
+}
 

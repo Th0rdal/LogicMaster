@@ -138,10 +138,15 @@ short getDiagonalIndexFromShort(short position) {
  *
  * @return: index of anti-diagonal
  *
- * */short getAntiDiagonalIndexFromPosition(Position* position) {
+ * */
+short getAntiDiagonalIndexFromPosition(Position* position) {
     return 8 - position->rank + (8 - (8 - position->file));
 }
 
 short getAntiDiagonalIndexFromShort(short position) {
     return 8 - (position/8+1) + (8 - (8 - position%8));
+}
+
+short positionToShort(Position* position) {
+    return (position->rank - 1) * 8 + (8 - position->file); 
 }

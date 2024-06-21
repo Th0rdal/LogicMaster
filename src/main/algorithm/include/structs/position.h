@@ -20,4 +20,6 @@ short getDiagonalIndexFromPosition(Position* position);
 short getDiagonalIndexFromShort(short position);
 short getAntiDiagonalIndexFromPosition(Position* position);
 short getAntiDiagonalIndexFromShort(short position);
+short positionToShort(Position* position);
+
 #endif

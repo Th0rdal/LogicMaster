@@ -29,9 +29,9 @@ void debugGamestate(Gamestate* gamestate) {
     printBoard(gamestate->bitboards.occupancy);
 
     printf("colors white\n");
-    printBoard(gamestate->bitboards.white);
+    printBoard(gamestate->bitboards.color[1]);
     printf("colors black\n");
-    printBoard(gamestate->bitboards.black);
+    printBoard(gamestate->bitboards.color[0]);
     
     printf("pawn:\n");
     printBoard(gamestate->bitboards.pawn);
@@ -51,10 +51,10 @@ void debugGamestate(Gamestate* gamestate) {
 
     printf("\nflags\n");
     printf("turn: %d\n", gamestate->flags.isWhiteTurn);
-    printf("white king castle: %d\n", gamestate->flags.whiteKCastle);
-    printf("white queen castle: %d\n", gamestate->flags.whiteQCastle);
-    printf("black king castle: %d\n", gamestate->flags.blackKCastle);
-    printf("black queen castle: %d\n", gamestate->flags.blackQCastle);
+    printf("white king castle: %d\n", gamestate->flags.kCastle[1]);
+    printf("white queen castle: %d\n", gamestate->flags.qCastle[1]);
+    printf("black king castle: %d\n", gamestate->flags.kCastle[0]);
+    printf("black queen castle: %d\n", gamestate->flags.qCastle[0]);
     printf("can en passant: %d\n", gamestate->flags.canEnPassant);
 
     printf("en Passant Position: %c", gamestate->enPassantPosition.rank + 64);
