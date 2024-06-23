@@ -30,3 +30,10 @@ _Noreturn void throwError(int errorCode, char* format, ...) {
     }
     __builtin_unreachable();
 }
+
+void throwWarning(int warningCode, char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    printf("\x1b[33" "Warning code: %d", warningCode);
+    vfprintf(stderr, format, args);
+}

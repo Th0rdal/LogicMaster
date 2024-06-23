@@ -1,24 +1,24 @@
 #include "tests/test_moveCalculator.h"
 
 void test_kingMove() {
-    Gamestate gamestate = gamestateInit();
+    Gamestate *gamestate = gamestateInit();
     // Bitboards
-    gamestate.bitboards.pawn =     0x000798400C006300; 
-    gamestate.bitboards.rook =     0x8100000000000084;
-    gamestate.bitboards.knight =   0x0000240000600000;
-    gamestate.bitboards.bishop =   0x2008000000100020;
-    gamestate.bitboards.queen =    0x0020000000000010;
-    gamestate.bitboards.king =     0x0800000000000002; 
+    gamestate->bitboards.pawn =     0x000798400C006300; 
+    gamestate->bitboards.rook =     0x8100000000000084;
+    gamestate->bitboards.knight =   0x0000240000600000;
+    gamestate->bitboards.bishop =   0x2008000000100020;
+    gamestate->bitboards.queen =    0x0020000000000010;
+    gamestate->bitboards.king =     0x0800000000000002; 
 
     //color
-    gamestate.bitboards.color[1] =    0x000000000C7063B6;
-    gamestate.bitboards.color[0] =    0xA92FBC4000000000;
+    gamestate->bitboards.color[1] =    0x000000000C7063B6;
+    gamestate->bitboards.color[0] =    0xA92FBC4000000000;
 
-    // occupancy
-    gamestate.bitboards.occupancy = gamestate.bitboards.color[0] | gamestate.bitboards.color[1];
+    // occupa->cy
+    gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
 
-    gamestate.flags.isWhiteTurn = true;
-    gamestate.flags.kCastle[0] = true;
+    gamestate->flags.isWhiteTurn = true;
+    gamestate->flags.kCastle[0] = true;
 
     Position position1;
     position1.rank = 1;
@@ -30,10 +30,10 @@ void test_kingMove() {
 
     uint64_t expected1 = 0x0000000000000401;
     uint64_t expected2 = 0x1610000000000000;
-    uint64_t actual1 = kingMoves(&gamestate, &position1);
+    uint64_t actual1 = kingMoves(gamestate, &position1);
 
-    gamestate.flags.isWhiteTurn = false;
-    uint64_t actual2 = kingMoves(&gamestate, &position2);
+    gamestate->flags.isWhiteTurn = false;
+    uint64_t actual2 = kingMoves(gamestate, &position2);
 
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected1, actual1, "white king G1");
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected2, actual2, "black king E8");
@@ -42,23 +42,23 @@ void test_kingMove() {
 
 
 void test_queenMove() {
-    Gamestate gamestate = gamestateInit();
+    Gamestate *gamestate = gamestateInit();
     // Bitboards
-    gamestate.bitboards.pawn =     0x000798400C006300; 
-    gamestate.bitboards.rook =     0x8100000000000084;
-    gamestate.bitboards.knight =   0x0000240000600000;
-    gamestate.bitboards.bishop =   0x2008000000100020;
-    gamestate.bitboards.queen =    0x0020000000000010;
-    gamestate.bitboards.king =     0x0800000000000002; 
+    gamestate->bitboards.pawn =     0x000798400C006300; 
+    gamestate->bitboards.rook =     0x8100000000000084;
+    gamestate->bitboards.knight =   0x0000240000600000;
+    gamestate->bitboards.bishop =   0x2008000000100020;
+    gamestate->bitboards.queen =    0x0020000000000010;
+    gamestate->bitboards.king =     0x0800000000000002; 
 
     //color
-    gamestate.bitboards.color[1] =    0x000000000C7063B6;
-    gamestate.bitboards.color[0] =    0xA92FBC4000000000;
+    gamestate->bitboards.color[1] =    0x000000000C7063B6;
+    gamestate->bitboards.color[0] =    0xA92FBC4000000000;
 
-    // occupancy
-    gamestate.bitboards.occupancy = gamestate.bitboards.color[0] | gamestate.bitboards.color[1];
+    // occupa->cy
+    gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
 
-    gamestate.flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = true;
 
     Position position1;
     position1.rank = 1;
@@ -71,11 +71,11 @@ void test_queenMove() {
     uint64_t expected1 = 0x0000000102041808;
     uint64_t expected2 = 0x50D0408000000000;
 
-    uint64_t actual1 = queenMoves(&gamestate, &position1);
+    uint64_t actual1 = queenMoves(gamestate, &position1);
 
-    gamestate.flags.isWhiteTurn = false;
+    gamestate->flags.isWhiteTurn = false;
 
-    uint64_t actual2 = queenMoves(&gamestate, &position2);
+    uint64_t actual2 = queenMoves(gamestate, &position2);
 
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected1, actual1, "white queen D1");
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected2, actual2, "black queen C7");
@@ -83,23 +83,23 @@ void test_queenMove() {
 }
 
 void test_knightMove() {
-    Gamestate gamestate = gamestateInit();
+    Gamestate *gamestate = gamestateInit();
     // Bitboards
-    gamestate.bitboards.pawn =     0x000798400C006300; 
-    gamestate.bitboards.rook =     0x8100000000000084;
-    gamestate.bitboards.knight =   0x0000240000600000;
-    gamestate.bitboards.bishop =   0x2008000000100020;
-    gamestate.bitboards.queen =    0x0020000000000010;
-    gamestate.bitboards.king =     0x0800000000000002; 
+    gamestate->bitboards.pawn =     0x000798400C006300; 
+    gamestate->bitboards.rook =     0x8100000000000084;
+    gamestate->bitboards.knight =   0x0000240000600000;
+    gamestate->bitboards.bishop =   0x2008000000100020;
+    gamestate->bitboards.queen =    0x0020000000000010;
+    gamestate->bitboards.king =     0x0800000000000002; 
 
     //color
-    gamestate.bitboards.color[1] =    0x000000000C7063B6;
-    gamestate.bitboards.color[0] =    0xA92FBC4000000000;
+    gamestate->bitboards.color[1] =    0x000000000C7063B6;
+    gamestate->bitboards.color[0] =    0xA92FBC4000000000;
 
-    // occupancy
-    gamestate.bitboards.occupancy = gamestate.bitboards.color[0] | gamestate.bitboards.color[1];
+    // occupa->cy
+    gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
 
-    gamestate.flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = true;
 
     Position position1;
     position1.rank = 3;
@@ -122,13 +122,13 @@ void test_knightMove() {
     uint64_t expected3 = 0x5080008850000000;
     uint64_t expected4 = 0x021000110A000000;
 
-    uint64_t actual1 = knightMoves(&gamestate, &position1);
-    uint64_t actual2 = knightMoves(&gamestate, &position2);
+    uint64_t actual1 = knightMoves(gamestate, &position1);
+    uint64_t actual2 = knightMoves(gamestate, &position2);
 
-    gamestate.flags.isWhiteTurn = false;
+    gamestate->flags.isWhiteTurn = false;
 
-    uint64_t actual3 = knightMoves(&gamestate, &position3);
-    uint64_t actual4 = knightMoves(&gamestate, &position4);
+    uint64_t actual3 = knightMoves(gamestate, &position3);
+    uint64_t actual4 = knightMoves(gamestate, &position4);
 
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected1, actual1, "white knight B3");
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected2, actual2, "white knight C3");
@@ -138,23 +138,23 @@ void test_knightMove() {
 }
  
 void test_bishopMove() {
-    Gamestate gamestate = gamestateInit();
+    Gamestate *gamestate = gamestateInit();
     // Bitboards
-    gamestate.bitboards.pawn =     0x000798400C006300; 
-    gamestate.bitboards.rook =     0x8100000000000084;
-    gamestate.bitboards.knight =   0x0000240000600000;
-    gamestate.bitboards.bishop =   0x2008000000100020;
-    gamestate.bitboards.queen =    0x0020000000000010;
-    gamestate.bitboards.king =     0x0800000000000002; 
+    gamestate->bitboards.pawn =     0x000798400C006300; 
+    gamestate->bitboards.rook =     0x8100000000000084;
+    gamestate->bitboards.knight =   0x0000240000600000;
+    gamestate->bitboards.bishop =   0x2008000000100020;
+    gamestate->bitboards.queen =    0x0020000000000010;
+    gamestate->bitboards.king =     0x0800000000000002; 
 
     //color
-    gamestate.bitboards.color[1] =    0x000000000C7063B6;
-    gamestate.bitboards.color[0] =    0xA92FBC4000000000;
+    gamestate->bitboards.color[1] =    0x000000000C7063B6;
+    gamestate->bitboards.color[0] =    0xA92FBC4000000000;
 
-    // occupancy
-    gamestate.bitboards.occupancy = gamestate.bitboards.color[0] | gamestate.bitboards.color[1];
+    // occupa->cy
+    gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
 
-    gamestate.flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = true;
 
     Position position1;
     position1.rank = 1;
@@ -177,13 +177,13 @@ void test_bishopMove() {
     uint64_t expected3 = 0x0050000000000000;
     uint64_t expected4 = 0x1400000000000000;
 
-    uint64_t actual1 = bishopMoves(&gamestate, &position1);
-    uint64_t actual2 = bishopMoves(&gamestate, &position2);
+    uint64_t actual1 = bishopMoves(gamestate, &position1);
+    uint64_t actual2 = bishopMoves(gamestate, &position2);
 
-    gamestate.flags.isWhiteTurn = false;
+    gamestate->flags.isWhiteTurn = false;
 
-    uint64_t actual3 = bishopMoves(&gamestate, &position3);
-    uint64_t actual4 = bishopMoves(&gamestate, &position4);
+    uint64_t actual3 = bishopMoves(gamestate, &position3);
+    uint64_t actual4 = bishopMoves(gamestate, &position4);
 
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected1, actual1, "white bishop C1");
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected2, actual2, "white bishop D3");
@@ -194,23 +194,24 @@ void test_bishopMove() {
 
   
 void test_rookMove() {
-    Gamestate gamestate = gamestateInit();
+    Gamestate *gamestate = gamestateInit();
+
     // Bitboards
-    gamestate.bitboards.pawn =     0x000798400C006300; 
-    gamestate.bitboards.rook =     0x8100000000000084;
-    gamestate.bitboards.knight =   0x0000240000600000;
-    gamestate.bitboards.bishop =   0x2008000000100020;
-    gamestate.bitboards.queen =    0x0020000000000010;
-    gamestate.bitboards.king =     0x0800000000000002; 
+    gamestate->bitboards.pawn =     0x000798400C006300; 
+    gamestate->bitboards.rook =     0x8100000000000084;
+    gamestate->bitboards.knight =   0x0000240000600000;
+    gamestate->bitboards.bishop =   0x2008000000100020;
+    gamestate->bitboards.queen =    0x0020000000000010;
+    gamestate->bitboards.king =     0x0800000000000002; 
 
     //color
-    gamestate.bitboards.color[1] =    0x000000000C7063B6;
-    gamestate.bitboards.color[0] =    0xA92FBC4000000000;
+    gamestate->bitboards.color[1] =    0x000000000C7063B6;
+    gamestate->bitboards.color[0] =    0xA92FBC4000000000;
 
-    // occupancy
-    gamestate.bitboards.occupancy = gamestate.bitboards.color[0] | gamestate.bitboards.color[1];
+    // occupa->cy
+    gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
 
-    gamestate.flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = true;
 
     Position position1;
     position1.rank = 1;
@@ -233,13 +234,13 @@ void test_rookMove() {
     uint64_t expected3 = 0x4080000000000000;
     uint64_t expected4 = 0x0600000000000000;
 
-    uint64_t actual1 = rookMoves(&gamestate, &position1);
-    uint64_t actual2 = rookMoves(&gamestate, &position2);
+    uint64_t actual1 = rookMoves(gamestate, &position1);
+    uint64_t actual2 = rookMoves(gamestate, &position2);
 
-    gamestate.flags.isWhiteTurn = false;
+    gamestate->flags.isWhiteTurn = false;
 
-    uint64_t actual3 = rookMoves(&gamestate, &position3);
-    uint64_t actual4 = rookMoves(&gamestate, &position4);
+    uint64_t actual3 = rookMoves(gamestate, &position3);
+    uint64_t actual4 = rookMoves(gamestate, &position4);
 
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected1, actual1, "white rook A1");
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected2, actual2, "white rook F1");
@@ -249,29 +250,29 @@ void test_rookMove() {
 }
 
 void test_pawnMove_enPassant() {
-    Gamestate gamestate1 = gamestateInit();
-    gamestate1.bitboards.pawn = 0x0000006000000000;
-    gamestate1.bitboards.color[1] = 0x0000002000000000;
-    gamestate1.bitboards.color[0] = 0x0000004000000000;
-    gamestate1.bitboards.occupancy = 0x0000006000000000;
-    gamestate1.flags.isWhiteTurn = true;
-    gamestate1.flags.canEnPassant = true;
-    gamestate1.enPassantPosition.rank = 6;
-    gamestate1.enPassantPosition.file = 2;
+    Gamestate *gamestate1 = gamestateInit();
+    gamestate1->bitboards.pawn = 0x0000006000000000;
+    gamestate1->bitboards.color[1] = 0x0000002000000000;
+    gamestate1->bitboards.color[0] = 0x0000004000000000;
+    gamestate1->bitboards.occupancy = 0x0000006000000000;
+    gamestate1->flags.isWhiteTurn = true;
+    gamestate1->flags.canEnPassant = true;
+    gamestate1->enPassantPosition.rank = 6;
+    gamestate1->enPassantPosition.file = 2;
 
     Position position1;
     position1.rank = 5;
     position1.file = 3;
 
-    Gamestate gamestate2= gamestateInit();
-    gamestate2.bitboards.pawn = 0x0000006000000000;
-    gamestate2.bitboards.color[1] = 0x0000002000000000;
-    gamestate2.bitboards.color[0]= 0x0000004000000000;
-    gamestate2.bitboards.occupancy = 0x0000006000000000;
-    gamestate2.flags.isWhiteTurn = false;
-    gamestate2.flags.canEnPassant = true;
-    gamestate2.enPassantPosition.rank = 3;
-    gamestate2.enPassantPosition.file = 2;
+    Gamestate *gamestate2= gamestateInit();
+    gamestate2->bitboards.pawn = 0x0000006000000000;
+    gamestate2->bitboards.color[1] = 0x0000002000000000;
+    gamestate2->bitboards.color[0]= 0x0000004000000000;
+    gamestate2->bitboards.occupancy = 0x0000006000000000;
+    gamestate2->flags.isWhiteTurn = false;
+    gamestate2->flags.canEnPassant = true;
+    gamestate2->enPassantPosition.rank = 3;
+    gamestate2->enPassantPosition.file = 2;
 
     Position position2;
     position2.rank = 4;
@@ -280,35 +281,35 @@ void test_pawnMove_enPassant() {
     uint64_t expected1 = 0x0000600000000000;
     uint64_t expected2 = 0x0000000000600000;
 
-    uint64_t actual1 = pawnMoves(&gamestate1, &position1);
-    uint64_t actual2 = pawnMoves(&gamestate2, &position2);
+    uint64_t actual1 = pawnMoves(gamestate1, &position1);
+    uint64_t actual2 = pawnMoves(gamestate2, &position2);
 
     TEST_ASSERT_EQUAL_UINT64(expected1, actual1);
     TEST_ASSERT_EQUAL_UINT64(expected2, actual2);
 }
 
 void test_pawnMove_black() {
-    Gamestate gamestate = gamestateInit();
-    gamestate.bitboards.pawn =     0x00FF15A00000FF00;
-    gamestate.bitboards.rook =     0x8100000000000081;
-    gamestate.bitboards.knight =   0x4200000000000042;
-    gamestate.bitboards.bishop =   0x2400000000000024;
-    gamestate.bitboards.queen =    0x1000000000000010;
-    gamestate.bitboards.king =     0x0800000000000008;
+    Gamestate *gamestate = gamestateInit();
+    gamestate->bitboards.pawn =     0x00FF15A00000FF00;
+    gamestate->bitboards.rook =     0x8100000000000081;
+    gamestate->bitboards.knight =   0x4200000000000042;
+    gamestate->bitboards.bishop =   0x2400000000000024;
+    gamestate->bitboards.queen =    0x1000000000000010;
+    gamestate->bitboards.king =     0x0800000000000008;
 
-    gamestate.bitboards.color[0] =    0xFFFF000000000000;
-    gamestate.bitboards.color[1] =    0x000015A00000FFFF;
+    gamestate->bitboards.color[0] =    0xFFFF000000000000;
+    gamestate->bitboards.color[1] =    0x000015A00000FFFF;
 
-    gamestate.bitboards.occupancy = 0xFFFF15A00000FFFF;
+    gamestate->bitboards.occupancy = 0xFFFF15A00000FFFF;
 
-    gamestate.enPassantPosition.rank = 0;
-    gamestate.enPassantPosition.file = 0;
+    gamestate->enPassantPosition.rank = 0;
+    gamestate->enPassantPosition.file = 0;
 
-    gamestate.counters.fullMove = 1;
-    gamestate.counters.halfMove = 0;
+    gamestate->counters.fullMove = 1;
+    gamestate->counters.halfMove = 0;
 
-    gamestate.flags.isWhiteTurn = false;
-    gamestate.flags.canEnPassant = false;
+    gamestate->flags.isWhiteTurn = false;
+    gamestate->flags.canEnPassant = false;
    
     Position position1; //A2 move 2 up, capture right. nothing left
     position1.rank = 7;
@@ -342,14 +343,14 @@ void test_pawnMove_black() {
     position8.rank = 7;
     position8.file = 8;
 
-    uint64_t actual1 = pawnMoves(&gamestate, &position1);
-    uint64_t actual2 = pawnMoves(&gamestate, &position2);
-    uint64_t actual3 = pawnMoves(&gamestate, &position3);
-    uint64_t actual4 = pawnMoves(&gamestate, &position4);
-    uint64_t actual5 = pawnMoves(&gamestate, &position5);
-    uint64_t actual6 = pawnMoves(&gamestate, &position6);
-    uint64_t actual7 = pawnMoves(&gamestate, &position7);
-    uint64_t actual8 = pawnMoves(&gamestate, &position8);
+    uint64_t actual1 = pawnMoves(gamestate, &position1);
+    uint64_t actual2 = pawnMoves(gamestate, &position2);
+    uint64_t actual3 = pawnMoves(gamestate, &position3);
+    uint64_t actual4 = pawnMoves(gamestate, &position4);
+    uint64_t actual5 = pawnMoves(gamestate, &position5);
+    uint64_t actual6 = pawnMoves(gamestate, &position6);
+    uint64_t actual7 = pawnMoves(gamestate, &position7);
+    uint64_t actual8 = pawnMoves(gamestate, &position8);
 
     uint64_t expected1 = 0x0000800000000000;
     uint64_t expected2 = 0x0000404000000000;
@@ -371,27 +372,27 @@ void test_pawnMove_black() {
 }
 
 void test_pawnMove_white() {
-    Gamestate gamestate = gamestateInit();
-    gamestate.bitboards.pawn =     0x00FF00000A51FF00;
-    gamestate.bitboards.rook =     0x8100000000000081;
-    gamestate.bitboards.knight =   0x4200000000000042;
-    gamestate.bitboards.bishop =   0x2400000000000024;
-    gamestate.bitboards.queen =    0x1000000000000010;
-    gamestate.bitboards.king =     0x0800000000000008;
+    Gamestate *gamestate = gamestateInit();
+    gamestate->bitboards.pawn =     0x00FF00000A51FF00;
+    gamestate->bitboards.rook =     0x8100000000000081;
+    gamestate->bitboards.knight =   0x4200000000000042;
+    gamestate->bitboards.bishop =   0x2400000000000024;
+    gamestate->bitboards.queen =    0x1000000000000010;
+    gamestate->bitboards.king =     0x0800000000000008;
 
-    gamestate.bitboards.color[0] =    0xFFFF00000A510000;
-    gamestate.bitboards.color[1] =    0x000000000000FFFF;
+    gamestate->bitboards.color[0] =    0xFFFF00000A510000;
+    gamestate->bitboards.color[1] =    0x000000000000FFFF;
 
-    gamestate.bitboards.occupancy = 0xFFFF00000A51FFFF;
+    gamestate->bitboards.occupancy = 0xFFFF00000A51FFFF;
 
-    gamestate.enPassantPosition.rank = 0;
-    gamestate.enPassantPosition.file = 0;
+    gamestate->enPassantPosition.rank = 0;
+    gamestate->enPassantPosition.file = 0;
 
-    gamestate.counters.fullMove = 1;
-    gamestate.counters.halfMove = 0;
+    gamestate->counters.fullMove = 1;
+    gamestate->counters.halfMove = 0;
 
-    gamestate.flags.isWhiteTurn = true;
-    gamestate.flags.canEnPassant = false;
+    gamestate->flags.isWhiteTurn = true;
+    gamestate->flags.canEnPassant = false;
  
     Position position1; //A2 move 2 up, capture right. nothing left
     position1.rank = 2;
@@ -425,14 +426,14 @@ void test_pawnMove_white() {
     position8.rank = 2;
     position8.file = 8;
 
-    uint64_t actual1 = pawnMoves(&gamestate, &position1);
-    uint64_t actual2 = pawnMoves(&gamestate, &position2);
-    uint64_t actual3 = pawnMoves(&gamestate, &position3);
-    uint64_t actual4 = pawnMoves(&gamestate, &position4);
-    uint64_t actual5 = pawnMoves(&gamestate, &position5);
-    uint64_t actual6 = pawnMoves(&gamestate, &position6);
-    uint64_t actual7 = pawnMoves(&gamestate, &position7);
-    uint64_t actual8 = pawnMoves(&gamestate, &position8);
+    uint64_t actual1 = pawnMoves(gamestate, &position1);
+    uint64_t actual2 = pawnMoves(gamestate, &position2);
+    uint64_t actual3 = pawnMoves(gamestate, &position3);
+    uint64_t actual4 = pawnMoves(gamestate, &position4);
+    uint64_t actual5 = pawnMoves(gamestate, &position5);
+    uint64_t actual6 = pawnMoves(gamestate, &position6);
+    uint64_t actual7 = pawnMoves(gamestate, &position7);
+    uint64_t actual8 = pawnMoves(gamestate, &position8);
 
     uint64_t expected1 = 0x0000000080C00000;
     uint64_t expected2 = 0x0000000000000000;

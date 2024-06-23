@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "errors.h"
 
@@ -21,5 +22,5 @@ short getDiagonalIndexFromShort(short position);
 short getAntiDiagonalIndexFromPosition(Position* position);
 short getAntiDiagonalIndexFromShort(short position);
 short positionToShort(Position* position);
-
+void deepCopyPosition(Position* destination, Position* source);
 #endif

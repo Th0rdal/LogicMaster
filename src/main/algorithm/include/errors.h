@@ -25,6 +25,11 @@
 #define ERROR_POSITION_VALUE_OUTSIDE_EXPECTED 110
 #define ERROR_PIECE_POSITION_CANNOT_BE_CALCULATED 111
 
+// move generation
+#define ERROR_PIECE_NOT_SELECTED 120
+
+
+#define WARNING_COULD_NOT_RETRIEVE_CORE_NUMBER 501 
 extern void throwError(int errorCode, char* format, ...);
 extern void throwWarning(int warningCode, char* format, ...);
 

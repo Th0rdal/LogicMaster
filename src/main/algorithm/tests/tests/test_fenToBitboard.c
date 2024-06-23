@@ -1,10 +1,10 @@
 #include "tests/test_fenToBitboard.h"
 
 void test_converter_fenToBitboard_workingInput1(void) {
-    Gamestate gamestate = gamestateInit();
+    Gamestate* gamestate = gamestateInit();
     char* fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     
-    fenToBitboard(fen, &gamestate);
+    fenToBitboard(fen, gamestate);
 
     // Bitboards
     uint64_t pawn =     0x00FF00000000FF00;
@@ -28,37 +28,37 @@ void test_converter_fenToBitboard_workingInput1(void) {
     int halfMove = 0;
 
     // assert
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(pawn, gamestate.bitboards.pawn, "pawn bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(rook, gamestate.bitboards.rook, "rook bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(knight, gamestate.bitboards.knight, "knight bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(bishop, gamestate.bitboards.bishop, "bishop bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(queen, gamestate.bitboards.queen, "queen bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate.bitboards.king, "king bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate.bitboards.occupancy, "occupancy bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(pawn, gamestate->bitboards.pawn, "pawn bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(rook, gamestate->bitboards.rook, "rook bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(knight, gamestate->bitboards.knight, "knight bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(bishop, gamestate->bitboards.bishop, "bishop bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(queen, gamestate->bitboards.queen, "queen bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate->bitboards.king, "king bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate->bitboards.occupancy, "occupancy bitboard");
 
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.color[1], "white bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.color[0], "black bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate->bitboards.color[1], "white bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate->bitboards.color[0], "black bitboard");
 
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.isWhiteTurn, "isWhiteTurn");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.kCastle[1], "white king castle");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.qCastle[1], "white queen castle");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.kCastle[0], "black king castle");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.kCastle[0], "black queen castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.canEnPassant, "can en passant");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate->flags.isWhiteTurn, "isWhiteTurn");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate->flags.kCastle[1], "white king castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate->flags.qCastle[1], "white queen castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate->flags.kCastle[0], "black king castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate->flags.kCastle[0], "black queen castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.canEnPassant, "can en passant");
 
-    TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate.enPassantPosition.rank, "en passant rank");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(positionFile, gamestate.enPassantPosition.file, "en passant file");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate->enPassantPosition.rank, "en passant rank");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(positionFile, gamestate->enPassantPosition.file, "en passant file");
 
-    TEST_ASSERT_EQUAL_INT_MESSAGE(fullMove, gamestate.counters.fullMove, "full move counter");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(halfMove, gamestate.counters.halfMove, "half move counter");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(fullMove, gamestate->counters.fullMove, "full move counter");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(halfMove, gamestate->counters.halfMove, "half move counter");
 
 }
 
 void test_converter_fenToBitboard_workingInput2(void) {
-    Gamestate gamestate = gamestateInit();
+    Gamestate* gamestate = gamestateInit();
     char* fen = "rnbq1bnr/ppppkppp/8/4p3/3P4/2N5/PPP1PPPP/1RBQKBNR b K - 3 3"; 
         
-    fenToBitboard(fen, &gamestate);
+    fenToBitboard(fen, gamestate);
 
     // Bitboards
     uint64_t pawn =     0x00F700081000EF00;
@@ -82,37 +82,37 @@ void test_converter_fenToBitboard_workingInput2(void) {
     int halfMove = 3;
 
     // assert
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(pawn, gamestate.bitboards.pawn, "pawn bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(rook, gamestate.bitboards.rook, "rook bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(knight, gamestate.bitboards.knight, "knight bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(bishop, gamestate.bitboards.bishop, "bishop bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(queen, gamestate.bitboards.queen, "queen bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate.bitboards.king, "king bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate.bitboards.occupancy, "occupancy bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(pawn, gamestate->bitboards.pawn, "pawn bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(rook, gamestate->bitboards.rook, "rook bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(knight, gamestate->bitboards.knight, "knight bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(bishop, gamestate->bitboards.bishop, "bishop bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(queen, gamestate->bitboards.queen, "queen bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate->bitboards.king, "king bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate->bitboards.occupancy, "occupancy bitboard");
 
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.color[1], "white bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.color[0], "black bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate->bitboards.color[1], "white bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate->bitboards.color[0], "black bitboard");
 
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.isWhiteTurn, "isWhiteTurn");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.kCastle[1], "white king castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.qCastle[1], "white queen castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.kCastle[0], "black king castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.qCastle[0], "black queen castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.canEnPassant, "can en passant");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.isWhiteTurn, "isWhiteTurn");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate->flags.kCastle[1], "white king castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.qCastle[1], "white queen castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.kCastle[0], "black king castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.qCastle[0], "black queen castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.canEnPassant, "can en passant");
 
-    TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate.enPassantPosition.rank, "en passant rank");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(positionFile, gamestate.enPassantPosition.file, "en passant file");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate->enPassantPosition.rank, "en passant rank");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(positionFile, gamestate->enPassantPosition.file, "en passant file");
 
-    TEST_ASSERT_EQUAL_INT_MESSAGE(fullMove, gamestate.counters.fullMove, "full move counter");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(halfMove, gamestate.counters.halfMove, "half move counter");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(fullMove, gamestate->counters.fullMove, "full move counter");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(halfMove, gamestate->counters.halfMove, "half move counter");
 
 }
 
 void test_converter_fenToBitboard_workingInput3(void) {
-    Gamestate gamestate = gamestateInit();
+    Gamestate* gamestate = gamestateInit();
     char* fen = "6k1/3qbp2/4n1p1/3QP2p/7P/1B3NP1/5PK1/8 b - - 3 40"; 
 
-    fenToBitboard(fen, &gamestate);
+    fenToBitboard(fen, gamestate);
 
     // Bitboards
     uint64_t pawn =     0x0004020901020400; 
@@ -136,41 +136,37 @@ void test_converter_fenToBitboard_workingInput3(void) {
     int halfMove = 3;
 
     // assert
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(pawn, gamestate.bitboards.pawn, "pawn bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(rook, gamestate.bitboards.rook, "rook bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(knight, gamestate.bitboards.knight, "knight bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(bishop, gamestate.bitboards.bishop, "bishop bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(queen, gamestate.bitboards.queen, "queen bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate.bitboards.king, "king bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate.bitboards.occupancy, "occupancy bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(pawn, gamestate->bitboards.pawn, "pawn bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(rook, gamestate->bitboards.rook, "rook bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(knight, gamestate->bitboards.knight, "knight bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(bishop, gamestate->bitboards.bishop, "bishop bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(queen, gamestate->bitboards.queen, "queen bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate->bitboards.king, "king bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate->bitboards.occupancy, "occupancy bitboard");
 
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.color[1], "white bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.color[0], "black bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate->bitboards.color[1], "white bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate->bitboards.color[0], "black bitboard");
 
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.isWhiteTurn, "isWhiteTurn");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.kCastle[1], "white king castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.qCastle[1], "white queen castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.kCastle[0], "black king castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.qCastle[0], "black queen castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.canEnPassant, "can en passant");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.isWhiteTurn, "isWhiteTurn");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.kCastle[1], "white king castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.qCastle[1], "white queen castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.kCastle[0], "black king castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.qCastle[0], "black queen castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.canEnPassant, "can en passant");
 
-    TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate.enPassantPosition.rank, "en passant rank");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(positionFile, gamestate.enPassantPosition.file, "en passant file");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate->enPassantPosition.rank, "en passant rank");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(positionFile, gamestate->enPassantPosition.file, "en passant file");
 
-    TEST_ASSERT_EQUAL_INT_MESSAGE(fullMove, gamestate.counters.fullMove, "full move counter");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(halfMove, gamestate.counters.halfMove, "half move counter");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(fullMove, gamestate->counters.fullMove, "full move counter");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(halfMove, gamestate->counters.halfMove, "half move counter");
 
 }
 
 void test_converter_fenToBitboard_workingInput4(void) {
-    //setupJump();
-    if (exit_status != 0) {
-        return;
-    }
-    Gamestate gamestate = gamestateInit();
+    Gamestate *gamestate = gamestateInit();
     char* fen = "r1b1k2r/2q1bppp/p1nppn2/Pp6/4PP2/1NNB4/1PP3PP/R1BQ1RK1 w kq b6 0 12";
 
-    fenToBitboard(fen, &gamestate);
+    fenToBitboard(fen, gamestate);
 
     // Bitboards
     uint64_t pawn =     0x000798C00C006300; 
@@ -194,29 +190,29 @@ void test_converter_fenToBitboard_workingInput4(void) {
     int halfMove = 0;
 
     // assert
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(pawn, gamestate.bitboards.pawn, "pawn bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(rook, gamestate.bitboards.rook, "rook bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(knight, gamestate.bitboards.knight, "knight bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(bishop, gamestate.bitboards.bishop, "bishop bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(queen, gamestate.bitboards.queen, "queen bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate.bitboards.king, "king bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate.bitboards.occupancy, "occupancy bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(pawn, gamestate->bitboards.pawn, "pawn bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(rook, gamestate->bitboards.rook, "rook bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(knight, gamestate->bitboards.knight, "knight bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(bishop, gamestate->bitboards.bishop, "bishop bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(queen, gamestate->bitboards.queen, "queen bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(king, gamestate->bitboards.king, "king bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(occupancy, gamestate->bitboards.occupancy, "occupancy bitboard");
 
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate.bitboards.color[1], "white bitboard");
-    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate.bitboards.color[0], "black bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(white, gamestate->bitboards.color[1], "white bitboard");
+    TEST_ASSERT_EQUAL_UINT64_MESSAGE(black, gamestate->bitboards.color[0], "black bitboard");
 
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.isWhiteTurn, "isWhiteTurn");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.kCastle[1], "white king castle");
-    TEST_ASSERT_FALSE_MESSAGE(gamestate.flags.qCastle[1], "white queen castle");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.kCastle[0], "black king castle");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.qCastle[0], "black queen castle");
-    TEST_ASSERT_TRUE_MESSAGE(gamestate.flags.canEnPassant, "can en passant");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate->flags.isWhiteTurn, "isWhiteTurn");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.kCastle[1], "white king castle");
+    TEST_ASSERT_FALSE_MESSAGE(gamestate->flags.qCastle[1], "white queen castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate->flags.kCastle[0], "black king castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate->flags.qCastle[0], "black queen castle");
+    TEST_ASSERT_TRUE_MESSAGE(gamestate->flags.canEnPassant, "can en passant");
 
-    TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate.enPassantPosition.rank, "en passant rank");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(positionFile, gamestate.enPassantPosition.file, "en passant file");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(positionRank, gamestate->enPassantPosition.rank, "en passant rank");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(positionFile, gamestate->enPassantPosition.file, "en passant file");
 
-    TEST_ASSERT_EQUAL_INT_MESSAGE(fullMove, gamestate.counters.fullMove, "full move counter");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(halfMove, gamestate.counters.halfMove, "half move counter");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(fullMove, gamestate->counters.fullMove, "full move counter");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(halfMove, gamestate->counters.halfMove, "half move counter");
 
 }
 

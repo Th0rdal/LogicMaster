@@ -17,6 +17,9 @@ typedef struct {
    uint64_t king;
 
    uint64_t color[2]; // index black = 0, index white = 1
+
+   // this HAS to be FF unless the king is in check (for calculations)
+   uint64_t possibleMovesAfterCheck; // only has interesting value if checkChecked is true & currently a check
 } Bitboards;
 
 typedef struct {
@@ -84,6 +87,10 @@ typedef struct {
     const short pawn2SquareAdd[2];
     const short pawnCaptureRight[2];
     const short pawnCaptureLeft[2];
+    const short qCastleRookPositions[2][2];
+    const short kCastleRookPositions[2][2];
+    const uint64_t kCastleRookBitboard[2];
+    const uint64_t qCastleRookBitboard[2];
 } SpecialMoveDictionary;
 
 extern Bitboards bitboardsInit();

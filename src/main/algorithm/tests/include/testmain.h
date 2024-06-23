@@ -7,5 +7,6 @@
 #include "tests\test_positionStruct.h"
 #include "tests\test_reverseBitboard.h"
 #include "tests\test_moveCalculator.h"
+#include "tests\test_preprocessing.h"
 
 #endif

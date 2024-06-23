@@ -5,7 +5,7 @@
 
 #include "unity.h"
 #include "structs/gamestate.h"
-#include "minimax/moveCalculation.h"
+#include "utility/moveCalculation.h"
 
 void runTests_moveCalculator();
 void includeTests_moveCalculator();

@@ -24,10 +24,8 @@ typedef struct {
     bool checkmate;
     bool draw;
 
-    bool whiteKCastle;
-    bool whiteQCastle;
-    bool blackKCastle;
-    bool blackQCastle;
+    bool kCastle[2];
+    bool qCastle[2];
 
     bool isWhiteTurn;
 } MoveFlags;
@@ -40,4 +38,5 @@ typedef struct {
 } Move;
 
 Move moveInit();
+void printMove(Move* move, char* string);
 #endif

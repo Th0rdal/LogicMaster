@@ -150,3 +150,8 @@ short getAntiDiagonalIndexFromShort(short position) {
 short positionToShort(Position* position) {
     return (position->rank - 1) * 8 + (8 - position->file); 
 }
+
+void deepCopyPosition(Position* destination, Position* source)  {
+    destination->rank = source->rank;
+    destination->file = source->file;
+}

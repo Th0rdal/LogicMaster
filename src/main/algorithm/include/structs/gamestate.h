@@ -3,11 +3,12 @@
 
 #include <stdbool.h>
 
+struct Gamestate;
+
 #include "bitboards.h"
 #include "position.h"
 #include "move.h"
-
-struct Gamestate;
+//#include "utility/moveCalculation.h" at the bottom as gamestate needs to be defined first
 
 typedef struct {
     int fullMove;
@@ -25,9 +26,10 @@ typedef struct { // all initialized to false
 typedef struct {
     bool checkedCheck;
     struct Gamestate* lastGamestate; //forward declaration
+    short depth;
 } GamestateConfig;
 
-typedef struct {
+typedef struct Gamestate {
     Bitboards bitboards;
     Counters counters;
     GamestateFlags flags;
@@ -36,9 +38,13 @@ typedef struct {
     Move move;
 } Gamestate;
 
-Gamestate gamestateInit();
+Gamestate* gamestateInit();
 Counters countersInit();
 GamestateFlags gamestateFlagInit(); 
 GamestateConfig gamestateConfigInit();
+bool gamestate_makeMove(Gamestate* gamestate, Gamestate* newGamestate, enum PIECE piece, Position* piecePosition, Position* movePosition);
+
+// here because gamestate needs to be defined first
+#include "utility/moveCalculation.h"
 
 #endif

@@ -53,10 +53,10 @@ int main(int argc, char *argv[]) {
     strcat(inputString, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     inputFormat = FEN;
 
-    Gamestate gamestate = gamestateInit();
+    Gamestate* gamestate = gamestateInit();
     
     //start "main loop"
-    preprocessing(inputFormat, inputString, &gamestate);
+    preprocessing(inputFormat, inputString, gamestate);
     // minimax aufrufen. der soll pre post processing selbst machen
     postprocessing();
     return 0;

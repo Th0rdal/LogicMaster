@@ -17,6 +17,7 @@ Bitboards bitboardsInit() {
     bitboards.king = 0;
     bitboards.color[0] = 0;
     bitboards.color[1] = 0;
+    bitboards.possibleMovesAfterCheck = 0xFFFFFFFFFFFFFFFF;
     return bitboards;
 }
 
@@ -324,6 +325,20 @@ const SpecialMoveDictionary specialMoveDictionary = {
     .pawn2SquareAdd = {-16, 16},
     .pawnCaptureRight = {-9, 7},
     .pawnCaptureLeft = {-7, 9},
+    .qCastleRookPositions = {
+        {8, 1}, {1, 1}
+    },
+    .kCastleRookPositions = {
+        {1, 8}, {8, 8}
+    },
+    .kCastleRookBitboard = {
+        0x0500000000000000,
+        0x0000000000000005
+    },
+    .qCastleRookBitboard = {
+        0xA000000000000000,
+        0x00000000000000A0
+    },
 };
 
 const MoveDictionary positionDictionary = {
