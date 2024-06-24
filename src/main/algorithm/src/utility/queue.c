@@ -1,10 +1,11 @@
 #include "utility/queue.h"
 
 
-Queue queueInit() {
+Queue queueInit(queueNode* listHead) {
     Queue queue = {
         .front = 0,
         .rear = 0,
+        .head = listHead
     };
     InitializeCriticalSection(&queue.lock);
     InitializeConditionVariable(&queue.condEnqueue);
@@ -19,6 +20,13 @@ void enqueue(Queue *queue, Gamestate* gamestate) {
         SleepConditionVariableCS(&queue->condEnqueue, &queue->lock, INFINITE);
     }
 
+    queueNode* newNode = malloc(sizeof(queueNode));
+    if (newNode == NULL) {
+        throwError(ERROR_MEMORY_MALLOC_FAILED, "Error: failed to allocate memory for queueNode");
+    }
+    newNode->gamestate = gamestate;
+    newNode->next = queue->head;
+    queue->head = newNode;
     queue->data[queue->rear] = gamestate;
     queue->rear = (queue->rear+1) % QUEUE_SIZE;
 
@@ -43,4 +51,5 @@ Gamestate* dequeue(Queue *queue) {
 
 void destroyQueue(Queue *queue) {
     DeleteCriticalSection(&queue->lock);
+    free(queue);
 }

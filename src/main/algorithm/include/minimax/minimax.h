@@ -5,8 +5,6 @@
 
 #include "preprocessing.h"
 
-void minimax(short maxDepth, Gamestate* gamestate);
-
-extern Gamestate* endStates;
+void minimax(const short maxDepth, Gamestate* gamestate);
 
 #endif

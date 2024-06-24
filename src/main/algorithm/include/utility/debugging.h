@@ -6,7 +6,19 @@
 
 #include "structs/gamestate.h"
 
-extern void printBoard(uint64_t board);
-extern void debugGamestate(Gamestate* gamestate);
+/*! 
+ * prints a bitboard out in a chess board pattern
+ *
+ * @param board: uint64_t representing the bitboard
+ *
+ */
+void printBoard(uint64_t board);
+
+/*!
+ * prints out all variables of gamestate
+ *
+ * @param gamestate: gamestate struct to print out
+ */
+void debugGamestate(Gamestate* gamestate);
 
 #endif

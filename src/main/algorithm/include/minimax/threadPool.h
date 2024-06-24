@@ -9,18 +9,44 @@
 #include "utility/queue.h"
 
 typedef struct {
-    pthread_t* threads;
+    int threadId;
+}ThreadArgs;
+
+typedef struct {
+    HANDLE* threads;
     int maxThreads;
     Queue queue;
     bool shutdown;
-    bool emergencyShutdown;
     int workCounter;
     int maxDepth;
     Queue results;
-    pthread_mutex_t lock;
+    CRITICAL_SECTION lock;
 } MoveGenerationThreadPool;
 
-MoveGenerationThreadPool moveGenerationThreadPoolInit(short maxDepth, int maxThreads);
-void updateWorkCounter(MoveGenerationThreadPool* pool, int value);
+/*!
+ * initializes all variables of the struct
+ *
+ * @param maxDepth: the maximal depth of the move generation
+ * @param maxthreads: the maximal amount of threads the pool may have
+ *
+ * @return: the initialized MoveGenerationThreadPool pointer 
+ * */
+MoveGenerationThreadPool* moveGenerationThreadPoolInit(const short maxDepth, const int maxThreads, queueNode* workQueue, queueNode* resultNode);
+
+/*!
+ * updates the workCounter variable of the given Mpool struct
+ *
+ * @param pool: the pool variable with the workCounter variable
+ * @param value: the update value for workCounter. The value gets added to workCounter
+ *
+ * */
+void updateWorkCounter(MoveGenerationThreadPool* pool, const int value);
+
+/*!
+ * destroys the MoveGenerationThreadPool struct and all needed fields
+ *
+ * @param pool: the struct to destroy
+ *
+ * */
 void destroyMoveGenerationThreadPoolInit(MoveGenerationThreadPool *pool);
 #endif

@@ -21,4 +21,15 @@ typedef enum {
     NONE
 }INPUTFORMAT; 
 
+/**
+ * Brings input into a normed format (gamestate) before giving it to the algorithm
+ *
+ * @param inputFormat: the INPUTFORMAT enum representing the format of the input string
+ * @param inputString: the given input string that will be converted into a gamestate
+ * @param gamestate: the gamestate to save the convertion in
+ *
+ * @exit: NOINPUT: if the input enum is not set or not recognized 
+ * */
+void preprocessing(INPUTFORMAT inputFormat, char* inputString, Gamestate* gamestate);
+
 #endif

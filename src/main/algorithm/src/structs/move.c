@@ -27,7 +27,7 @@ MoveFlags moveFlagsInit() {
     return flags;
 }
 
-void printMove(Move* move, char* string) {
+void printMove(const Move* move, char* string) {
     char moveString[20];
     strcpy(moveString, "");
     short counter = 0;

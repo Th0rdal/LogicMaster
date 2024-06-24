@@ -1,33 +1,37 @@
 #include "minimax/threadPool.h"
 
-MoveGenerationThreadPool moveGenerationThreadPoolInit(short maxDepth, int maxThreads) {
-    //init thread pool
-    MoveGenerationThreadPool pool;
-    pool.maxThreads = maxThreads;
-    pool.threads = (pthread_t*) malloc(maxThreads * sizeof(pthread_t));
-    if (pool.threads == NULL) {
+
+MoveGenerationThreadPool* moveGenerationThreadPoolInit(const short maxDepth, const int maxThreads, queueNode* workNode, queueNode* resultNode) {
+    MoveGenerationThreadPool* pool = (MoveGenerationThreadPool*)malloc(sizeof(MoveGenerationThreadPool));
+    if (pool == NULL) {
+        throwError(ERROR_MEMORY_MALLOC_FAILED, "Error: failed to allocate memory for moveGenerationThreadPool");
+    }
+    pool->maxThreads = maxThreads;
+    pool->threads = (HANDLE*) malloc(maxThreads * sizeof(HANDLE));
+    if (pool->threads == NULL) {
        throwError(ERROR_MEMORY_MALLOC_FAILED, "Error: failed to allocate memory for move generation worker threads"); 
     }
-    pool.queue = queueInit();
-    pool.results = queueInit();
-    pthread_mutex_init(&pool.lock, NULL);
+    pool->queue = queueInit(workNode);
+    pool->results = queueInit(resultNode);
+    InitializeCriticalSection(&pool->lock);
   
-    pool.shutdown = false;
-    pool.emergencyShutdown = false;
-    pool.workCounter = 0;
-    pool.maxDepth = maxDepth;
+    pool->shutdown = false;
+    pool->workCounter = 0;
+    pool->maxDepth = maxDepth;
 
     return pool;
 }
 
-void updateWorkCounter(MoveGenerationThreadPool *pool, int value) {
-    pthread_mutex_lock(&pool->lock);
+void updateWorkCounter(MoveGenerationThreadPool *pool, const int value) {
+    EnterCriticalSection(&pool->lock);
     pool->workCounter += value;
-    pthread_mutex_unlock(&pool->lock);
+    LeaveCriticalSection(&pool->lock);
 }
 
 void destroyMoveGenerationThreadPoolInit(MoveGenerationThreadPool *pool) {
-    pthread_mutex_destroy(&pool->lock);
+    DeleteCriticalSection(&pool->lock);
+    free(pool->threads);
     destroyQueue(&pool->queue);
     destroyQueue(&pool->results);
+    free(pool);
 }

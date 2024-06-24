@@ -102,7 +102,6 @@ extern const DiagonalBitboards antiDiagonalBitboards;
 extern const MoveDictionary knightMoveDictionary;
 extern const MoveDictionary kingMoveDictionary;
 extern const MoveDictionary positionDictionary;
-extern const MoveDictionary reversePositionDictionary;
 extern const SpecialMoveDictionary specialMoveDictionary;
 
 #endif

@@ -37,6 +37,19 @@ typedef struct {
     MoveFlags flags;
 } Move;
 
+/*!
+ * initializes the Move struct
+ *
+ * */
 Move moveInit();
-void printMove(Move* move, char* string);
+
+/*!
+ * creates the given chess move in long notation and saves it in the given char*
+ *
+ * @param move: The move to print
+ * @param string: the char* to save the result in 
+ *
+ * */
+void printMove(const Move* move, char* string);
+
 #endif

@@ -1,6 +1,12 @@
 #include "errors.h"
 
-void printErrorCodeSpecification(int exitCode) {
+/*!
+ * prints an error code specific message for the error message
+ *
+ * @param exitCode: the errorcode of the error
+ *
+ * */
+static inline void printErrorCodeSpecification(int exitCode) {
     char* specification;
     switch (exitCode) {
         case ERROR_MEMORY_MALLOC_FAILED:

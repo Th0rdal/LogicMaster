@@ -1,11 +1,5 @@
 #include "utility/debugging.h"
 
-/*
- * prints a bitboard out in a chess board pattern
- *
- * @param board: uint64_t representing the bitboard
- *
- */
 void printBoard(uint64_t board) {
     printf("0x%llx\n", board);
     for (int i = 63; i >= 0; --i) {
@@ -19,11 +13,6 @@ void printBoard(uint64_t board) {
     printf("\n");
 }
 
-/*
- * prints out all variables of gamestate
- *
- * @param gamestate: gamestate struct to print out
- */
 void debugGamestate(Gamestate* gamestate) {
     printf("occupancy\n");
     printBoard(gamestate->bitboards.occupancy);

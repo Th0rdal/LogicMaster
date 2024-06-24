@@ -1,23 +1,13 @@
 #include "utility/moveCalculation.h"
 
-static uint64_t horizontalSlide(Gamestate* gamestate, short position);
-static uint64_t verticalSlide(Gamestate* gamestate, short position);
-static uint64_t diagonalSlide(Gamestate* gamestate, short position);
-static uint64_t antiDiagonalSlide(Gamestate* gamestate, short position);
-static bool canKCastle(Gamestate* gamestate);
-static bool canQCastle(Gamestate* gamestate);
-uint64_t squareAttacked(Gamestate* gamestate, Position* position);
+static inline uint64_t horizontalSlide(const Gamestate* gamestate, const short position);
+static inline uint64_t verticalSlide(const Gamestate* gamestate, const short position);
+static inline uint64_t diagonalSlide(const Gamestate* gamestate, const short position);
+static inline uint64_t antiDiagonalSlide(const Gamestate* gamestate, const short position);
+static inline bool canKCastle(const Gamestate* gamestate);
+static inline bool canQCastle(const Gamestate* gamestate);
 
-/**
- * calculates all possible moves a given pawn can do
- *
- * @param gamestate: the current gamestate
- * @param position: position of the pawn as a struct
- *
- * @return bitboard representing all possible moves
- *
- * */
-uint64_t pawnMoves(Gamestate* gamestate, Position* position) { 
+uint64_t pawnMoves(const Gamestate* gamestate, const Position* position) { 
     uint64_t moves = 0;
     uint64_t pos1, pos2, pos3, pos4;
     bool side = gamestate->flags.isWhiteTurn;
@@ -41,16 +31,7 @@ uint64_t pawnMoves(Gamestate* gamestate, Position* position) {
     return moves;
 }
 
-/**
- * calculates all possible moves a given rook can do
- *
- * @param gamestate: the current gamestate
- * @param position: position of the rook as a struct
- *
- * @return bitboard representing all possible moves
- *
- * */
-uint64_t rookMoves(Gamestate* gamestate, Position* position) {
+uint64_t rookMoves(const Gamestate* gamestate, const Position* position) {
     uint64_t moves = 0;
     short pos = positionToShort(position);
     moves |= horizontalSlide(gamestate, pos);
@@ -58,31 +39,13 @@ uint64_t rookMoves(Gamestate* gamestate, Position* position) {
     return moves;
 }
 
-/**
- * calculates all possible moves a given knight can do
- *
- * @param gamestate: the current gamestate
- * @param position: position of the knight as a struct
- *
- * @return bitboard representing all possible moves
- *
- * */
-uint64_t knightMoves(Gamestate* gamestate, Position* position) {
+uint64_t knightMoves(const Gamestate* gamestate, const Position* position) {
     uint64_t moves = knightMoveDictionary.boards[positionToShort(position)];
     moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn] & moves);
     return moves;
 }
 
-/**
- * calculates all possible moves a given bishop can do
- *
- * @param gamestate: the current gamestate
- * @param position: position of the bishop as a struct
- *
- * @return bitboard representing all possible moves
- *
- * */
-uint64_t bishopMoves(Gamestate* gamestate, Position* position) {
+uint64_t bishopMoves(const Gamestate* gamestate, const Position* position) {
     uint64_t moves = 0;
     short pos = positionToShort(position);
     moves |= diagonalSlide(gamestate, pos);
@@ -90,16 +53,7 @@ uint64_t bishopMoves(Gamestate* gamestate, Position* position) {
     return moves;
 }
 
-/**
- * calculates all possible moves a given queen can do
- *
- * @param gamestate: the current gamestate
- * @param position: position of the queen as a struct
- *
- * @return bitboard representing all possible moves
- *
- * */
-uint64_t queenMoves(Gamestate* gamestate, Position* position) {
+uint64_t queenMoves(const Gamestate* gamestate, const Position* position) {
     uint64_t moves = 0;
     short pos = positionToShort(position);
     moves |= horizontalSlide(gamestate, pos);
@@ -109,16 +63,7 @@ uint64_t queenMoves(Gamestate* gamestate, Position* position) {
     return moves;
 }
 
-/**
- * calculates all possible moves a given king can do
- *
- * @param gamestate: the current gamestate
- * @param position: position of the king as a struct
- *
- * @return bitboard representing all possible moves
- *
- * */
-uint64_t kingMoves(Gamestate* gamestate, Position* position) {
+uint64_t kingMoves(const Gamestate* gamestate, const Position* position) {
     uint64_t moves = kingMoveDictionary.boards[positionToShort(position)];
     moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn] & moves); //check if edge pieces are white pieces
     if (gamestate->flags.isWhiteTurn) { //means that the piece MUST be a white piece
@@ -139,17 +84,7 @@ uint64_t kingMoves(Gamestate* gamestate, Position* position) {
     return moves;
 }
 
-/*
- * returns bitboards containing all checking pieces + all block possibilities + all king moves. If this is 0 => checkmate.
- * also saves the bitboards into config of the gamestate
- *
- * @param gamestate: the gamestate to check
- * @param kingPosition: the position of the king that needs to be checked
- *
- * @return: bitboard with all possible king moves, piece captures or block opportunities
- *
- * */
-uint64_t createPossibleMovesAfterCheck(Gamestate* gamestate, Position* kingPosition) {
+uint64_t createPossibleMovesAfterCheck(const Gamestate* gamestate, const Position* kingPosition) {
     uint64_t possibleMovesAfterCheck = 0;
     uint64_t attackingPieces = squareAttacked(gamestate, kingPosition);
     bool side = gamestate->flags.isWhiteTurn;
@@ -175,19 +110,7 @@ uint64_t createPossibleMovesAfterCheck(Gamestate* gamestate, Position* kingPosit
     return possibleMovesAfterCheck; 
 }
 
-/*
- * makes a move and checks if the move is legal, by seeing if the king is under attack afterwards.
- * this is only filling a new gamestate with the most essential values to check.
- * 
- * @param gamestate: the gamestate to check
- * @param piece: the piece that made the move
- * @param piecePosition: the starting position of the piece
- * @param movePosition: the end position of the piece
- *
- * return: true if the move is legal, otherwise false
- *
- * */
-bool makeMoveAndCheckLegal(Gamestate* gamestate, enum PIECE piece, Position* piecePosition, Position* movePosition) {
+bool makeMoveAndCheckLegal(const Gamestate* gamestate, const enum PIECE piece, const Position* piecePosition, const Position* movePosition) {
     Gamestate* newGamestate = gamestateInit();
     bool side = gamestate->flags.isWhiteTurn;
     short originalPos = positionToShort(piecePosition);
@@ -229,20 +152,14 @@ bool makeMoveAndCheckLegal(Gamestate* gamestate, enum PIECE piece, Position* pie
 
     Position* kingPosition = getAllPiecePositions(newGamestate->bitboards.king & gamestate->bitboards.color[side], 1);
     if (squareAttacked(newGamestate, kingPosition)) {
+        free(newGamestate);
         return false; 
     }
+    free(newGamestate);
     return true;
 }
 
-/**
- * calculates all squares that have pieces that attack the given position
- *
- * @param gamestate: the gamestate to check
- * @param position: the position to check
- *
- * @return: bitboard with a 1 on every position a piece that is attacking the defined position is standing
- * */
-uint64_t squareAttacked(Gamestate* gamestate, Position* position) {
+uint64_t squareAttacked(const Gamestate* gamestate, const Position* position) {
     uint64_t moves = 0;
     bool side = gamestate->flags.isWhiteTurn;
     short pos = positionToShort(position);
@@ -256,7 +173,7 @@ uint64_t squareAttacked(Gamestate* gamestate, Position* position) {
     return moves;
 }
 
-/**
+/*!
  * check if a king castle can be done
  *
  * @param gamestate: the gamestate to check
@@ -264,7 +181,7 @@ uint64_t squareAttacked(Gamestate* gamestate, Position* position) {
  * @return: true if king castle is possible, else false
  *
  * */
-bool canKCastle(Gamestate* gamestate) {
+static inline bool canKCastle(const Gamestate* gamestate) {
     bool side = gamestate->flags.isWhiteTurn;
     return gamestate->flags.kCastle[side]
         && !(gamestate->bitboards.occupancy & specialMoveDictionary.kingCastle[side])
@@ -272,7 +189,7 @@ bool canKCastle(Gamestate* gamestate) {
         && !squareAttacked(gamestate, &specialMoveDictionary.kingCastlePositions[side][1]));
 }
 
-/**
+/*!
  * check if a queen castle can be done
  *
  * @param gamestate: the gamestate to check
@@ -280,7 +197,7 @@ bool canKCastle(Gamestate* gamestate) {
  * @return: true if queen castle is possible, else false
  *
  * */
-bool canQCastle(Gamestate* gamestate) {
+static inline bool canQCastle(const Gamestate* gamestate) {
     bool side = gamestate->flags.isWhiteTurn;
     return gamestate->flags.qCastle[side]
         && !(gamestate->bitboards.occupancy & specialMoveDictionary.queenCastle[side])
@@ -288,7 +205,7 @@ bool canQCastle(Gamestate* gamestate) {
         && !squareAttacked(gamestate, &specialMoveDictionary.queenCastlePositions[side][1]));
 }
 
-/**
+/*!
  * calculates all possible positions a sliding piece (e.g., rook) can have in horizontal (rank) direction
  *
  * @param gamestate: gamestate struct representing the current gamestate
@@ -296,7 +213,7 @@ bool canQCastle(Gamestate* gamestate) {
  *
  * @return: bitboard representing all attacks the piece can make in horizontal direction
  * */
-uint64_t horizontalSlide(Gamestate* gamestate, short position) {
+static inline uint64_t horizontalSlide(const Gamestate* gamestate, const short position) {
     uint64_t mask = rankBitboards.boards[position/8]; 
     uint64_t rankOccupancy = gamestate->bitboards.occupancy & mask;
     uint64_t posInBoard = positionDictionary.boards[position];
@@ -305,7 +222,7 @@ uint64_t horizontalSlide(Gamestate* gamestate, short position) {
     return moves;
 }
 
-/*
+/*!
  * calculates all possible positions a sliding piece (e.g., rook) can have in vertical (file) direction
  *
  * @param gamestate: gamestate struct representing the current gamestate
@@ -313,7 +230,7 @@ uint64_t horizontalSlide(Gamestate* gamestate, short position) {
  *
  * @return: bitboard representing all attacks the piece can make in vertical direction
  * */
-uint64_t verticalSlide(Gamestate* gamestate, short position) {
+static inline uint64_t verticalSlide(const Gamestate* gamestate, const short position) {
     uint64_t mask = fileBitboards.boards[7 - position%8];
     uint64_t fileOccupancy = gamestate->bitboards.occupancy & mask;
     uint64_t posInBoard = positionDictionary.boards[position];
@@ -322,7 +239,7 @@ uint64_t verticalSlide(Gamestate* gamestate, short position) {
     return moves;
 }
 
-/*
+/*!
  * calculates all possible positions a sliding piece (e.g., rook) can have in diagonal direction
  *
  * @param gamestate: gamestate struct representing the current gamestate
@@ -330,8 +247,8 @@ uint64_t verticalSlide(Gamestate* gamestate, short position) {
  *
  * @return:OPTIMIZATION: instead of calculating the possible moves based on the diagonal/anti diagonal, I could have a lookup table.
  * bitboard representing all attacks the piece can make in diagonal direction
- * */ 
-uint64_t antiDiagonalSlide(Gamestate* gamestate, short position) {
+ * */
+static inline uint64_t antiDiagonalSlide(const Gamestate* gamestate, const short position) {
     uint64_t positionInBoard = positionDictionary.boards[position];
     uint64_t antiDiagonal = antiDiagonalBitboards.boards[getAntiDiagonalIndexFromShort(position)];
  
@@ -353,7 +270,7 @@ uint64_t antiDiagonalSlide(Gamestate* gamestate, short position) {
     return moves;
 }
 
-/*
+/*!
  * calculates all possible positions a sliding piece (e.g., rook) can have in diagonal direction
  *
  * @param gamestate: gamestate struct representing the current gamestate
@@ -361,7 +278,7 @@ uint64_t antiDiagonalSlide(Gamestate* gamestate, short position) {
  *
  * @return: bitboard representing all attacks the piece can make in diagonal direction
  * */
-uint64_t diagonalSlide(Gamestate* gamestate, short position) {
+static inline uint64_t diagonalSlide(const Gamestate* gamestate, const short position) {
     uint64_t positionInBoard = positionDictionary.boards[position];
     uint64_t diagonal = diagonalBitboards.boards[getDiagonalIndexFromShort(position)];
     

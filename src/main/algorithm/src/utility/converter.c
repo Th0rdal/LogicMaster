@@ -1,16 +1,8 @@
 #include "utility/converter.h"
 
-static void getFenPart(char* fen, short* startIndex, char* part);
-static void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboards);
+static inline void getFenPart(const char* fen, short* startIndex, char* part);
+static inline void setPieceOnBitboard(const char fenChar, const uint64_t value, Bitboards* bitboards);
 
-/**
- * Converts a fen notation char array into a bitboard struct and writes it into the bitboard struct
- * Expects en Passant position in format a-h1-8 e.g., a5, e3
- *
- * @param fen: fen notation char array
- * @param bitboards: Bitboards struct pointer to empty bitboard
- *
- * */
 void fenToBitboard(char* fen, Gamestate* gamestate) {
     short maxLoopCounter = 0;
     short counter = 0;
@@ -100,7 +92,7 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
 
 }
 
-/**
+/*!
  * adds the value to the bitboard given by the fenChar
  *
  * @param fenChar: character representation of the piece
@@ -108,7 +100,7 @@ void fenToBitboard(char* fen, Gamestate* gamestate) {
  * @param bitboards: Bitboard struct pointer representing the board
  *
  */
-static void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboards) {
+static inline void setPieceOnBitboard(const char fenChar, const uint64_t value, Bitboards* bitboards) {
     switch (fenChar) {
         case 'k':
         case 'K':
@@ -139,7 +131,7 @@ static void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboard
     }
 }
 
-/**
+/*!
  * fetches the next part of the fen notation. This is marked by a space
  *
  * @param fen: the complete fen notation char pointer
@@ -149,7 +141,7 @@ static void setPieceOnBitboard(char fenChar, uint64_t value, Bitboards* bitboard
  * @exit ERROR_FETCHING_FEN_PART: If after completing fetching, the next character is not a space
  *
  */
-static void getFenPart(char* fen, short* startIndex, char* toWrite) {
+static inline void getFenPart(const char* fen, short* startIndex, char* toWrite) {
     memset(toWrite, '\0', strlen(toWrite)+1); // reset toWrite string
     int i;
 
@@ -161,6 +153,3 @@ static void getFenPart(char* fen, short* startIndex, char* toWrite) {
     }
     *startIndex += i; // add i to the current counter.
 }
-
-
-

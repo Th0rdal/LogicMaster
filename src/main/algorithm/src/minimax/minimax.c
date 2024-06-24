@@ -1,6 +1,11 @@
 #include "minimax/minimax.h"
 
-int setup() {
+/*!
+ * gets the number of processors for maxThreads
+ *
+ *  @return: maxThreads
+ */
+static inline int setupMaxThreads() {
     SYSTEM_INFO sysinfo;
     GetSystemInfo(&sysinfo);
     int maxThreads = sysinfo.dwNumberOfProcessors;

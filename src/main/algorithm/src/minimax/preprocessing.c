@@ -1,18 +1,14 @@
 #include "minimax/preprocessing.h"
 
-/*void appendStateToArray(Gamestate* calculatedStates, Gamestate* toAppend, short* counter, short* maxCount) {
-    if (*counter == *maxCount) {
-        maxCount += MOVES_INCREMENT;
-        Gamestate* temp = (Gamestate*) realloc(calculatedStates, sizeof(Gamestate) * *maxCount);
-        if (temp == NULL) {
-            throwError(ERROR_MEMORY_REALLOC_FAILED, "Error in reallocating memory: function appendStateToArray");
-        }
-        calculatedStates = temp;
-    }
-}
-*/
-void* worker(void* args) {
-    MoveGenerationThreadPool* pool = (MoveGenerationThreadPool *)args;
+/*!
+ * function representing the work a MoveGenerationThreadPool thread does. It works until the shutdown command is issued or the workCounter reaches 0 (which means work done)
+ * it gets a new gamestate from the queue, processes it and then updates the workCounter. If the maxDepth is reached, it enqueues the gamestate to the result queue
+ *
+ * @param: it needs a MoveGenerationThreadPool struct to work
+ *
+ **/
+DWORD WINAPI worker(LPVOID lpParam) {
+    MoveGenerationThreadPool* pool = (MoveGenerationThreadPool *)lpParam;
     Queue workQueue = pool->queue;
     int counter = 0;
 
@@ -24,7 +20,7 @@ void* worker(void* args) {
         counter = calculateMoves(gamestate, &workQueue);
         updateWorkCounter(pool, counter-1);
     }
-     
+    return 0;
 }
 
 int calculateMoves(Gamestate* gamestate, Queue* queue) {
@@ -69,7 +65,10 @@ int calculateMoves(Gamestate* gamestate, Queue* queue) {
             } 
         }
     }
-    
+    free(piecePositions);
+    free(movePositions);
+    movePositions = NULL;
+
     // rook calculations
     board = gamestate->bitboards.rook & gamestate->bitboards.color[side];
     count = __builtin_popcountll(board);
@@ -91,6 +90,9 @@ int calculateMoves(Gamestate* gamestate, Queue* queue) {
             } 
         }
     }   
+    free(piecePositions);
+    free(movePositions);
+    movePositions = NULL;
 
     // knight
     board = gamestate->bitboards.knight & gamestate->bitboards.color[side];
@@ -113,6 +115,9 @@ int calculateMoves(Gamestate* gamestate, Queue* queue) {
             } 
         }
     }
+    free(piecePositions);
+    free(movePositions);
+    movePositions = NULL;
     
     //bishop
     board = gamestate->bitboards.bishop & gamestate->bitboards.color[side];
@@ -135,6 +140,9 @@ int calculateMoves(Gamestate* gamestate, Queue* queue) {
             } 
         }
     }
+    free(piecePositions);
+    free(movePositions);
+    movePositions = NULL;
 
     //queen
     board = gamestate->bitboards.queen & gamestate->bitboards.color[side];
@@ -157,6 +165,9 @@ int calculateMoves(Gamestate* gamestate, Queue* queue) {
             } 
         }
     }
+    free(piecePositions);
+    free(movePositions);
+    movePositions = NULL;
 
     //king
     board = gamestate->bitboards.king & gamestate->bitboards.color[side];
@@ -179,11 +190,14 @@ int calculateMoves(Gamestate* gamestate, Queue* queue) {
             } 
         }
     }
+    free(piecePositions);
+    free(movePositions);
+    movePositions = NULL;
 
     return movesAddedToQueue;
 }
     
-void minimax_preprocessing(short maxDepth, int maxThreads, Gamestate* gamestate) {
+void minimax_preprocessing(const short maxDepth, const int maxThreads, Gamestate* gamestate) {
     /*
      * threading:
      * give each thread their own thread struct with id and result pointer
@@ -196,11 +210,29 @@ void minimax_preprocessing(short maxDepth, int maxThreads, Gamestate* gamestate)
      * 
      * */
     
-    MoveGenerationThreadPool pool = moveGenerationThreadPoolInit(maxDepth, maxThreads);    
-
-
+    queueNode* node = malloc(sizeof(queueNode));
+    MoveGenerationThreadPool* pool = moveGenerationThreadPoolInit(maxDepth, maxThreads, node, node);    
+    
+    DWORD threadIDs[pool->maxThreads];
     for (int i = 0; i < maxThreads; i++) {
-        pthread_create(&pool.threads[i], NULL, worker, (void *)&pool);
+        pool->threads[i] = CreateThread(
+            NULL,   // Default security attributes
+            0,      // Default stack size
+            worker, // Thread function
+            &pool,  // argument to thread function
+            0,      // Defauzlt creation flags
+            &threadIDs[i]    // Ignore thread ID
+        );
+        
+        if (pool->threads[i] == NULL) {
+            throwError(ERROR_THREADS_CREATION_FAILED, "Error: failed to create thread for move generation"); 
+        }
+    }
+
+    WaitForMultipleObjects(pool->maxThreads, pool->threads, TRUE, INFINITE);
+
+    for (int i = 0; i < pool->maxThreads; i++) {
+        CloseHandle(pool->threads[i]);
     }
 
 }
