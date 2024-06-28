@@ -15,6 +15,15 @@ static inline void printErrorCodeSpecification(int exitCode) {
         case ERROR_MEMORY_REALLOC_FAILED:
             specification = "memory reallocation failed";
             break;
+        case ERROR_THREADS_CREATION_FAILED:
+            specification = "thread creation failed";
+            break;
+        case ERROR_CUSTOM_STACK_OVERFLOW:
+            specification = "stack overflow";
+            break;
+        case ERROR_CUSTOM_STACK_UNDERFLOW:
+            specification = "stack underflow";
+            break;
         case ERROR_NOINPUT:
             specification = "no input given";
             break;
@@ -32,6 +41,12 @@ static inline void printErrorCodeSpecification(int exitCode) {
             break;
         case ERROR_POSITION_VALUE_OUTSIDE_EXPECTED:
             specification = "position value outside defined range";
+            break;
+        case ERROR_PIECE_POSITION_CANNOT_BE_CALCULATED:
+            specification = "piece position cannot be calculated";
+            break;
+        case ERROR_PIECE_NOT_SELECTED:
+            specification = "no piece selected";
             break;
     }
     specification[0] = toupper(specification[0]);

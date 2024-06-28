@@ -25,7 +25,7 @@ Position positionInit();
  *
  * @param position: the position to check
  *
- * @exit ERROR_POSITION_VALUE_OUTSIDE_EXPECTED: if a value is outside of the defined values
+ * @warning ERROR_POSITION_VALUE_OUTSIDE_EXPECTED: if a value is outside of the defined values
  *
  * */
 void checkPositionValues(Position* position);
@@ -49,6 +49,8 @@ void setPositionFromShort(Position* position, const short number);
  * @param bitboard: uint64_t bitboard with the positions
  * @param pieces: short with the amount of 1 in the bitboard. Can be calculated with __builtin_popcountll which counts all 1
  *
+ * @warning ERROR_POSITION_VALUE_OUTSIDE_EXPECTED: if the position value is not between 1 <= x <= 8
+ *
  * */
 Position* getAllPiecePositions(const uint64_t bitboard, const short pieces);
 
@@ -58,7 +60,7 @@ Position* getAllPiecePositions(const uint64_t bitboard, const short pieces);
  * @param fenChar: char array with the position to convert
  * @param position: Position struct to save the position in
  *
- * @exit ERROR_CANNOT_CONVERT_POSITION: either value cannot be converted to number between 1 and 8 or is not defined
+ * @warning ERROR_POSITION_VALUE_OUTSIDE_EXPECTED: either value cannot be converted to number between 1 and 8 or is not defined
  *
  */
 void convertCharArrayToPosition(const char* fenChar, Position* position);
@@ -112,14 +114,5 @@ short getAntiDiagonalIndexFromShort(const short position);
  *
  * */
 short positionToShort(const Position* position);
-
-/*!
- * does a deep copy of a position.
- *
- * @param destination: the destination position
- * @param source: the source position 
- *
- * */
-void deepCopyPosition(Position* destination, const Position* source);
 
 #endif

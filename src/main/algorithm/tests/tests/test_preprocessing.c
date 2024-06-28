@@ -1,7 +1,8 @@
 #include "tests/test_preprocessing.h"
 
 void test_moveGeneration() {
-    Queue queue = queueInit(); 
+    Queue* queue = queueInit(1);
+    initializeTree();
 
     Gamestate *gamestate = gamestateInit();
     // Bitboards
@@ -21,6 +22,7 @@ void test_moveGeneration() {
     gamestate->flags.isWhiteTurn = true;
     
     short expectedValue = 38;
+    int expectedTreeValue = 1;
     char* expected[] = {
         "e4 e5",
         "f4 f5",
@@ -63,12 +65,13 @@ void test_moveGeneration() {
 
     };
 
-    int actual = calculateMoves(gamestate, &queue);  
+    int actual = calculateMoves(gamestate, queue, NULL);  
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(expectedValue, actual, "Too many or too little moves generated");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(expectedTreeValue, size(tree->head), "Tree is too small or large");
     for (int i = 0; i < actual; i++) {
         char f[20];
-        Gamestate* temp = dequeue(&queue);
+        Gamestate* temp = dequeue(queue);
         Move move = temp->move;
         printMove(&move, f);
         //printf("%s\n", f); if debugging is needed
@@ -85,8 +88,129 @@ void test_moveGeneration() {
 
 }
 
+void test_moveGenerationWithOneThread() {
+    initializeTree();
+    Gamestate *gamestate = gamestateInit();
+    // Bitboards
+    gamestate->bitboards.pawn =     0x000798400C006300; 
+    gamestate->bitboards.rook =     0x8100000000000084;
+    gamestate->bitboards.knight =   0x0000240000600000;
+    gamestate->bitboards.bishop =   0x2008000000100020;
+    gamestate->bitboards.queen =    0x0020000000000010;
+    gamestate->bitboards.king =     0x0800000000000002; 
+
+    //color
+    gamestate->bitboards.color[1] =    0x000000000C7063B6;
+    gamestate->bitboards.color[0] =    0xA92FBC4000000000;
+
+    // occupancy
+    gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
+    gamestate->flags.isWhiteTurn = true;
+
+    int expectedTreeValue = 39;
+ 
+    MoveGenerationThreadPool* pool = moveGenerationThreadPoolInit(1, 1);    
+    pool->workCounter++;
+    enqueue(pool->queue, gamestate);
+
+    DWORD threadIDs[pool->maxThreads];
+    for (int i = 0; i < pool->maxThreads; i++) {
+        pool->threads[i] = CreateThread(
+            NULL,   // Default security attributes
+            0,      // Default stack size
+            generationWorker, // Thread function
+            pool,  // argument to thread function
+            0,      // Defauzlt creation flags
+            &threadIDs[i]    // Ignore thread ID
+        );
+        
+        if (pool->threads[i] == NULL) {
+            throwError(ERROR_THREADS_CREATION_FAILED, "Error: failed to create thread for move generation"); 
+        }
+    }
+
+    DWORD waitResult = WaitForMultipleObjects(pool->maxThreads, pool->threads, TRUE, 10000);
+    if (waitResult == WAIT_TIMEOUT) {
+        pool->shutdown = true;
+        TEST_FAIL_MESSAGE("Some thread took too long");
+    }
+    TEST_ASSERT_EQUAL_INT_MESSAGE(expectedTreeValue, size(tree->head), "The tree is too small or large");
+    TEST_PASS();
+    //destroyGamestateTreeNodeWithInside(tree->head);
+    tree->head = NULL;
+}
+
+void test_moveGenerationWithThreads() {
+    Gamestate *gamestate = gamestateInit();
+    // Bitboards
+    gamestate->bitboards.pawn =     0x000798400C006300; 
+    gamestate->bitboards.rook =     0x8100000000000084;
+    gamestate->bitboards.knight =   0x0000240000600000;
+    gamestate->bitboards.bishop =   0x2008000000100020;
+    gamestate->bitboards.queen =    0x0020000000000010;
+    gamestate->bitboards.king =     0x0800000000000002; 
+
+    //color
+    gamestate->bitboards.color[1] =    0x000000000C7063B6;
+    gamestate->bitboards.color[0] =    0xA92FBC4000000000;
+
+    // occupancy
+    gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
+    gamestate->flags.isWhiteTurn = true;
+
+    int expectedTreeValue[] = {39, 1528, 56979};
+    
+    for (int depth = 1; depth < 4; depth++) {
+        initializeTree();
+        MoveGenerationThreadPool* pool = moveGenerationThreadPoolInit(depth, 32);    
+        pool->workCounter++;
+        enqueue(pool->queue, gamestate);
+        
+        DWORD threadIDs[pool->maxThreads];
+        for (int i = 0; i < pool->maxThreads; i++) {
+            pool->threads[i] = CreateThread(
+                NULL,   // Default security attributes
+                0,      // Default stack size
+                generationWorker, // Thread function
+                pool,  // argument to thread function
+                0,      // Defauzlt creation flags
+                &threadIDs[i]    // Ignore thread ID
+            );
+            
+            if (pool->threads[i] == NULL) {
+                throwError(ERROR_THREADS_CREATION_FAILED, "Error: failed to create thread for move generation"); 
+            }
+        }
+
+        DWORD waitResult = WaitForMultipleObjects(pool->maxThreads, pool->threads, TRUE, 50000);
+
+        if (waitResult == WAIT_TIMEOUT) {
+            pool->shutdown = true;
+            switch (depth) {                
+                case 1:
+                    TEST_FAIL_MESSAGE("Some thread took too long (depth 1)");
+                    break;
+                case 2:
+                    TEST_FAIL_MESSAGE("Some thread took too long (depth 2)");
+                    break;
+                case 3:
+                    TEST_FAIL_MESSAGE("Some thread took too long (depth 3)");
+                    break;
+            }
+        }
+        TEST_ASSERT_EQUAL_INT_MESSAGE(expectedTreeValue[depth-1], size(tree->head), "The tree is too small or large");
+        destroyGamestateTreeNodeWithInside(tree->head);
+        free(tree);
+        tree = NULL;
+        gamestate->config.parent = NULL;
+        gamestate->config.node = NULL;
+    }
+}
+
 static void __loadTests() {
     RUN_TEST(test_moveGeneration);
+    RUN_TEST(test_moveGenerationWithOneThread);
+    RUN_TEST(test_moveGenerationWithThreads);
 }
 
 void runTests_preprocessing() {

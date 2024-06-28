@@ -32,8 +32,12 @@ _Noreturn void throwError(int errorCode, char* format, ...) {
 }
 
 void throwWarning(int warningCode, char* format, ...) {
+    char newFormat[1024];
     va_list args;
     va_start(args, format);
-    printf("\x1b[33" "Warning code: %d", warningCode);
-    vfprintf(stderr, format, args);
+    strcpy(newFormat, format);
+    strcat(newFormat, "\n");
+    printf("\x1b[33m" "\tWarning code: %d\n", warningCode);
+    vfprintf(stderr, newFormat, args);
+    printf("\x1b[0m");
 }

@@ -39,7 +39,7 @@ void debugGamestate(Gamestate* gamestate) {
     printf("half move counter: %d\n", gamestate->counters.halfMove);
 
     printf("\nflags\n");
-    printf("turn: %d\n", gamestate->flags.isWhiteTurn);
+    printf("turn: %s\n", gamestate->flags.isWhiteTurn ? "true" : "false");
     printf("white king castle: %d\n", gamestate->flags.kCastle[1]);
     printf("white queen castle: %d\n", gamestate->flags.qCastle[1]);
     printf("black king castle: %d\n", gamestate->flags.kCastle[0]);

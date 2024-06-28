@@ -107,6 +107,8 @@ uint64_t createPossibleMovesAfterCheck(const Gamestate* gamestate, const Positio
  * @param position: the position to check
  *
  * @return: bitboard with a 1 on every position a piece that is attacking the defined position is standing
+ *
+ * @warning ERROR_PIECE_NOT_SELECTED: if there was no piece or the NO_PIECE value given to the function instead of a piece
  * */
 bool makeMoveAndCheckLegal(const Gamestate* gamestate, const enum PIECE piece, const Position* piecePosition, const Position* movePosition);
 

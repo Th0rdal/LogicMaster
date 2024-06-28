@@ -2,24 +2,26 @@
 #define QUEUE_H
 
 //this is a THREAT SAVE queue
-#define QUEUE_SIZE 500
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <math.h>
 
 #include "structs/gamestate.h"
 
-typedef struct queueNode{
-    Gamestate* gamestate;
-    struct queueNode* next;
-}queueNode;
+#define QUEUE_RESIZE // comment this out if the queue should not be resized 
+
+static const int QUEUE_SIZE_BASE = 15;
+static const int QUEUE_SIZE_MULTIPLIER = 75;
+static const int ENQUEUE_WAIT_TIME = 1500;
+static const int DEQUEUE_WAIT_TIME = 100;
 
 typedef struct {
-    Gamestate* data[QUEUE_SIZE];
+    Gamestate** data;
     int front;
     int rear;
-    queueNode* head;
+    int maxSize;
     CRITICAL_SECTION lock;
     CONDITION_VARIABLE condEnqueue; // waiting in enqueue when queue full
     CONDITION_VARIABLE condDequeue; // waiting in dequeue when queue is empty
@@ -28,8 +30,10 @@ typedef struct {
 /*!
  * initializes the queue struct
  *
+ * @param maxDepth: a value that will be multiplied with QUEUE_SIZE_BASE to determine the queue size
+ *
  * */
-Queue queueInit();
+Queue* queueInit(int maxDepth);
 
 /*!
  * adds a Gamestate to the queue

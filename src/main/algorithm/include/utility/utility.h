@@ -14,7 +14,7 @@
  * @param charNumber: pointer to array to convert to number
  *
  * @return: integer representing the char array
- * @exit ERROR_CONVERTING_CHARARRAY_TO_INT: if there is an unexpected character in the array
+ * @warning ERROR_CONVERTING_CHARARRAY_TO_INT: if there is an unexpected character in the array
  *
  */
 int convertCharArrayToInt(char* charNumber);

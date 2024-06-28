@@ -20,6 +20,7 @@ int main(void) {
     includeTests_reverseBitboard();
     includeTests_moveCalculator();
     includeTests_preprocessing();
+    includeTests_makeMove();
     // end test cases
     printf("\x1b[0m");
     return UNITY_END();

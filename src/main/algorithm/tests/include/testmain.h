@@ -8,5 +8,6 @@
 #include "tests\test_reverseBitboard.h"
 #include "tests\test_moveCalculator.h"
 #include "tests\test_preprocessing.h"
+#include "tests\test_makeMove.h"
 
 #endif

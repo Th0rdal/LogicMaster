@@ -39,35 +39,42 @@ GamestateConfig gamestateConfigInit() {
     config.checkedCheck = false;
     config.lastGamestate = NULL;
     config.depth = 0;
+    config.parent = NULL;
+    config.node = NULL;
+    config.evaluation = 0;
     return config;
 }
 
+inline void destroyGamestate(Gamestate* gamestate) {
+    free(gamestate);
+}
+
 bool gamestate_makeMove(Gamestate* gamestate, Gamestate* newGamestate, const enum PIECE piece, Position* piecePosition, Position* movePosition) {
-
-
     newGamestate->move.piece = piece;
-    deepCopyPosition(&newGamestate->move.startPosition, piecePosition);
-    deepCopyPosition(&newGamestate->move.endPosition, movePosition);
+    newGamestate->move.startPosition = *piecePosition;
+    newGamestate->move.endPosition = *movePosition;
 
-    bool side = gamestate->flags.isWhiteTurn;
+    int side = gamestate->flags.isWhiteTurn ? 1 : 0;
     short pos = positionToShort(movePosition);
     short originalPos = positionToShort(piecePosition);
-    uint64_t notPos = ~positionDictionary.boards[pos];
+    uint64_t originalPosBoard = positionDictionary.boards[originalPos];
+    uint64_t notOriginalPosBoard = ~originalPosBoard;
+    uint64_t notPosBoard = ~positionDictionary.boards[pos];
+
     newGamestate->move.flags.capture = gamestate->bitboards.occupancy & positionDictionary.boards[pos];
     newGamestate->move.flags.isWhiteTurn = side;
     newGamestate->move.flags.draw = false;
 
-
-    // bitboards
-    newGamestate->bitboards.pawn = gamestate->bitboards.pawn & notPos;
-    newGamestate->bitboards.rook = gamestate->bitboards.rook & notPos;
-    newGamestate->bitboards.knight = gamestate->bitboards.knight & notPos;
-    newGamestate->bitboards.bishop = gamestate->bitboards.bishop & notPos;
-    newGamestate->bitboards.queen = gamestate->bitboards.queen & notPos;
-    newGamestate->bitboards.king = gamestate->bitboards.king & notPos;
+    // bitboards (deleting old position)
+    newGamestate->bitboards.pawn = gamestate->bitboards.pawn & notOriginalPosBoard;
+    newGamestate->bitboards.rook = gamestate->bitboards.rook & notOriginalPosBoard;
+    newGamestate->bitboards.knight = gamestate->bitboards.knight & notOriginalPosBoard;
+    newGamestate->bitboards.bishop = gamestate->bitboards.bishop & notOriginalPosBoard;
+    newGamestate->bitboards.queen = gamestate->bitboards.queen & notOriginalPosBoard;
+    newGamestate->bitboards.king = gamestate->bitboards.king & notOriginalPosBoard;
     newGamestate->bitboards.occupancy = gamestate->bitboards.occupancy;
-    newGamestate->bitboards.color[side] ^= (positionDictionary.boards[originalPos] | ~notPos);
-    newGamestate->bitboards.color[!side] = gamestate->bitboards.color[!side] & notPos;
+    newGamestate->bitboards.color[side] = gamestate->bitboards.color[side] ^ (originalPosBoard | ~notPosBoard);
+    newGamestate->bitboards.color[!side] = gamestate->bitboards.color[!side] & notPosBoard;
     newGamestate->bitboards.possibleMovesAfterCheck = 0xFFFFFFFFFFFFFFFF;
     
     // flags
@@ -79,7 +86,7 @@ bool gamestate_makeMove(Gamestate* gamestate, Gamestate* newGamestate, const enu
 
     switch (piece) {
         case PAWN:
-            newGamestate->bitboards.pawn |= ~notPos;
+            newGamestate->bitboards.pawn |= ~notPosBoard;
             if ((originalPos - pos > 0 ? originalPos - pos : -originalPos + pos ) > 9) {
                 if ((newGamestate->bitboards.pawn & newGamestate->bitboards.color[!side]) &
                         ((positionDictionary.boards[pos-1] & fileBitboards.reverseBoards[0]) | (positionDictionary.boards[pos+1] & fileBitboards.reverseBoards[7]))) {
@@ -94,7 +101,7 @@ bool gamestate_makeMove(Gamestate* gamestate, Gamestate* newGamestate, const enu
             } 
             break;
         case ROOK:
-            newGamestate->bitboards.rook |= ~notPos;
+            newGamestate->bitboards.rook |= ~notPosBoard;
             if (newGamestate->flags.kCastle[side] && piecePosition->rank == specialMoveDictionary.kCastleRookPositions[side][0] && piecePosition->file == specialMoveDictionary.kCastleRookPositions[side][1]) {
                 newGamestate->flags.kCastle[side] = false;
             }
@@ -103,16 +110,16 @@ bool gamestate_makeMove(Gamestate* gamestate, Gamestate* newGamestate, const enu
             }
             break;
         case KNIGHT:
-            newGamestate->bitboards.knight |= ~notPos;
+            newGamestate->bitboards.knight |= ~notPosBoard;
             break;
         case BISHOP:
-            newGamestate->bitboards.bishop |= ~notPos;
+            newGamestate->bitboards.bishop |= ~notPosBoard;
             break;
         case QUEEN:
-            newGamestate->bitboards.queen |= ~notPos;
+            newGamestate->bitboards.queen |= ~notPosBoard;
             break;
         case KING:
-            newGamestate->bitboards.king |= ~notPos;
+            newGamestate->bitboards.king |= ~notPosBoard;
             if ((newGamestate->flags.kCastle[side] | newGamestate->flags.qCastle[side]) & (piecePosition->rank == movePosition->rank)) {
                 if (originalPos - pos > 1) {
                     newGamestate->move.flags.kCastle[side] = true;
@@ -134,7 +141,7 @@ bool gamestate_makeMove(Gamestate* gamestate, Gamestate* newGamestate, const enu
     }
     
     // check if the move is legal, aka king not in check
-    Position* kingPosition = getAllPiecePositions(newGamestate->bitboards.king & gamestate->bitboards.color[side], 1);
+    Position* kingPosition = getAllPiecePositions(newGamestate->bitboards.king & newGamestate->bitboards.color[side], 1);
     if (squareAttacked(newGamestate, kingPosition)) {
         return 0; 
     }
@@ -145,12 +152,12 @@ bool gamestate_makeMove(Gamestate* gamestate, Gamestate* newGamestate, const enu
 
     // config done here because only bare minimum is done before checking if the move is viable
     newGamestate->config.lastGamestate = gamestate;
-    newGamestate->config.depth = gamestate->config.depth++;
+    newGamestate->config.depth = gamestate->config.depth + 1;
    
     side = !side;
     newGamestate->flags.isWhiteTurn = side;
     // new Gamestate fully filled
-    kingPosition = getAllPiecePositions(newGamestate->bitboards.king & gamestate->bitboards.color[side], 1);
+    kingPosition = getAllPiecePositions(newGamestate->bitboards.king & newGamestate->bitboards.color[side], 1);
     if (squareAttacked(newGamestate, kingPosition)) {
         newGamestate->move.flags.check = true;
         newGamestate->bitboards.possibleMovesAfterCheck = createPossibleMovesAfterCheck(newGamestate, kingPosition);

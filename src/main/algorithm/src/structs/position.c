@@ -30,9 +30,11 @@ void setPositionFromShort(Position* position, const short number) {
 
 Position* getAllPiecePositions(const uint64_t bitboard, const short pieces) {
     if (pieces < 0 ) {
-        throwError(ERROR_PIECE_POSITION_CANNOT_BE_CALCULATED, "Error the piece position given '%d' is negative", pieces);
+        throwError(ERROR_PIECE_POSITION_CANNOT_BE_CALCULATED, "Error: The piece position given '%d' is negative", pieces);
     } else if (pieces > 63) {
-        throwError(ERROR_PIECE_POSITION_CANNOT_BE_CALCULATED, "Error the piece position given '%d' is bigger than 63", pieces);
+        throwError(ERROR_PIECE_POSITION_CANNOT_BE_CALCULATED, "Error: The piece position given '%d' is bigger than 63", pieces);
+    } else if (bitboard == 0 && pieces != 0) {
+        throwError(ERROR_PIECE_POSITION_CANNOT_BE_CALCULATED, "Error: The piece position bitboard is 0, but should have %d '1' in it", pieces);
     }
     Position* piecePositions = (Position*) malloc(sizeof(Position)*pieces);
 
@@ -99,8 +101,3 @@ short positionToShort(const Position* position) {
     return (position->rank - 1) * 8 + (8 - position->file); 
 }
 
-
-void deepCopyPosition(Position* destination, const Position* source)  {
-    destination->rank = source->rank;
-    destination->file = source->file;
-}

@@ -3,11 +3,13 @@
 
 #include <stdbool.h>
 
-struct Gamestate;
-
+typedef struct Gamestate Gamestate;
+typedef struct GamestateTreeNode GamestateTreeNode; // forward declaration of tree struct
+                                                    
 #include "bitboards.h"
 #include "position.h"
 #include "move.h"
+#include "structs/tree.h"
 //#include "utility/moveCalculation.h" at the bottom as gamestate needs to be defined first
 
 typedef struct {
@@ -27,6 +29,9 @@ typedef struct {
     bool checkedCheck;
     struct Gamestate* lastGamestate; //forward declaration
     short depth;
+    GamestateTreeNode* parent;
+    GamestateTreeNode* node;
+    int evaluation;
 } GamestateConfig;
 
 typedef struct Gamestate {
@@ -69,6 +74,14 @@ GamestateFlags gamestateFlagInit();
  *
  * */
 GamestateConfig gamestateConfigInit();
+
+/*!
+ * destroys the given gamestate
+ *
+ * @param gamestate: pointer to the gamestate to destroy
+ *
+ * */
+void destroyGamestate(Gamestate* gamestate);
 
 /**
  * makes a move on the boards and creates a new gamestate representing the made move.

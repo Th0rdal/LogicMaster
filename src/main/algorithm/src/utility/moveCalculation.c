@@ -10,7 +10,7 @@ static inline bool canQCastle(const Gamestate* gamestate);
 uint64_t pawnMoves(const Gamestate* gamestate, const Position* position) { 
     uint64_t moves = 0;
     uint64_t pos1, pos2, pos3, pos4;
-    bool side = gamestate->flags.isWhiteTurn;
+    int side = gamestate->flags.isWhiteTurn ? 1 : 0;
 
     pos1 = positionDictionary.boards[positionToShort(position)+specialMoveDictionary.pawn1SquareAdd[side]]; // move 1 square
     pos2 = positionDictionary.boards[positionToShort(position)+specialMoveDictionary.pawn2SquareAdd[side]]; //move 2 spaces
@@ -41,7 +41,7 @@ uint64_t rookMoves(const Gamestate* gamestate, const Position* position) {
 
 uint64_t knightMoves(const Gamestate* gamestate, const Position* position) {
     uint64_t moves = knightMoveDictionary.boards[positionToShort(position)];
-    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn] & moves);
+    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn ? 1 : 0] & moves);
     return moves;
 }
 
@@ -65,7 +65,7 @@ uint64_t queenMoves(const Gamestate* gamestate, const Position* position) {
 
 uint64_t kingMoves(const Gamestate* gamestate, const Position* position) {
     uint64_t moves = kingMoveDictionary.boards[positionToShort(position)];
-    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn] & moves); //check if edge pieces are white pieces
+    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn ? 1 : 0] & moves); //check if edge pieces are white pieces
     if (gamestate->flags.isWhiteTurn) { //means that the piece MUST be a white piece
         if (canKCastle(gamestate)) {
             moves |= 0x2;
@@ -87,7 +87,7 @@ uint64_t kingMoves(const Gamestate* gamestate, const Position* position) {
 uint64_t createPossibleMovesAfterCheck(const Gamestate* gamestate, const Position* kingPosition) {
     uint64_t possibleMovesAfterCheck = 0;
     uint64_t attackingPieces = squareAttacked(gamestate, kingPosition);
-    bool side = gamestate->flags.isWhiteTurn;
+    int side = gamestate->flags.isWhiteTurn ? 1 : 0;
     uint64_t moves = kingMoves(gamestate, kingPosition);
     short count = __builtin_popcountll(moves);
     Position* kingMoves = getAllPiecePositions(moves, count);
@@ -112,7 +112,7 @@ uint64_t createPossibleMovesAfterCheck(const Gamestate* gamestate, const Positio
 
 bool makeMoveAndCheckLegal(const Gamestate* gamestate, const enum PIECE piece, const Position* piecePosition, const Position* movePosition) {
     Gamestate* newGamestate = gamestateInit();
-    bool side = gamestate->flags.isWhiteTurn;
+    int side = gamestate->flags.isWhiteTurn ? 1 : 0;
     short originalPos = positionToShort(piecePosition);
     uint64_t notPos = ~positionDictionary.boards[positionToShort(movePosition)];
     
@@ -161,7 +161,7 @@ bool makeMoveAndCheckLegal(const Gamestate* gamestate, const enum PIECE piece, c
 
 uint64_t squareAttacked(const Gamestate* gamestate, const Position* position) {
     uint64_t moves = 0;
-    bool side = gamestate->flags.isWhiteTurn;
+    int side = gamestate->flags.isWhiteTurn ? 1 : 0;
     short pos = positionToShort(position);
 
     moves |= (horizontalSlide(gamestate, pos) | verticalSlide(gamestate, pos)) & (gamestate->bitboards.color[!side] & (gamestate->bitboards.rook | gamestate->bitboards.queen)); 
@@ -182,7 +182,7 @@ uint64_t squareAttacked(const Gamestate* gamestate, const Position* position) {
  *
  * */
 static inline bool canKCastle(const Gamestate* gamestate) {
-    bool side = gamestate->flags.isWhiteTurn;
+    int side = gamestate->flags.isWhiteTurn ? 1 : 0;
     return gamestate->flags.kCastle[side]
         && !(gamestate->bitboards.occupancy & specialMoveDictionary.kingCastle[side])
         && (!squareAttacked(gamestate, &specialMoveDictionary.kingCastlePositions[side][0]) // if squareAttacked is 0, means no piece is attacking this 
@@ -198,7 +198,7 @@ static inline bool canKCastle(const Gamestate* gamestate) {
  *
  * */
 static inline bool canQCastle(const Gamestate* gamestate) {
-    bool side = gamestate->flags.isWhiteTurn;
+    int side = gamestate->flags.isWhiteTurn ? 1 : 0;
     return gamestate->flags.qCastle[side]
         && !(gamestate->bitboards.occupancy & specialMoveDictionary.queenCastle[side])
         && (!squareAttacked(gamestate, &specialMoveDictionary.queenCastlePositions[side][0]) // if squareAttacked is 0, means no piece is attacking this 
@@ -218,7 +218,7 @@ static inline uint64_t horizontalSlide(const Gamestate* gamestate, const short p
     uint64_t rankOccupancy = gamestate->bitboards.occupancy & mask;
     uint64_t posInBoard = positionDictionary.boards[position];
     uint64_t moves = ((rankOccupancy - (2 * posInBoard)) ^ (reverseBitboard(reverseBitboard(rankOccupancy) - (2 * positionDictionary.boards[63 - position])))) & mask; 
-    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn] & mask);
+    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn ? 1 : 0] & mask);
     return moves;
 }
 
@@ -235,7 +235,7 @@ static inline uint64_t verticalSlide(const Gamestate* gamestate, const short pos
     uint64_t fileOccupancy = gamestate->bitboards.occupancy & mask;
     uint64_t posInBoard = positionDictionary.boards[position];
     uint64_t moves = ((fileOccupancy - (2 * posInBoard)) ^ reverseBitboard(reverseBitboard(fileOccupancy) - (2 * positionDictionary.boards[63 - position]))) & mask;
-    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn] & mask);
+    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn ? 1 : 0] & mask);
     return moves;
 }
 
@@ -266,7 +266,7 @@ static inline uint64_t antiDiagonalSlide(const Gamestate* gamestate, const short
     uint64_t movesDownRight = downRightMoves ^ indexFirstAfterBlock;
 
     uint64_t moves = movesUpLeft | movesDownRight;
-    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn] & antiDiagonal);
+    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn ? 1 : 0] & antiDiagonal);
     return moves;
 }
 
@@ -295,6 +295,6 @@ static inline uint64_t diagonalSlide(const Gamestate* gamestate, const short pos
     uint64_t movesDownLeft = downLeftMoves ^ indexFirstAfterBlock;
     
     uint64_t moves = movesUpRight | movesDownLeft;
-    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn] & diagonal);
+    moves &= ~(gamestate->bitboards.color[gamestate->flags.isWhiteTurn ? 1 : 0] & diagonal);
     return moves;
 }

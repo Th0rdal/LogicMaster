@@ -1,5 +1,7 @@
 #include "minimax/minimax.h"
 
+bool algorithmColorWhite = false;
+
 /*!
  * gets the number of processors for maxThreads
  *
@@ -16,7 +18,8 @@ static inline int setupMaxThreads() {
     return maxThreads;
 }
 
-void minimax(short maxDepth, Gamestate* gamestate) {
+void minimax(short maxDepth, bool algorithmColorWhite, Gamestate* gamestate) {
     //TODO
     //preprocessing, core, postprocessing
+    algorithmColorWhite = algorithmColorWhite;
 }

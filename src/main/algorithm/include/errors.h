@@ -13,6 +13,10 @@
 // threads
 #define ERROR_THREADS_CREATION_FAILED 15
 
+// basic data structs
+#define ERROR_CUSTOM_STACK_OVERFLOW 21
+#define ERROR_CUSTOM_STACK_UNDERFLOW 22
+
 // no input to program
 #define ERROR_NOINPUT 40
 
@@ -33,7 +37,8 @@
 
 
 #define WARNING_COULD_NOT_RETRIEVE_CORE_NUMBER 501 
-
+#define WARNING_QUEUE_TOO_SMALL 502
+#define WARNING_RESIZING_QUEUE 503
 /*!
  * throws an error and then exists the program
  *
