@@ -10,7 +10,8 @@ set ROOT_DIR=src\main\algorithm
 
 REM Compiler and flags
 set CC=gcc
-set CFLAGS=-Wall -Wextra -pedantic -std=c11 -I%ROOT_DIR%\include
+set CFLAGS=-Wall -g -Wextra -pedantic -std=c11 -I%ROOT_DIR%\include
+
 
 REM Target executable
 set TARGET=%TARGET_DIR%\algorithm.exe
@@ -88,8 +89,13 @@ if errorlevel 1 (
 
 REM Check if the build was successful
 echo Build successful.
-echo Starting the executable...
-echo.
-"%TARGET%"
+
+
+if "%1" neq "noExecution" (
+	echo Starting the executable...
+	echo.
+	"%TARGET%"
+)
 
 endlocal
+exit /b 0

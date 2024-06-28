@@ -1,6 +1,16 @@
 @echo off
 setlocal
 
+if "%1"=="all" (
+	echo compiling main...
+	call build.bat noExecution
+	if errorLevel 1 (
+		echo The build process failed. Execution of the program stopped.
+		exit /b 1
+	)
+	echo.
+)
+
 REM Root directory
 set ROOT_DIR=src\main\algorithm\tests
 
@@ -15,7 +25,7 @@ set SHARED_LIB=%TARGET_DIR%\tests\libmockexit.dll
 
 REM Compiler and flags
 set CC=gcc
-set CFLAGS=-Wall -Wextra -pedantic -std=c11 
+set CFLAGS=-Wall -g -Wextra -pedantic -std=c11 
 set LDFLAGS=
 
 REM Remove old .o files if they exist
@@ -84,8 +94,13 @@ echo Test executable created at: %TEST_EXE%
 echo Static library created at: %TEST_OBJECT_DIR%\libmockexit.a
 
 REM Run the test executable
-echo Running tests...
-"%TEST_EXE%"
+if "%2"=="gdb" (
+	gdb %TEST_EXE%
+) else (
+	echo Running tests...
+	"%TEST_EXE%"
+)
+
 
 REM Check if the execution was successful
 if errorlevel 1 (
