@@ -7,7 +7,7 @@
 
 #include "mockExit.h"
 
-extern void includeTests_fenToBitboard();
-extern void runTests_fenToBitboard();
+void includeTests_fenToBitboard();
+void runTests_fenToBitboard();
 
 #endif

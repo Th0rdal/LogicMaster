@@ -5,7 +5,7 @@
 
 #include "mockExit.h"
 
-extern void includeTests_positionStruct();
-extern void runTests_positionStruct();
+void includeTests_positionStruct();
+void runTests_positionStruct();
 
 #endif

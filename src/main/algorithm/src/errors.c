@@ -48,6 +48,8 @@ static inline void printErrorCodeSpecification(int exitCode) {
         case ERROR_PIECE_NOT_SELECTED:
             specification = "no piece selected";
             break;
+        default:
+            specification = "no specification defined";
     }
     specification[0] = toupper(specification[0]);
 

@@ -113,6 +113,7 @@ void printMove(const Move* move, char* string) {
     moveString[counter] = move->endPosition.file + 'a' - 1;
     counter++;
     moveString[counter] = move->endPosition.rank + '0';
+    counter++;
 
 
     if (move->flags.promotion) {

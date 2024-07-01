@@ -7,7 +7,7 @@
 
 #include "mockExit.h"
 
-extern void includeTests_convertCharArrayToInt();
-extern void runTests_convertCharArrayToInt();
+void includeTests_convertCharArrayToInt();
+void runTests_convertCharArrayToInt();
 
 #endif

@@ -9,6 +9,7 @@
 #define PREPROCESSING_H
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "errors.h"
 #include "structs/gamestate.h"
@@ -24,7 +25,7 @@ typedef struct {
     int maxThreads;
     Queue* queue;
     bool shutdown;
-    int workCounter;
+    int64_t workCounter;
     int maxDepth;
     CRITICAL_SECTION lock;
 } MoveGenerationThreadPool;

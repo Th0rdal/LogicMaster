@@ -91,11 +91,27 @@ void destroyGamestate(Gamestate* gamestate);
  * @param piece: the piece that made the move
  * @param piecePosition: the current position of the piece that is moving
  * @param movePosition: the end position of the piece that is moving
+ * @param promotionPiece: the piece the pawn is promoted to (NO_PIECE if no promotion)
  *
  * @return: false if the move is illegal, else true
  *
  * */
-bool gamestate_makeMove(Gamestate* gamestate, Gamestate* newGamestate, const enum PIECE piece, Position* piecePosition, Position* movePosition);
+bool gamestateMakeMoveInternal(Gamestate* gamestate, Gamestate* newGamestate, const enum PIECE piece, Position* piecePosition, Position* movePosition, const enum PIECE promotionPiece);
+
+/*!
+ * A wrapper function for gamestateMakeMoveInternal, because that demands a PIECE definition for promotionPiece, which is usually NO_PIECE
+ * 
+ * @param gamestate: the current gamestate of the board
+ * @param newGamestate: struct to save the new gamestate in
+ * @param piece: the piece that made the move
+ * @param piecePosition: the current position of the piece that is moving
+ * @param movePosition: the end position of the piece that is moving
+ * 
+ * @return: false if the move is illegal, else true
+ * */
+__attribute__((always_inline)) inline bool gamestate_makeMove(Gamestate* gamestate, Gamestate* newGamestate, const enum PIECE piece, Position* piecePosition, Position* movePosition) {
+    return gamestateMakeMoveInternal(gamestate, newGamestate, piece, piecePosition, movePosition, NO_PIECE);
+}
 
 // here because gamestate needs to be defined first
 #include "utility/moveCalculation.h"

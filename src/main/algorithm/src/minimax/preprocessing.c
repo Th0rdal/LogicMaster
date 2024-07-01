@@ -2,6 +2,7 @@
 
 static void updateWorkCounter(MoveGenerationThreadPool *pool, const int value);
 static void destroyThreadPool(MoveGenerationThreadPool *pool);
+static __attribute__((always_inline)) inline void addToQueue(Gamestate* newGamestate, GamestateTreeNode* node, Queue* queue, int* movesAddedToQueue);
 int calculateMoves(Gamestate* gamestate, Queue* queue, GamestateTreeNode* node);
 
 DWORD WINAPI generationWorker(LPVOID lpParam) {
@@ -44,7 +45,7 @@ DWORD WINAPI generationWorker(LPVOID lpParam) {
  * */
 int calculateMoves(Gamestate* gamestate, Queue* queue, GamestateTreeNode* node) {
 
-    int side = gamestate->flags.isWhiteTurn ? 1 : 0;
+    int side = !gamestate->flags.isWhiteTurn ? 1 : 0;
     uint64_t board, moveBoard;
     short count, count2;
     Position* piecePositions, *movePositions;
@@ -76,16 +77,30 @@ int calculateMoves(Gamestate* gamestate, Queue* queue, GamestateTreeNode* node) 
         count2 = __builtin_popcountll(moveBoard);
         movePositions = getAllPiecePositions(moveBoard, count2);
         for (int j = 0; j < count2; j++) {
-            Gamestate* newGamestate = gamestateInit();
-            bool returnValue = gamestate_makeMove(gamestate, newGamestate, PAWN, (piecePositions+i), (movePositions+j));  
-            if (returnValue) {
-                newGamestate->config.parent = node;
-                if (newGamestate->config.node == NULL) {
-                    createGamestateTreeNode(newGamestate);
-                }
-                enqueue(queue, newGamestate);
-                movesAddedToQueue++;
-            } 
+            Gamestate* newGamestate;
+            bool returnValue;
+            if ((movePositions+j)->rank == rankBitboards.pawnPromotionRank[!gamestate->flags.isWhiteTurn]) {
+                newGamestate = gamestateInit();
+                returnValue = gamestateMakeMoveInternal(gamestate, newGamestate, PAWN, (piecePositions+i), (movePositions+j), QUEEN);
+                if (returnValue) addToQueue(newGamestate, node, queue, &movesAddedToQueue);
+
+                newGamestate = gamestateInit();
+                returnValue = gamestateMakeMoveInternal(gamestate, newGamestate, PAWN, (piecePositions+i), (movePositions+j), ROOK);
+                if (returnValue) addToQueue(newGamestate, node, queue, &movesAddedToQueue);
+
+                newGamestate = gamestateInit();
+                returnValue = gamestateMakeMoveInternal(gamestate, newGamestate, PAWN, (piecePositions+i), (movePositions+j), KNIGHT);
+                if (returnValue) addToQueue(newGamestate, node, queue, &movesAddedToQueue);
+
+                newGamestate = gamestateInit();
+                returnValue = gamestateMakeMoveInternal(gamestate, newGamestate, PAWN, (piecePositions+i), (movePositions+j), BISHOP);
+                if (returnValue) addToQueue(newGamestate, node, queue, &movesAddedToQueue);
+            } else {
+                newGamestate = gamestateInit();
+                returnValue = gamestate_makeMove(gamestate, newGamestate, PAWN, (piecePositions+i), (movePositions+j));  
+                if (returnValue) addToQueue(newGamestate, node, queue, &movesAddedToQueue);
+            }
+            
         }
         free(movePositions);
         movePositions = NULL;
@@ -108,14 +123,8 @@ int calculateMoves(Gamestate* gamestate, Queue* queue, GamestateTreeNode* node) 
         for (int j = 0; j < count2; j++) {
             Gamestate* newGamestate = gamestateInit();
             bool returnValue = gamestate_makeMove(gamestate, newGamestate, ROOK, (piecePositions+i), (movePositions+j));  
-            if (returnValue) {
-                newGamestate->config.parent = node;
-                if (newGamestate->config.node == NULL) {
-                    createGamestateTreeNode(newGamestate);
-                }
-                enqueue(queue, newGamestate);
-                movesAddedToQueue++;
-            } 
+            if (returnValue) addToQueue(newGamestate, node, queue, &movesAddedToQueue);
+ 
         }
         free(movePositions);
         movePositions = NULL;
@@ -138,14 +147,7 @@ int calculateMoves(Gamestate* gamestate, Queue* queue, GamestateTreeNode* node) 
         for (int j = 0; j < count2; j++) {
             Gamestate* newGamestate = gamestateInit();
             bool returnValue = gamestate_makeMove(gamestate, newGamestate, KNIGHT, (piecePositions+i), (movePositions+j));  
-            if (returnValue) {
-                newGamestate->config.parent = node;
-                if (newGamestate->config.node == NULL) {
-                    createGamestateTreeNode(newGamestate);
-                }
-                enqueue(queue, newGamestate);
-                movesAddedToQueue++;
-            } 
+            if (returnValue) addToQueue(newGamestate, node, queue, &movesAddedToQueue);
         }
         free(movePositions);
         movePositions = NULL;
@@ -169,14 +171,8 @@ int calculateMoves(Gamestate* gamestate, Queue* queue, GamestateTreeNode* node) 
         for (int j = 0; j < count2; j++) {
             Gamestate* newGamestate = gamestateInit();
             bool returnValue = gamestate_makeMove(gamestate, newGamestate, BISHOP, (piecePositions+i), (movePositions+j));  
-            if (returnValue) {
-                newGamestate->config.parent = node;
-                if (newGamestate->config.node == NULL) {
-                    createGamestateTreeNode(newGamestate);
-                }
-                enqueue(queue, newGamestate);
-                movesAddedToQueue++;
-            } 
+            if (returnValue) addToQueue(newGamestate, node, queue, &movesAddedToQueue);
+            
         }
         free(movePositions);
         movePositions = NULL;
@@ -199,14 +195,7 @@ int calculateMoves(Gamestate* gamestate, Queue* queue, GamestateTreeNode* node) 
         for (int j = 0; j < count2; j++) {
             Gamestate* newGamestate = gamestateInit();
             bool returnValue = gamestate_makeMove(gamestate, newGamestate, QUEEN, (piecePositions+i), (movePositions+j));  
-            if (returnValue) {
-                newGamestate->config.parent = node;
-                if (newGamestate->config.node == NULL) {
-                    createGamestateTreeNode(newGamestate);
-                }
-                enqueue(queue, newGamestate);
-                movesAddedToQueue++;
-            } 
+            if (returnValue) addToQueue(newGamestate, node, queue, &movesAddedToQueue);
         }
         free(movePositions);
         piecePositions = NULL;
@@ -229,14 +218,7 @@ int calculateMoves(Gamestate* gamestate, Queue* queue, GamestateTreeNode* node) 
         for (int j = 0; j < count2; j++) {
             Gamestate* newGamestate = gamestateInit();
             bool returnValue = gamestate_makeMove(gamestate, newGamestate, KING, (piecePositions+i), (movePositions+j));  
-            if (returnValue) {
-                newGamestate->config.parent = node;
-                if (newGamestate->config.node == NULL) {
-                    createGamestateTreeNode(newGamestate);
-                }
-                enqueue(queue, newGamestate);
-                movesAddedToQueue++;
-            } 
+            if (returnValue) addToQueue(newGamestate, node, queue, &movesAddedToQueue);
         }    
         free(movePositions);
         movePositions = NULL;
@@ -246,7 +228,20 @@ int calculateMoves(Gamestate* gamestate, Queue* queue, GamestateTreeNode* node) 
 
     return movesAddedToQueue;
 }
-    
+   
+/*!
+ * handles everything needed to add a new gamestate to the work queue.
+ * Supposed to be inlined at location
+ * */
+static __attribute__((always_inline)) inline void addToQueue(Gamestate* newGamestate, GamestateTreeNode* node, Queue* queue, int* movesAddedToQueue) {
+    newGamestate->config.parent = node;
+    if (newGamestate->config.node == NULL) {
+        createGamestateTreeNode(newGamestate);
+    }
+    enqueue(queue, newGamestate);
+    (*movesAddedToQueue)++;
+} 
+
 void minimax_preprocessing(const short maxDepth, const int maxThreads, Gamestate* gamestate) {
     /*
      * threading:

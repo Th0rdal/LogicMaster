@@ -21,6 +21,7 @@ int main(void) {
     includeTests_moveCalculator();
     includeTests_preprocessing();
     includeTests_makeMove();
+    includeTests_evaluation();
     // end test cases
     printf("\x1b[0m");
     return UNITY_END();

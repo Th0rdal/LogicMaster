@@ -10,8 +10,8 @@
 #include "structs/move.h"
 #include "unity.h"
 
-extern void includeTests_preprocessing();
-extern void runTests_preprocessing();
+void includeTests_preprocessing();
+void runTests_preprocessing();
 
 // needed for testing but not exposed in their header
 extern int calculateMoves(Gamestate* gamestate, Queue* queue, GamestateTreeNode* node); 

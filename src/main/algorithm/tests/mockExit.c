@@ -37,7 +37,7 @@ void throwWarning(int warningCode, char* format, ...) {
     va_start(args, format);
     strcpy(newFormat, format);
     strcat(newFormat, "\n");
-    printf("\x1b[33m" "\tWarning code: %d\n", warningCode);
+    printf("\x1b[33m" "\tWarning code: %d\n\t\t", warningCode);
     vfprintf(stderr, newFormat, args);
     printf("\x1b[0m");
 }

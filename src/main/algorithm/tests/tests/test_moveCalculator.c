@@ -14,10 +14,10 @@ void test_kingMove() {
     gamestate->bitboards.color[1] =    0x000000000C7063B6;
     gamestate->bitboards.color[0] =    0xA92FBC4000000000;
 
-    // occupa->cy
+    // occupancy
     gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
 
-    gamestate->flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = false;
     gamestate->flags.kCastle[0] = true;
 
     Position position1;
@@ -32,7 +32,7 @@ void test_kingMove() {
     uint64_t expected2 = 0x1610000000000000;
     uint64_t actual1 = kingMoves(gamestate, &position1);
 
-    gamestate->flags.isWhiteTurn = false;
+    gamestate->flags.isWhiteTurn = true;
     uint64_t actual2 = kingMoves(gamestate, &position2);
 
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected1, actual1, "white king G1");
@@ -58,7 +58,7 @@ void test_queenMove() {
     // occupa->cy
     gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
 
-    gamestate->flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = false;
 
     Position position1;
     position1.rank = 1;
@@ -73,7 +73,7 @@ void test_queenMove() {
 
     uint64_t actual1 = queenMoves(gamestate, &position1);
 
-    gamestate->flags.isWhiteTurn = false;
+    gamestate->flags.isWhiteTurn = true;
 
     uint64_t actual2 = queenMoves(gamestate, &position2);
 
@@ -99,7 +99,7 @@ void test_knightMove() {
     // occupa->cy
     gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
 
-    gamestate->flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = false;
 
     Position position1;
     position1.rank = 3;
@@ -125,7 +125,7 @@ void test_knightMove() {
     uint64_t actual1 = knightMoves(gamestate, &position1);
     uint64_t actual2 = knightMoves(gamestate, &position2);
 
-    gamestate->flags.isWhiteTurn = false;
+    gamestate->flags.isWhiteTurn = true;
 
     uint64_t actual3 = knightMoves(gamestate, &position3);
     uint64_t actual4 = knightMoves(gamestate, &position4);
@@ -154,7 +154,7 @@ void test_bishopMove() {
     // occupa->cy
     gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
 
-    gamestate->flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = false;
 
     Position position1;
     position1.rank = 1;
@@ -180,7 +180,7 @@ void test_bishopMove() {
     uint64_t actual1 = bishopMoves(gamestate, &position1);
     uint64_t actual2 = bishopMoves(gamestate, &position2);
 
-    gamestate->flags.isWhiteTurn = false;
+    gamestate->flags.isWhiteTurn = true;
 
     uint64_t actual3 = bishopMoves(gamestate, &position3);
     uint64_t actual4 = bishopMoves(gamestate, &position4);
@@ -211,7 +211,7 @@ void test_rookMove() {
     // occupa->cy
     gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
 
-    gamestate->flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = false;
 
     Position position1;
     position1.rank = 1;
@@ -237,7 +237,7 @@ void test_rookMove() {
     uint64_t actual1 = rookMoves(gamestate, &position1);
     uint64_t actual2 = rookMoves(gamestate, &position2);
 
-    gamestate->flags.isWhiteTurn = false;
+    gamestate->flags.isWhiteTurn = true;
 
     uint64_t actual3 = rookMoves(gamestate, &position3);
     uint64_t actual4 = rookMoves(gamestate, &position4);
@@ -255,7 +255,7 @@ void test_pawnMove_enPassant() {
     gamestate1->bitboards.color[1] = 0x0000002000000000;
     gamestate1->bitboards.color[0] = 0x0000004000000000;
     gamestate1->bitboards.occupancy = 0x0000006000000000;
-    gamestate1->flags.isWhiteTurn = true;
+    gamestate1->flags.isWhiteTurn = false;
     gamestate1->flags.canEnPassant = true;
     gamestate1->enPassantPosition.rank = 6;
     gamestate1->enPassantPosition.file = 2;
@@ -269,7 +269,7 @@ void test_pawnMove_enPassant() {
     gamestate2->bitboards.color[1] = 0x0000002000000000;
     gamestate2->bitboards.color[0]= 0x0000004000000000;
     gamestate2->bitboards.occupancy = 0x0000006000000000;
-    gamestate2->flags.isWhiteTurn = false;
+    gamestate2->flags.isWhiteTurn = true;
     gamestate2->flags.canEnPassant = true;
     gamestate2->enPassantPosition.rank = 3;
     gamestate2->enPassantPosition.file = 2;
@@ -308,7 +308,7 @@ void test_pawnMove_black() {
     gamestate->counters.fullMove = 1;
     gamestate->counters.halfMove = 0;
 
-    gamestate->flags.isWhiteTurn = false;
+    gamestate->flags.isWhiteTurn = true;
     gamestate->flags.canEnPassant = false;
    
     Position position1; //A2 move 2 up, capture right. nothing left
@@ -391,7 +391,7 @@ void test_pawnMove_white() {
     gamestate->counters.fullMove = 1;
     gamestate->counters.halfMove = 0;
 
-    gamestate->flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = false;
     gamestate->flags.canEnPassant = false;
  
     Position position1; //A2 move 2 up, capture right. nothing left
@@ -454,6 +454,37 @@ void test_pawnMove_white() {
     TEST_ASSERT_EQUAL_UINT64_MESSAGE(expected8, actual8, "position 8");
 }
 
+void test_squareAttacked() {
+    Gamestate *gamestate = gamestateInit();
+    gamestate->bitboards.pawn =     0x0000001800000000;
+    gamestate->bitboards.rook =     0xBF02020202020002;
+    gamestate->bitboards.knight =   0x0000000040000000;
+    gamestate->bitboards.bishop =   0x000000000000005C;
+    gamestate->bitboards.queen =    0x4000000000000000;
+    gamestate->bitboards.king =     0x0001000000004000;
+
+    gamestate->bitboards.color[0] =    0xFF03021A4202005E;
+    gamestate->bitboards.color[1] =    0x0000000000004000;
+
+    gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
+    gamestate->flags.isWhiteTurn = true;
+    Position position1 = {2, 2};
+
+    uint64_t expected1 = 0;
+    uint64_t expected2 = 0x4000000000000000;
+        
+    uint64_t actual1 = squareAttacked(gamestate, &position1, true);
+    
+    gamestate->bitboards.knight = 0x0000000000000000;
+    gamestate->bitboards.color[0] = 0xFF03021A0202005E;
+    gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
+
+    uint64_t actual2 = squareAttacked(gamestate, &position1, true);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(expected1, actual1, "no square attacking");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(expected2, actual2, "1 attacking square");
+}
+
 void __loadTests() {
     RUN_TEST(test_pawnMove_white);
     RUN_TEST(test_pawnMove_black);
@@ -463,6 +494,7 @@ void __loadTests() {
     RUN_TEST(test_knightMove);
     RUN_TEST(test_queenMove);
     RUN_TEST(test_kingMove);
+    RUN_TEST(test_squareAttacked);
 }
 
 void runTests_moveCalculator() {

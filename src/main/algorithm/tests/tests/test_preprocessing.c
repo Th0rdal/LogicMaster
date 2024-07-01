@@ -19,7 +19,7 @@ void test_moveGeneration() {
 
     // occupancy
     gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
-    gamestate->flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = false;
     
     short expectedValue = 38;
     int expectedTreeValue = 1;
@@ -85,6 +85,9 @@ void test_moveGeneration() {
         }    
         TEST_ASSERT_EQUAL_INT_MESSAGE(0, result, f);
     }
+    destroyGamestateTreeNodeWithInside(tree->head);
+    free(tree);
+    tree = NULL;
 
 }
 
@@ -105,10 +108,10 @@ void test_moveGenerationWithOneThread() {
 
     // occupancy
     gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
-    gamestate->flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = false;
 
-    int expectedTreeValue = 39;
- 
+    int expectedTreeValue = 38+1; //38 moves possible plus the one base move defined above
+
     MoveGenerationThreadPool* pool = moveGenerationThreadPoolInit(1, 1);    
     pool->workCounter++;
     enqueue(pool->queue, gamestate);
@@ -129,19 +132,21 @@ void test_moveGenerationWithOneThread() {
         }
     }
 
-    DWORD waitResult = WaitForMultipleObjects(pool->maxThreads, pool->threads, TRUE, 10000);
+    DWORD waitResult = WaitForMultipleObjects(pool->maxThreads, pool->threads, TRUE, 50000);
     if (waitResult == WAIT_TIMEOUT) {
         pool->shutdown = true;
         TEST_FAIL_MESSAGE("Some thread took too long");
     }
     TEST_ASSERT_EQUAL_INT_MESSAGE(expectedTreeValue, size(tree->head), "The tree is too small or large");
     TEST_PASS();
-    //destroyGamestateTreeNodeWithInside(tree->head);
-    tree->head = NULL;
+    destroyGamestateTreeNodeWithInside(tree->head);
+    free(tree);
+    tree = NULL;
 }
 
 void test_moveGenerationWithThreads() {
     Gamestate *gamestate = gamestateInit();
+    //clock_t start, end;
     // Bitboards
     gamestate->bitboards.pawn =     0x000798400C006300; 
     gamestate->bitboards.rook =     0x8100000000000084;
@@ -156,11 +161,11 @@ void test_moveGenerationWithThreads() {
 
     // occupancy
     gamestate->bitboards.occupancy = gamestate->bitboards.color[0] | gamestate->bitboards.color[1];
-    gamestate->flags.isWhiteTurn = true;
+    gamestate->flags.isWhiteTurn = false;
 
-    int expectedTreeValue[] = {39, 1528, 56979};
+    int expectedTreeValue[] = {39, 1516, 57092, 2179984};
     
-    for (int depth = 1; depth < 4; depth++) {
+    for (int depth = 1; depth < 5; depth++) {
         initializeTree();
         MoveGenerationThreadPool* pool = moveGenerationThreadPoolInit(depth, 32);    
         pool->workCounter++;
@@ -168,6 +173,7 @@ void test_moveGenerationWithThreads() {
         
         DWORD threadIDs[pool->maxThreads];
         for (int i = 0; i < pool->maxThreads; i++) {
+            //start=clock();
             pool->threads[i] = CreateThread(
                 NULL,   // Default security attributes
                 0,      // Default stack size
@@ -182,8 +188,8 @@ void test_moveGenerationWithThreads() {
             }
         }
 
-        DWORD waitResult = WaitForMultipleObjects(pool->maxThreads, pool->threads, TRUE, 50000);
-
+        DWORD waitResult = WaitForMultipleObjects(pool->maxThreads, pool->threads, TRUE, INFINITE);//50000);
+        //end = clock();
         if (waitResult == WAIT_TIMEOUT) {
             pool->shutdown = true;
             switch (depth) {                
@@ -196,8 +202,14 @@ void test_moveGenerationWithThreads() {
                 case 3:
                     TEST_FAIL_MESSAGE("Some thread took too long (depth 3)");
                     break;
+                case 4:
+                    TEST_FAIL_MESSAGE("Some thread took too long (depth 4)");
+                    break;
+                default:
+                    TEST_FAIL_MESSAGE("Some test took to long");
             }
         }
+        //printf("%f\n", ((double)end-start)/CLOCKS_PER_SEC);
         TEST_ASSERT_EQUAL_INT_MESSAGE(expectedTreeValue[depth-1], size(tree->head), "The tree is too small or large");
         destroyGamestateTreeNodeWithInside(tree->head);
         free(tree);
