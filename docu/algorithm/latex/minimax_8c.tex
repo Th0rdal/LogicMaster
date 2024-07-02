@@ -1,0 +1,30 @@
+\doxysection{src/main/algorithm/src/minimax/minimax.c File Reference}
+\hypertarget{minimax_8c}{}\label{minimax_8c}\index{src/main/algorithm/src/minimax/minimax.c@{src/main/algorithm/src/minimax/minimax.c}}
+{\ttfamily \#include "{}minimax/minimax.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static int \mbox{\hyperlink{minimax_8c_ae466a1ca463da9dec266b58a7f10cf3d}{setup\+Max\+Threads}} (int max\+Threads)
+\item 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{minimax_8c_ad3435ea99487ee786258dc421b5badd2}{minimax}} (short max\+Depth, int max\+Threads\+Input, \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{minimax_8c_ad3435ea99487ee786258dc421b5badd2}\index{minimax.c@{minimax.c}!minimax@{minimax}}
+\index{minimax@{minimax}!minimax.c@{minimax.c}}
+\doxysubsubsection{\texorpdfstring{minimax()}{minimax()}}
+{\footnotesize\ttfamily \label{minimax_8c_ad3435ea99487ee786258dc421b5badd2} 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*} minimax (\begin{DoxyParamCaption}\item[{short}]{max\+Depth}{, }\item[{int}]{max\+Threads\+Input}{, }\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+\Hypertarget{minimax_8c_ae466a1ca463da9dec266b58a7f10cf3d}\index{minimax.c@{minimax.c}!setupMaxThreads@{setupMaxThreads}}
+\index{setupMaxThreads@{setupMaxThreads}!minimax.c@{minimax.c}}
+\doxysubsubsection{\texorpdfstring{setupMaxThreads()}{setupMaxThreads()}}
+{\footnotesize\ttfamily \label{minimax_8c_ae466a1ca463da9dec266b58a7f10cf3d} 
+static int setup\+Max\+Threads (\begin{DoxyParamCaption}\item[{int}]{max\+Threads}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+gets the number of processors for max\+Threads
+
+\begin{DoxyReturn}{Returns}
+\+: max\+Threads 
+\end{DoxyReturn}

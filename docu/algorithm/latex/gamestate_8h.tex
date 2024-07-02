@@ -1,0 +1,324 @@
+\doxysection{src/main/algorithm/include/structs/gamestate.h File Reference}
+\hypertarget{gamestate_8h}{}\label{gamestate_8h}\index{src/main/algorithm/include/structs/gamestate.h@{src/main/algorithm/include/structs/gamestate.h}}
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}bitboards.\+h"{}}\newline
+{\ttfamily \#include "{}position.\+h"{}}\newline
+{\ttfamily \#include "{}move.\+h"{}}\newline
+{\ttfamily \#include "{}structs/tree.\+h"{}}\newline
+{\ttfamily \#include "{}utility/move\+Calculation.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_counters}{Counters}}
+\item 
+struct \mbox{\hyperlink{struct_gamestate_flags}{Gamestate\+Flags}}
+\item 
+struct \mbox{\hyperlink{struct_gamestate_config}{Gamestate\+Config}}
+\item 
+struct \mbox{\hyperlink{struct_gamestate}{Gamestate}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct Gamestate \mbox{\hyperlink{gamestate_8h_a84a411e7a8368ccca2d9e147f0c8de2d}{Gamestate}}
+\item 
+typedef struct Gamestate\+Tree\+Node \mbox{\hyperlink{gamestate_8h_ab8adacef989671d7375e1d736ffabe74}{Gamestate\+Tree\+Node}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{gamestate_8h_acc4204ddd7d8ad0ae85f8fa6feda3d40}{gamestate\+Init}} ()
+\item 
+\mbox{\hyperlink{struct_counters}{Counters}} \mbox{\hyperlink{gamestate_8h_afd4940c3c987f24b5f64826775f9f22f}{counters\+Init}} ()
+\item 
+\mbox{\hyperlink{struct_gamestate_flags}{Gamestate\+Flags}} \mbox{\hyperlink{gamestate_8h_a757dc1b6e0a9402f497aec432e47d553}{gamestate\+Flag\+Init}} ()
+\item 
+\mbox{\hyperlink{struct_gamestate_config}{Gamestate\+Config}} \mbox{\hyperlink{gamestate_8h_a4024816c25c902ccf44e893f2a2ac1ab}{gamestate\+Config\+Init}} ()
+\item 
+void \mbox{\hyperlink{gamestate_8h_a5c691c06488276a278904296974d20cd}{destroy\+Gamestate}} (\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\item 
+bool \mbox{\hyperlink{gamestate_8h_aa5afc044760b48619c4c3a359c72734c}{gamestate\+Make\+Move\+Internal}} (\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate, \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{gamestate_8h_ab482139e3bfcf1ad744a5f0a6793d24a}{new\+Gamestate}}, const enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}} piece, \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{gamestate_8h_a818ce1ed710aea0606d9f411008b51c9}{piece\+Position}}, \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{gamestate_8h_adad974fcef088bfdaf5af08162a25f31}{move\+Position}}, const enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}} promotion\+Piece)
+\item 
+\mbox{\hyperlink{gamestate_8h_a2348e4d6d4533726d3a1f0cbaab7fa84}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((always\+\_\+inline)) inline bool gamestate\+\_\+make\+Move(\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{gamestate_8h_ab482139e3bfcf1ad744a5f0a6793d24a}{new\+Gamestate}}
+\item 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}} piece \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{gamestate_8h_a818ce1ed710aea0606d9f411008b51c9}{piece\+Position}}
+\item 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}} piece \mbox{\hyperlink{struct_position}{Position}} \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{gamestate_8h_adad974fcef088bfdaf5af08162a25f31}{move\+Position}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{gamestate_8h_a84a411e7a8368ccca2d9e147f0c8de2d}\index{gamestate.h@{gamestate.h}!Gamestate@{Gamestate}}
+\index{Gamestate@{Gamestate}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{Gamestate}{Gamestate}}
+{\footnotesize\ttfamily \label{gamestate_8h_a84a411e7a8368ccca2d9e147f0c8de2d} 
+typedef struct Gamestate Gamestate}
+
+\Hypertarget{gamestate_8h_ab8adacef989671d7375e1d736ffabe74}\index{gamestate.h@{gamestate.h}!GamestateTreeNode@{GamestateTreeNode}}
+\index{GamestateTreeNode@{GamestateTreeNode}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{GamestateTreeNode}{GamestateTreeNode}}
+{\footnotesize\ttfamily \label{gamestate_8h_ab8adacef989671d7375e1d736ffabe74} 
+typedef struct Gamestate\+Tree\+Node Gamestate\+Tree\+Node}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{gamestate_8h_a2348e4d6d4533726d3a1f0cbaab7fa84}\index{gamestate.h@{gamestate.h}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}}
+{\footnotesize\ttfamily \label{gamestate_8h_a2348e4d6d4533726d3a1f0cbaab7fa84} 
+\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(always\+\_\+inline)}]{}{}\end{DoxyParamCaption})}
+
+A wrapper function for gamestate\+Make\+Move\+Internal, because that demands a PIECE definition for promotion\+Piece, which is usually NO\+\_\+\+PIECE
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate of the board \\
+\hline
+{\em new\+Gamestate} & struct to save the new gamestate in \\
+\hline
+{\em piece} & the piece that made the move \\
+\hline
+{\em piece\+Position} & the current position of the piece that is moving \\
+\hline
+{\em move\+Position} & the end position of the piece that is moving\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: false if the move is illegal, else true
+\end{DoxyReturn}
+check if the stack is empty
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & pointer to the \doxylink{struct_evaluation_stack}{Evaluation\+Stack} to check\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: true if the stack is empty, else false
+\end{DoxyReturn}
+pushes a \doxylink{struct_evaluation_data}{Evaluation\+Data} struct onto the stack
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & the stack to push the data on \\
+\hline
+{\em data} & the data to push on the stack\\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+ERROR\+\_\+\+STACK\+\_\+\+OVERFLOW\+: if the stack is full
+\end{DoxyWarning}
+pops the last element pushed onto the stack and returns it. It also deletes it from the stack
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & the stack to pop from\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: the last element pushed onto the stack as \doxylink{struct_evaluation_data}{Evaluation\+Data} pointer
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+ERROR\+\_\+\+STACK\+\_\+\+UNDERFLOW\+: if the stack is empty
+\end{DoxyWarning}
+pooks at the last element pushed onto the stack and returns it.
+
+
+\begin{DoxyParams}{Parameters}
+{\em stack} & the stack to pop from\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: the last element pushed onto the stack as \doxylink{struct_evaluation_data}{Evaluation\+Data} pointer
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+ERROR\+\_\+\+STACK\+\_\+\+UNDERFLOW\+: if the stack is empty
+\end{DoxyWarning}
+creates an \doxylink{struct_evaluation_data}{Evaluation\+Data} struct with the given data
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & the \doxylink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node} to save in \doxylink{struct_evaluation_data}{Evaluation\+Data} \\
+\hline
+{\em state} & the current state of the node. If state = 0, push children. if state = 1, process evaluation\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: pointer to the initialized \doxylink{struct_evaluation_data}{Evaluation\+Data} struct
+\end{DoxyReturn}
+calculates all possible moves a given rook can do A wrapper function calling pawn\+Moves\+With\+Side\+Selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the rook as a struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves
+\end{DoxyReturn}
+calculates all possible moves a given knight can do A wrapper function calling pawn\+Moves\+With\+Side\+Selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the knight as a struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves
+\end{DoxyReturn}
+calculates all possible moves a given bishop can do A wrapper function calling pawn\+Moves\+With\+Side\+Selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the bishop as a struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves
+\end{DoxyReturn}
+calculates all possible moves a given queen can do A wrapper function calling pawn\+Moves\+With\+Side\+Selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the queen as a struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves
+\end{DoxyReturn}
+calculates all possible moves a given king can do A wrapper function calling pawn\+Moves\+With\+Side\+Selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the king as a struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves 
+\end{DoxyReturn}
+\Hypertarget{gamestate_8h_afd4940c3c987f24b5f64826775f9f22f}\index{gamestate.h@{gamestate.h}!countersInit@{countersInit}}
+\index{countersInit@{countersInit}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{countersInit()}{countersInit()}}
+{\footnotesize\ttfamily \label{gamestate_8h_afd4940c3c987f24b5f64826775f9f22f} 
+\mbox{\hyperlink{struct_counters}{Counters}} counters\+Init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+creates and initializes a \doxylink{struct_counters}{Counters} struct. Initialization with 0
+
+\begin{DoxyReturn}{Returns}
+\+: initialized \doxylink{struct_counters}{Counters} struct 
+\end{DoxyReturn}
+\Hypertarget{gamestate_8h_a5c691c06488276a278904296974d20cd}\index{gamestate.h@{gamestate.h}!destroyGamestate@{destroyGamestate}}
+\index{destroyGamestate@{destroyGamestate}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{destroyGamestate()}{destroyGamestate()}}
+{\footnotesize\ttfamily \label{gamestate_8h_a5c691c06488276a278904296974d20cd} 
+void destroy\+Gamestate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+destroys the given gamestate
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & pointer to the gamestate to destroy \\
+\hline
+\end{DoxyParams}
+\Hypertarget{gamestate_8h_a4024816c25c902ccf44e893f2a2ac1ab}\index{gamestate.h@{gamestate.h}!gamestateConfigInit@{gamestateConfigInit}}
+\index{gamestateConfigInit@{gamestateConfigInit}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{gamestateConfigInit()}{gamestateConfigInit()}}
+{\footnotesize\ttfamily \label{gamestate_8h_a4024816c25c902ccf44e893f2a2ac1ab} 
+\mbox{\hyperlink{struct_gamestate_config}{Gamestate\+Config}} gamestate\+Config\+Init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+creates and initializes a \doxylink{struct_gamestate_config}{Gamestate\+Config} struct. Initializes it with false/\+Null
+
+\begin{DoxyReturn}{Returns}
+\+: initialized \doxylink{struct_gamestate_config}{Gamestate\+Config} 
+\end{DoxyReturn}
+\Hypertarget{gamestate_8h_a757dc1b6e0a9402f497aec432e47d553}\index{gamestate.h@{gamestate.h}!gamestateFlagInit@{gamestateFlagInit}}
+\index{gamestateFlagInit@{gamestateFlagInit}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{gamestateFlagInit()}{gamestateFlagInit()}}
+{\footnotesize\ttfamily \label{gamestate_8h_a757dc1b6e0a9402f497aec432e47d553} 
+\mbox{\hyperlink{struct_gamestate_flags}{Gamestate\+Flags}} gamestate\+Flag\+Init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+creates and initialzes a \doxylink{struct_gamestate_flags}{Gamestate\+Flags} struct. Initialization with false
+
+\begin{DoxyReturn}{Returns}
+\+: initialized \doxylink{struct_gamestate_flags}{Gamestate\+Flags} struct 
+\end{DoxyReturn}
+\Hypertarget{gamestate_8h_acc4204ddd7d8ad0ae85f8fa6feda3d40}\index{gamestate.h@{gamestate.h}!gamestateInit@{gamestateInit}}
+\index{gamestateInit@{gamestateInit}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{gamestateInit()}{gamestateInit()}}
+{\footnotesize\ttfamily \label{gamestate_8h_acc4204ddd7d8ad0ae85f8fa6feda3d40} 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*} gamestate\+Init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+initializes all variables with values and returns an initialized gamestate. This should be the only way to get a new gamestate.
+
+\begin{DoxyReturn}{Returns}
+\+: \doxylink{struct_gamestate}{Gamestate} struct after initialization 
+\end{DoxyReturn}
+\Hypertarget{gamestate_8h_aa5afc044760b48619c4c3a359c72734c}\index{gamestate.h@{gamestate.h}!gamestateMakeMoveInternal@{gamestateMakeMoveInternal}}
+\index{gamestateMakeMoveInternal@{gamestateMakeMoveInternal}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{gamestateMakeMoveInternal()}{gamestateMakeMoveInternal()}}
+{\footnotesize\ttfamily \label{gamestate_8h_aa5afc044760b48619c4c3a359c72734c} 
+bool gamestate\+Make\+Move\+Internal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{, }\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{new\+Gamestate}{, }\item[{const enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}}}]{piece}{, }\item[{\mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{piece\+Position}{, }\item[{\mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{move\+Position}{, }\item[{const enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}}}]{promotion\+Piece}{}\end{DoxyParamCaption})}
+
+makes a move on the boards and creates a new gamestate representing the made move.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate of the board \\
+\hline
+{\em new\+Gamestate} & struct to save the new gamestate in \\
+\hline
+{\em piece} & the piece that made the move \\
+\hline
+{\em piece\+Position} & the current position of the piece that is moving \\
+\hline
+{\em move\+Position} & the end position of the piece that is moving \\
+\hline
+{\em promotion\+Piece} & the piece the pawn is promoted to (NO\+\_\+\+PIECE if no promotion)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: false if the move is illegal, else true 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{gamestate_8h_adad974fcef088bfdaf5af08162a25f31}\index{gamestate.h@{gamestate.h}!movePosition@{movePosition}}
+\index{movePosition@{movePosition}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{movePosition}{movePosition}}
+{\footnotesize\ttfamily \label{gamestate_8h_adad974fcef088bfdaf5af08162a25f31} 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}} piece \mbox{\hyperlink{struct_position}{Position}} \mbox{\hyperlink{struct_position}{Position}}\texorpdfstring{$\ast$}{*} move\+Position}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{gamestate_8h_aa5afc044760b48619c4c3a359c72734c}{gamestateMakeMoveInternal}}(gamestate,\ \mbox{\hyperlink{gamestate_8h_ab482139e3bfcf1ad744a5f0a6793d24a}{newGamestate}},\ piece,\ \mbox{\hyperlink{gamestate_8h_a818ce1ed710aea0606d9f411008b51c9}{piecePosition}},\ \mbox{\hyperlink{gamestate_8h_adad974fcef088bfdaf5af08162a25f31}{movePosition}},\ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930daf9f748c8be10f498deb994733ce37df5}{NO\_PIECE}})}
+
+\end{DoxyCode}
+\Hypertarget{gamestate_8h_ab482139e3bfcf1ad744a5f0a6793d24a}\index{gamestate.h@{gamestate.h}!newGamestate@{newGamestate}}
+\index{newGamestate@{newGamestate}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{newGamestate}{newGamestate}}
+{\footnotesize\ttfamily \label{gamestate_8h_ab482139e3bfcf1ad744a5f0a6793d24a} 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}}\texorpdfstring{$\ast$}{*} new\+Gamestate}
+
+\Hypertarget{gamestate_8h_a818ce1ed710aea0606d9f411008b51c9}\index{gamestate.h@{gamestate.h}!piecePosition@{piecePosition}}
+\index{piecePosition@{piecePosition}!gamestate.h@{gamestate.h}}
+\doxysubsubsection{\texorpdfstring{piecePosition}{piecePosition}}
+{\footnotesize\ttfamily \label{gamestate_8h_a818ce1ed710aea0606d9f411008b51c9} 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}} piece \mbox{\hyperlink{struct_position}{Position}}\texorpdfstring{$\ast$}{*} piece\+Position}
+

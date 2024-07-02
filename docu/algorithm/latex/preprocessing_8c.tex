@@ -1,0 +1,106 @@
+\doxysection{src/main/algorithm/src/minimax/preprocessing.c File Reference}
+\hypertarget{preprocessing_8c}{}\label{preprocessing_8c}\index{src/main/algorithm/src/minimax/preprocessing.c@{src/main/algorithm/src/minimax/preprocessing.c}}
+{\ttfamily \#include "{}minimax/preprocessing.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{preprocessing_8c_a2d1c5541242b91b44df469d0eb4d52af}{update\+Work\+Counter}} (\mbox{\hyperlink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*}pool, const int value)
+\item 
+static void \mbox{\hyperlink{preprocessing_8c_a73f2fdfe918ec35bd21b1b82d53b9cb3}{destroy\+Generation\+Thread\+Pool}} (\mbox{\hyperlink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*}pool)
+\item 
+static \mbox{\hyperlink{preprocessing_8c_a8c8313d05785802938c6d8a2a7fa3e09}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((always\+\_\+inline))
+\item 
+int \mbox{\hyperlink{preprocessing_8c_a571336fe77c98dea69bd7301809d85d1}{calculate\+Moves}} (\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate, \mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}queue, \mbox{\hyperlink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{stack_8h_af5ef8329d9a89f522542bae387e68c06}{node}})
+\item 
+void \mbox{\hyperlink{preprocessing_8c_a249140b83c74e66aeb06ebc08c472a1d}{preprocessing\+\_\+start}} (const short max\+Depth, const int max\+Threads, \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\item 
+\mbox{\hyperlink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{preprocessing_8c_a6a2c7daa3b6163021deb8a66a4ce361c}{move\+Generation\+Thread\+Pool\+Init}} (const short max\+Depth, const int max\+Threads)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{preprocessing_8c_a8c8313d05785802938c6d8a2a7fa3e09}\index{preprocessing.c@{preprocessing.c}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!preprocessing.c@{preprocessing.c}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}}
+{\footnotesize\ttfamily \label{preprocessing_8c_a8c8313d05785802938c6d8a2a7fa3e09} 
+static \+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(always\+\_\+inline)}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+handles everything needed to add a new gamestate to the work queue. Supposed to be inlined at location \Hypertarget{preprocessing_8c_a571336fe77c98dea69bd7301809d85d1}\index{preprocessing.c@{preprocessing.c}!calculateMoves@{calculateMoves}}
+\index{calculateMoves@{calculateMoves}!preprocessing.c@{preprocessing.c}}
+\doxysubsubsection{\texorpdfstring{calculateMoves()}{calculateMoves()}}
+{\footnotesize\ttfamily \label{preprocessing_8c_a571336fe77c98dea69bd7301809d85d1} 
+int calculate\+Moves (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{, }\item[{\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}}]{queue}{, }\item[{\mbox{\hyperlink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node}} \texorpdfstring{$\ast$}{*}}]{node}{}\end{DoxyParamCaption})}
+
+calculates all possible moves for a given gamestate, create new gamestate and save it in the queue
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the gamestate to use for the calculations \\
+\hline
+{\em queue} & the queue to push the results in \\
+\hline
+{\em node} & the \doxylink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node} of the parent\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: number of gamestates added to the queue 
+\end{DoxyReturn}
+\Hypertarget{preprocessing_8c_a73f2fdfe918ec35bd21b1b82d53b9cb3}\index{preprocessing.c@{preprocessing.c}!destroyGenerationThreadPool@{destroyGenerationThreadPool}}
+\index{destroyGenerationThreadPool@{destroyGenerationThreadPool}!preprocessing.c@{preprocessing.c}}
+\doxysubsubsection{\texorpdfstring{destroyGenerationThreadPool()}{destroyGenerationThreadPool()}}
+{\footnotesize\ttfamily \label{preprocessing_8c_a73f2fdfe918ec35bd21b1b82d53b9cb3} 
+static void destroy\+Generation\+Thread\+Pool (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*}}]{pool}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+destroys the \doxylink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool} struct and all needed fields
+
+
+\begin{DoxyParams}{Parameters}
+{\em pool} & the struct to destroy \\
+\hline
+\end{DoxyParams}
+\Hypertarget{preprocessing_8c_a6a2c7daa3b6163021deb8a66a4ce361c}\index{preprocessing.c@{preprocessing.c}!moveGenerationThreadPoolInit@{moveGenerationThreadPoolInit}}
+\index{moveGenerationThreadPoolInit@{moveGenerationThreadPoolInit}!preprocessing.c@{preprocessing.c}}
+\doxysubsubsection{\texorpdfstring{moveGenerationThreadPoolInit()}{moveGenerationThreadPoolInit()}}
+{\footnotesize\ttfamily \label{preprocessing_8c_a6a2c7daa3b6163021deb8a66a4ce361c} 
+\mbox{\hyperlink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*} move\+Generation\+Thread\+Pool\+Init (\begin{DoxyParamCaption}\item[{const short}]{max\+Depth}{, }\item[{const int}]{max\+Threads}{}\end{DoxyParamCaption})}
+
+initializes all variables of the struct
+
+
+\begin{DoxyParams}{Parameters}
+{\em max\+Depth} & the maximal depth of the move generation \\
+\hline
+{\em maxthreads} & the maximal amount of threads the pool may have\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: the initialized \doxylink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool} pointer 
+\end{DoxyReturn}
+\Hypertarget{preprocessing_8c_a249140b83c74e66aeb06ebc08c472a1d}\index{preprocessing.c@{preprocessing.c}!preprocessing\_start@{preprocessing\_start}}
+\index{preprocessing\_start@{preprocessing\_start}!preprocessing.c@{preprocessing.c}}
+\doxysubsubsection{\texorpdfstring{preprocessing\_start()}{preprocessing\_start()}}
+{\footnotesize\ttfamily \label{preprocessing_8c_a249140b83c74e66aeb06ebc08c472a1d} 
+void preprocessing\+\_\+start (\begin{DoxyParamCaption}\item[{const short}]{max\+Depth}{, }\item[{const int}]{max\+Threads}{, }\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+function representing the work a \doxylink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool} thread does. It works until the shutdown command is issued or the work\+Counter reaches 0 (which means work done) it gets a new gamestate from the queue, processes it and then updates the work\+Counter. If the max\+Depth is reached, it enqueues the gamestate to the result queue
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & it needs a \doxylink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool} struct to work \\
+\hline
+\end{DoxyParams}
+\Hypertarget{preprocessing_8c_a2d1c5541242b91b44df469d0eb4d52af}\index{preprocessing.c@{preprocessing.c}!updateWorkCounter@{updateWorkCounter}}
+\index{updateWorkCounter@{updateWorkCounter}!preprocessing.c@{preprocessing.c}}
+\doxysubsubsection{\texorpdfstring{updateWorkCounter()}{updateWorkCounter()}}
+{\footnotesize\ttfamily \label{preprocessing_8c_a2d1c5541242b91b44df469d0eb4d52af} 
+static void update\+Work\+Counter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*}}]{pool}{, }\item[{const int}]{value}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+updates the work\+Counter variable of the given Mpool struct
+
+
+\begin{DoxyParams}{Parameters}
+{\em pool} & the pool variable with the work\+Counter variable \\
+\hline
+{\em value} & the update value for work\+Counter. The value gets added to work\+Counter \\
+\hline
+\end{DoxyParams}

@@ -1,0 +1,77 @@
+\doxysection{src/main/algorithm/include/minimax/preprocessing.h File Reference}
+\hypertarget{preprocessing_8h}{}\label{preprocessing_8h}\index{src/main/algorithm/include/minimax/preprocessing.h@{src/main/algorithm/include/minimax/preprocessing.h}}
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include "{}errors.\+h"{}}\newline
+{\ttfamily \#include "{}structs/gamestate.\+h"{}}\newline
+{\ttfamily \#include "{}structs/position.\+h"{}}\newline
+{\ttfamily \#include "{}structs/queue.\+h"{}}\newline
+{\ttfamily \#include "{}structs/stack.\+h"{}}\newline
+{\ttfamily \#include "{}structs/tree.\+h"{}}\newline
+{\ttfamily \#include "{}utility/move\+Calculation.\+h"{}}\newline
+{\ttfamily \#include "{}minimax/evaluation.\+h"{}}\newline
+{\ttfamily \#include "{}config.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{preprocessing_8h_a249140b83c74e66aeb06ebc08c472a1d}{preprocessing\+\_\+start}} (const short max\+Depth, const int max\+Threads, \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\item 
+DWORD WINAPI \mbox{\hyperlink{preprocessing_8h_a4a94880b8e41c6f069c4f827482a0a22}{generation\+Worker}} (LPVOID lp\+Param)
+\item 
+\mbox{\hyperlink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{preprocessing_8h_a6a2c7daa3b6163021deb8a66a4ce361c}{move\+Generation\+Thread\+Pool\+Init}} (const short max\+Depth, const int max\+Threads)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file includes functions for preprocessing. This involves a move calculation worker, a move calculations function and a preprocessing function. 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{preprocessing_8h_a4a94880b8e41c6f069c4f827482a0a22}\index{preprocessing.h@{preprocessing.h}!generationWorker@{generationWorker}}
+\index{generationWorker@{generationWorker}!preprocessing.h@{preprocessing.h}}
+\doxysubsubsection{\texorpdfstring{generationWorker()}{generationWorker()}}
+{\footnotesize\ttfamily \label{preprocessing_8h_a4a94880b8e41c6f069c4f827482a0a22} 
+DWORD WINAPI generation\+Worker (\begin{DoxyParamCaption}\item[{LPVOID}]{lp\+Param}{}\end{DoxyParamCaption})}
+
+The function an generation worker thread executes to generate all possible moves For move generation it uses an internal function called calcuolate\+Moves
+
+
+\begin{DoxyParams}{Parameters}
+{\em lp\+Param} & The \doxylink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool} with all needed variables set \\
+\hline
+\end{DoxyParams}
+\Hypertarget{preprocessing_8h_a6a2c7daa3b6163021deb8a66a4ce361c}\index{preprocessing.h@{preprocessing.h}!moveGenerationThreadPoolInit@{moveGenerationThreadPoolInit}}
+\index{moveGenerationThreadPoolInit@{moveGenerationThreadPoolInit}!preprocessing.h@{preprocessing.h}}
+\doxysubsubsection{\texorpdfstring{moveGenerationThreadPoolInit()}{moveGenerationThreadPoolInit()}}
+{\footnotesize\ttfamily \label{preprocessing_8h_a6a2c7daa3b6163021deb8a66a4ce361c} 
+\mbox{\hyperlink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*} move\+Generation\+Thread\+Pool\+Init (\begin{DoxyParamCaption}\item[{const short}]{max\+Depth}{, }\item[{const int}]{max\+Threads}{}\end{DoxyParamCaption})}
+
+initializes all variables of the struct
+
+
+\begin{DoxyParams}{Parameters}
+{\em max\+Depth} & the maximal depth of the move generation \\
+\hline
+{\em maxthreads} & the maximal amount of threads the pool may have\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: the initialized \doxylink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool} pointer 
+\end{DoxyReturn}
+\Hypertarget{preprocessing_8h_a249140b83c74e66aeb06ebc08c472a1d}\index{preprocessing.h@{preprocessing.h}!preprocessing\_start@{preprocessing\_start}}
+\index{preprocessing\_start@{preprocessing\_start}!preprocessing.h@{preprocessing.h}}
+\doxysubsubsection{\texorpdfstring{preprocessing\_start()}{preprocessing\_start()}}
+{\footnotesize\ttfamily \label{preprocessing_8h_a249140b83c74e66aeb06ebc08c472a1d} 
+void preprocessing\+\_\+start (\begin{DoxyParamCaption}\item[{const short}]{max\+Depth}{, }\item[{const int}]{max\+Threads}{, }\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+function representing the work a \doxylink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool} thread does. It works until the shutdown command is issued or the work\+Counter reaches 0 (which means work done) it gets a new gamestate from the queue, processes it and then updates the work\+Counter. If the max\+Depth is reached, it enqueues the gamestate to the result queue
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & it needs a \doxylink{struct_move_generation_thread_pool}{Move\+Generation\+Thread\+Pool} struct to work \\
+\hline
+\end{DoxyParams}

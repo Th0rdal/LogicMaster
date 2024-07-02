@@ -1,0 +1,39 @@
+\doxysection{src/main/algorithm/src/utility/debugging.c File Reference}
+\hypertarget{debugging_8c}{}\label{debugging_8c}\index{src/main/algorithm/src/utility/debugging.c@{src/main/algorithm/src/utility/debugging.c}}
+{\ttfamily \#include "{}utility/debugging.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{debugging_8c_a56c60c6168b7d9915e5f319f3345b289}{print\+Board}} (uint64\+\_\+t board)
+\item 
+void \mbox{\hyperlink{debugging_8c_ae9d1cf0e4873de79081966daf56fa4f7}{debug\+Gamestate}} (\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{debugging_8c_ae9d1cf0e4873de79081966daf56fa4f7}\index{debugging.c@{debugging.c}!debugGamestate@{debugGamestate}}
+\index{debugGamestate@{debugGamestate}!debugging.c@{debugging.c}}
+\doxysubsubsection{\texorpdfstring{debugGamestate()}{debugGamestate()}}
+{\footnotesize\ttfamily \label{debugging_8c_ae9d1cf0e4873de79081966daf56fa4f7} 
+void debug\+Gamestate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+prints out all variables of gamestate
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & gamestate struct to print out \\
+\hline
+\end{DoxyParams}
+\Hypertarget{debugging_8c_a56c60c6168b7d9915e5f319f3345b289}\index{debugging.c@{debugging.c}!printBoard@{printBoard}}
+\index{printBoard@{printBoard}!debugging.c@{debugging.c}}
+\doxysubsubsection{\texorpdfstring{printBoard()}{printBoard()}}
+{\footnotesize\ttfamily \label{debugging_8c_a56c60c6168b7d9915e5f319f3345b289} 
+void print\+Board (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{board}{}\end{DoxyParamCaption})}
+
+prints a bitboard out in a chess board pattern
+
+
+\begin{DoxyParams}{Parameters}
+{\em board} & uint64\+\_\+t representing the bitboard \\
+\hline
+\end{DoxyParams}

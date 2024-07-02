@@ -1,0 +1,38 @@
+\doxysection{src/main/algorithm/src/utility/utility.c File Reference}
+\hypertarget{utility_8c}{}\label{utility_8c}\index{src/main/algorithm/src/utility/utility.c@{src/main/algorithm/src/utility/utility.c}}
+{\ttfamily \#include "{}utility/utility.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{utility_8c_ab8d6dbbf276d5766fdd27423a4b4ee49}{convert\+Char\+Array\+To\+Int}} (char \texorpdfstring{$\ast$}{*}char\+Number)
+\item 
+uint64\+\_\+t \mbox{\hyperlink{utility_8c_ae6a10284270912f55cb7604364e245fc}{reverse\+Bitboard}} (uint64\+\_\+t bitboard)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{utility_8c_ab8d6dbbf276d5766fdd27423a4b4ee49}\index{utility.c@{utility.c}!convertCharArrayToInt@{convertCharArrayToInt}}
+\index{convertCharArrayToInt@{convertCharArrayToInt}!utility.c@{utility.c}}
+\doxysubsubsection{\texorpdfstring{convertCharArrayToInt()}{convertCharArrayToInt()}}
+{\footnotesize\ttfamily \label{utility_8c_ab8d6dbbf276d5766fdd27423a4b4ee49} 
+int convert\+Char\+Array\+To\+Int (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{char\+Number}{}\end{DoxyParamCaption})}
+
+converts a char array into an integer. Allows negative number
+
+
+\begin{DoxyParams}{Parameters}
+{\em char\+Number} & pointer to array to convert to number\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: integer representing the char array 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+ERROR\+\_\+\+CONVERTING\+\_\+\+CHARARRAY\+\_\+\+TO\+\_\+\+INT\+: if there is an unexpected character in the array 
+\end{DoxyWarning}
+\Hypertarget{utility_8c_ae6a10284270912f55cb7604364e245fc}\index{utility.c@{utility.c}!reverseBitboard@{reverseBitboard}}
+\index{reverseBitboard@{reverseBitboard}!utility.c@{utility.c}}
+\doxysubsubsection{\texorpdfstring{reverseBitboard()}{reverseBitboard()}}
+{\footnotesize\ttfamily \label{utility_8c_ae6a10284270912f55cb7604364e245fc} 
+uint64\+\_\+t reverse\+Bitboard (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{bitboard}{}\end{DoxyParamCaption})}
+

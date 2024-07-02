@@ -1,0 +1,108 @@
+\doxysection{src/main/algorithm/src/minimax/evaluation.c File Reference}
+\hypertarget{evaluation_8c}{}\label{evaluation_8c}\index{src/main/algorithm/src/minimax/evaluation.c@{src/main/algorithm/src/minimax/evaluation.c}}
+{\ttfamily \#include "{}minimax/evaluation.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{evaluation_8c_ae62895ed71909b645c6dbf082462b14d}{get\+Gamestate\+Tree\+Node}} (\mbox{\hyperlink{struct_evaluation_thread_pool}{Evaluation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*}pool)
+\item 
+void \mbox{\hyperlink{evaluation_8c_af48860981e0da1b97757e72fc2208a9b}{evaluate}} (\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\item 
+DWORD WINAPI \mbox{\hyperlink{evaluation_8c_abe33aef1087eaaf15a3a6777e688436d}{evaluation\+Worker}} (LPVOID lp\+Param)
+\item 
+\mbox{\hyperlink{struct_evaluation_thread_pool}{Evaluation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{evaluation_8c_ac45b41d7735c83fcbc444b4aa9f03a6e}{evaluation\+Thread\+Pool\+Init}} (const int max\+Threads, \mbox{\hyperlink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node}} \texorpdfstring{$\ast$}{*}src\+Tree)
+\item 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{evaluation_8c_a6639a209f2a893da95483020eff5bc2b}{evaluate\+Last\+Gamestate}} (\mbox{\hyperlink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node}} \texorpdfstring{$\ast$}{*}gamestate\+Tree\+Node)
+\item 
+void \mbox{\hyperlink{evaluation_8c_a6dcefefcc70cadf47909988dddf6022f}{destroy\+Evaluation\+Thread\+Pool}} (\mbox{\hyperlink{struct_evaluation_thread_pool}{Evaluation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*}pool)
+\item 
+void \mbox{\hyperlink{evaluation_8c_a8bae192348de092aa75ca372fdff7915}{evaluation\+\_\+start}} (int max\+Threads)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{evaluation_8c_a6dcefefcc70cadf47909988dddf6022f}\index{evaluation.c@{evaluation.c}!destroyEvaluationThreadPool@{destroyEvaluationThreadPool}}
+\index{destroyEvaluationThreadPool@{destroyEvaluationThreadPool}!evaluation.c@{evaluation.c}}
+\doxysubsubsection{\texorpdfstring{destroyEvaluationThreadPool()}{destroyEvaluationThreadPool()}}
+{\footnotesize\ttfamily \label{evaluation_8c_a6dcefefcc70cadf47909988dddf6022f} 
+void destroy\+Evaluation\+Thread\+Pool (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_evaluation_thread_pool}{Evaluation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*}}]{pool}{}\end{DoxyParamCaption})}
+
+destroys the \doxylink{struct_evaluation_thread_pool}{Evaluation\+Thread\+Pool} struct and all needed fields
+
+
+\begin{DoxyParams}{Parameters}
+{\em pool} & the struct to destroy \\
+\hline
+\end{DoxyParams}
+\Hypertarget{evaluation_8c_af48860981e0da1b97757e72fc2208a9b}\index{evaluation.c@{evaluation.c}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!evaluation.c@{evaluation.c}}
+\doxysubsubsection{\texorpdfstring{evaluate()}{evaluate()}}
+{\footnotesize\ttfamily \label{evaluation_8c_af48860981e0da1b97757e72fc2208a9b} 
+void evaluate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+evaluates a specific gamestate based on an algorithm. Algorithm counts piece values for each sides and subtracts white pieces from black pieces draw is evaluated as 0, checkmate is + or -\/ 100
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the gamestate to evaluate \\
+\hline
+\end{DoxyParams}
+\Hypertarget{evaluation_8c_a6639a209f2a893da95483020eff5bc2b}\index{evaluation.c@{evaluation.c}!evaluateLastGamestate@{evaluateLastGamestate}}
+\index{evaluateLastGamestate@{evaluateLastGamestate}!evaluation.c@{evaluation.c}}
+\doxysubsubsection{\texorpdfstring{evaluateLastGamestate()}{evaluateLastGamestate()}}
+{\footnotesize\ttfamily \label{evaluation_8c_a6639a209f2a893da95483020eff5bc2b} 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*} evaluate\+Last\+Gamestate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node}} \texorpdfstring{$\ast$}{*}}]{gamestate\+Tree\+Node}{}\end{DoxyParamCaption})}
+
+evaluates the best evaluation value out of all children and sets it for the gamestate. This should only be used with Gamestate\+Tree\+Nodes that have children that are already evaluated
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate\+Tree\+Node} & the node to evaluate \\
+\hline
+\end{DoxyParams}
+\Hypertarget{evaluation_8c_a8bae192348de092aa75ca372fdff7915}\index{evaluation.c@{evaluation.c}!evaluation\_start@{evaluation\_start}}
+\index{evaluation\_start@{evaluation\_start}!evaluation.c@{evaluation.c}}
+\doxysubsubsection{\texorpdfstring{evaluation\_start()}{evaluation\_start()}}
+{\footnotesize\ttfamily \label{evaluation_8c_a8bae192348de092aa75ca372fdff7915} 
+void evaluation\+\_\+start (\begin{DoxyParamCaption}\item[{int}]{max\+Threads}{}\end{DoxyParamCaption})}
+
+starts evaluating the gamestate tree \Hypertarget{evaluation_8c_ac45b41d7735c83fcbc444b4aa9f03a6e}\index{evaluation.c@{evaluation.c}!evaluationThreadPoolInit@{evaluationThreadPoolInit}}
+\index{evaluationThreadPoolInit@{evaluationThreadPoolInit}!evaluation.c@{evaluation.c}}
+\doxysubsubsection{\texorpdfstring{evaluationThreadPoolInit()}{evaluationThreadPoolInit()}}
+{\footnotesize\ttfamily \label{evaluation_8c_ac45b41d7735c83fcbc444b4aa9f03a6e} 
+\mbox{\hyperlink{struct_evaluation_thread_pool}{Evaluation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*} evaluation\+Thread\+Pool\+Init (\begin{DoxyParamCaption}\item[{const int}]{max\+Threads}{, }\item[{\mbox{\hyperlink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node}} \texorpdfstring{$\ast$}{*}}]{src\+Tree}{}\end{DoxyParamCaption})}
+
+initializes all variables of the struct
+
+
+\begin{DoxyParams}{Parameters}
+{\em maxthreads} & the maximal amount of threads the pool may have \\
+\hline
+{\em src\+Tree} & the base node for the evaluation\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: the initialized \doxylink{struct_evaluation_thread_pool}{Evaluation\+Thread\+Pool} pointer 
+\end{DoxyReturn}
+\Hypertarget{evaluation_8c_abe33aef1087eaaf15a3a6777e688436d}\index{evaluation.c@{evaluation.c}!evaluationWorker@{evaluationWorker}}
+\index{evaluationWorker@{evaluationWorker}!evaluation.c@{evaluation.c}}
+\doxysubsubsection{\texorpdfstring{evaluationWorker()}{evaluationWorker()}}
+{\footnotesize\ttfamily \label{evaluation_8c_abe33aef1087eaaf15a3a6777e688436d} 
+DWORD WINAPI evaluation\+Worker (\begin{DoxyParamCaption}\item[{LPVOID}]{lp\+Param}{}\end{DoxyParamCaption})}
+
+goes through each child of the base node and evaluates the nodes. It does this by going further into the tree until a node with no children is found. It evaluates that node and then goes up the stack If more than 1 child have the same evaluation and it is the best, the progarm will only save the first gamestate Since no further calculations are done, it does not matter what gamestate will be taken as only the evaluation matters \Hypertarget{evaluation_8c_ae62895ed71909b645c6dbf082462b14d}\index{evaluation.c@{evaluation.c}!getGamestateTreeNode@{getGamestateTreeNode}}
+\index{getGamestateTreeNode@{getGamestateTreeNode}!evaluation.c@{evaluation.c}}
+\doxysubsubsection{\texorpdfstring{getGamestateTreeNode()}{getGamestateTreeNode()}}
+{\footnotesize\ttfamily \label{evaluation_8c_ae62895ed71909b645c6dbf082462b14d} 
+static \mbox{\hyperlink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node}} \texorpdfstring{$\ast$}{*} get\+Gamestate\+Tree\+Node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_evaluation_thread_pool}{Evaluation\+Thread\+Pool}} \texorpdfstring{$\ast$}{*}}]{pool}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+gets a \doxylink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node} that is a child of the head node and returns it. Critical section, so a lock is used. If all chilren were already fetched, it returns NULL
+
+
+\begin{DoxyParams}{Parameters}
+{\em pool} & the thread pool configuration struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: \doxylink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node} pointer if there are still children to process, else NULL 
+\end{DoxyReturn}

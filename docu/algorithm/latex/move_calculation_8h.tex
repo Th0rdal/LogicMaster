@@ -1,0 +1,312 @@
+\doxysection{src/main/algorithm/include/utility/move\+Calculation.h File Reference}
+\hypertarget{move_calculation_8h}{}\label{move_calculation_8h}\index{src/main/algorithm/include/utility/moveCalculation.h@{src/main/algorithm/include/utility/moveCalculation.h}}
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include "{}utility\textbackslash{}utility.\+h"{}}\newline
+{\ttfamily \#include "{}structs\textbackslash{}position.\+h"{}}\newline
+{\ttfamily \#include "{}structs\textbackslash{}gamestate.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{move_calculation_8h_aec9cc9dea87aa3ef94be9822fd61c1e7}{pawn\+Moves\+With\+Side\+Selection}} (const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate, const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}}, const bool for\+White\+Piece)
+\item 
+\mbox{\hyperlink{move_calculation_8h_a19b1fb665bfad1275c3f80366d212ea0}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((always\+\_\+inline)) inline uint64\+\_\+t pawn\+Moves(const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate
+\item 
+uint64\+\_\+t \mbox{\hyperlink{move_calculation_8h_a5493f89cd8743d1f3cd77a2cf2e2b2f4}{rook\+Moves\+With\+Side\+Selection}} (const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate, const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}}, const bool for\+White\+Piece)
+\item 
+uint64\+\_\+t \mbox{\hyperlink{move_calculation_8h_a23f483e1363cdab1a9188b6fd36cbc74}{knight\+Moves\+With\+Side\+Selection}} (const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate, const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}}, const bool for\+White\+Piece)
+\item 
+uint64\+\_\+t \mbox{\hyperlink{move_calculation_8h_af83d3657f5acf5e51e4d34d18536502f}{bishop\+Moves\+With\+Side\+Selection}} (const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate, const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}}, const bool for\+White\+Piece)
+\item 
+uint64\+\_\+t \mbox{\hyperlink{move_calculation_8h_abd922e0ed96d736455c83dccc1da418f}{queen\+Moves\+With\+Side\+Selection}} (const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate, const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}}, const bool for\+White\+Piece)
+\item 
+uint64\+\_\+t \mbox{\hyperlink{move_calculation_8h_a4f81e011575e16adc40f0c063c77e15e}{king\+Moves\+With\+Side\+Selection}} (const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate, const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}}, const bool for\+White\+Piece)
+\item 
+uint64\+\_\+t \mbox{\hyperlink{move_calculation_8h_a25344c1adf9452c74eba64b52a68acc1}{square\+Attacked}} (const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate, const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}}, const bool check\+For\+White)
+\item 
+uint64\+\_\+t \mbox{\hyperlink{move_calculation_8h_a5a42e210c7a2d227fdd59a3d04683182}{create\+Possible\+Moves\+After\+Check}} (const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate, const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}king\+Position, const bool for\+White\+Piece)
+\item 
+bool \mbox{\hyperlink{move_calculation_8h_a3e9c382aeb62a6a3a1a01d3aa40ed997}{make\+Move\+And\+Check\+Legal}} (const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate, const enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}} piece, const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{gamestate_8h_a818ce1ed710aea0606d9f411008b51c9}{piece\+Position}}, const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{gamestate_8h_adad974fcef088bfdaf5af08162a25f31}{move\+Position}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{move_calculation_8h_a19b1fb665bfad1275c3f80366d212ea0}\index{moveCalculation.h@{moveCalculation.h}!\_\_attribute\_\_@{\_\_attribute\_\_}}
+\index{\_\_attribute\_\_@{\_\_attribute\_\_}!moveCalculation.h@{moveCalculation.h}}
+\doxysubsubsection{\texorpdfstring{\_\_attribute\_\_()}{\_\_attribute\_\_()}}
+{\footnotesize\ttfamily \label{move_calculation_8h_a19b1fb665bfad1275c3f80366d212ea0} 
+\+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(always\+\_\+inline)}]{}{}\end{DoxyParamCaption}) const}
+
+calculates all possible moves a given pawn can do. A wrapper function calling pawn\+Moves\+With\+Side\+Selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the pawn as a struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves
+\end{DoxyReturn}
+calculates all possible moves a given rook can do A wrapper function calling pawn\+Moves\+With\+Side\+Selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the rook as a struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves
+\end{DoxyReturn}
+calculates all possible moves a given knight can do A wrapper function calling pawn\+Moves\+With\+Side\+Selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the knight as a struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves
+\end{DoxyReturn}
+calculates all possible moves a given bishop can do A wrapper function calling pawn\+Moves\+With\+Side\+Selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the bishop as a struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves
+\end{DoxyReturn}
+calculates all possible moves a given queen can do A wrapper function calling pawn\+Moves\+With\+Side\+Selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the queen as a struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves
+\end{DoxyReturn}
+calculates all possible moves a given king can do A wrapper function calling pawn\+Moves\+With\+Side\+Selection.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the king as a struct\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves 
+\end{DoxyReturn}
+\Hypertarget{move_calculation_8h_af83d3657f5acf5e51e4d34d18536502f}\index{moveCalculation.h@{moveCalculation.h}!bishopMovesWithSideSelection@{bishopMovesWithSideSelection}}
+\index{bishopMovesWithSideSelection@{bishopMovesWithSideSelection}!moveCalculation.h@{moveCalculation.h}}
+\doxysubsubsection{\texorpdfstring{bishopMovesWithSideSelection()}{bishopMovesWithSideSelection()}}
+{\footnotesize\ttfamily \label{move_calculation_8h_af83d3657f5acf5e51e4d34d18536502f} 
+uint64\+\_\+t bishop\+Moves\+With\+Side\+Selection (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{, }\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{, }\item[{const bool}]{for\+White\+Piece}{}\end{DoxyParamCaption})}
+
+calculates all possible moves a given bishop can do
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the bishop as a struct \\
+\hline
+{\em for\+White\+Piece} & the color of the piece\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves 
+\end{DoxyReturn}
+\Hypertarget{move_calculation_8h_a5a42e210c7a2d227fdd59a3d04683182}\index{moveCalculation.h@{moveCalculation.h}!createPossibleMovesAfterCheck@{createPossibleMovesAfterCheck}}
+\index{createPossibleMovesAfterCheck@{createPossibleMovesAfterCheck}!moveCalculation.h@{moveCalculation.h}}
+\doxysubsubsection{\texorpdfstring{createPossibleMovesAfterCheck()}{createPossibleMovesAfterCheck()}}
+{\footnotesize\ttfamily \label{move_calculation_8h_a5a42e210c7a2d227fdd59a3d04683182} 
+uint64\+\_\+t create\+Possible\+Moves\+After\+Check (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{, }\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{king\+Position}{, }\item[{const bool}]{for\+White\+Piece}{}\end{DoxyParamCaption})}
+
+makes a move and checks if the move is legal, by seeing if the king is under attack afterwards. this is only filling a new gamestate with the most essential values to check.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the gamestate to check \\
+\hline
+{\em piece} & the piece that made the move \\
+\hline
+{\em piece\+Position} & the starting position of the piece \\
+\hline
+{\em move\+Position} & the end position of the piece\\
+\hline
+\end{DoxyParams}
+return\+: true if the move is legal, otherwise false \Hypertarget{move_calculation_8h_a4f81e011575e16adc40f0c063c77e15e}\index{moveCalculation.h@{moveCalculation.h}!kingMovesWithSideSelection@{kingMovesWithSideSelection}}
+\index{kingMovesWithSideSelection@{kingMovesWithSideSelection}!moveCalculation.h@{moveCalculation.h}}
+\doxysubsubsection{\texorpdfstring{kingMovesWithSideSelection()}{kingMovesWithSideSelection()}}
+{\footnotesize\ttfamily \label{move_calculation_8h_a4f81e011575e16adc40f0c063c77e15e} 
+uint64\+\_\+t king\+Moves\+With\+Side\+Selection (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{, }\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{, }\item[{const bool}]{for\+White\+Piece}{}\end{DoxyParamCaption})}
+
+calculates all possible moves a given king can do
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the king as a struct \\
+\hline
+{\em for\+White\+Piece} & the color of the piece\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves 
+\end{DoxyReturn}
+\Hypertarget{move_calculation_8h_a23f483e1363cdab1a9188b6fd36cbc74}\index{moveCalculation.h@{moveCalculation.h}!knightMovesWithSideSelection@{knightMovesWithSideSelection}}
+\index{knightMovesWithSideSelection@{knightMovesWithSideSelection}!moveCalculation.h@{moveCalculation.h}}
+\doxysubsubsection{\texorpdfstring{knightMovesWithSideSelection()}{knightMovesWithSideSelection()}}
+{\footnotesize\ttfamily \label{move_calculation_8h_a23f483e1363cdab1a9188b6fd36cbc74} 
+uint64\+\_\+t knight\+Moves\+With\+Side\+Selection (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{, }\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{, }\item[{const bool}]{for\+White\+Piece}{}\end{DoxyParamCaption})}
+
+calculates all possible moves a given knight can do
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the knight as a struct \\
+\hline
+{\em for\+White\+Piece} & the color of the piece\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves 
+\end{DoxyReturn}
+\Hypertarget{move_calculation_8h_a3e9c382aeb62a6a3a1a01d3aa40ed997}\index{moveCalculation.h@{moveCalculation.h}!makeMoveAndCheckLegal@{makeMoveAndCheckLegal}}
+\index{makeMoveAndCheckLegal@{makeMoveAndCheckLegal}!moveCalculation.h@{moveCalculation.h}}
+\doxysubsubsection{\texorpdfstring{makeMoveAndCheckLegal()}{makeMoveAndCheckLegal()}}
+{\footnotesize\ttfamily \label{move_calculation_8h_a3e9c382aeb62a6a3a1a01d3aa40ed997} 
+bool make\+Move\+And\+Check\+Legal (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{, }\item[{const enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}}}]{piece}{, }\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{piece\+Position}{, }\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{move\+Position}{}\end{DoxyParamCaption})}
+
+calculates all squares that have pieces that attack the given position
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the gamestate to check \\
+\hline
+{\em position} & the position to check\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: bitboard with a 1 on every position a piece that is attacking the defined position is standing
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+ERROR\+\_\+\+PIECE\+\_\+\+NOT\+\_\+\+SELECTED\+: if there was no piece or the NO\+\_\+\+PIECE value given to the function instead of a piece 
+\end{DoxyWarning}
+\Hypertarget{move_calculation_8h_aec9cc9dea87aa3ef94be9822fd61c1e7}\index{moveCalculation.h@{moveCalculation.h}!pawnMovesWithSideSelection@{pawnMovesWithSideSelection}}
+\index{pawnMovesWithSideSelection@{pawnMovesWithSideSelection}!moveCalculation.h@{moveCalculation.h}}
+\doxysubsubsection{\texorpdfstring{pawnMovesWithSideSelection()}{pawnMovesWithSideSelection()}}
+{\footnotesize\ttfamily \label{move_calculation_8h_aec9cc9dea87aa3ef94be9822fd61c1e7} 
+uint64\+\_\+t pawn\+Moves\+With\+Side\+Selection (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{, }\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{, }\item[{const bool}]{for\+White\+Piece}{}\end{DoxyParamCaption})}
+
+calculates all possible moves a given pawn can do.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the pawn as a struct \\
+\hline
+{\em for\+White\+Piece} & the color of the piece\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves 
+\end{DoxyReturn}
+\Hypertarget{move_calculation_8h_abd922e0ed96d736455c83dccc1da418f}\index{moveCalculation.h@{moveCalculation.h}!queenMovesWithSideSelection@{queenMovesWithSideSelection}}
+\index{queenMovesWithSideSelection@{queenMovesWithSideSelection}!moveCalculation.h@{moveCalculation.h}}
+\doxysubsubsection{\texorpdfstring{queenMovesWithSideSelection()}{queenMovesWithSideSelection()}}
+{\footnotesize\ttfamily \label{move_calculation_8h_abd922e0ed96d736455c83dccc1da418f} 
+uint64\+\_\+t queen\+Moves\+With\+Side\+Selection (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{, }\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{, }\item[{const bool}]{for\+White\+Piece}{}\end{DoxyParamCaption})}
+
+calculates all possible moves a given queen can do
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the queen as a struct \\
+\hline
+{\em for\+White\+Piece} & the color of the piece\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves 
+\end{DoxyReturn}
+\Hypertarget{move_calculation_8h_a5493f89cd8743d1f3cd77a2cf2e2b2f4}\index{moveCalculation.h@{moveCalculation.h}!rookMovesWithSideSelection@{rookMovesWithSideSelection}}
+\index{rookMovesWithSideSelection@{rookMovesWithSideSelection}!moveCalculation.h@{moveCalculation.h}}
+\doxysubsubsection{\texorpdfstring{rookMovesWithSideSelection()}{rookMovesWithSideSelection()}}
+{\footnotesize\ttfamily \label{move_calculation_8h_a5493f89cd8743d1f3cd77a2cf2e2b2f4} 
+uint64\+\_\+t rook\+Moves\+With\+Side\+Selection (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{, }\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{, }\item[{const bool}]{for\+White\+Piece}{}\end{DoxyParamCaption})}
+
+calculates all possible moves a given rook can do
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the current gamestate \\
+\hline
+{\em position} & position of the rook as a struct \\
+\hline
+{\em for\+White\+Piece} & the color of the piece\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bitboard representing all possible moves 
+\end{DoxyReturn}
+\Hypertarget{move_calculation_8h_a25344c1adf9452c74eba64b52a68acc1}\index{moveCalculation.h@{moveCalculation.h}!squareAttacked@{squareAttacked}}
+\index{squareAttacked@{squareAttacked}!moveCalculation.h@{moveCalculation.h}}
+\doxysubsubsection{\texorpdfstring{squareAttacked()}{squareAttacked()}}
+{\footnotesize\ttfamily \label{move_calculation_8h_a25344c1adf9452c74eba64b52a68acc1} 
+uint64\+\_\+t square\+Attacked (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{, }\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{, }\item[{const bool}]{check\+For\+White}{}\end{DoxyParamCaption})}
+
+returns bitboards containing all checking pieces + all block possibilities + all king moves for the current gamestate color. If check\+For\+White is true the return value will be the position of black pieces attacking the square. If this is 0 while king is in check =\texorpdfstring{$>$}{>} checkmate.
+
+also saves the bitboards into config of the gamestate
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the gamestate to check \\
+\hline
+{\em king\+Position} & the position of the king that needs to be checked \\
+\hline
+{\em check\+For\+White} & true for white, false for black\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: bitboard with all possible king moves, piece captures or block opportunities 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}\index{moveCalculation.h@{moveCalculation.h}!position@{position}}
+\index{position@{position}!moveCalculation.h@{moveCalculation.h}}
+\doxysubsubsection{\texorpdfstring{position}{position}}
+{\footnotesize\ttfamily \label{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1} 
+const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*} position}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{move_calculation_8h_aec9cc9dea87aa3ef94be9822fd61c1e7}{pawnMovesWithSideSelection}}(gamestate,\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ !gamestate-\/>flags.isWhiteTurn)}
+
+\end{DoxyCode}

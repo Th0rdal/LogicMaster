@@ -1,0 +1,232 @@
+\doxysection{src/main/algorithm/include/errors.h File Reference}
+\hypertarget{errors_8h}{}\label{errors_8h}\index{src/main/algorithm/include/errors.h@{src/main/algorithm/include/errors.h}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{errors_8h_a3dd9acb980d8a0e61a1869899c7dbaa8}{ERROR\+\_\+\+MEMORY\+\_\+\+MALLOC\+\_\+\+FAILED}}~10
+\item 
+\#define \mbox{\hyperlink{errors_8h_a22478f611a427b276fed8c4cf8baea6e}{ERROR\+\_\+\+MEMORY\+\_\+\+REALLOC\+\_\+\+FAILED}}~11
+\item 
+\#define \mbox{\hyperlink{errors_8h_a3d4504aa63dc4e483e4e9fcad9835708}{ERROR\+\_\+\+THREADS\+\_\+\+CREATION\+\_\+\+FAILED}}~15
+\item 
+\#define \mbox{\hyperlink{errors_8h_af8d39f04776d95af3704ab4b91472194}{ERROR\+\_\+\+THREADS\+\_\+\+TIMEOUT}}~16
+\item 
+\#define \mbox{\hyperlink{errors_8h_ac6d16c9702a78188654719d652c58e80}{ERROR\+\_\+\+CUSTOM\+\_\+\+STACK\+\_\+\+OVERFLOW}}~21
+\item 
+\#define \mbox{\hyperlink{errors_8h_a0fdf7f224a77ba5b87f2b3387c33348f}{ERROR\+\_\+\+CUSTOM\+\_\+\+STACK\+\_\+\+UNDERFLOW}}~22
+\item 
+\#define \mbox{\hyperlink{errors_8h_afa25d217872ad6f630dc9378ede79357}{ERROR\+\_\+\+QUEUE\+\_\+\+TOO\+\_\+\+SMALL}}~25
+\item 
+\#define \mbox{\hyperlink{errors_8h_a79caf300881c3e27ec51dc9b7d9404e8}{ERROR\+\_\+\+NOINPUT}}~40
+\item 
+\#define \mbox{\hyperlink{errors_8h_ad114c9e8bfc7ead3dd235f33b5e47e50}{ERROR\+\_\+\+UNKNOWN\+\_\+\+ARGUMENT}}~41
+\item 
+\#define \mbox{\hyperlink{errors_8h_a246900269a3234e8ed96ffd961556a69}{ERROR\+\_\+\+FEN\+\_\+\+CHAR\+\_\+\+NOT\+\_\+\+DEFINED}}~100
+\item 
+\#define \mbox{\hyperlink{errors_8h_a73b35fde1ef34df594a49db23fbc169f}{ERROR\+\_\+\+FEN\+\_\+\+NUMBER\+\_\+\+CONVERTION\+\_\+\+CHAR\+\_\+\+TOO\+\_\+\+LARGE}}~102
+\item 
+\#define \mbox{\hyperlink{errors_8h_abd496e81512de2c33eba2b6c3b806dda}{ERROR\+\_\+\+FETCHING\+\_\+\+FEN\+\_\+\+PART}}~103
+\item 
+\#define \mbox{\hyperlink{errors_8h_af4e51884063043458938c0525fb1b360}{ERROR\+\_\+\+CONVERTING\+\_\+\+CHARARRAY\+\_\+\+TO\+\_\+\+INT}}~104
+\item 
+\#define \mbox{\hyperlink{errors_8h_a9dd1e54d3c43e9253265191b4efa9b06}{ERROR\+\_\+\+POSITION\+\_\+\+VALUE\+\_\+\+OUTSIDE\+\_\+\+EXPECTED}}~110
+\item 
+\#define \mbox{\hyperlink{errors_8h_ae158dce438c2051c4cab2886d85bf2a0}{ERROR\+\_\+\+PIECE\+\_\+\+POSITION\+\_\+\+CANNOT\+\_\+\+BE\+\_\+\+CALCULATED}}~111
+\item 
+\#define \mbox{\hyperlink{errors_8h_afb1f6fe0a716b1397a3b0579833d970e}{ERROR\+\_\+\+PROMOTION\+\_\+\+PIECE\+\_\+\+UNAVAILABLE}}~112
+\item 
+\#define \mbox{\hyperlink{errors_8h_aba8ebe18f86b7f7e98f3a9eb606cc614}{ERROR\+\_\+\+PIECE\+\_\+\+NOT\+\_\+\+SELECTED}}~120
+\item 
+\#define \mbox{\hyperlink{errors_8h_afd982677fff51473bdd3b2143d4c5541}{WARNING\+\_\+\+COULD\+\_\+\+NOT\+\_\+\+RETRIEVE\+\_\+\+CORE\+\_\+\+NUMBER}}~501
+\item 
+\#define \mbox{\hyperlink{errors_8h_a78e6d84d00b431a93eafe2cdf4ea88e5}{WARNING\+\_\+\+QUEUE\+\_\+\+TOO\+\_\+\+SMALL}}~502
+\item 
+\#define \mbox{\hyperlink{errors_8h_a79b3d881ea521ee0bd501694e050e00f}{WARNING\+\_\+\+RESIZING\+\_\+\+QUEUE}}~503
+\item 
+\#define \mbox{\hyperlink{errors_8h_a5233b677b4adfbaa1e9ce2e0aa9dfe99}{WARNING\+\_\+\+STACK\+\_\+\+TOO\+\_\+\+SMALL}}~504
+\item 
+\#define \mbox{\hyperlink{errors_8h_adeaaba44fe12abe4f77a8ddec7599fbb}{WARNING\+\_\+\+RESIZING\+\_\+\+STACK}}~505
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{errors_8h_a02605c478875df486a1de7d24db32e3d}{throw\+Error}} (int error\+Code, char \texorpdfstring{$\ast$}{*}format,...)
+\item 
+void \mbox{\hyperlink{errors_8h_ad44c7208abc0c1b8927ca26524f9c509}{throw\+Warning}} (int warning\+Code, char \texorpdfstring{$\ast$}{*}format,...)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{errors_8h_af4e51884063043458938c0525fb1b360}\index{errors.h@{errors.h}!ERROR\_CONVERTING\_CHARARRAY\_TO\_INT@{ERROR\_CONVERTING\_CHARARRAY\_TO\_INT}}
+\index{ERROR\_CONVERTING\_CHARARRAY\_TO\_INT@{ERROR\_CONVERTING\_CHARARRAY\_TO\_INT}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_CONVERTING\_CHARARRAY\_TO\_INT}{ERROR\_CONVERTING\_CHARARRAY\_TO\_INT}}
+{\footnotesize\ttfamily \label{errors_8h_af4e51884063043458938c0525fb1b360} 
+\#define ERROR\+\_\+\+CONVERTING\+\_\+\+CHARARRAY\+\_\+\+TO\+\_\+\+INT~104}
+
+\Hypertarget{errors_8h_ac6d16c9702a78188654719d652c58e80}\index{errors.h@{errors.h}!ERROR\_CUSTOM\_STACK\_OVERFLOW@{ERROR\_CUSTOM\_STACK\_OVERFLOW}}
+\index{ERROR\_CUSTOM\_STACK\_OVERFLOW@{ERROR\_CUSTOM\_STACK\_OVERFLOW}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_CUSTOM\_STACK\_OVERFLOW}{ERROR\_CUSTOM\_STACK\_OVERFLOW}}
+{\footnotesize\ttfamily \label{errors_8h_ac6d16c9702a78188654719d652c58e80} 
+\#define ERROR\+\_\+\+CUSTOM\+\_\+\+STACK\+\_\+\+OVERFLOW~21}
+
+\Hypertarget{errors_8h_a0fdf7f224a77ba5b87f2b3387c33348f}\index{errors.h@{errors.h}!ERROR\_CUSTOM\_STACK\_UNDERFLOW@{ERROR\_CUSTOM\_STACK\_UNDERFLOW}}
+\index{ERROR\_CUSTOM\_STACK\_UNDERFLOW@{ERROR\_CUSTOM\_STACK\_UNDERFLOW}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_CUSTOM\_STACK\_UNDERFLOW}{ERROR\_CUSTOM\_STACK\_UNDERFLOW}}
+{\footnotesize\ttfamily \label{errors_8h_a0fdf7f224a77ba5b87f2b3387c33348f} 
+\#define ERROR\+\_\+\+CUSTOM\+\_\+\+STACK\+\_\+\+UNDERFLOW~22}
+
+\Hypertarget{errors_8h_a246900269a3234e8ed96ffd961556a69}\index{errors.h@{errors.h}!ERROR\_FEN\_CHAR\_NOT\_DEFINED@{ERROR\_FEN\_CHAR\_NOT\_DEFINED}}
+\index{ERROR\_FEN\_CHAR\_NOT\_DEFINED@{ERROR\_FEN\_CHAR\_NOT\_DEFINED}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_FEN\_CHAR\_NOT\_DEFINED}{ERROR\_FEN\_CHAR\_NOT\_DEFINED}}
+{\footnotesize\ttfamily \label{errors_8h_a246900269a3234e8ed96ffd961556a69} 
+\#define ERROR\+\_\+\+FEN\+\_\+\+CHAR\+\_\+\+NOT\+\_\+\+DEFINED~100}
+
+\Hypertarget{errors_8h_a73b35fde1ef34df594a49db23fbc169f}\index{errors.h@{errors.h}!ERROR\_FEN\_NUMBER\_CONVERTION\_CHAR\_TOO\_LARGE@{ERROR\_FEN\_NUMBER\_CONVERTION\_CHAR\_TOO\_LARGE}}
+\index{ERROR\_FEN\_NUMBER\_CONVERTION\_CHAR\_TOO\_LARGE@{ERROR\_FEN\_NUMBER\_CONVERTION\_CHAR\_TOO\_LARGE}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_FEN\_NUMBER\_CONVERTION\_CHAR\_TOO\_LARGE}{ERROR\_FEN\_NUMBER\_CONVERTION\_CHAR\_TOO\_LARGE}}
+{\footnotesize\ttfamily \label{errors_8h_a73b35fde1ef34df594a49db23fbc169f} 
+\#define ERROR\+\_\+\+FEN\+\_\+\+NUMBER\+\_\+\+CONVERTION\+\_\+\+CHAR\+\_\+\+TOO\+\_\+\+LARGE~102}
+
+\Hypertarget{errors_8h_abd496e81512de2c33eba2b6c3b806dda}\index{errors.h@{errors.h}!ERROR\_FETCHING\_FEN\_PART@{ERROR\_FETCHING\_FEN\_PART}}
+\index{ERROR\_FETCHING\_FEN\_PART@{ERROR\_FETCHING\_FEN\_PART}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_FETCHING\_FEN\_PART}{ERROR\_FETCHING\_FEN\_PART}}
+{\footnotesize\ttfamily \label{errors_8h_abd496e81512de2c33eba2b6c3b806dda} 
+\#define ERROR\+\_\+\+FETCHING\+\_\+\+FEN\+\_\+\+PART~103}
+
+\Hypertarget{errors_8h_a3dd9acb980d8a0e61a1869899c7dbaa8}\index{errors.h@{errors.h}!ERROR\_MEMORY\_MALLOC\_FAILED@{ERROR\_MEMORY\_MALLOC\_FAILED}}
+\index{ERROR\_MEMORY\_MALLOC\_FAILED@{ERROR\_MEMORY\_MALLOC\_FAILED}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_MEMORY\_MALLOC\_FAILED}{ERROR\_MEMORY\_MALLOC\_FAILED}}
+{\footnotesize\ttfamily \label{errors_8h_a3dd9acb980d8a0e61a1869899c7dbaa8} 
+\#define ERROR\+\_\+\+MEMORY\+\_\+\+MALLOC\+\_\+\+FAILED~10}
+
+\Hypertarget{errors_8h_a22478f611a427b276fed8c4cf8baea6e}\index{errors.h@{errors.h}!ERROR\_MEMORY\_REALLOC\_FAILED@{ERROR\_MEMORY\_REALLOC\_FAILED}}
+\index{ERROR\_MEMORY\_REALLOC\_FAILED@{ERROR\_MEMORY\_REALLOC\_FAILED}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_MEMORY\_REALLOC\_FAILED}{ERROR\_MEMORY\_REALLOC\_FAILED}}
+{\footnotesize\ttfamily \label{errors_8h_a22478f611a427b276fed8c4cf8baea6e} 
+\#define ERROR\+\_\+\+MEMORY\+\_\+\+REALLOC\+\_\+\+FAILED~11}
+
+\Hypertarget{errors_8h_a79caf300881c3e27ec51dc9b7d9404e8}\index{errors.h@{errors.h}!ERROR\_NOINPUT@{ERROR\_NOINPUT}}
+\index{ERROR\_NOINPUT@{ERROR\_NOINPUT}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_NOINPUT}{ERROR\_NOINPUT}}
+{\footnotesize\ttfamily \label{errors_8h_a79caf300881c3e27ec51dc9b7d9404e8} 
+\#define ERROR\+\_\+\+NOINPUT~40}
+
+\Hypertarget{errors_8h_aba8ebe18f86b7f7e98f3a9eb606cc614}\index{errors.h@{errors.h}!ERROR\_PIECE\_NOT\_SELECTED@{ERROR\_PIECE\_NOT\_SELECTED}}
+\index{ERROR\_PIECE\_NOT\_SELECTED@{ERROR\_PIECE\_NOT\_SELECTED}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_PIECE\_NOT\_SELECTED}{ERROR\_PIECE\_NOT\_SELECTED}}
+{\footnotesize\ttfamily \label{errors_8h_aba8ebe18f86b7f7e98f3a9eb606cc614} 
+\#define ERROR\+\_\+\+PIECE\+\_\+\+NOT\+\_\+\+SELECTED~120}
+
+\Hypertarget{errors_8h_ae158dce438c2051c4cab2886d85bf2a0}\index{errors.h@{errors.h}!ERROR\_PIECE\_POSITION\_CANNOT\_BE\_CALCULATED@{ERROR\_PIECE\_POSITION\_CANNOT\_BE\_CALCULATED}}
+\index{ERROR\_PIECE\_POSITION\_CANNOT\_BE\_CALCULATED@{ERROR\_PIECE\_POSITION\_CANNOT\_BE\_CALCULATED}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_PIECE\_POSITION\_CANNOT\_BE\_CALCULATED}{ERROR\_PIECE\_POSITION\_CANNOT\_BE\_CALCULATED}}
+{\footnotesize\ttfamily \label{errors_8h_ae158dce438c2051c4cab2886d85bf2a0} 
+\#define ERROR\+\_\+\+PIECE\+\_\+\+POSITION\+\_\+\+CANNOT\+\_\+\+BE\+\_\+\+CALCULATED~111}
+
+\Hypertarget{errors_8h_a9dd1e54d3c43e9253265191b4efa9b06}\index{errors.h@{errors.h}!ERROR\_POSITION\_VALUE\_OUTSIDE\_EXPECTED@{ERROR\_POSITION\_VALUE\_OUTSIDE\_EXPECTED}}
+\index{ERROR\_POSITION\_VALUE\_OUTSIDE\_EXPECTED@{ERROR\_POSITION\_VALUE\_OUTSIDE\_EXPECTED}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_POSITION\_VALUE\_OUTSIDE\_EXPECTED}{ERROR\_POSITION\_VALUE\_OUTSIDE\_EXPECTED}}
+{\footnotesize\ttfamily \label{errors_8h_a9dd1e54d3c43e9253265191b4efa9b06} 
+\#define ERROR\+\_\+\+POSITION\+\_\+\+VALUE\+\_\+\+OUTSIDE\+\_\+\+EXPECTED~110}
+
+\Hypertarget{errors_8h_afb1f6fe0a716b1397a3b0579833d970e}\index{errors.h@{errors.h}!ERROR\_PROMOTION\_PIECE\_UNAVAILABLE@{ERROR\_PROMOTION\_PIECE\_UNAVAILABLE}}
+\index{ERROR\_PROMOTION\_PIECE\_UNAVAILABLE@{ERROR\_PROMOTION\_PIECE\_UNAVAILABLE}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_PROMOTION\_PIECE\_UNAVAILABLE}{ERROR\_PROMOTION\_PIECE\_UNAVAILABLE}}
+{\footnotesize\ttfamily \label{errors_8h_afb1f6fe0a716b1397a3b0579833d970e} 
+\#define ERROR\+\_\+\+PROMOTION\+\_\+\+PIECE\+\_\+\+UNAVAILABLE~112}
+
+\Hypertarget{errors_8h_afa25d217872ad6f630dc9378ede79357}\index{errors.h@{errors.h}!ERROR\_QUEUE\_TOO\_SMALL@{ERROR\_QUEUE\_TOO\_SMALL}}
+\index{ERROR\_QUEUE\_TOO\_SMALL@{ERROR\_QUEUE\_TOO\_SMALL}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_QUEUE\_TOO\_SMALL}{ERROR\_QUEUE\_TOO\_SMALL}}
+{\footnotesize\ttfamily \label{errors_8h_afa25d217872ad6f630dc9378ede79357} 
+\#define ERROR\+\_\+\+QUEUE\+\_\+\+TOO\+\_\+\+SMALL~25}
+
+\Hypertarget{errors_8h_a3d4504aa63dc4e483e4e9fcad9835708}\index{errors.h@{errors.h}!ERROR\_THREADS\_CREATION\_FAILED@{ERROR\_THREADS\_CREATION\_FAILED}}
+\index{ERROR\_THREADS\_CREATION\_FAILED@{ERROR\_THREADS\_CREATION\_FAILED}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_THREADS\_CREATION\_FAILED}{ERROR\_THREADS\_CREATION\_FAILED}}
+{\footnotesize\ttfamily \label{errors_8h_a3d4504aa63dc4e483e4e9fcad9835708} 
+\#define ERROR\+\_\+\+THREADS\+\_\+\+CREATION\+\_\+\+FAILED~15}
+
+\Hypertarget{errors_8h_af8d39f04776d95af3704ab4b91472194}\index{errors.h@{errors.h}!ERROR\_THREADS\_TIMEOUT@{ERROR\_THREADS\_TIMEOUT}}
+\index{ERROR\_THREADS\_TIMEOUT@{ERROR\_THREADS\_TIMEOUT}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_THREADS\_TIMEOUT}{ERROR\_THREADS\_TIMEOUT}}
+{\footnotesize\ttfamily \label{errors_8h_af8d39f04776d95af3704ab4b91472194} 
+\#define ERROR\+\_\+\+THREADS\+\_\+\+TIMEOUT~16}
+
+\Hypertarget{errors_8h_ad114c9e8bfc7ead3dd235f33b5e47e50}\index{errors.h@{errors.h}!ERROR\_UNKNOWN\_ARGUMENT@{ERROR\_UNKNOWN\_ARGUMENT}}
+\index{ERROR\_UNKNOWN\_ARGUMENT@{ERROR\_UNKNOWN\_ARGUMENT}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_UNKNOWN\_ARGUMENT}{ERROR\_UNKNOWN\_ARGUMENT}}
+{\footnotesize\ttfamily \label{errors_8h_ad114c9e8bfc7ead3dd235f33b5e47e50} 
+\#define ERROR\+\_\+\+UNKNOWN\+\_\+\+ARGUMENT~41}
+
+\Hypertarget{errors_8h_afd982677fff51473bdd3b2143d4c5541}\index{errors.h@{errors.h}!WARNING\_COULD\_NOT\_RETRIEVE\_CORE\_NUMBER@{WARNING\_COULD\_NOT\_RETRIEVE\_CORE\_NUMBER}}
+\index{WARNING\_COULD\_NOT\_RETRIEVE\_CORE\_NUMBER@{WARNING\_COULD\_NOT\_RETRIEVE\_CORE\_NUMBER}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{WARNING\_COULD\_NOT\_RETRIEVE\_CORE\_NUMBER}{WARNING\_COULD\_NOT\_RETRIEVE\_CORE\_NUMBER}}
+{\footnotesize\ttfamily \label{errors_8h_afd982677fff51473bdd3b2143d4c5541} 
+\#define WARNING\+\_\+\+COULD\+\_\+\+NOT\+\_\+\+RETRIEVE\+\_\+\+CORE\+\_\+\+NUMBER~501}
+
+\Hypertarget{errors_8h_a78e6d84d00b431a93eafe2cdf4ea88e5}\index{errors.h@{errors.h}!WARNING\_QUEUE\_TOO\_SMALL@{WARNING\_QUEUE\_TOO\_SMALL}}
+\index{WARNING\_QUEUE\_TOO\_SMALL@{WARNING\_QUEUE\_TOO\_SMALL}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{WARNING\_QUEUE\_TOO\_SMALL}{WARNING\_QUEUE\_TOO\_SMALL}}
+{\footnotesize\ttfamily \label{errors_8h_a78e6d84d00b431a93eafe2cdf4ea88e5} 
+\#define WARNING\+\_\+\+QUEUE\+\_\+\+TOO\+\_\+\+SMALL~502}
+
+\Hypertarget{errors_8h_a79b3d881ea521ee0bd501694e050e00f}\index{errors.h@{errors.h}!WARNING\_RESIZING\_QUEUE@{WARNING\_RESIZING\_QUEUE}}
+\index{WARNING\_RESIZING\_QUEUE@{WARNING\_RESIZING\_QUEUE}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{WARNING\_RESIZING\_QUEUE}{WARNING\_RESIZING\_QUEUE}}
+{\footnotesize\ttfamily \label{errors_8h_a79b3d881ea521ee0bd501694e050e00f} 
+\#define WARNING\+\_\+\+RESIZING\+\_\+\+QUEUE~503}
+
+\Hypertarget{errors_8h_adeaaba44fe12abe4f77a8ddec7599fbb}\index{errors.h@{errors.h}!WARNING\_RESIZING\_STACK@{WARNING\_RESIZING\_STACK}}
+\index{WARNING\_RESIZING\_STACK@{WARNING\_RESIZING\_STACK}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{WARNING\_RESIZING\_STACK}{WARNING\_RESIZING\_STACK}}
+{\footnotesize\ttfamily \label{errors_8h_adeaaba44fe12abe4f77a8ddec7599fbb} 
+\#define WARNING\+\_\+\+RESIZING\+\_\+\+STACK~505}
+
+\Hypertarget{errors_8h_a5233b677b4adfbaa1e9ce2e0aa9dfe99}\index{errors.h@{errors.h}!WARNING\_STACK\_TOO\_SMALL@{WARNING\_STACK\_TOO\_SMALL}}
+\index{WARNING\_STACK\_TOO\_SMALL@{WARNING\_STACK\_TOO\_SMALL}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{WARNING\_STACK\_TOO\_SMALL}{WARNING\_STACK\_TOO\_SMALL}}
+{\footnotesize\ttfamily \label{errors_8h_a5233b677b4adfbaa1e9ce2e0aa9dfe99} 
+\#define WARNING\+\_\+\+STACK\+\_\+\+TOO\+\_\+\+SMALL~504}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{errors_8h_a02605c478875df486a1de7d24db32e3d}\index{errors.h@{errors.h}!throwError@{throwError}}
+\index{throwError@{throwError}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{throwError()}{throwError()}}
+{\footnotesize\ttfamily \label{errors_8h_a02605c478875df486a1de7d24db32e3d} 
+void throw\+Error (\begin{DoxyParamCaption}\item[{int}]{error\+Code}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{format}{, }\item[{}]{...}{}\end{DoxyParamCaption})}
+
+throws an error and then exists the program
+
+
+\begin{DoxyParams}{Parameters}
+{\em error\+Code} & the errorcode of the error \\
+\hline
+{\em format} & a char\texorpdfstring{$\ast$}{*} with an error message. Variables can be given as d, s, etc... \\
+\hline
+{\em ...} & any variable "{}declared"{} in format \\
+\hline
+\end{DoxyParams}
+\Hypertarget{errors_8h_ad44c7208abc0c1b8927ca26524f9c509}\index{errors.h@{errors.h}!throwWarning@{throwWarning}}
+\index{throwWarning@{throwWarning}!errors.h@{errors.h}}
+\doxysubsubsection{\texorpdfstring{throwWarning()}{throwWarning()}}
+{\footnotesize\ttfamily \label{errors_8h_ad44c7208abc0c1b8927ca26524f9c509} 
+void throw\+Warning (\begin{DoxyParamCaption}\item[{int}]{warning\+Code}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{format}{, }\item[{}]{...}{}\end{DoxyParamCaption})}
+
+throws a warning to stderr and then returns
+
+
+\begin{DoxyParams}{Parameters}
+{\em warning\+Code} & the warning\+Code of the warning \\
+\hline
+{\em format} & a char\texorpdfstring{$\ast$}{*} with the error message. Variables can be given as d, s, etc... \\
+\hline
+{\em ...} & any variables "{}declared"{} in format \\
+\hline
+\end{DoxyParams}

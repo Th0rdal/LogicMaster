@@ -1,0 +1,21 @@
+var searchData=
+[
+  ['error_5fconverting_5fchararray_5fto_5fint_0',['ERROR_CONVERTING_CHARARRAY_TO_INT',['../errors_8h.html#af4e51884063043458938c0525fb1b360',1,'errors.h']]],
+  ['error_5fcustom_5fstack_5foverflow_1',['ERROR_CUSTOM_STACK_OVERFLOW',['../errors_8h.html#ac6d16c9702a78188654719d652c58e80',1,'errors.h']]],
+  ['error_5fcustom_5fstack_5funderflow_2',['ERROR_CUSTOM_STACK_UNDERFLOW',['../errors_8h.html#a0fdf7f224a77ba5b87f2b3387c33348f',1,'errors.h']]],
+  ['error_5ffen_5fchar_5fnot_5fdefined_3',['ERROR_FEN_CHAR_NOT_DEFINED',['../errors_8h.html#a246900269a3234e8ed96ffd961556a69',1,'errors.h']]],
+  ['error_5ffen_5fnumber_5fconvertion_5fchar_5ftoo_5flarge_4',['ERROR_FEN_NUMBER_CONVERTION_CHAR_TOO_LARGE',['../errors_8h.html#a73b35fde1ef34df594a49db23fbc169f',1,'errors.h']]],
+  ['error_5ffetching_5ffen_5fpart_5',['ERROR_FETCHING_FEN_PART',['../errors_8h.html#abd496e81512de2c33eba2b6c3b806dda',1,'errors.h']]],
+  ['error_5fmemory_5fmalloc_5ffailed_6',['ERROR_MEMORY_MALLOC_FAILED',['../errors_8h.html#a3dd9acb980d8a0e61a1869899c7dbaa8',1,'errors.h']]],
+  ['error_5fmemory_5frealloc_5ffailed_7',['ERROR_MEMORY_REALLOC_FAILED',['../errors_8h.html#a22478f611a427b276fed8c4cf8baea6e',1,'errors.h']]],
+  ['error_5fnoinput_8',['ERROR_NOINPUT',['../errors_8h.html#a79caf300881c3e27ec51dc9b7d9404e8',1,'errors.h']]],
+  ['error_5fpiece_5fnot_5fselected_9',['ERROR_PIECE_NOT_SELECTED',['../errors_8h.html#aba8ebe18f86b7f7e98f3a9eb606cc614',1,'errors.h']]],
+  ['error_5fpiece_5fposition_5fcannot_5fbe_5fcalculated_10',['ERROR_PIECE_POSITION_CANNOT_BE_CALCULATED',['../errors_8h.html#ae158dce438c2051c4cab2886d85bf2a0',1,'errors.h']]],
+  ['error_5fposition_5fvalue_5foutside_5fexpected_11',['ERROR_POSITION_VALUE_OUTSIDE_EXPECTED',['../errors_8h.html#a9dd1e54d3c43e9253265191b4efa9b06',1,'errors.h']]],
+  ['error_5fpromotion_5fpiece_5funavailable_12',['ERROR_PROMOTION_PIECE_UNAVAILABLE',['../errors_8h.html#afb1f6fe0a716b1397a3b0579833d970e',1,'errors.h']]],
+  ['error_5fqueue_5ftoo_5fsmall_13',['ERROR_QUEUE_TOO_SMALL',['../errors_8h.html#afa25d217872ad6f630dc9378ede79357',1,'errors.h']]],
+  ['error_5fthreads_5fcreation_5ffailed_14',['ERROR_THREADS_CREATION_FAILED',['../errors_8h.html#a3d4504aa63dc4e483e4e9fcad9835708',1,'errors.h']]],
+  ['error_5fthreads_5ftimeout_15',['ERROR_THREADS_TIMEOUT',['../errors_8h.html#af8d39f04776d95af3704ab4b91472194',1,'errors.h']]],
+  ['error_5funknown_5fargument_16',['ERROR_UNKNOWN_ARGUMENT',['../errors_8h.html#ad114c9e8bfc7ead3dd235f33b5e47e50',1,'errors.h']]],
+  ['evaluation_5fsave_5fmemory_17',['EVALUATION_SAVE_MEMORY',['../config_8h.html#aaae0af485f2716707680715a3371b9e9',1,'config.h']]]
+];

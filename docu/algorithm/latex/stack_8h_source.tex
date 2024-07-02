@@ -1,0 +1,74 @@
+\doxysection{stack.\+h}
+\hypertarget{stack_8h_source}{}\label{stack_8h_source}\index{src/main/algorithm/include/structs/stack.h@{src/main/algorithm/include/structs/stack.h}}
+\mbox{\hyperlink{stack_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ STACK\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ STACK\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tree_8h}{structs/tree.h}}"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{config_8h}{config.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}\ \{}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{struct_evaluation_data_ae0562d3e0833896c508bc646d05f61f6}{state}};\ \textcolor{comment}{//\ if\ state\ =\ 0,\ push\ children.\ if\ state\ =\ 1,\ process\ evaluation}}
+\DoxyCodeLine{00009\ \ \ \ \ \mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}*\ \mbox{\hyperlink{struct_evaluation_data_ac22e4f3d3b0b86ba1d5d6f33122013e2}{node}};}
+\DoxyCodeLine{00010\ \}\ \mbox{\hyperlink{stack_8h_a2335d6b57673dd8ca665c6e0c355e6c4}{EvaluationData}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_evaluation_stack}{EvaluationStack}}\ \{}
+\DoxyCodeLine{00013\ \ \ \ \mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}**\ \mbox{\hyperlink{struct_evaluation_stack_a428528cfdefa855035f5aff0a9c34b84}{items}};}
+\DoxyCodeLine{00014\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_evaluation_stack_abc0e5e9022b6ad1cdc28007bd569167e}{top}};}
+\DoxyCodeLine{00015\ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_evaluation_stack_a556302fc5bc7c0d20f2c28fd324e6523}{MAX\_STACK\_SIZE}};}
+\DoxyCodeLine{00016\ \}\ \mbox{\hyperlink{stack_8h_aaa405e5c535ffb1d6e497550dd51ede1}{EvaluationStack}};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00024\ \mbox{\hyperlink{struct_evaluation_stack}{EvaluationStack}}*\ \mbox{\hyperlink{stack_8h_a140fcde40e53666482cec550bb7f0904}{initializeStack}}();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00034\ \mbox{\hyperlink{stack_8h_a7ca56dc12418565fe21999fe3e9d5920}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ isFull(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_evaluation_stack}{EvaluationStack}}*\ stack)\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordflow}{return}\ stack-\/>\mbox{\hyperlink{struct_evaluation_stack_abc0e5e9022b6ad1cdc28007bd569167e}{top}}\ ==\ stack-\/>\mbox{\hyperlink{struct_evaluation_stack_a556302fc5bc7c0d20f2c28fd324e6523}{MAX\_STACK\_SIZE}}\ -\/\ 1;}
+\DoxyCodeLine{00036\ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00046\ \mbox{\hyperlink{stack_8h_a7ca56dc12418565fe21999fe3e9d5920}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ isEmpty(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_evaluation_stack}{EvaluationStack}}*\ stack)\ \{}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordflow}{return}\ stack-\/>\mbox{\hyperlink{struct_evaluation_stack_abc0e5e9022b6ad1cdc28007bd569167e}{top}}\ ==\ -\/1;}
+\DoxyCodeLine{00048\ \}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00059\ \mbox{\hyperlink{stack_8h_a7ca56dc12418565fe21999fe3e9d5920}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ pushEvaluationStack(\mbox{\hyperlink{struct_evaluation_stack}{EvaluationStack}}*\ stack,\ \mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}*\ \mbox{\hyperlink{stack_8h_a718c1bf5a3bf21ebb980203b142e5b75}{data}})\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordflow}{if}\ (isFull(stack))\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{errors_8c_ad44c7208abc0c1b8927ca26524f9c509}{throwWarning}}(\mbox{\hyperlink{errors_8h_a5233b677b4adfbaa1e9ce2e0aa9dfe99}{WARNING\_STACK\_TOO\_SMALL}},\ \textcolor{stringliteral}{"{}Warning:\ The\ stack\ was\ too\ small"{}});}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#ifdef\ STACK\_RESIZE}}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{errors_8c_ad44c7208abc0c1b8927ca26524f9c509}{throwWarning}}(\mbox{\hyperlink{errors_8h_adeaaba44fe12abe4f77a8ddec7599fbb}{WARNING\_RESIZING\_STACK}},\ \textcolor{stringliteral}{"{}Warning:\ The\ stack\ was\ resized"{}});}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ stack-\/>\mbox{\hyperlink{struct_evaluation_stack_a556302fc5bc7c0d20f2c28fd324e6523}{MAX\_STACK\_SIZE}}\ *=\ 2;\ }
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}**\ temp\ =\ (\mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}**)realloc(stack-\/>\mbox{\hyperlink{struct_evaluation_stack_a428528cfdefa855035f5aff0a9c34b84}{items}},\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}*)\ *\ stack-\/>\mbox{\hyperlink{struct_evaluation_stack_a556302fc5bc7c0d20f2c28fd324e6523}{MAX\_STACK\_SIZE}});\ }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (temp\ ==\ NULL)\ \{}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{errors_8c_a61467adf8701f6418141bf4c2b5e755e}{throwError}}(\mbox{\hyperlink{errors_8h_a22478f611a427b276fed8c4cf8baea6e}{ERROR\_MEMORY\_REALLOC\_FAILED}},\ \textcolor{stringliteral}{"{}Error:\ failed\ to\ resize\ the\ stack\ items"{}});}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ stack-\/>\mbox{\hyperlink{struct_evaluation_stack_a428528cfdefa855035f5aff0a9c34b84}{items}}\ =\ temp;}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#ifndef\ STACK\_RESIZE}}
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{errors_8c_a61467adf8701f6418141bf4c2b5e755e}{throwError}}(\mbox{\hyperlink{errors_8h_ac6d16c9702a78188654719d652c58e80}{ERROR\_CUSTOM\_STACK\_OVERFLOW}},\ \textcolor{stringliteral}{"{}Error:\ trying\ to\ push\ on\ a\ full\ EvaluationStack"{}});}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#endif}}
+\DoxyCodeLine{00074\ \ \ \ \ \}}
+\DoxyCodeLine{00075\ \ \ \ \ stack-\/>\mbox{\hyperlink{struct_evaluation_stack_a428528cfdefa855035f5aff0a9c34b84}{items}}[++(stack-\/>\mbox{\hyperlink{struct_evaluation_stack_abc0e5e9022b6ad1cdc28007bd569167e}{top}})]\ =\ \mbox{\hyperlink{stack_8h_a718c1bf5a3bf21ebb980203b142e5b75}{data}};}
+\DoxyCodeLine{00076\ \}\ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00087\ \mbox{\hyperlink{stack_8h_a7ca56dc12418565fe21999fe3e9d5920}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}*\ popEvaluationStack(\mbox{\hyperlink{struct_evaluation_stack}{EvaluationStack}}*\ stack)\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordflow}{if}\ (isEmpty(stack))\ \{}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{errors_8c_a61467adf8701f6418141bf4c2b5e755e}{throwError}}(\mbox{\hyperlink{errors_8h_a0fdf7f224a77ba5b87f2b3387c33348f}{ERROR\_CUSTOM\_STACK\_UNDERFLOW}},\ \textcolor{stringliteral}{"{}Error:\ trying\ to\ pop\ from\ empty\ EvaluationStack"{}});}
+\DoxyCodeLine{00090\ \ \ \ \ \}}
+\DoxyCodeLine{00091\ \ \ \ \ \textcolor{keywordflow}{return}\ stack-\/>\mbox{\hyperlink{struct_evaluation_stack_a428528cfdefa855035f5aff0a9c34b84}{items}}[(stack-\/>\mbox{\hyperlink{struct_evaluation_stack_abc0e5e9022b6ad1cdc28007bd569167e}{top}})-\/-\/];}
+\DoxyCodeLine{00092\ \}}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00103\ \mbox{\hyperlink{stack_8h_a7ca56dc12418565fe21999fe3e9d5920}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}*\ peekEvaluationStack(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_evaluation_stack}{EvaluationStack}}*\ stack)\ \{}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordflow}{if}\ (isEmpty(stack))\ \{}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{errors_8c_a61467adf8701f6418141bf4c2b5e755e}{throwError}}(\mbox{\hyperlink{errors_8h_a0fdf7f224a77ba5b87f2b3387c33348f}{ERROR\_CUSTOM\_STACK\_UNDERFLOW}},\ \textcolor{stringliteral}{"{}Error:\ trying\ to\ peek\ from\ empty\ EvaluationStack"{}});}
+\DoxyCodeLine{00106\ \ \ \ \ \}}
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{keywordflow}{return}\ (stack-\/>\mbox{\hyperlink{struct_evaluation_stack_a428528cfdefa855035f5aff0a9c34b84}{items}}[stack-\/>\mbox{\hyperlink{struct_evaluation_stack_abc0e5e9022b6ad1cdc28007bd569167e}{top}}]);}
+\DoxyCodeLine{00108\ \}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00119\ \mbox{\hyperlink{stack_8h_a7ca56dc12418565fe21999fe3e9d5920}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ \mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}*\ createEvaluationData(\mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}*\ \mbox{\hyperlink{stack_8h_af5ef8329d9a89f522542bae387e68c06}{node}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{stack_8h_a275f5633395aa71f87a24f33d5686d5e}{state}})\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}*\ \mbox{\hyperlink{stack_8h_a718c1bf5a3bf21ebb980203b142e5b75}{data}}\ =\ (\mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}*)malloc(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{struct_evaluation_data}{EvaluationData}}));}
+\DoxyCodeLine{00121\ \ \ \ \ \mbox{\hyperlink{stack_8h_a718c1bf5a3bf21ebb980203b142e5b75}{data}}-\/>\mbox{\hyperlink{struct_evaluation_data_ac22e4f3d3b0b86ba1d5d6f33122013e2}{node}}\ =\ \mbox{\hyperlink{stack_8h_af5ef8329d9a89f522542bae387e68c06}{node}};}
+\DoxyCodeLine{00122\ \ \ \ \ \mbox{\hyperlink{stack_8h_a718c1bf5a3bf21ebb980203b142e5b75}{data}}-\/>\mbox{\hyperlink{struct_evaluation_data_ae0562d3e0833896c508bc646d05f61f6}{state}}\ =\ \mbox{\hyperlink{stack_8h_a275f5633395aa71f87a24f33d5686d5e}{state}};}
+\DoxyCodeLine{00123\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{stack_8h_a718c1bf5a3bf21ebb980203b142e5b75}{data}};}
+\DoxyCodeLine{00124\ \}}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

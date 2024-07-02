@@ -1,0 +1,50 @@
+\doxysection{move.\+h}
+\hypertarget{move_8h_source}{}\label{move_8h_source}\index{src/main/algorithm/include/structs/move.h@{src/main/algorithm/include/structs/move.h}}
+\mbox{\hyperlink{move_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MOVE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MOVE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{position_8h}{structs/position.h}}"{}}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}}\ \{}
+\DoxyCodeLine{00009\ \ \ \ \ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930daf9f748c8be10f498deb994733ce37df5}{NO\_PIECE}},}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930da1f189a15a64c7c4a1553e876b56c6bf2}{PAWN}},}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930da49b75ad9a5137e805c60f32ed9cc2820}{ROOK}},}
+\DoxyCodeLine{00012\ \ \ \ \ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930dad4a86ac7d51335fcb5756203a88612d6}{KNIGHT}},}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930da6bc4b5ac244475b6bd2595d608f18814}{BISHOP}},}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930da58561257be7e2f96f82c0fdb51d7f964}{QUEEN}},}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930da157524408d6f0fc4b7dc5e52f3dd3b80}{KING}}}
+\DoxyCodeLine{00016\ \};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_move_flags_a66f1910145577c14e9a8f5aabeaf2601}{capture}};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_move_flags_a26ad1c8537b6e011298e7cb8e0b10b6d}{promotion}};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_move_flags_a316518e32101497b3172c0db3d590609}{check}};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_move_flags_ad272ec4ef560b2127e47d4d8a3d08da5}{enPassant}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_move_flags_af9195f04a9acb2c0705d7d6ce55d350f}{checkmate}};}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_move_flags_a5a4ada33410a49fa994709a3a8de68e2}{draw}};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{bool}\ kCastle[2];}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{bool}\ qCastle[2];}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_move_flags_a38fed37dcfd0e6c4d4053df7c7315e53}{isWhiteTurn}};}
+\DoxyCodeLine{00031\ \}\ \mbox{\hyperlink{struct_move_flags}{MoveFlags}};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{enum}\ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}}\ \mbox{\hyperlink{struct_move_addb651548559da9b46b772d9d50c2f2f}{piece}};}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{struct_position}{Position}}\ \mbox{\hyperlink{struct_move_aac0b35534f7ba60ee08090099ae5ed78}{startPosition}};}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{struct_position}{Position}}\ \mbox{\hyperlink{struct_move_ab64e272bbcefdca1555705ba9c10c02e}{endPosition}};}
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{struct_move_flags}{MoveFlags}}\ \mbox{\hyperlink{struct_move_af262985d06535e1bec0683a0d6dd721f}{flags}};}
+\DoxyCodeLine{00038\ \}\ \mbox{\hyperlink{struct_move}{Move}};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00044\ \mbox{\hyperlink{struct_move}{Move}}\ \mbox{\hyperlink{move_8h_a68b718383ebfe8304c7d89765994996b}{moveInit}}();}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00053\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{move_8h_a0f2509f7ebd00fc5e689c2e05d31b7bb}{printMove}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_move}{Move}}*\ move,\ \textcolor{keywordtype}{char}*\ \textcolor{keywordtype}{string});}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

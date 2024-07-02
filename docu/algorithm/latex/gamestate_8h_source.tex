@@ -1,0 +1,71 @@
+\doxysection{gamestate.\+h}
+\hypertarget{gamestate_8h_source}{}\label{gamestate_8h_source}\index{src/main/algorithm/include/structs/gamestate.h@{src/main/algorithm/include/structs/gamestate.h}}
+\mbox{\hyperlink{gamestate_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ GAMESTATE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ GAMESTATE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_gamestate}{Gamestate}}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}};}
+\DoxyCodeLine{00007\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}\ \mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}};\ \textcolor{comment}{//\ forward\ declaration\ of\ tree\ struct}}
+\DoxyCodeLine{00008\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{bitboards_8h}{bitboards.h}}"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{position_8h}{position.h}}"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{move_8h}{move.h}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{tree_8h}{structs/tree.h}}"{}}}
+\DoxyCodeLine{00013\ \textcolor{comment}{//\#include\ "{}utility/moveCalculation.h"{}\ at\ the\ bottom\ as\ gamestate\ needs\ to\ be\ defined\ first}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_counters_a638a08f72c8f741be2239d4b26a3fa2c}{fullMove}};}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_counters_a8f2659317f0040ea2f01700470867f91}{halfMove}};}
+\DoxyCodeLine{00018\ \}\ \mbox{\hyperlink{struct_counters}{Counters}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{\ \textcolor{comment}{//\ all\ initialized\ to\ false}}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{bool}\ kCastle[2];\ \textcolor{comment}{//\ index\ 0\ =\ black,\ index\ 1\ =\ white}}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{bool}\ qCastle[2];}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_gamestate_flags_a3ac60133e4e32cc03eeedab843272ff7}{isWhiteTurn}};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_gamestate_flags_a5e2900e45e1a3a79f2124b728aad9794}{canEnPassant}};}
+\DoxyCodeLine{00025\ \}\ \mbox{\hyperlink{struct_gamestate_flags}{GamestateFlags}};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_gamestate_config_ad633614f9d89ee02273f43e677786ea4}{checkedCheck}};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ \mbox{\hyperlink{struct_gamestate_config_ac3767546b49d7af8d5ad439793925736}{lastGamestate}};\ \textcolor{comment}{//forward\ declaration}}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{struct_gamestate_config_a71db296f82a16f973f92770b8b8ad70a}{depth}};}
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}*\ \mbox{\hyperlink{struct_gamestate_config_ae5c3c6570ffb7bd8fcd482a722ce03ef}{parent}};}
+\DoxyCodeLine{00032\ \ \ \ \ \mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}*\ \mbox{\hyperlink{struct_gamestate_config_a7e56cc4f66d2aa4beac7d5f2fbaee31d}{node}};}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_gamestate_config_a90a7c1e347bbe39ff72d55d41bf79747}{evaluation}};}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_gamestate_config_ad1e1e8351fe50ba4739db63f82aece19}{averageEvaluation}};}
+\DoxyCodeLine{00035\ \}\ \mbox{\hyperlink{struct_gamestate_config}{GamestateConfig}};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_gamestate}{Gamestate}}\ \{}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{struct_bitboards}{Bitboards}}\ \mbox{\hyperlink{struct_gamestate_aaaeed120152297d622a76731481846a6}{bitboards}};}
+\DoxyCodeLine{00039\ \ \ \ \ \mbox{\hyperlink{struct_counters}{Counters}}\ \mbox{\hyperlink{struct_gamestate_a5183c80db3fa840b6b93a2684d9757ed}{counters}};}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{struct_gamestate_flags}{GamestateFlags}}\ \mbox{\hyperlink{struct_gamestate_a52f31bf5a14b6a9208616255cffb9335}{flags}};}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{struct_position}{Position}}\ \mbox{\hyperlink{struct_gamestate_aee4e47c020d9745c84d779d780255f9e}{enPassantPosition}};}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{struct_gamestate_config}{GamestateConfig}}\ \mbox{\hyperlink{struct_gamestate_a429efcc39bf0024835016b67a9b7f384}{config}};}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{struct_move}{Move}}\ \mbox{\hyperlink{struct_gamestate_a7c8ad5b7befdff55134671df0fe516d8}{move}};}
+\DoxyCodeLine{00044\ \}\ \mbox{\hyperlink{gamestate_8h_a84a411e7a8368ccca2d9e147f0c8de2d}{Gamestate}};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00052\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ \mbox{\hyperlink{gamestate_8h_acc4204ddd7d8ad0ae85f8fa6feda3d40}{gamestateInit}}();}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00060\ \mbox{\hyperlink{struct_counters}{Counters}}\ \mbox{\hyperlink{gamestate_8h_afd4940c3c987f24b5f64826775f9f22f}{countersInit}}();}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00068\ \mbox{\hyperlink{struct_gamestate_flags}{GamestateFlags}}\ \mbox{\hyperlink{gamestate_8h_a757dc1b6e0a9402f497aec432e47d553}{gamestateFlagInit}}();\ }
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00076\ \mbox{\hyperlink{struct_gamestate_config}{GamestateConfig}}\ \mbox{\hyperlink{gamestate_8h_a4024816c25c902ccf44e893f2a2ac1ab}{gamestateConfigInit}}();}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00084\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{gamestate_8h_a5c691c06488276a278904296974d20cd}{destroyGamestate}}(\mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate);}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00099\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{gamestate_8h_aa5afc044760b48619c4c3a359c72734c}{gamestateMakeMoveInternal}}(\mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ \mbox{\hyperlink{gamestate_8h_ab482139e3bfcf1ad744a5f0a6793d24a}{newGamestate}},\ \textcolor{keyword}{const}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}}\ piece,\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{gamestate_8h_a818ce1ed710aea0606d9f411008b51c9}{piecePosition}},\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{gamestate_8h_adad974fcef088bfdaf5af08162a25f31}{movePosition}},\ \textcolor{keyword}{const}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}}\ promotionPiece);}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00112\ \mbox{\hyperlink{gamestate_8h_a2348e4d6d4533726d3a1f0cbaab7fa84}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ gamestate\_makeMove(\mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ \mbox{\hyperlink{gamestate_8h_ab482139e3bfcf1ad744a5f0a6793d24a}{newGamestate}},\ \textcolor{keyword}{const}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}}\ piece,\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{gamestate_8h_a818ce1ed710aea0606d9f411008b51c9}{piecePosition}},\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{gamestate_8h_adad974fcef088bfdaf5af08162a25f31}{movePosition}})\ \{}
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{gamestate_8h_aa5afc044760b48619c4c3a359c72734c}{gamestateMakeMoveInternal}}(gamestate,\ \mbox{\hyperlink{gamestate_8h_ab482139e3bfcf1ad744a5f0a6793d24a}{newGamestate}},\ piece,\ \mbox{\hyperlink{gamestate_8h_a818ce1ed710aea0606d9f411008b51c9}{piecePosition}},\ \mbox{\hyperlink{gamestate_8h_adad974fcef088bfdaf5af08162a25f31}{movePosition}},\ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930daf9f748c8be10f498deb994733ce37df5}{NO\_PIECE}});}
+\DoxyCodeLine{00114\ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{comment}{//\ here\ because\ gamestate\ needs\ to\ be\ defined\ first}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{move_calculation_8h}{utility/moveCalculation.h}}"{}}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

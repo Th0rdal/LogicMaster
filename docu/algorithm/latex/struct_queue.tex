@@ -1,0 +1,73 @@
+\doxysection{Queue Struct Reference}
+\hypertarget{struct_queue}{}\label{struct_queue}\index{Queue@{Queue}}
+
+
+{\ttfamily \#include $<$queue.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_queue_a9ce6063c598fe437e7b71232304581ac}{data}}
+\item 
+int \mbox{\hyperlink{struct_queue_aa14801d5c5fea47f3d08483d103e0b57}{front}}
+\item 
+int \mbox{\hyperlink{struct_queue_a8303807ce298d63d958f7e5765034d70}{rear}}
+\item 
+int \mbox{\hyperlink{struct_queue_a37eb0195b359b95302008ff72a66a0bd}{max\+Size}}
+\item 
+CRITICAL\+\_\+\+SECTION \mbox{\hyperlink{struct_queue_aca4c78a433849e2d843b0d3cadbe795b}{lock}}
+\item 
+CONDITION\+\_\+\+VARIABLE \mbox{\hyperlink{struct_queue_a46119efe22ef14696614a9e127aaea45}{cond\+Enqueue}}
+\item 
+CONDITION\+\_\+\+VARIABLE \mbox{\hyperlink{struct_queue_a8afb71e29d5971b0ea2843355850c6ab}{cond\+Dequeue}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct_queue_a8afb71e29d5971b0ea2843355850c6ab}\index{Queue@{Queue}!condDequeue@{condDequeue}}
+\index{condDequeue@{condDequeue}!Queue@{Queue}}
+\doxysubsubsection{\texorpdfstring{condDequeue}{condDequeue}}
+{\footnotesize\ttfamily \label{struct_queue_a8afb71e29d5971b0ea2843355850c6ab} 
+CONDITION\+\_\+\+VARIABLE Queue\+::cond\+Dequeue}
+
+\Hypertarget{struct_queue_a46119efe22ef14696614a9e127aaea45}\index{Queue@{Queue}!condEnqueue@{condEnqueue}}
+\index{condEnqueue@{condEnqueue}!Queue@{Queue}}
+\doxysubsubsection{\texorpdfstring{condEnqueue}{condEnqueue}}
+{\footnotesize\ttfamily \label{struct_queue_a46119efe22ef14696614a9e127aaea45} 
+CONDITION\+\_\+\+VARIABLE Queue\+::cond\+Enqueue}
+
+\Hypertarget{struct_queue_a9ce6063c598fe437e7b71232304581ac}\index{Queue@{Queue}!data@{data}}
+\index{data@{data}!Queue@{Queue}}
+\doxysubsubsection{\texorpdfstring{data}{data}}
+{\footnotesize\ttfamily \label{struct_queue_a9ce6063c598fe437e7b71232304581ac} 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}}\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} Queue\+::data}
+
+\Hypertarget{struct_queue_aa14801d5c5fea47f3d08483d103e0b57}\index{Queue@{Queue}!front@{front}}
+\index{front@{front}!Queue@{Queue}}
+\doxysubsubsection{\texorpdfstring{front}{front}}
+{\footnotesize\ttfamily \label{struct_queue_aa14801d5c5fea47f3d08483d103e0b57} 
+int Queue\+::front}
+
+\Hypertarget{struct_queue_aca4c78a433849e2d843b0d3cadbe795b}\index{Queue@{Queue}!lock@{lock}}
+\index{lock@{lock}!Queue@{Queue}}
+\doxysubsubsection{\texorpdfstring{lock}{lock}}
+{\footnotesize\ttfamily \label{struct_queue_aca4c78a433849e2d843b0d3cadbe795b} 
+CRITICAL\+\_\+\+SECTION Queue\+::lock}
+
+\Hypertarget{struct_queue_a37eb0195b359b95302008ff72a66a0bd}\index{Queue@{Queue}!maxSize@{maxSize}}
+\index{maxSize@{maxSize}!Queue@{Queue}}
+\doxysubsubsection{\texorpdfstring{maxSize}{maxSize}}
+{\footnotesize\ttfamily \label{struct_queue_a37eb0195b359b95302008ff72a66a0bd} 
+int Queue\+::max\+Size}
+
+\Hypertarget{struct_queue_a8303807ce298d63d958f7e5765034d70}\index{Queue@{Queue}!rear@{rear}}
+\index{rear@{rear}!Queue@{Queue}}
+\doxysubsubsection{\texorpdfstring{rear}{rear}}
+{\footnotesize\ttfamily \label{struct_queue_a8303807ce298d63d958f7e5765034d70} 
+int Queue\+::rear}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/algorithm/include/structs/\mbox{\hyperlink{queue_8h}{queue.\+h}}\end{DoxyCompactItemize}
