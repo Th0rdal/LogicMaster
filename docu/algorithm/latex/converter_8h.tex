@@ -1,0 +1,34 @@
+\doxysection{src/main/algorithm/include/utility/converter.h File Reference}
+\hypertarget{converter_8h}{}\label{converter_8h}\index{src/main/algorithm/include/utility/converter.h@{src/main/algorithm/include/utility/converter.h}}
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+{\ttfamily \#include "{}errors.\+h"{}}\newline
+{\ttfamily \#include "{}structs/bitboards.\+h"{}}\newline
+{\ttfamily \#include "{}structs/gamestate.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{converter_8h_aecf8688e35c175b15309dc7b25f9d5ca}{fen\+To\+Bitboard}} (char \texorpdfstring{$\ast$}{*}fen, \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{converter_8h_aecf8688e35c175b15309dc7b25f9d5ca}\index{converter.h@{converter.h}!fenToBitboard@{fenToBitboard}}
+\index{fenToBitboard@{fenToBitboard}!converter.h@{converter.h}}
+\doxysubsubsection{\texorpdfstring{fenToBitboard()}{fenToBitboard()}}
+{\footnotesize\ttfamily \label{converter_8h_aecf8688e35c175b15309dc7b25f9d5ca} 
+void fen\+To\+Bitboard (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{fen}{, }\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+Converts a fen notation char array into a bitboard struct and writes it into the bitboard struct Expects en Passant position in format a-\/h1-\/8 e.\+g., a5, e3
+
+
+\begin{DoxyParams}{Parameters}
+{\em fen} & fen notation char array \\
+\hline
+{\em bitboards} & \doxylink{struct_bitboards}{Bitboards} struct pointer to empty bitboard \\
+\hline
+\end{DoxyParams}

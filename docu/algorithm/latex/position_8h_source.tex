@@ -1,0 +1,41 @@
+\doxysection{position.\+h}
+\hypertarget{position_8h_source}{}\label{position_8h_source}\index{src/main/algorithm/include/structs/position.h@{src/main/algorithm/include/structs/position.h}}
+\mbox{\hyperlink{position_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ POSITION\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ POSITION\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{errors_8h}{errors.h}}"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{\ \textcolor{comment}{//\ initialized\ to\ 0}}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{struct_position_a680f5c4f86f3e5e8c0b4a90f866485a0}{rank}};\ \textcolor{comment}{//\ row}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{struct_position_a225605a3eea1cced001a40b5b73af001}{file}};\ \textcolor{comment}{//column}}
+\DoxyCodeLine{00013\ \}\ \mbox{\hyperlink{struct_position}{Position}};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00021\ \mbox{\hyperlink{struct_position}{Position}}\ \mbox{\hyperlink{position_8h_a5450f1bf1ad192e6406714c7b82b01c9}{positionInit}}();}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00031\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{position_8h_a0e1b8c66cf72bf69c8b548379aaba496}{checkPositionValues}}(\mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}});}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00040\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{position_8h_a62049f188ebc31b3b95251c9f3f82444}{setPositionFromShort}}(\mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{short}\ number);}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00055\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{position_8h_a2d8d41fc7d109a69fb7b761a7ca5a940}{getAllPiecePositions}}(\textcolor{keyword}{const}\ uint64\_t\ bitboard,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{short}\ pieces);}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00066\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{position_8h_afbf3d93ffca3b7b1f2f88979d6dc98ae}{convertCharArrayToPosition}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ fenChar,\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}});}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00076\ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{position_8h_a99f4469e1e9074f527eb8bce45b21072}{getDiagonalIndexFromPosition}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}});}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00086\ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{position_8h_ad642504dd9e352088b356612ae7bc702}{getDiagonalIndexFromShort}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}});}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00096\ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{position_8h_a7131b285a2eae610b2ee6d80a39e04e4}{getAntiDiagonalIndexFromPosition}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}});}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00106\ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{position_8h_aedb4a543e80d840396ffa5f67107567f}{getAntiDiagonalIndexFromShort}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}});}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00116\ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{position_8h_a540ff43cc5977261cd61231109386728}{positionToShort}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}});}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

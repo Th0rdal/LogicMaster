@@ -1,0 +1,41 @@
+\doxysection{src/main/algorithm/include/utility/debugging.h File Reference}
+\hypertarget{debugging_8h}{}\label{debugging_8h}\index{src/main/algorithm/include/utility/debugging.h@{src/main/algorithm/include/utility/debugging.h}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include "{}structs/gamestate.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{debugging_8h_a56c60c6168b7d9915e5f319f3345b289}{print\+Board}} (uint64\+\_\+t board)
+\item 
+void \mbox{\hyperlink{debugging_8h_ae9d1cf0e4873de79081966daf56fa4f7}{debug\+Gamestate}} (\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{debugging_8h_ae9d1cf0e4873de79081966daf56fa4f7}\index{debugging.h@{debugging.h}!debugGamestate@{debugGamestate}}
+\index{debugGamestate@{debugGamestate}!debugging.h@{debugging.h}}
+\doxysubsubsection{\texorpdfstring{debugGamestate()}{debugGamestate()}}
+{\footnotesize\ttfamily \label{debugging_8h_ae9d1cf0e4873de79081966daf56fa4f7} 
+void debug\+Gamestate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+prints out all variables of gamestate
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & gamestate struct to print out \\
+\hline
+\end{DoxyParams}
+\Hypertarget{debugging_8h_a56c60c6168b7d9915e5f319f3345b289}\index{debugging.h@{debugging.h}!printBoard@{printBoard}}
+\index{printBoard@{printBoard}!debugging.h@{debugging.h}}
+\doxysubsubsection{\texorpdfstring{printBoard()}{printBoard()}}
+{\footnotesize\ttfamily \label{debugging_8h_a56c60c6168b7d9915e5f319f3345b289} 
+void print\+Board (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{board}{}\end{DoxyParamCaption})}
+
+prints a bitboard out in a chess board pattern
+
+
+\begin{DoxyParams}{Parameters}
+{\em board} & uint64\+\_\+t representing the bitboard \\
+\hline
+\end{DoxyParams}

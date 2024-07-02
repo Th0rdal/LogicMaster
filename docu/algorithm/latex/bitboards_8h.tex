@@ -1,0 +1,104 @@
+\doxysection{src/main/algorithm/include/structs/bitboards.h File Reference}
+\hypertarget{bitboards_8h}{}\label{bitboards_8h}\index{src/main/algorithm/include/structs/bitboards.h@{src/main/algorithm/include/structs/bitboards.h}}
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include "{}position.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_bitboards}{Bitboards}}
+\item 
+struct \mbox{\hyperlink{struct_file_bitboards}{File\+Bitboards}}
+\item 
+struct \mbox{\hyperlink{struct_rank_bitboards}{Rank\+Bitboards}}
+\item 
+struct \mbox{\hyperlink{struct_diagonal_bitboards}{Diagonal\+Bitboards}}
+\item 
+struct \mbox{\hyperlink{struct_move_dictionary}{Move\+Dictionary}}
+\item 
+struct \mbox{\hyperlink{struct_special_move_dictionary}{Special\+Move\+Dictionary}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_bitboards}{Bitboards}} \mbox{\hyperlink{bitboards_8h_adf89d63cbd40c9fe72117e0c7a44cb38}{bitboards\+Init}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{struct_file_bitboards}{File\+Bitboards}} \mbox{\hyperlink{bitboards_8h_af4607ff2b77a1fdb400149ec9990b7a3}{file\+Bitboards}}
+\item 
+const \mbox{\hyperlink{struct_rank_bitboards}{Rank\+Bitboards}} \mbox{\hyperlink{bitboards_8h_a9d82f0ee6b1690ca961bffb4de986994}{rank\+Bitboards}}
+\item 
+const \mbox{\hyperlink{struct_diagonal_bitboards}{Diagonal\+Bitboards}} \mbox{\hyperlink{bitboards_8h_aca3b91f570e453097d1a38c55b0825f0}{diagonal\+Bitboards}}
+\item 
+const \mbox{\hyperlink{struct_diagonal_bitboards}{Diagonal\+Bitboards}} \mbox{\hyperlink{bitboards_8h_aeb91645e1cd58f7e2eed4505392695b5}{anti\+Diagonal\+Bitboards}}
+\item 
+const \mbox{\hyperlink{struct_move_dictionary}{Move\+Dictionary}} \mbox{\hyperlink{bitboards_8h_ad2632000b5255f75c9e1eca8f2e5f29d}{knight\+Move\+Dictionary}}
+\item 
+const \mbox{\hyperlink{struct_move_dictionary}{Move\+Dictionary}} \mbox{\hyperlink{bitboards_8h_a624832c3bda31d6a38d91e8a0007b6d9}{king\+Move\+Dictionary}}
+\item 
+const \mbox{\hyperlink{struct_move_dictionary}{Move\+Dictionary}} \mbox{\hyperlink{bitboards_8h_a5b21d20fe91181a21878cdddf13b4cfc}{position\+Dictionary}}
+\item 
+const \mbox{\hyperlink{struct_special_move_dictionary}{Special\+Move\+Dictionary}} \mbox{\hyperlink{bitboards_8h_aae369e3c07155d6ccf9330947efbed91}{special\+Move\+Dictionary}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{bitboards_8h_adf89d63cbd40c9fe72117e0c7a44cb38}\index{bitboards.h@{bitboards.h}!bitboardsInit@{bitboardsInit}}
+\index{bitboardsInit@{bitboardsInit}!bitboards.h@{bitboards.h}}
+\doxysubsubsection{\texorpdfstring{bitboardsInit()}{bitboardsInit()}}
+{\footnotesize\ttfamily \label{bitboards_8h_adf89d63cbd40c9fe72117e0c7a44cb38} 
+\mbox{\hyperlink{struct_bitboards}{Bitboards}} bitboards\+Init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{bitboards_8h_aeb91645e1cd58f7e2eed4505392695b5}\index{bitboards.h@{bitboards.h}!antiDiagonalBitboards@{antiDiagonalBitboards}}
+\index{antiDiagonalBitboards@{antiDiagonalBitboards}!bitboards.h@{bitboards.h}}
+\doxysubsubsection{\texorpdfstring{antiDiagonalBitboards}{antiDiagonalBitboards}}
+{\footnotesize\ttfamily \label{bitboards_8h_aeb91645e1cd58f7e2eed4505392695b5} 
+const \mbox{\hyperlink{struct_diagonal_bitboards}{Diagonal\+Bitboards}} anti\+Diagonal\+Bitboards\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{bitboards_8h_aca3b91f570e453097d1a38c55b0825f0}\index{bitboards.h@{bitboards.h}!diagonalBitboards@{diagonalBitboards}}
+\index{diagonalBitboards@{diagonalBitboards}!bitboards.h@{bitboards.h}}
+\doxysubsubsection{\texorpdfstring{diagonalBitboards}{diagonalBitboards}}
+{\footnotesize\ttfamily \label{bitboards_8h_aca3b91f570e453097d1a38c55b0825f0} 
+const \mbox{\hyperlink{struct_diagonal_bitboards}{Diagonal\+Bitboards}} diagonal\+Bitboards\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{bitboards_8h_af4607ff2b77a1fdb400149ec9990b7a3}\index{bitboards.h@{bitboards.h}!fileBitboards@{fileBitboards}}
+\index{fileBitboards@{fileBitboards}!bitboards.h@{bitboards.h}}
+\doxysubsubsection{\texorpdfstring{fileBitboards}{fileBitboards}}
+{\footnotesize\ttfamily \label{bitboards_8h_af4607ff2b77a1fdb400149ec9990b7a3} 
+const \mbox{\hyperlink{struct_file_bitboards}{File\+Bitboards}} file\+Bitboards\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{bitboards_8h_a624832c3bda31d6a38d91e8a0007b6d9}\index{bitboards.h@{bitboards.h}!kingMoveDictionary@{kingMoveDictionary}}
+\index{kingMoveDictionary@{kingMoveDictionary}!bitboards.h@{bitboards.h}}
+\doxysubsubsection{\texorpdfstring{kingMoveDictionary}{kingMoveDictionary}}
+{\footnotesize\ttfamily \label{bitboards_8h_a624832c3bda31d6a38d91e8a0007b6d9} 
+const \mbox{\hyperlink{struct_move_dictionary}{Move\+Dictionary}} king\+Move\+Dictionary\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{bitboards_8h_ad2632000b5255f75c9e1eca8f2e5f29d}\index{bitboards.h@{bitboards.h}!knightMoveDictionary@{knightMoveDictionary}}
+\index{knightMoveDictionary@{knightMoveDictionary}!bitboards.h@{bitboards.h}}
+\doxysubsubsection{\texorpdfstring{knightMoveDictionary}{knightMoveDictionary}}
+{\footnotesize\ttfamily \label{bitboards_8h_ad2632000b5255f75c9e1eca8f2e5f29d} 
+const \mbox{\hyperlink{struct_move_dictionary}{Move\+Dictionary}} knight\+Move\+Dictionary\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{bitboards_8h_a5b21d20fe91181a21878cdddf13b4cfc}\index{bitboards.h@{bitboards.h}!positionDictionary@{positionDictionary}}
+\index{positionDictionary@{positionDictionary}!bitboards.h@{bitboards.h}}
+\doxysubsubsection{\texorpdfstring{positionDictionary}{positionDictionary}}
+{\footnotesize\ttfamily \label{bitboards_8h_a5b21d20fe91181a21878cdddf13b4cfc} 
+const \mbox{\hyperlink{struct_move_dictionary}{Move\+Dictionary}} position\+Dictionary\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{bitboards_8h_a9d82f0ee6b1690ca961bffb4de986994}\index{bitboards.h@{bitboards.h}!rankBitboards@{rankBitboards}}
+\index{rankBitboards@{rankBitboards}!bitboards.h@{bitboards.h}}
+\doxysubsubsection{\texorpdfstring{rankBitboards}{rankBitboards}}
+{\footnotesize\ttfamily \label{bitboards_8h_a9d82f0ee6b1690ca961bffb4de986994} 
+const \mbox{\hyperlink{struct_rank_bitboards}{Rank\+Bitboards}} rank\+Bitboards\hspace{0.3cm}{\ttfamily [extern]}}
+
+\Hypertarget{bitboards_8h_aae369e3c07155d6ccf9330947efbed91}\index{bitboards.h@{bitboards.h}!specialMoveDictionary@{specialMoveDictionary}}
+\index{specialMoveDictionary@{specialMoveDictionary}!bitboards.h@{bitboards.h}}
+\doxysubsubsection{\texorpdfstring{specialMoveDictionary}{specialMoveDictionary}}
+{\footnotesize\ttfamily \label{bitboards_8h_aae369e3c07155d6ccf9330947efbed91} 
+const \mbox{\hyperlink{struct_special_move_dictionary}{Special\+Move\+Dictionary}} special\+Move\+Dictionary\hspace{0.3cm}{\ttfamily [extern]}}
+

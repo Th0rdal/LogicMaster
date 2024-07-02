@@ -1,0 +1,65 @@
+\doxysection{Evaluation\+Thread\+Pool Struct Reference}
+\hypertarget{struct_evaluation_thread_pool}{}\label{struct_evaluation_thread_pool}\index{EvaluationThreadPool@{EvaluationThreadPool}}
+
+
+{\ttfamily \#include $<$evaluation.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+HANDLE \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_evaluation_thread_pool_a33ee774caa2182e0f84eb82ee909b837}{threads}}
+\item 
+int \mbox{\hyperlink{struct_evaluation_thread_pool_ae4aff24e68daaf170d520d40d09653b0}{max\+Threads}}
+\item 
+bool \mbox{\hyperlink{struct_evaluation_thread_pool_a4e85e1f1ec1d1d6addd52151786c9f23}{shutdown}}
+\item 
+int \mbox{\hyperlink{struct_evaluation_thread_pool_a4d8edee60a709a73267fc22a3aa307b2}{work\+Counter}}
+\item 
+\mbox{\hyperlink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_evaluation_thread_pool_a0b213e552861e86c29a9cc3773f66206}{src\+Tree}}
+\item 
+CRITICAL\+\_\+\+SECTION \mbox{\hyperlink{struct_evaluation_thread_pool_a622456d7b3a604259f238d9654d185e1}{lock}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct_evaluation_thread_pool_a622456d7b3a604259f238d9654d185e1}\index{EvaluationThreadPool@{EvaluationThreadPool}!lock@{lock}}
+\index{lock@{lock}!EvaluationThreadPool@{EvaluationThreadPool}}
+\doxysubsubsection{\texorpdfstring{lock}{lock}}
+{\footnotesize\ttfamily \label{struct_evaluation_thread_pool_a622456d7b3a604259f238d9654d185e1} 
+CRITICAL\+\_\+\+SECTION Evaluation\+Thread\+Pool\+::lock}
+
+\Hypertarget{struct_evaluation_thread_pool_ae4aff24e68daaf170d520d40d09653b0}\index{EvaluationThreadPool@{EvaluationThreadPool}!maxThreads@{maxThreads}}
+\index{maxThreads@{maxThreads}!EvaluationThreadPool@{EvaluationThreadPool}}
+\doxysubsubsection{\texorpdfstring{maxThreads}{maxThreads}}
+{\footnotesize\ttfamily \label{struct_evaluation_thread_pool_ae4aff24e68daaf170d520d40d09653b0} 
+int Evaluation\+Thread\+Pool\+::max\+Threads}
+
+\Hypertarget{struct_evaluation_thread_pool_a4e85e1f1ec1d1d6addd52151786c9f23}\index{EvaluationThreadPool@{EvaluationThreadPool}!shutdown@{shutdown}}
+\index{shutdown@{shutdown}!EvaluationThreadPool@{EvaluationThreadPool}}
+\doxysubsubsection{\texorpdfstring{shutdown}{shutdown}}
+{\footnotesize\ttfamily \label{struct_evaluation_thread_pool_a4e85e1f1ec1d1d6addd52151786c9f23} 
+bool Evaluation\+Thread\+Pool\+::shutdown}
+
+\Hypertarget{struct_evaluation_thread_pool_a0b213e552861e86c29a9cc3773f66206}\index{EvaluationThreadPool@{EvaluationThreadPool}!srcTree@{srcTree}}
+\index{srcTree@{srcTree}!EvaluationThreadPool@{EvaluationThreadPool}}
+\doxysubsubsection{\texorpdfstring{srcTree}{srcTree}}
+{\footnotesize\ttfamily \label{struct_evaluation_thread_pool_a0b213e552861e86c29a9cc3773f66206} 
+\mbox{\hyperlink{struct_gamestate_tree_node}{Gamestate\+Tree\+Node}}\texorpdfstring{$\ast$}{*} Evaluation\+Thread\+Pool\+::src\+Tree}
+
+\Hypertarget{struct_evaluation_thread_pool_a33ee774caa2182e0f84eb82ee909b837}\index{EvaluationThreadPool@{EvaluationThreadPool}!threads@{threads}}
+\index{threads@{threads}!EvaluationThreadPool@{EvaluationThreadPool}}
+\doxysubsubsection{\texorpdfstring{threads}{threads}}
+{\footnotesize\ttfamily \label{struct_evaluation_thread_pool_a33ee774caa2182e0f84eb82ee909b837} 
+HANDLE\texorpdfstring{$\ast$}{*} Evaluation\+Thread\+Pool\+::threads}
+
+\Hypertarget{struct_evaluation_thread_pool_a4d8edee60a709a73267fc22a3aa307b2}\index{EvaluationThreadPool@{EvaluationThreadPool}!workCounter@{workCounter}}
+\index{workCounter@{workCounter}!EvaluationThreadPool@{EvaluationThreadPool}}
+\doxysubsubsection{\texorpdfstring{workCounter}{workCounter}}
+{\footnotesize\ttfamily \label{struct_evaluation_thread_pool_a4d8edee60a709a73267fc22a3aa307b2} 
+int Evaluation\+Thread\+Pool\+::work\+Counter}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/algorithm/include/minimax/\mbox{\hyperlink{evaluation_8h}{evaluation.\+h}}\end{DoxyCompactItemize}

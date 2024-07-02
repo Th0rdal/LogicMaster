@@ -1,0 +1,73 @@
+\doxysection{Move\+Generation\+Thread\+Pool Struct Reference}
+\hypertarget{struct_move_generation_thread_pool}{}\label{struct_move_generation_thread_pool}\index{MoveGenerationThreadPool@{MoveGenerationThreadPool}}
+
+
+{\ttfamily \#include $<$preprocessing.\+h$>$}
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+HANDLE \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_move_generation_thread_pool_afea2f9920b2e04ded656a369d9b5e69e}{threads}}
+\item 
+int \mbox{\hyperlink{struct_move_generation_thread_pool_a720d9ea9c7fe4ac8d48f51acceb96874}{max\+Threads}}
+\item 
+\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_move_generation_thread_pool_ae57195d536435853452b3c04e88f48fb}{queue}}
+\item 
+bool \mbox{\hyperlink{struct_move_generation_thread_pool_a9a2e7b63db6074a640a05d290eb6bbf4}{shutdown}}
+\item 
+int64\+\_\+t \mbox{\hyperlink{struct_move_generation_thread_pool_a6ea21c02efbc2a42b59087303cafd872}{work\+Counter}}
+\item 
+int \mbox{\hyperlink{struct_move_generation_thread_pool_a637d23519b93ab7637481a4d9013072b}{max\+Depth}}
+\item 
+CRITICAL\+\_\+\+SECTION \mbox{\hyperlink{struct_move_generation_thread_pool_a9fcc530e49e3c23dcab5200083bdb4bc}{lock}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct_move_generation_thread_pool_a9fcc530e49e3c23dcab5200083bdb4bc}\index{MoveGenerationThreadPool@{MoveGenerationThreadPool}!lock@{lock}}
+\index{lock@{lock}!MoveGenerationThreadPool@{MoveGenerationThreadPool}}
+\doxysubsubsection{\texorpdfstring{lock}{lock}}
+{\footnotesize\ttfamily \label{struct_move_generation_thread_pool_a9fcc530e49e3c23dcab5200083bdb4bc} 
+CRITICAL\+\_\+\+SECTION Move\+Generation\+Thread\+Pool\+::lock}
+
+\Hypertarget{struct_move_generation_thread_pool_a637d23519b93ab7637481a4d9013072b}\index{MoveGenerationThreadPool@{MoveGenerationThreadPool}!maxDepth@{maxDepth}}
+\index{maxDepth@{maxDepth}!MoveGenerationThreadPool@{MoveGenerationThreadPool}}
+\doxysubsubsection{\texorpdfstring{maxDepth}{maxDepth}}
+{\footnotesize\ttfamily \label{struct_move_generation_thread_pool_a637d23519b93ab7637481a4d9013072b} 
+int Move\+Generation\+Thread\+Pool\+::max\+Depth}
+
+\Hypertarget{struct_move_generation_thread_pool_a720d9ea9c7fe4ac8d48f51acceb96874}\index{MoveGenerationThreadPool@{MoveGenerationThreadPool}!maxThreads@{maxThreads}}
+\index{maxThreads@{maxThreads}!MoveGenerationThreadPool@{MoveGenerationThreadPool}}
+\doxysubsubsection{\texorpdfstring{maxThreads}{maxThreads}}
+{\footnotesize\ttfamily \label{struct_move_generation_thread_pool_a720d9ea9c7fe4ac8d48f51acceb96874} 
+int Move\+Generation\+Thread\+Pool\+::max\+Threads}
+
+\Hypertarget{struct_move_generation_thread_pool_ae57195d536435853452b3c04e88f48fb}\index{MoveGenerationThreadPool@{MoveGenerationThreadPool}!queue@{queue}}
+\index{queue@{queue}!MoveGenerationThreadPool@{MoveGenerationThreadPool}}
+\doxysubsubsection{\texorpdfstring{queue}{queue}}
+{\footnotesize\ttfamily \label{struct_move_generation_thread_pool_ae57195d536435853452b3c04e88f48fb} 
+\mbox{\hyperlink{struct_queue}{Queue}}\texorpdfstring{$\ast$}{*} Move\+Generation\+Thread\+Pool\+::queue}
+
+\Hypertarget{struct_move_generation_thread_pool_a9a2e7b63db6074a640a05d290eb6bbf4}\index{MoveGenerationThreadPool@{MoveGenerationThreadPool}!shutdown@{shutdown}}
+\index{shutdown@{shutdown}!MoveGenerationThreadPool@{MoveGenerationThreadPool}}
+\doxysubsubsection{\texorpdfstring{shutdown}{shutdown}}
+{\footnotesize\ttfamily \label{struct_move_generation_thread_pool_a9a2e7b63db6074a640a05d290eb6bbf4} 
+bool Move\+Generation\+Thread\+Pool\+::shutdown}
+
+\Hypertarget{struct_move_generation_thread_pool_afea2f9920b2e04ded656a369d9b5e69e}\index{MoveGenerationThreadPool@{MoveGenerationThreadPool}!threads@{threads}}
+\index{threads@{threads}!MoveGenerationThreadPool@{MoveGenerationThreadPool}}
+\doxysubsubsection{\texorpdfstring{threads}{threads}}
+{\footnotesize\ttfamily \label{struct_move_generation_thread_pool_afea2f9920b2e04ded656a369d9b5e69e} 
+HANDLE\texorpdfstring{$\ast$}{*} Move\+Generation\+Thread\+Pool\+::threads}
+
+\Hypertarget{struct_move_generation_thread_pool_a6ea21c02efbc2a42b59087303cafd872}\index{MoveGenerationThreadPool@{MoveGenerationThreadPool}!workCounter@{workCounter}}
+\index{workCounter@{workCounter}!MoveGenerationThreadPool@{MoveGenerationThreadPool}}
+\doxysubsubsection{\texorpdfstring{workCounter}{workCounter}}
+{\footnotesize\ttfamily \label{struct_move_generation_thread_pool_a6ea21c02efbc2a42b59087303cafd872} 
+int64\+\_\+t Move\+Generation\+Thread\+Pool\+::work\+Counter}
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/algorithm/include/minimax/\mbox{\hyperlink{preprocessing_8h}{preprocessing.\+h}}\end{DoxyCompactItemize}

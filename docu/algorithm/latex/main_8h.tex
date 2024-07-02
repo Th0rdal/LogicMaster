@@ -1,0 +1,61 @@
+\doxysection{src/main/algorithm/include/main.h File Reference}
+\hypertarget{main_8h}{}\label{main_8h}\index{src/main/algorithm/include/main.h@{src/main/algorithm/include/main.h}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include "{}utility/converter.\+h"{}}\newline
+{\ttfamily \#include "{}utility/debugging.\+h"{}}\newline
+{\ttfamily \#include "{}structs/gamestate.\+h"{}}\newline
+{\ttfamily \#include "{}structs/bitboards.\+h"{}}\newline
+{\ttfamily \#include "{}minimax/minimax.\+h"{}}\newline
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{main_8h_a292484485655112baf1f1f40d51ea6fa}{INPUTFORMAT}} \{ \mbox{\hyperlink{main_8h_a292484485655112baf1f1f40d51ea6faac147929a0d4740f028e599eeabca7ec1}{FEN}}
+, \mbox{\hyperlink{main_8h_a292484485655112baf1f1f40d51ea6faac157bdf0b85a40d2619cbc8bc1ae5fe2}{NONE}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{main_8h_a77b0a0ea75a8eb822e6420c1430b60b6}{preprocessing}} (\mbox{\hyperlink{main_8h_a292484485655112baf1f1f40d51ea6fa}{INPUTFORMAT}} input\+Format, char \texorpdfstring{$\ast$}{*}input\+String, \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{main_8h_a292484485655112baf1f1f40d51ea6fa}\index{main.h@{main.h}!INPUTFORMAT@{INPUTFORMAT}}
+\index{INPUTFORMAT@{INPUTFORMAT}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{INPUTFORMAT}{INPUTFORMAT}}
+{\footnotesize\ttfamily \label{main_8h_a292484485655112baf1f1f40d51ea6fa} 
+enum \mbox{\hyperlink{main_8h_a292484485655112baf1f1f40d51ea6fa}{INPUTFORMAT}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{FEN@{FEN}!main.h@{main.h}}\index{main.h@{main.h}!FEN@{FEN}}}\Hypertarget{main_8h_a292484485655112baf1f1f40d51ea6faac147929a0d4740f028e599eeabca7ec1}\label{main_8h_a292484485655112baf1f1f40d51ea6fa} 
+FEN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NONE@{NONE}!main.h@{main.h}}\index{main.h@{main.h}!NONE@{NONE}}}\Hypertarget{main_8h_a292484485655112baf1f1f40d51ea6faac157bdf0b85a40d2619cbc8bc1ae5fe2}\label{main_8h_a292484485655112baf1f1f40d51ea6fa} 
+NONE&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8h_a77b0a0ea75a8eb822e6420c1430b60b6}\index{main.h@{main.h}!preprocessing@{preprocessing}}
+\index{preprocessing@{preprocessing}!main.h@{main.h}}
+\doxysubsubsection{\texorpdfstring{preprocessing()}{preprocessing()}}
+{\footnotesize\ttfamily \label{main_8h_a77b0a0ea75a8eb822e6420c1430b60b6} 
+void preprocessing (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{main_8h_a292484485655112baf1f1f40d51ea6fa}{INPUTFORMAT}}}]{input\+Format}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{input\+String}{, }\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+Brings input into a normed format (gamestate) before giving it to the algorithm
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+Format} & the INPUTFORMAT enum representing the format of the input string \\
+\hline
+{\em input\+String} & the given input string that will be converted into a gamestate \\
+\hline
+{\em gamestate} & the gamestate to save the convertion in\\
+\hline
+\end{DoxyParams}
+@exit\+: NOINPUT\+: if the input enum is not set or not recognized 

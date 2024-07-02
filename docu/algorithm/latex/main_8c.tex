@@ -1,0 +1,45 @@
+\doxysection{src/main/algorithm/src/main.c File Reference}
+\hypertarget{main_8c}{}\label{main_8c}\index{src/main/algorithm/src/main.c@{src/main/algorithm/src/main.c}}
+{\ttfamily \#include "{}main.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{main_8c_a77b0a0ea75a8eb822e6420c1430b60b6}{preprocessing}} (\mbox{\hyperlink{main_8h_a292484485655112baf1f1f40d51ea6fa}{INPUTFORMAT}} input\+Format, char \texorpdfstring{$\ast$}{*}input\+String, \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\item 
+void \mbox{\hyperlink{main_8c_ac2eef7caf4ebe8bde79b6bc40269b070}{postprocessing}} (\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\item 
+int \mbox{\hyperlink{main_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8c_a0ddf1224851353fc92bfbff6f499fa97}\index{main.c@{main.c}!main@{main}}
+\index{main@{main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily \label{main_8c_a0ddf1224851353fc92bfbff6f499fa97} 
+int main (\begin{DoxyParamCaption}\item[{int}]{argc}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{argv}{\mbox{[}$\,$\mbox{]}}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8c_ac2eef7caf4ebe8bde79b6bc40269b070}\index{main.c@{main.c}!postprocessing@{postprocessing}}
+\index{postprocessing@{postprocessing}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{postprocessing()}{postprocessing()}}
+{\footnotesize\ttfamily \label{main_8c_ac2eef7caf4ebe8bde79b6bc40269b070} 
+void postprocessing (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+\Hypertarget{main_8c_a77b0a0ea75a8eb822e6420c1430b60b6}\index{main.c@{main.c}!preprocessing@{preprocessing}}
+\index{preprocessing@{preprocessing}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{preprocessing()}{preprocessing()}}
+{\footnotesize\ttfamily \label{main_8c_a77b0a0ea75a8eb822e6420c1430b60b6} 
+void preprocessing (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{main_8h_a292484485655112baf1f1f40d51ea6fa}{INPUTFORMAT}}}]{input\+Format}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{input\+String}{, }\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+Brings input into a normed format (gamestate) before giving it to the algorithm
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+Format} & the INPUTFORMAT enum representing the format of the input string \\
+\hline
+{\em input\+String} & the given input string that will be converted into a gamestate \\
+\hline
+{\em gamestate} & the gamestate to save the convertion in\\
+\hline
+\end{DoxyParams}
+@exit\+: NOINPUT\+: if the input enum is not set or not recognized 

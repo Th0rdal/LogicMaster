@@ -1,0 +1,55 @@
+\doxysection{move\+Calculation.\+h}
+\hypertarget{move_calculation_8h_source}{}\label{move_calculation_8h_source}\index{src/main/algorithm/include/utility/moveCalculation.h@{src/main/algorithm/include/utility/moveCalculation.h}}
+\mbox{\hyperlink{move_calculation_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MOVECALCULATION\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MOVECALCULATION\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{utility_8h}{utility\(\backslash\)utility.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{position_8h}{structs\(\backslash\)position.h}}"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{gamestate_8h}{structs\(\backslash\)gamestate.h}}"{}}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00023\ uint64\_t\ \mbox{\hyperlink{move_calculation_8h_aec9cc9dea87aa3ef94be9822fd61c1e7}{pawnMovesWithSideSelection}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ forWhitePiece);}
+\DoxyCodeLine{00034\ \mbox{\hyperlink{move_calculation_8h_a19b1fb665bfad1275c3f80366d212ea0}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ uint64\_t\ pawnMoves(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})\ \{}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{move_calculation_8h_aec9cc9dea87aa3ef94be9822fd61c1e7}{pawnMovesWithSideSelection}}(gamestate,\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ !gamestate-\/>\mbox{\hyperlink{struct_gamestate_a52f31bf5a14b6a9208616255cffb9335}{flags}}.\mbox{\hyperlink{struct_gamestate_flags_a3ac60133e4e32cc03eeedab843272ff7}{isWhiteTurn}});}
+\DoxyCodeLine{00036\ \}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00048\ uint64\_t\ \mbox{\hyperlink{move_calculation_8h_a5493f89cd8743d1f3cd77a2cf2e2b2f4}{rookMovesWithSideSelection}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ forWhitePiece);}
+\DoxyCodeLine{00059\ \mbox{\hyperlink{move_calculation_8h_a19b1fb665bfad1275c3f80366d212ea0}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ uint64\_t\ rookMoves(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{move_calculation_8h_a5493f89cd8743d1f3cd77a2cf2e2b2f4}{rookMovesWithSideSelection}}(gamestate,\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ !gamestate-\/>\mbox{\hyperlink{struct_gamestate_a52f31bf5a14b6a9208616255cffb9335}{flags}}.\mbox{\hyperlink{struct_gamestate_flags_a3ac60133e4e32cc03eeedab843272ff7}{isWhiteTurn}});}
+\DoxyCodeLine{00061\ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00073\ uint64\_t\ \mbox{\hyperlink{move_calculation_8h_a23f483e1363cdab1a9188b6fd36cbc74}{knightMovesWithSideSelection}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ forWhitePiece);}
+\DoxyCodeLine{00084\ \mbox{\hyperlink{move_calculation_8h_a19b1fb665bfad1275c3f80366d212ea0}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ uint64\_t\ knightMoves(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{move_calculation_8h_a23f483e1363cdab1a9188b6fd36cbc74}{knightMovesWithSideSelection}}(gamestate,\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ !gamestate-\/>\mbox{\hyperlink{struct_gamestate_a52f31bf5a14b6a9208616255cffb9335}{flags}}.\mbox{\hyperlink{struct_gamestate_flags_a3ac60133e4e32cc03eeedab843272ff7}{isWhiteTurn}});}
+\DoxyCodeLine{00086\ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00098\ uint64\_t\ \mbox{\hyperlink{move_calculation_8h_af83d3657f5acf5e51e4d34d18536502f}{bishopMovesWithSideSelection}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ forWhitePiece);}
+\DoxyCodeLine{00109\ \mbox{\hyperlink{move_calculation_8h_a19b1fb665bfad1275c3f80366d212ea0}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ uint64\_t\ bishopMoves(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{move_calculation_8h_af83d3657f5acf5e51e4d34d18536502f}{bishopMovesWithSideSelection}}(gamestate,\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ !gamestate-\/>\mbox{\hyperlink{struct_gamestate_a52f31bf5a14b6a9208616255cffb9335}{flags}}.\mbox{\hyperlink{struct_gamestate_flags_a3ac60133e4e32cc03eeedab843272ff7}{isWhiteTurn}});}
+\DoxyCodeLine{00111\ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00123\ uint64\_t\ \mbox{\hyperlink{move_calculation_8h_abd922e0ed96d736455c83dccc1da418f}{queenMovesWithSideSelection}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ forWhitePiece);}
+\DoxyCodeLine{00134\ \mbox{\hyperlink{move_calculation_8h_a19b1fb665bfad1275c3f80366d212ea0}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ uint64\_t\ queenMoves(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})\ \{}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{move_calculation_8h_abd922e0ed96d736455c83dccc1da418f}{queenMovesWithSideSelection}}(gamestate,\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ !gamestate-\/>\mbox{\hyperlink{struct_gamestate_a52f31bf5a14b6a9208616255cffb9335}{flags}}.\mbox{\hyperlink{struct_gamestate_flags_a3ac60133e4e32cc03eeedab843272ff7}{isWhiteTurn}});}
+\DoxyCodeLine{00136\ \}}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00148\ uint64\_t\ \mbox{\hyperlink{move_calculation_8h_a4f81e011575e16adc40f0c063c77e15e}{kingMovesWithSideSelection}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ forWhitePiece);}
+\DoxyCodeLine{00159\ \mbox{\hyperlink{move_calculation_8h_a19b1fb665bfad1275c3f80366d212ea0}{\_\_attribute\_\_}}((always\_inline))\ \textcolor{keyword}{inline}\ uint64\_t\ kingMoves(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{move_calculation_8h_a4f81e011575e16adc40f0c063c77e15e}{kingMovesWithSideSelection}}(gamestate,\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ !gamestate-\/>\mbox{\hyperlink{struct_gamestate_a52f31bf5a14b6a9208616255cffb9335}{flags}}.\mbox{\hyperlink{struct_gamestate_flags_a3ac60133e4e32cc03eeedab843272ff7}{isWhiteTurn}});}
+\DoxyCodeLine{00161\ \}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00177\ uint64\_t\ \mbox{\hyperlink{move_calculation_8h_a25344c1adf9452c74eba64b52a68acc1}{squareAttacked}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}},\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ checkForWhite);}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00191\ uint64\_t\ \mbox{\hyperlink{move_calculation_8h_a5a42e210c7a2d227fdd59a3d04683182}{createPossibleMovesAfterCheck}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ kingPosition,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ forWhitePiece);}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00203\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{move_calculation_8h_a3e9c382aeb62a6a3a1a01d3aa40ed997}{makeMoveAndCheckLegal}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate,\ \textcolor{keyword}{const}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}}\ piece,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{gamestate_8h_a818ce1ed710aea0606d9f411008b51c9}{piecePosition}},\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_position}{Position}}*\ \mbox{\hyperlink{gamestate_8h_adad974fcef088bfdaf5af08162a25f31}{movePosition}});}
+\DoxyCodeLine{00204\ }
+\DoxyCodeLine{00205\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

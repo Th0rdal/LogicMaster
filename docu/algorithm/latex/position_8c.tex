@@ -1,0 +1,187 @@
+\doxysection{src/main/algorithm/src/structs/position.c File Reference}
+\hypertarget{position_8c}{}\label{position_8c}\index{src/main/algorithm/src/structs/position.c@{src/main/algorithm/src/structs/position.c}}
+{\ttfamily \#include "{}structs/position.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_position}{Position}} \mbox{\hyperlink{position_8c_a5450f1bf1ad192e6406714c7b82b01c9}{position\+Init}} ()
+\item 
+void \mbox{\hyperlink{position_8c_a0e1b8c66cf72bf69c8b548379aaba496}{check\+Position\+Values}} (\mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})
+\item 
+void \mbox{\hyperlink{position_8c_a62049f188ebc31b3b95251c9f3f82444}{set\+Position\+From\+Short}} (\mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}}, const short number)
+\item 
+\mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{position_8c_a2d8d41fc7d109a69fb7b761a7ca5a940}{get\+All\+Piece\+Positions}} (const uint64\+\_\+t bitboard, const short pieces)
+\item 
+void \mbox{\hyperlink{position_8c_afbf3d93ffca3b7b1f2f88979d6dc98ae}{convert\+Char\+Array\+To\+Position}} (const char \texorpdfstring{$\ast$}{*}fen\+Char, \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})
+\item 
+short \mbox{\hyperlink{position_8c_a99f4469e1e9074f527eb8bce45b21072}{get\+Diagonal\+Index\+From\+Position}} (const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})
+\item 
+short \mbox{\hyperlink{position_8c_ad642504dd9e352088b356612ae7bc702}{get\+Diagonal\+Index\+From\+Short}} (const short \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})
+\item 
+short \mbox{\hyperlink{position_8c_a7131b285a2eae610b2ee6d80a39e04e4}{get\+Anti\+Diagonal\+Index\+From\+Position}} (const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})
+\item 
+short \mbox{\hyperlink{position_8c_aedb4a543e80d840396ffa5f67107567f}{get\+Anti\+Diagonal\+Index\+From\+Short}} (const short \mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})
+\item 
+short \mbox{\hyperlink{position_8c_a540ff43cc5977261cd61231109386728}{position\+To\+Short}} (const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}\mbox{\hyperlink{move_calculation_8h_a0cba79494eb2ea98920c12f6f7748fd1}{position}})
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{position_8c_a0e1b8c66cf72bf69c8b548379aaba496}\index{position.c@{position.c}!checkPositionValues@{checkPositionValues}}
+\index{checkPositionValues@{checkPositionValues}!position.c@{position.c}}
+\doxysubsubsection{\texorpdfstring{checkPositionValues()}{checkPositionValues()}}
+{\footnotesize\ttfamily \label{position_8c_a0e1b8c66cf72bf69c8b548379aaba496} 
+void check\+Position\+Values (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{}\end{DoxyParamCaption})}
+
+chceks if the values of \doxylink{struct_position}{Position} struct is within the defined values 1-\/8
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & the position to check\\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+ERROR\+\_\+\+POSITION\+\_\+\+VALUE\+\_\+\+OUTSIDE\+\_\+\+EXPECTED\+: if a value is outside of the defined values 
+\end{DoxyWarning}
+\Hypertarget{position_8c_afbf3d93ffca3b7b1f2f88979d6dc98ae}\index{position.c@{position.c}!convertCharArrayToPosition@{convertCharArrayToPosition}}
+\index{convertCharArrayToPosition@{convertCharArrayToPosition}!position.c@{position.c}}
+\doxysubsubsection{\texorpdfstring{convertCharArrayToPosition()}{convertCharArrayToPosition()}}
+{\footnotesize\ttfamily \label{position_8c_afbf3d93ffca3b7b1f2f88979d6dc98ae} 
+void convert\+Char\+Array\+To\+Position (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{fen\+Char}{, }\item[{\mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{}\end{DoxyParamCaption})}
+
+convert a char Array to a position. This function expects a char array with length 2. All further characters will be ignored!
+
+
+\begin{DoxyParams}{Parameters}
+{\em fen\+Char} & char array with the position to convert \\
+\hline
+{\em position} & \doxylink{struct_position}{Position} struct to save the position in\\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+ERROR\+\_\+\+POSITION\+\_\+\+VALUE\+\_\+\+OUTSIDE\+\_\+\+EXPECTED\+: either value cannot be converted to number between 1 and 8 or is not defined 
+\end{DoxyWarning}
+\Hypertarget{position_8c_a2d8d41fc7d109a69fb7b761a7ca5a940}\index{position.c@{position.c}!getAllPiecePositions@{getAllPiecePositions}}
+\index{getAllPiecePositions@{getAllPiecePositions}!position.c@{position.c}}
+\doxysubsubsection{\texorpdfstring{getAllPiecePositions()}{getAllPiecePositions()}}
+{\footnotesize\ttfamily \label{position_8c_a2d8d41fc7d109a69fb7b761a7ca5a940} 
+\mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*} get\+All\+Piece\+Positions (\begin{DoxyParamCaption}\item[{const uint64\+\_\+t}]{bitboard}{, }\item[{const short}]{pieces}{}\end{DoxyParamCaption})}
+
+returns a \doxylink{struct_position}{Position} array with all positions that are within the bitboard. A position is set, if the bit at the position is 1 RESULT NEEDS TO BE FREED No pieces should be filtered out before calling this function. Will return pointer to nothing. Must still be freed
+
+
+\begin{DoxyParams}{Parameters}
+{\em bitboard} & uint64\+\_\+t bitboard with the positions \\
+\hline
+{\em pieces} & short with the amount of 1 in the bitboard. Can be calculated with \+\_\+\+\_\+builtin\+\_\+popcountll which counts all 1\\
+\hline
+\end{DoxyParams}
+\begin{DoxyWarning}{Warning}
+ERROR\+\_\+\+POSITION\+\_\+\+VALUE\+\_\+\+OUTSIDE\+\_\+\+EXPECTED\+: if the position value is not between 1 \texorpdfstring{$<$}{<}= x \texorpdfstring{$<$}{<}= 8 
+\end{DoxyWarning}
+\Hypertarget{position_8c_a7131b285a2eae610b2ee6d80a39e04e4}\index{position.c@{position.c}!getAntiDiagonalIndexFromPosition@{getAntiDiagonalIndexFromPosition}}
+\index{getAntiDiagonalIndexFromPosition@{getAntiDiagonalIndexFromPosition}!position.c@{position.c}}
+\doxysubsubsection{\texorpdfstring{getAntiDiagonalIndexFromPosition()}{getAntiDiagonalIndexFromPosition()}}
+{\footnotesize\ttfamily \label{position_8c_a7131b285a2eae610b2ee6d80a39e04e4} 
+short get\+Anti\+Diagonal\+Index\+From\+Position (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{}\end{DoxyParamCaption})}
+
+converts the position into the index needed for the anti-\/diagonal
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & the position to convert\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: index of anti-\/diagonal 
+\end{DoxyReturn}
+\Hypertarget{position_8c_aedb4a543e80d840396ffa5f67107567f}\index{position.c@{position.c}!getAntiDiagonalIndexFromShort@{getAntiDiagonalIndexFromShort}}
+\index{getAntiDiagonalIndexFromShort@{getAntiDiagonalIndexFromShort}!position.c@{position.c}}
+\doxysubsubsection{\texorpdfstring{getAntiDiagonalIndexFromShort()}{getAntiDiagonalIndexFromShort()}}
+{\footnotesize\ttfamily \label{position_8c_aedb4a543e80d840396ffa5f67107567f} 
+short get\+Anti\+Diagonal\+Index\+From\+Short (\begin{DoxyParamCaption}\item[{const short}]{position}{}\end{DoxyParamCaption})}
+
+converts the position into the index needed for the anti-\/diagonal
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & the position to convert\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: index of anti-\/diagonal 
+\end{DoxyReturn}
+\Hypertarget{position_8c_a99f4469e1e9074f527eb8bce45b21072}\index{position.c@{position.c}!getDiagonalIndexFromPosition@{getDiagonalIndexFromPosition}}
+\index{getDiagonalIndexFromPosition@{getDiagonalIndexFromPosition}!position.c@{position.c}}
+\doxysubsubsection{\texorpdfstring{getDiagonalIndexFromPosition()}{getDiagonalIndexFromPosition()}}
+{\footnotesize\ttfamily \label{position_8c_a99f4469e1e9074f527eb8bce45b21072} 
+short get\+Diagonal\+Index\+From\+Position (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{}\end{DoxyParamCaption})}
+
+converts the position into the index needed for the diagonal
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & the position to convert\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: index of diagonal 
+\end{DoxyReturn}
+\Hypertarget{position_8c_ad642504dd9e352088b356612ae7bc702}\index{position.c@{position.c}!getDiagonalIndexFromShort@{getDiagonalIndexFromShort}}
+\index{getDiagonalIndexFromShort@{getDiagonalIndexFromShort}!position.c@{position.c}}
+\doxysubsubsection{\texorpdfstring{getDiagonalIndexFromShort()}{getDiagonalIndexFromShort()}}
+{\footnotesize\ttfamily \label{position_8c_ad642504dd9e352088b356612ae7bc702} 
+short get\+Diagonal\+Index\+From\+Short (\begin{DoxyParamCaption}\item[{const short}]{position}{}\end{DoxyParamCaption})}
+
+converts the position into the index needed for the diagonal
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & the position to convert\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: index of diagonal 
+\end{DoxyReturn}
+\Hypertarget{position_8c_a5450f1bf1ad192e6406714c7b82b01c9}\index{position.c@{position.c}!positionInit@{positionInit}}
+\index{positionInit@{positionInit}!position.c@{position.c}}
+\doxysubsubsection{\texorpdfstring{positionInit()}{positionInit()}}
+{\footnotesize\ttfamily \label{position_8c_a5450f1bf1ad192e6406714c7b82b01c9} 
+\mbox{\hyperlink{struct_position}{Position}} position\+Init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+creates and initializes a \doxylink{struct_position}{Position} struct. Initialization with 0
+
+\begin{DoxyReturn}{Returns}
+\+: initialized \doxylink{struct_position}{Position} struct 
+\end{DoxyReturn}
+\Hypertarget{position_8c_a540ff43cc5977261cd61231109386728}\index{position.c@{position.c}!positionToShort@{positionToShort}}
+\index{positionToShort@{positionToShort}!position.c@{position.c}}
+\doxysubsubsection{\texorpdfstring{positionToShort()}{positionToShort()}}
+{\footnotesize\ttfamily \label{position_8c_a540ff43cc5977261cd61231109386728} 
+short position\+To\+Short (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{}\end{DoxyParamCaption})}
+
+converts a position to a short.
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & the position to convert\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: index of the square represented by the position 
+\end{DoxyReturn}
+\Hypertarget{position_8c_a62049f188ebc31b3b95251c9f3f82444}\index{position.c@{position.c}!setPositionFromShort@{setPositionFromShort}}
+\index{setPositionFromShort@{setPositionFromShort}!position.c@{position.c}}
+\doxysubsubsection{\texorpdfstring{setPositionFromShort()}{setPositionFromShort()}}
+{\footnotesize\ttfamily \label{position_8c_a62049f188ebc31b3b95251c9f3f82444} 
+void set\+Position\+From\+Short (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_position}{Position}} \texorpdfstring{$\ast$}{*}}]{position}{, }\item[{const short}]{number}{}\end{DoxyParamCaption})}
+
+fills given position struct based on the number given in short. 0 = A8, 7 = A1
+
+
+\begin{DoxyParams}{Parameters}
+{\em position} & pointer to position struct that should be written to \\
+\hline
+{\em number} & short number that represents the position \\
+\hline
+\end{DoxyParams}

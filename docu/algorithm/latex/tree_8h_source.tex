@@ -1,0 +1,48 @@
+\doxysection{tree.\+h}
+\hypertarget{tree_8h_source}{}\label{tree_8h_source}\index{src/main/algorithm/include/structs/tree.h@{src/main/algorithm/include/structs/tree.h}}
+\mbox{\hyperlink{tree_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TREE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ TREE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <windows.h>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{gamestate_8h}{structs/gamestate.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{errors_8h}{errors.h}}"{}}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}\ \mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_gamestate_tree_branch}{GamestateTreeBranch}}\ \mbox{\hyperlink{struct_gamestate_tree_branch}{GamestateTreeBranch}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_gamestate_tree_branch}{GamestateTreeBranch}}\ \{}
+\DoxyCodeLine{00013\ \ \ \ \ \mbox{\hyperlink{struct_gamestate_tree_branch}{GamestateTreeBranch}}*\ \mbox{\hyperlink{struct_gamestate_tree_branch_ab83ac0d4277bb263c0379d34dc2add1d}{next}};}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{struct_gamestate_tree_branch}{GamestateTreeBranch}}*\ \mbox{\hyperlink{struct_gamestate_tree_branch_a77377fa3e0ca617a639cb61092938507}{prev}};}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}*\ \mbox{\hyperlink{struct_gamestate_tree_branch_a38f6c3a797daa4a920bff2fb9d6bbd19}{node}};}
+\DoxyCodeLine{00016\ \}\ \mbox{\hyperlink{tree_8h_abb93fc06b07637970b274999760475f3}{GamestateTreeBranch}};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ \mbox{\hyperlink{struct_gamestate_tree_node_ae5e258dcfcd364fa5d20f878980166a1}{gamestate}};}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{struct_gamestate_tree_branch}{GamestateTreeBranch}}*\ \mbox{\hyperlink{struct_gamestate_tree_node_a8dc6d3e7c4972b2b0ed74e9acf5ad3fe}{children}};}
+\DoxyCodeLine{00021\ \}\ \mbox{\hyperlink{tree_8h_ab8adacef989671d7375e1d736ffabe74}{GamestateTreeNode}};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}*\ \mbox{\hyperlink{struct_gamestate_tree_a8e1879634993efc438d981438598c124}{head}};}
+\DoxyCodeLine{00025\ \ \ \ \ CRITICAL\_SECTION\ \mbox{\hyperlink{struct_gamestate_tree_acb604667cd1821b19758fdd2703b82af}{lock}};}
+\DoxyCodeLine{00026\ \}\ \mbox{\hyperlink{struct_gamestate_tree}{GamestateTree}};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{comment}{//\ initialize\ tree\ needs\ to\ be\ called\ before\ this\ variable\ can\ be\ used\ correctly}}
+\DoxyCodeLine{00029\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{struct_gamestate_tree}{GamestateTree}}*\ \mbox{\hyperlink{tree_8h_a3335f34fe4e4347e866f3b322ae8ae32}{tree}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00035\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{tree_8h_ae03cd5138ed6b2a741996aebf934c069}{initializeTree}}();}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00045\ \mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}*\ \mbox{\hyperlink{tree_8h_a6e267f7b93fae4870e2cce6f3106b762}{createGamestateTreeNode}}(\mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate);}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00054\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{tree_8h_a139616ff5f4d91944ca247abc4ee8db3}{destroyGamestateTreeNodeWithInside}}(\mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}*\ \mbox{\hyperlink{stack_8h_af5ef8329d9a89f522542bae387e68c06}{node}});}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00063\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{tree_8h_a863e64b7063d39e0bf258806d08a1745}{destroyGamestateTreeBranchWithInside}}(\mbox{\hyperlink{struct_gamestate_tree_branch}{GamestateTreeBranch}}*\ branch);}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00073\ \mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}*\ \mbox{\hyperlink{tree_8h_ac9e0ff95d09337f9974a6c6bf712bcbe}{criticalCreateGamestateTreeNode}}(\textcolor{keyword}{struct}\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{tree_8h_aa50f2a17ec220501b95ba76e5f48db6d}{size}}(\mbox{\hyperlink{struct_gamestate_tree_node}{GamestateTreeNode}}*\ \mbox{\hyperlink{stack_8h_af5ef8329d9a89f522542bae387e68c06}{node}});}
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

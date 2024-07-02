@@ -1,0 +1,42 @@
+\doxysection{queue.\+h}
+\hypertarget{queue_8h_source}{}\label{queue_8h_source}\index{src/main/algorithm/include/structs/queue.h@{src/main/algorithm/include/structs/queue.h}}
+\mbox{\hyperlink{queue_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ QUEUE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ QUEUE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{//this\ is\ a\ THREAT\ SAVE\ queue}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <windows.h>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{gamestate_8h}{structs/gamestate.h}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{config_8h}{config.h}}"{}}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{queue_8h_aa925d707306dd8a4376d80bba0e546d8}{QUEUE\_SIZE\_BASE}}\ =\ 15;}
+\DoxyCodeLine{00015\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{queue_8h_a188b1a707ddacdb9640a653a086bd772}{QUEUE\_SIZE\_MULTIPLIER}}\ =\ 75;}
+\DoxyCodeLine{00016\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{queue_8h_ad222af9fc6845f00de76338762b44a66}{ENQUEUE\_WAIT\_TIME}}\ =\ 1500;}
+\DoxyCodeLine{00017\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{queue_8h_a03d855633a71dbe796c2bbc3d5edc54c}{DEQUEUE\_WAIT\_TIME}}\ =\ 100;}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{struct_gamestate}{Gamestate}}**\ \mbox{\hyperlink{struct_queue_a9ce6063c598fe437e7b71232304581ac}{data}};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_queue_aa14801d5c5fea47f3d08483d103e0b57}{front}};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_queue_a8303807ce298d63d958f7e5765034d70}{rear}};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_queue_a37eb0195b359b95302008ff72a66a0bd}{maxSize}};}
+\DoxyCodeLine{00024\ \ \ \ \ CRITICAL\_SECTION\ \mbox{\hyperlink{struct_queue_aca4c78a433849e2d843b0d3cadbe795b}{lock}};}
+\DoxyCodeLine{00025\ \ \ \ \ CONDITION\_VARIABLE\ \mbox{\hyperlink{struct_queue_a46119efe22ef14696614a9e127aaea45}{condEnqueue}};\ \textcolor{comment}{//\ waiting\ in\ enqueue\ when\ queue\ full}}
+\DoxyCodeLine{00026\ \ \ \ \ CONDITION\_VARIABLE\ \mbox{\hyperlink{struct_queue_a8afb71e29d5971b0ea2843355850c6ab}{condDequeue}};\ \textcolor{comment}{//\ waiting\ in\ dequeue\ when\ queue\ is\ empty}}
+\DoxyCodeLine{00027\ \}\ \mbox{\hyperlink{struct_queue}{Queue}};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00035\ \mbox{\hyperlink{struct_queue}{Queue}}*\ \mbox{\hyperlink{queue_8h_a9aa85e51775cc7e4ae6ac074d5dc0a3a}{queueInit}}(\textcolor{keywordtype}{int}\ maxDepth);}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00044\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{queue_8h_a15db704869a91d668bf937fa66e0377a}{enqueue}}(\mbox{\hyperlink{struct_queue}{Queue}}*\ queue,\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ gamestate);}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00052\ \mbox{\hyperlink{struct_gamestate}{Gamestate}}*\ \mbox{\hyperlink{queue_8h_a4e0f475174ceb2036058f703992f2afb}{dequeue}}(\mbox{\hyperlink{struct_queue}{Queue}}*\ queue);}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00058\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{queue_8h_a8a899da05d64478f11cd6524a09e6843}{destroyQueue}}(\mbox{\hyperlink{struct_queue}{Queue}}*\ queue);}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

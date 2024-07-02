@@ -1,0 +1,64 @@
+\doxysection{src/main/algorithm/src/structs/queue.c File Reference}
+\hypertarget{queue_8c}{}\label{queue_8c}\index{src/main/algorithm/src/structs/queue.c@{src/main/algorithm/src/structs/queue.c}}
+{\ttfamily \#include "{}structs/queue.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{queue_8c_a9aa85e51775cc7e4ae6ac074d5dc0a3a}{queue\+Init}} (int max\+Depth)
+\item 
+void \mbox{\hyperlink{queue_8c_a15db704869a91d668bf937fa66e0377a}{enqueue}} (\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}queue, \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\item 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{queue_8c_a4e0f475174ceb2036058f703992f2afb}{dequeue}} (\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}queue)
+\item 
+void \mbox{\hyperlink{queue_8c_a8a899da05d64478f11cd6524a09e6843}{destroy\+Queue}} (\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}queue)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{queue_8c_a4e0f475174ceb2036058f703992f2afb}\index{queue.c@{queue.c}!dequeue@{dequeue}}
+\index{dequeue@{dequeue}!queue.c@{queue.c}}
+\doxysubsubsection{\texorpdfstring{dequeue()}{dequeue()}}
+{\footnotesize\ttfamily \label{queue_8c_a4e0f475174ceb2036058f703992f2afb} 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*} dequeue (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}}]{queue}{}\end{DoxyParamCaption})}
+
+gets the first gamestate of the queue
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & the queue to get the gamestate from \\
+\hline
+\end{DoxyParams}
+\Hypertarget{queue_8c_a8a899da05d64478f11cd6524a09e6843}\index{queue.c@{queue.c}!destroyQueue@{destroyQueue}}
+\index{destroyQueue@{destroyQueue}!queue.c@{queue.c}}
+\doxysubsubsection{\texorpdfstring{destroyQueue()}{destroyQueue()}}
+{\footnotesize\ttfamily \label{queue_8c_a8a899da05d64478f11cd6524a09e6843} 
+void destroy\+Queue (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}}]{queue}{}\end{DoxyParamCaption})}
+
+destroies the queue struct and all fields in it \Hypertarget{queue_8c_a15db704869a91d668bf937fa66e0377a}\index{queue.c@{queue.c}!enqueue@{enqueue}}
+\index{enqueue@{enqueue}!queue.c@{queue.c}}
+\doxysubsubsection{\texorpdfstring{enqueue()}{enqueue()}}
+{\footnotesize\ttfamily \label{queue_8c_a15db704869a91d668bf937fa66e0377a} 
+void enqueue (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}}]{queue}{, }\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+adds a \doxylink{struct_gamestate}{Gamestate} to the queue
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & the queue to add the gamestate to \\
+\hline
+{\em gamestate} & the gamestate to add \\
+\hline
+\end{DoxyParams}
+\Hypertarget{queue_8c_a9aa85e51775cc7e4ae6ac074d5dc0a3a}\index{queue.c@{queue.c}!queueInit@{queueInit}}
+\index{queueInit@{queueInit}!queue.c@{queue.c}}
+\doxysubsubsection{\texorpdfstring{queueInit()}{queueInit()}}
+{\footnotesize\ttfamily \label{queue_8c_a9aa85e51775cc7e4ae6ac074d5dc0a3a} 
+\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*} queue\+Init (\begin{DoxyParamCaption}\item[{int}]{max\+Depth}{}\end{DoxyParamCaption})}
+
+initializes the queue struct
+
+
+\begin{DoxyParams}{Parameters}
+{\em max\+Depth} & a value that will be multiplied with QUEUE\+\_\+\+SIZE\+\_\+\+BASE to determine the queue size \\
+\hline
+\end{DoxyParams}

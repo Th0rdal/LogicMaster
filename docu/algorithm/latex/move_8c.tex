@@ -1,0 +1,42 @@
+\doxysection{src/main/algorithm/src/structs/move.c File Reference}
+\hypertarget{move_8c}{}\label{move_8c}\index{src/main/algorithm/src/structs/move.c@{src/main/algorithm/src/structs/move.c}}
+{\ttfamily \#include "{}structs/move.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_move_flags}{Move\+Flags}} \mbox{\hyperlink{move_8c_a63e46d93cb09be90c212de06a9543a29}{move\+Flags\+Init}} ()
+\item 
+\mbox{\hyperlink{struct_move}{Move}} \mbox{\hyperlink{move_8c_a68b718383ebfe8304c7d89765994996b}{move\+Init}} ()
+\item 
+void \mbox{\hyperlink{move_8c_a0f2509f7ebd00fc5e689c2e05d31b7bb}{print\+Move}} (const \mbox{\hyperlink{struct_move}{Move}} \texorpdfstring{$\ast$}{*}move, char \texorpdfstring{$\ast$}{*}string)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{move_8c_a63e46d93cb09be90c212de06a9543a29}\index{move.c@{move.c}!moveFlagsInit@{moveFlagsInit}}
+\index{moveFlagsInit@{moveFlagsInit}!move.c@{move.c}}
+\doxysubsubsection{\texorpdfstring{moveFlagsInit()}{moveFlagsInit()}}
+{\footnotesize\ttfamily \label{move_8c_a63e46d93cb09be90c212de06a9543a29} 
+\mbox{\hyperlink{struct_move_flags}{Move\+Flags}} move\+Flags\+Init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{move_8c_a68b718383ebfe8304c7d89765994996b}\index{move.c@{move.c}!moveInit@{moveInit}}
+\index{moveInit@{moveInit}!move.c@{move.c}}
+\doxysubsubsection{\texorpdfstring{moveInit()}{moveInit()}}
+{\footnotesize\ttfamily \label{move_8c_a68b718383ebfe8304c7d89765994996b} 
+\mbox{\hyperlink{struct_move}{Move}} move\+Init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+initializes the \doxylink{struct_move}{Move} struct \Hypertarget{move_8c_a0f2509f7ebd00fc5e689c2e05d31b7bb}\index{move.c@{move.c}!printMove@{printMove}}
+\index{printMove@{printMove}!move.c@{move.c}}
+\doxysubsubsection{\texorpdfstring{printMove()}{printMove()}}
+{\footnotesize\ttfamily \label{move_8c_a0f2509f7ebd00fc5e689c2e05d31b7bb} 
+void print\+Move (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_move}{Move}} \texorpdfstring{$\ast$}{*}}]{move}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{string}{}\end{DoxyParamCaption})}
+
+creates the given chess move in long notation and saves it in the given char\texorpdfstring{$\ast$}{*}
+
+
+\begin{DoxyParams}{Parameters}
+{\em move} & The move to print \\
+\hline
+{\em string} & the char\texorpdfstring{$\ast$}{*} to save the result in \\
+\hline
+\end{DoxyParams}

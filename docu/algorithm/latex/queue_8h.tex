@@ -1,0 +1,112 @@
+\doxysection{src/main/algorithm/include/structs/queue.h File Reference}
+\hypertarget{queue_8h}{}\label{queue_8h}\index{src/main/algorithm/include/structs/queue.h@{src/main/algorithm/include/structs/queue.h}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$windows.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include "{}structs/gamestate.\+h"{}}\newline
+{\ttfamily \#include "{}config.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_queue}{Queue}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{queue_8h_a9aa85e51775cc7e4ae6ac074d5dc0a3a}{queue\+Init}} (int max\+Depth)
+\item 
+void \mbox{\hyperlink{queue_8h_a15db704869a91d668bf937fa66e0377a}{enqueue}} (\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}queue, \mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
+\item 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{queue_8h_a4e0f475174ceb2036058f703992f2afb}{dequeue}} (\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}queue)
+\item 
+void \mbox{\hyperlink{queue_8h_a8a899da05d64478f11cd6524a09e6843}{destroy\+Queue}} (\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}queue)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+static const int \mbox{\hyperlink{queue_8h_aa925d707306dd8a4376d80bba0e546d8}{QUEUE\+\_\+\+SIZE\+\_\+\+BASE}} = 15
+\item 
+static const int \mbox{\hyperlink{queue_8h_a188b1a707ddacdb9640a653a086bd772}{QUEUE\+\_\+\+SIZE\+\_\+\+MULTIPLIER}} = 75
+\item 
+static const int \mbox{\hyperlink{queue_8h_ad222af9fc6845f00de76338762b44a66}{ENQUEUE\+\_\+\+WAIT\+\_\+\+TIME}} = 1500
+\item 
+static const int \mbox{\hyperlink{queue_8h_a03d855633a71dbe796c2bbc3d5edc54c}{DEQUEUE\+\_\+\+WAIT\+\_\+\+TIME}} = 100
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{queue_8h_a4e0f475174ceb2036058f703992f2afb}\index{queue.h@{queue.h}!dequeue@{dequeue}}
+\index{dequeue@{dequeue}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{dequeue()}{dequeue()}}
+{\footnotesize\ttfamily \label{queue_8h_a4e0f475174ceb2036058f703992f2afb} 
+\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*} dequeue (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}}]{queue}{}\end{DoxyParamCaption})}
+
+gets the first gamestate of the queue
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & the queue to get the gamestate from \\
+\hline
+\end{DoxyParams}
+\Hypertarget{queue_8h_a8a899da05d64478f11cd6524a09e6843}\index{queue.h@{queue.h}!destroyQueue@{destroyQueue}}
+\index{destroyQueue@{destroyQueue}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{destroyQueue()}{destroyQueue()}}
+{\footnotesize\ttfamily \label{queue_8h_a8a899da05d64478f11cd6524a09e6843} 
+void destroy\+Queue (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}}]{queue}{}\end{DoxyParamCaption})}
+
+destroies the queue struct and all fields in it \Hypertarget{queue_8h_a15db704869a91d668bf937fa66e0377a}\index{queue.h@{queue.h}!enqueue@{enqueue}}
+\index{enqueue@{enqueue}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{enqueue()}{enqueue()}}
+{\footnotesize\ttfamily \label{queue_8h_a15db704869a91d668bf937fa66e0377a} 
+void enqueue (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*}}]{queue}{, }\item[{\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}}]{gamestate}{}\end{DoxyParamCaption})}
+
+adds a \doxylink{struct_gamestate}{Gamestate} to the queue
+
+
+\begin{DoxyParams}{Parameters}
+{\em queue} & the queue to add the gamestate to \\
+\hline
+{\em gamestate} & the gamestate to add \\
+\hline
+\end{DoxyParams}
+\Hypertarget{queue_8h_a9aa85e51775cc7e4ae6ac074d5dc0a3a}\index{queue.h@{queue.h}!queueInit@{queueInit}}
+\index{queueInit@{queueInit}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{queueInit()}{queueInit()}}
+{\footnotesize\ttfamily \label{queue_8h_a9aa85e51775cc7e4ae6ac074d5dc0a3a} 
+\mbox{\hyperlink{struct_queue}{Queue}} \texorpdfstring{$\ast$}{*} queue\+Init (\begin{DoxyParamCaption}\item[{int}]{max\+Depth}{}\end{DoxyParamCaption})}
+
+initializes the queue struct
+
+
+\begin{DoxyParams}{Parameters}
+{\em max\+Depth} & a value that will be multiplied with QUEUE\+\_\+\+SIZE\+\_\+\+BASE to determine the queue size \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{queue_8h_a03d855633a71dbe796c2bbc3d5edc54c}\index{queue.h@{queue.h}!DEQUEUE\_WAIT\_TIME@{DEQUEUE\_WAIT\_TIME}}
+\index{DEQUEUE\_WAIT\_TIME@{DEQUEUE\_WAIT\_TIME}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{DEQUEUE\_WAIT\_TIME}{DEQUEUE\_WAIT\_TIME}}
+{\footnotesize\ttfamily \label{queue_8h_a03d855633a71dbe796c2bbc3d5edc54c} 
+const int DEQUEUE\+\_\+\+WAIT\+\_\+\+TIME = 100\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{queue_8h_ad222af9fc6845f00de76338762b44a66}\index{queue.h@{queue.h}!ENQUEUE\_WAIT\_TIME@{ENQUEUE\_WAIT\_TIME}}
+\index{ENQUEUE\_WAIT\_TIME@{ENQUEUE\_WAIT\_TIME}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{ENQUEUE\_WAIT\_TIME}{ENQUEUE\_WAIT\_TIME}}
+{\footnotesize\ttfamily \label{queue_8h_ad222af9fc6845f00de76338762b44a66} 
+const int ENQUEUE\+\_\+\+WAIT\+\_\+\+TIME = 1500\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{queue_8h_aa925d707306dd8a4376d80bba0e546d8}\index{queue.h@{queue.h}!QUEUE\_SIZE\_BASE@{QUEUE\_SIZE\_BASE}}
+\index{QUEUE\_SIZE\_BASE@{QUEUE\_SIZE\_BASE}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{QUEUE\_SIZE\_BASE}{QUEUE\_SIZE\_BASE}}
+{\footnotesize\ttfamily \label{queue_8h_aa925d707306dd8a4376d80bba0e546d8} 
+const int QUEUE\+\_\+\+SIZE\+\_\+\+BASE = 15\hspace{0.3cm}{\ttfamily [static]}}
+
+\Hypertarget{queue_8h_a188b1a707ddacdb9640a653a086bd772}\index{queue.h@{queue.h}!QUEUE\_SIZE\_MULTIPLIER@{QUEUE\_SIZE\_MULTIPLIER}}
+\index{QUEUE\_SIZE\_MULTIPLIER@{QUEUE\_SIZE\_MULTIPLIER}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{QUEUE\_SIZE\_MULTIPLIER}{QUEUE\_SIZE\_MULTIPLIER}}
+{\footnotesize\ttfamily \label{queue_8h_a188b1a707ddacdb9640a653a086bd772} 
+const int QUEUE\+\_\+\+SIZE\+\_\+\+MULTIPLIER = 75\hspace{0.3cm}{\ttfamily [static]}}
+

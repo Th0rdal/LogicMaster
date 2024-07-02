@@ -1,0 +1,42 @@
+\doxysection{src/main/algorithm/include/utility/utility.h File Reference}
+\hypertarget{utility_8h}{}\label{utility_8h}\index{src/main/algorithm/include/utility/utility.h@{src/main/algorithm/include/utility/utility.h}}
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include "{}errors.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{utility_8h_ab8d6dbbf276d5766fdd27423a4b4ee49}{convert\+Char\+Array\+To\+Int}} (char \texorpdfstring{$\ast$}{*}char\+Number)
+\item 
+uint64\+\_\+t \mbox{\hyperlink{utility_8h_ae6a10284270912f55cb7604364e245fc}{reverse\+Bitboard}} (uint64\+\_\+t bitboard)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{utility_8h_ab8d6dbbf276d5766fdd27423a4b4ee49}\index{utility.h@{utility.h}!convertCharArrayToInt@{convertCharArrayToInt}}
+\index{convertCharArrayToInt@{convertCharArrayToInt}!utility.h@{utility.h}}
+\doxysubsubsection{\texorpdfstring{convertCharArrayToInt()}{convertCharArrayToInt()}}
+{\footnotesize\ttfamily \label{utility_8h_ab8d6dbbf276d5766fdd27423a4b4ee49} 
+int convert\+Char\+Array\+To\+Int (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{char\+Number}{}\end{DoxyParamCaption})}
+
+converts a char array into an integer. Allows negative number
+
+
+\begin{DoxyParams}{Parameters}
+{\em char\+Number} & pointer to array to convert to number\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: integer representing the char array 
+\end{DoxyReturn}
+\begin{DoxyWarning}{Warning}
+ERROR\+\_\+\+CONVERTING\+\_\+\+CHARARRAY\+\_\+\+TO\+\_\+\+INT\+: if there is an unexpected character in the array 
+\end{DoxyWarning}
+\Hypertarget{utility_8h_ae6a10284270912f55cb7604364e245fc}\index{utility.h@{utility.h}!reverseBitboard@{reverseBitboard}}
+\index{reverseBitboard@{reverseBitboard}!utility.h@{utility.h}}
+\doxysubsubsection{\texorpdfstring{reverseBitboard()}{reverseBitboard()}}
+{\footnotesize\ttfamily \label{utility_8h_ae6a10284270912f55cb7604364e245fc} 
+uint64\+\_\+t reverse\+Bitboard (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{bitboard}{}\end{DoxyParamCaption})}
+

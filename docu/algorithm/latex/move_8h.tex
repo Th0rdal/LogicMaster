@@ -1,0 +1,95 @@
+\doxysection{src/main/algorithm/include/structs/move.h File Reference}
+\hypertarget{move_8h}{}\label{move_8h}\index{src/main/algorithm/include/structs/move.h@{src/main/algorithm/include/structs/move.h}}
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}structs/position.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_move_flags}{Move\+Flags}}
+\item 
+struct \mbox{\hyperlink{struct_move}{Move}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}} \{ \newline
+\mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930daf9f748c8be10f498deb994733ce37df5}{NO\+\_\+\+PIECE}}
+, \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930da1f189a15a64c7c4a1553e876b56c6bf2}{PAWN}}
+, \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930da49b75ad9a5137e805c60f32ed9cc2820}{ROOK}}
+, \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930dad4a86ac7d51335fcb5756203a88612d6}{KNIGHT}}
+, \newline
+\mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930da6bc4b5ac244475b6bd2595d608f18814}{BISHOP}}
+, \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930da58561257be7e2f96f82c0fdb51d7f964}{QUEEN}}
+, \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930da157524408d6f0fc4b7dc5e52f3dd3b80}{KING}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_move}{Move}} \mbox{\hyperlink{move_8h_a68b718383ebfe8304c7d89765994996b}{move\+Init}} ()
+\item 
+void \mbox{\hyperlink{move_8h_a0f2509f7ebd00fc5e689c2e05d31b7bb}{print\+Move}} (const \mbox{\hyperlink{struct_move}{Move}} \texorpdfstring{$\ast$}{*}move, char \texorpdfstring{$\ast$}{*}string)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}\index{move.h@{move.h}!PIECE@{PIECE}}
+\index{PIECE@{PIECE}!move.h@{move.h}}
+\doxysubsubsection{\texorpdfstring{PIECE}{PIECE}}
+{\footnotesize\ttfamily \label{move_8h_a30867d32ae0c776ddd66b07a2f4d930d} 
+enum \mbox{\hyperlink{move_8h_a30867d32ae0c776ddd66b07a2f4d930d}{PIECE}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NO\_PIECE@{NO\_PIECE}!move.h@{move.h}}\index{move.h@{move.h}!NO\_PIECE@{NO\_PIECE}}}\Hypertarget{move_8h_a30867d32ae0c776ddd66b07a2f4d930daf9f748c8be10f498deb994733ce37df5}\label{move_8h_a30867d32ae0c776ddd66b07a2f4d930d} 
+NO\+\_\+\+PIECE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PAWN@{PAWN}!move.h@{move.h}}\index{move.h@{move.h}!PAWN@{PAWN}}}\Hypertarget{move_8h_a30867d32ae0c776ddd66b07a2f4d930da1f189a15a64c7c4a1553e876b56c6bf2}\label{move_8h_a30867d32ae0c776ddd66b07a2f4d930d} 
+PAWN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ROOK@{ROOK}!move.h@{move.h}}\index{move.h@{move.h}!ROOK@{ROOK}}}\Hypertarget{move_8h_a30867d32ae0c776ddd66b07a2f4d930da49b75ad9a5137e805c60f32ed9cc2820}\label{move_8h_a30867d32ae0c776ddd66b07a2f4d930d} 
+ROOK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{KNIGHT@{KNIGHT}!move.h@{move.h}}\index{move.h@{move.h}!KNIGHT@{KNIGHT}}}\Hypertarget{move_8h_a30867d32ae0c776ddd66b07a2f4d930dad4a86ac7d51335fcb5756203a88612d6}\label{move_8h_a30867d32ae0c776ddd66b07a2f4d930d} 
+KNIGHT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BISHOP@{BISHOP}!move.h@{move.h}}\index{move.h@{move.h}!BISHOP@{BISHOP}}}\Hypertarget{move_8h_a30867d32ae0c776ddd66b07a2f4d930da6bc4b5ac244475b6bd2595d608f18814}\label{move_8h_a30867d32ae0c776ddd66b07a2f4d930d} 
+BISHOP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{QUEEN@{QUEEN}!move.h@{move.h}}\index{move.h@{move.h}!QUEEN@{QUEEN}}}\Hypertarget{move_8h_a30867d32ae0c776ddd66b07a2f4d930da58561257be7e2f96f82c0fdb51d7f964}\label{move_8h_a30867d32ae0c776ddd66b07a2f4d930d} 
+QUEEN&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{KING@{KING}!move.h@{move.h}}\index{move.h@{move.h}!KING@{KING}}}\Hypertarget{move_8h_a30867d32ae0c776ddd66b07a2f4d930da157524408d6f0fc4b7dc5e52f3dd3b80}\label{move_8h_a30867d32ae0c776ddd66b07a2f4d930d} 
+KING&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{move_8h_a68b718383ebfe8304c7d89765994996b}\index{move.h@{move.h}!moveInit@{moveInit}}
+\index{moveInit@{moveInit}!move.h@{move.h}}
+\doxysubsubsection{\texorpdfstring{moveInit()}{moveInit()}}
+{\footnotesize\ttfamily \label{move_8h_a68b718383ebfe8304c7d89765994996b} 
+\mbox{\hyperlink{struct_move}{Move}} move\+Init (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+initializes the \doxylink{struct_move}{Move} struct \Hypertarget{move_8h_a0f2509f7ebd00fc5e689c2e05d31b7bb}\index{move.h@{move.h}!printMove@{printMove}}
+\index{printMove@{printMove}!move.h@{move.h}}
+\doxysubsubsection{\texorpdfstring{printMove()}{printMove()}}
+{\footnotesize\ttfamily \label{move_8h_a0f2509f7ebd00fc5e689c2e05d31b7bb} 
+void print\+Move (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{struct_move}{Move}} \texorpdfstring{$\ast$}{*}}]{move}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{string}{}\end{DoxyParamCaption})}
+
+creates the given chess move in long notation and saves it in the given char\texorpdfstring{$\ast$}{*}
+
+
+\begin{DoxyParams}{Parameters}
+{\em move} & The move to print \\
+\hline
+{\em string} & the char\texorpdfstring{$\ast$}{*} to save the result in \\
+\hline
+\end{DoxyParams}

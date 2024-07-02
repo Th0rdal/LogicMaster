@@ -1,0 +1,59 @@
+\doxysection{errors.\+h}
+\hypertarget{errors_8h_source}{}\label{errors_8h_source}\index{src/main/algorithm/include/errors.h@{src/main/algorithm/include/errors.h}}
+\mbox{\hyperlink{errors_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ERRORCODES\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ERRORCODES\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stdarg.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <ctype.h>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ memory\ }}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ ERROR\_MEMORY\_MALLOC\_FAILED\ 10}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ ERROR\_MEMORY\_REALLOC\_FAILED\ 11}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{comment}{//\ threads}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ ERROR\_THREADS\_CREATION\_FAILED\ 15}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ ERROR\_THREADS\_TIMEOUT\ 16}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ basic\ data\ structs}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ ERROR\_CUSTOM\_STACK\_OVERFLOW\ 21}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ ERROR\_CUSTOM\_STACK\_UNDERFLOW\ 22}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ ERROR\_QUEUE\_TOO\_SMALL\ 25}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ no\ input\ to\ program}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ ERROR\_NOINPUT\ 40}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ ERROR\_UNKNOWN\_ARGUMENT\ 41}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{//fen\ convertion\ errors}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ ERROR\_FEN\_CHAR\_NOT\_DEFINED\ 100}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ ERROR\_FEN\_NUMBER\_CONVERTION\_CHAR\_TOO\_LARGE\ 102\ }}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ ERROR\_FETCHING\_FEN\_PART\ 103}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{//\ utility\ errors}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ ERROR\_CONVERTING\_CHARARRAY\_TO\_INT\ 104}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{comment}{//\ position\ errors}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ ERROR\_POSITION\_VALUE\_OUTSIDE\_EXPECTED\ 110}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ ERROR\_PIECE\_POSITION\_CANNOT\_BE\_CALCULATED\ 111}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ ERROR\_PROMOTION\_PIECE\_UNAVAILABLE\ 112}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{comment}{//\ move\ generation}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ ERROR\_PIECE\_NOT\_SELECTED\ 120}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ WARNING\_COULD\_NOT\_RETRIEVE\_CORE\_NUMBER\ 501\ }}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ WARNING\_QUEUE\_TOO\_SMALL\ 502}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ WARNING\_RESIZING\_QUEUE\ 503}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ WARNING\_STACK\_TOO\_SMALL\ 504}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ WARNING\_RESIZING\_STACK\ 505}}
+\DoxyCodeLine{00056\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{errors_8h_a02605c478875df486a1de7d24db32e3d}{throwError}}(\textcolor{keywordtype}{int}\ errorCode,\ \textcolor{keywordtype}{char}*\ format,\ ...);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00066\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{errors_8h_ad44c7208abc0c1b8927ca26524f9c509}{throwWarning}}(\textcolor{keywordtype}{int}\ warningCode,\ \textcolor{keywordtype}{char}*\ format,\ ...);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00069\ }
+
+\end{DoxyCode}

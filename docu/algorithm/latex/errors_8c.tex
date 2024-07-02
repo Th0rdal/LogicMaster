@@ -1,0 +1,62 @@
+\doxysection{src/main/algorithm/src/errors.c File Reference}
+\hypertarget{errors_8c}{}\label{errors_8c}\index{src/main/algorithm/src/errors.c@{src/main/algorithm/src/errors.c}}
+{\ttfamily \#include "{}errors.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{errors_8c_ad840c746145244194ffc4da8d93e2ba0}{print\+Error\+Code\+Specification}} (int exit\+Code)
+\item 
+\+\_\+\+Noreturn void \mbox{\hyperlink{errors_8c_a61467adf8701f6418141bf4c2b5e755e}{throw\+Error}} (int exit\+Code, char \texorpdfstring{$\ast$}{*}format,...)
+\item 
+void \mbox{\hyperlink{errors_8c_ad44c7208abc0c1b8927ca26524f9c509}{throw\+Warning}} (int warning\+Code, char \texorpdfstring{$\ast$}{*}format,...)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{errors_8c_ad840c746145244194ffc4da8d93e2ba0}\index{errors.c@{errors.c}!printErrorCodeSpecification@{printErrorCodeSpecification}}
+\index{printErrorCodeSpecification@{printErrorCodeSpecification}!errors.c@{errors.c}}
+\doxysubsubsection{\texorpdfstring{printErrorCodeSpecification()}{printErrorCodeSpecification()}}
+{\footnotesize\ttfamily \label{errors_8c_ad840c746145244194ffc4da8d93e2ba0} 
+static void print\+Error\+Code\+Specification (\begin{DoxyParamCaption}\item[{int}]{exit\+Code}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+prints an error code specific message for the error message
+
+
+\begin{DoxyParams}{Parameters}
+{\em exit\+Code} & the errorcode of the error \\
+\hline
+\end{DoxyParams}
+\Hypertarget{errors_8c_a61467adf8701f6418141bf4c2b5e755e}\index{errors.c@{errors.c}!throwError@{throwError}}
+\index{throwError@{throwError}!errors.c@{errors.c}}
+\doxysubsubsection{\texorpdfstring{throwError()}{throwError()}}
+{\footnotesize\ttfamily \label{errors_8c_a61467adf8701f6418141bf4c2b5e755e} 
+\+\_\+\+Noreturn void throw\+Error (\begin{DoxyParamCaption}\item[{int}]{error\+Code}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{format}{, }\item[{}]{...}{}\end{DoxyParamCaption})}
+
+throws an error and then exists the program
+
+
+\begin{DoxyParams}{Parameters}
+{\em error\+Code} & the errorcode of the error \\
+\hline
+{\em format} & a char\texorpdfstring{$\ast$}{*} with an error message. Variables can be given as d, s, etc... \\
+\hline
+{\em ...} & any variable "{}declared"{} in format \\
+\hline
+\end{DoxyParams}
+\Hypertarget{errors_8c_ad44c7208abc0c1b8927ca26524f9c509}\index{errors.c@{errors.c}!throwWarning@{throwWarning}}
+\index{throwWarning@{throwWarning}!errors.c@{errors.c}}
+\doxysubsubsection{\texorpdfstring{throwWarning()}{throwWarning()}}
+{\footnotesize\ttfamily \label{errors_8c_ad44c7208abc0c1b8927ca26524f9c509} 
+void throw\+Warning (\begin{DoxyParamCaption}\item[{int}]{warning\+Code}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{format}{, }\item[{}]{...}{}\end{DoxyParamCaption})}
+
+throws a warning to stderr and then returns
+
+
+\begin{DoxyParams}{Parameters}
+{\em warning\+Code} & the warning\+Code of the warning \\
+\hline
+{\em format} & a char\texorpdfstring{$\ast$}{*} with the error message. Variables can be given as d, s, etc... \\
+\hline
+{\em ...} & any variables "{}declared"{} in format \\
+\hline
+\end{DoxyParams}

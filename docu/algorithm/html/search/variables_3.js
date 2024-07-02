@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['data_0',['data',['../struct_queue.html#a9ce6063c598fe437e7b71232304581ac',1,'Queue::data'],['../stack_8h.html#a718c1bf5a3bf21ebb980203b142e5b75',1,'data:&#160;stack.h']]],
+  ['depth_1',['depth',['../struct_gamestate_config.html#a71db296f82a16f973f92770b8b8ad70a',1,'GamestateConfig']]],
+  ['dequeue_5fwait_5ftime_2',['DEQUEUE_WAIT_TIME',['../queue_8h.html#a03d855633a71dbe796c2bbc3d5edc54c',1,'queue.h']]],
+  ['diagonal1_3',['diagonal1',['../struct_diagonal_bitboards.html#a5828a12a52c402cdbb27bd4e7f6275f0',1,'DiagonalBitboards']]],
+  ['diagonal10_4',['diagonal10',['../struct_diagonal_bitboards.html#adb290b6132f9b856f1cafe37eace5421',1,'DiagonalBitboards']]],
+  ['diagonal11_5',['diagonal11',['../struct_diagonal_bitboards.html#a06db30a8472558a9a937b0f279951870',1,'DiagonalBitboards']]],
+  ['diagonal12_6',['diagonal12',['../struct_diagonal_bitboards.html#ab22681b86b2be28a7b06ee06b41e0ded',1,'DiagonalBitboards']]],
+  ['diagonal13_7',['diagonal13',['../struct_diagonal_bitboards.html#a80cefca30f1bd289e64ddce591a5300f',1,'DiagonalBitboards']]],
+  ['diagonal14_8',['diagonal14',['../struct_diagonal_bitboards.html#addadac144e76afe4b3df8a3ae1d82b53',1,'DiagonalBitboards']]],
+  ['diagonal15_9',['diagonal15',['../struct_diagonal_bitboards.html#a1248542619cfb5e628bd902dbbc8b90c',1,'DiagonalBitboards']]],
+  ['diagonal2_10',['diagonal2',['../struct_diagonal_bitboards.html#afef4de085691e938595444ac071ac008',1,'DiagonalBitboards']]],
+  ['diagonal3_11',['diagonal3',['../struct_diagonal_bitboards.html#a1aadabf2fe9b7198409a2d56ca4c1199',1,'DiagonalBitboards']]],
+  ['diagonal4_12',['diagonal4',['../struct_diagonal_bitboards.html#ab9ac42705f60d9449db2b98e38ae3179',1,'DiagonalBitboards']]],
+  ['diagonal5_13',['diagonal5',['../struct_diagonal_bitboards.html#a860fc3e908c28eb34fda3328f68e14cc',1,'DiagonalBitboards']]],
+  ['diagonal6_14',['diagonal6',['../struct_diagonal_bitboards.html#a30949959554aa7c4b9cf385f096f5700',1,'DiagonalBitboards']]],
+  ['diagonal7_15',['diagonal7',['../struct_diagonal_bitboards.html#a955a16fd22e501b214ea452baa35b113',1,'DiagonalBitboards']]],
+  ['diagonal8_16',['diagonal8',['../struct_diagonal_bitboards.html#ac2583b0c86a5120ffd026cd56726546b',1,'DiagonalBitboards']]],
+  ['diagonal9_17',['diagonal9',['../struct_diagonal_bitboards.html#a0b85b88a9330be0f7247a1a9d7d3431c',1,'DiagonalBitboards']]],
+  ['diagonalbitboards_18',['diagonalBitboards',['../bitboards_8c.html#aca3b91f570e453097d1a38c55b0825f0',1,'diagonalBitboards:&#160;bitboards.c'],['../bitboards_8h.html#aca3b91f570e453097d1a38c55b0825f0',1,'diagonalBitboards:&#160;bitboards.c']]],
+  ['draw_19',['draw',['../struct_move_flags.html#a5a4ada33410a49fa994709a3a8de68e2',1,'MoveFlags']]]
+];
