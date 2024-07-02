@@ -42,6 +42,7 @@ GamestateConfig gamestateConfigInit() {
     config.parent = NULL;
     config.node = NULL;
     config.evaluation = 0;
+    config.averageEvaluation = 0;
     return config;
 }
 
@@ -96,6 +97,8 @@ bool gamestateMakeMoveInternal(Gamestate* gamestate, Gamestate* newGamestate, co
                     case QUEEN:
                         newGamestate->bitboards.queen |= posBoard;
                         break;
+                    default:
+                        throwError(ERROR_PROMOTION_PIECE_UNAVAILABLE, "Error: the promotion piece is not 'ROOK', 'KNIGHT', 'BISHOP', 'QUEEN'");
                 }
             } else { // normal pawn move
                 newGamestate->bitboards.pawn |= posBoard;

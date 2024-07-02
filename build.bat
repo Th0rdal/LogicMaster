@@ -71,7 +71,7 @@ for /R "%ROOT_DIR%" %%f in (*.c) do (
         echo Generating assembly file for %%f...
         set ASSEMBLY_FILE=%ASSEMBLY_DIR%\%%~nf.s
         echo Command: %CC% %CFLAGS% -S "%%f" -o !ASSEMBLY_FILE!
-        %CC% %CFLAGS% -S "%%f" -o !ASSEMBLY_FILE!
+        %CC% %CFLAGS% -w -S "%%f" -o !ASSEMBLY_FILE!
         if errorlevel 1 (
             echo ERROR: Failed to generate assembly file for %%f
             exit /b 1
@@ -94,7 +94,7 @@ echo Build successful.
 if "%1" neq "noExecution" (
 	echo Starting the executable...
 	echo.
-	"%TARGET%"
+	"%TARGET%" -ifen -md 1 "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 )
 
 endlocal

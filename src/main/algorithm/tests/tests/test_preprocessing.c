@@ -171,7 +171,6 @@ void test_moveGenerationWithThreads() {
         pool->workCounter++;
         enqueue(pool->queue, gamestate);
         
-        DWORD threadIDs[pool->maxThreads];
         for (int i = 0; i < pool->maxThreads; i++) {
             //start=clock();
             pool->threads[i] = CreateThread(
@@ -180,7 +179,7 @@ void test_moveGenerationWithThreads() {
                 generationWorker, // Thread function
                 pool,  // argument to thread function
                 0,      // Defauzlt creation flags
-                &threadIDs[i]    // Ignore thread ID
+                NULL    // Ignore thread ID
             );
             
             if (pool->threads[i] == NULL) {
@@ -188,7 +187,8 @@ void test_moveGenerationWithThreads() {
             }
         }
 
-        DWORD waitResult = WaitForMultipleObjects(pool->maxThreads, pool->threads, TRUE, INFINITE);//50000);
+        DWORD waitResult = WaitForMultipleObjects(pool->maxThreads, pool->threads, TRUE, 10000);
+                                                                                           
         //end = clock();
         if (waitResult == WAIT_TIMEOUT) {
             pool->shutdown = true;

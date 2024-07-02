@@ -5,9 +5,10 @@
 #include <stdbool.h>
 
 #include "preprocessing.h"
+#include "evaluation.h"
 
 extern bool algorithmColorWhite; // if true, the algorithm will optimize for white
 
-void minimax(const short maxDepth, bool algorithmColorWhite, Gamestate* gamestate);
+Gamestate* minimax(const short maxDepth, bool algorithmColorWhite, Gamestate* gamestate);
 
 #endif

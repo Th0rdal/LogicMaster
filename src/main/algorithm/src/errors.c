@@ -10,49 +10,59 @@ static inline void printErrorCodeSpecification(int exitCode) {
     char* specification;
     switch (exitCode) {
         case ERROR_MEMORY_MALLOC_FAILED:
-            specification = "memory allocation failed";
+            specification = "Memory allocation failed";
             break;
         case ERROR_MEMORY_REALLOC_FAILED:
-            specification = "memory reallocation failed";
+            specification = "Memory reallocation failed";
             break;
         case ERROR_THREADS_CREATION_FAILED:
-            specification = "thread creation failed";
+            specification = "Thread creation failed";
+            break;
+        case ERROR_THREADS_TIMEOUT:
+            specification = "Thread timeout";
             break;
         case ERROR_CUSTOM_STACK_OVERFLOW:
-            specification = "stack overflow";
+            specification = "Stack overflow";
             break;
         case ERROR_CUSTOM_STACK_UNDERFLOW:
-            specification = "stack underflow";
+            specification = "Stack underflow";
+            break;
+        case ERROR_QUEUE_TOO_SMALL:
+            specification = "Queue too small";
             break;
         case ERROR_NOINPUT:
-            specification = "no input given";
+            specification = "No input given";
+            break;
+        case ERROR_UNKNOWN_ARGUMENT:
+            specification = "Unknown program argument";
             break;
         case ERROR_FEN_CHAR_NOT_DEFINED:
-            specification = "fen char not defined";
+            specification = "Fen char not defined";
             break;
         case ERROR_FEN_NUMBER_CONVERTION_CHAR_TOO_LARGE:
-            specification = "fen number convertion char is too large";
+            specification = "Fen number convertion char is too large";
             break;
         case ERROR_FETCHING_FEN_PART:
-            specification = "fen fetching part";
+            specification = "Fen fetching part";
             break;
         case ERROR_CONVERTING_CHARARRAY_TO_INT:
-            specification = "fen converting chararray to int";
+            specification = "Fen converting chararray to int";
             break;
         case ERROR_POSITION_VALUE_OUTSIDE_EXPECTED:
-            specification = "position value outside defined range";
+            specification = "Position value outside defined range";
             break;
         case ERROR_PIECE_POSITION_CANNOT_BE_CALCULATED:
-            specification = "piece position cannot be calculated";
+            specification = "Piece position cannot be calculated";
+            break;
+        case ERROR_PROMOTION_PIECE_UNAVAILABLE:
+            specification = "Promotion piece unavailable";
             break;
         case ERROR_PIECE_NOT_SELECTED:
-            specification = "no piece selected";
+            specification = "No piece selected";
             break;
         default:
-            specification = "no specification defined";
+            specification = "No specification defined";
     }
-    specification[0] = toupper(specification[0]);
-
     fprintf(stderr, "%s error:\n\t", specification);
 }
 
@@ -72,4 +82,6 @@ void throwWarning(int warningCode, char* format, ...) {
     va_start(args, format);
     printf("\x1b[33" "Warning code: %d", warningCode);
     vfprintf(stderr, format, args);
+    printf("\x1b[0m");
+    va_end(args);
 }

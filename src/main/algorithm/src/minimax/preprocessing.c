@@ -1,7 +1,7 @@
 #include "minimax/preprocessing.h"
 
-static void updateWorkCounter(MoveGenerationThreadPool *pool, const int value);
-static void destroyThreadPool(MoveGenerationThreadPool *pool);
+static inline void updateWorkCounter(MoveGenerationThreadPool *pool, const int value);
+static inline void destroyGenerationThreadPool(MoveGenerationThreadPool *pool);
 static __attribute__((always_inline)) inline void addToQueue(Gamestate* newGamestate, GamestateTreeNode* node, Queue* queue, int* movesAddedToQueue);
 int calculateMoves(Gamestate* gamestate, Queue* queue, GamestateTreeNode* node);
 
@@ -242,7 +242,7 @@ static __attribute__((always_inline)) inline void addToQueue(Gamestate* newGames
     (*movesAddedToQueue)++;
 } 
 
-void minimax_preprocessing(const short maxDepth, const int maxThreads, Gamestate* gamestate) {
+void preprocessing_start(const short maxDepth, const int maxThreads, Gamestate* gamestate) {
     /*
      * threading:
      * give each thread their own thread struct with id and result pointer
@@ -255,29 +255,27 @@ void minimax_preprocessing(const short maxDepth, const int maxThreads, Gamestate
      * 
      * */
     
-    MoveGenerationThreadPool* pool = moveGenerationThreadPoolInit(maxDepth, maxThreads);    
-    
-    DWORD threadIDs[pool->maxThreads];
+    MoveGenerationThreadPool* genPool = moveGenerationThreadPoolInit(maxDepth, maxThreads);
+    genPool->workCounter++;
+    enqueue(genPool->queue, gamestate);
     for (int i = 0; i < maxThreads; i++) {
-        pool->threads[i] = CreateThread(
-            NULL,   // Default security attributes
-            0,      // Default stack size
-            generationWorker, // Thread function
-            &pool,  // argument to thread function
-            0,      // Defauzlt creation flags
-            &threadIDs[i]    // Ignore thread ID
+        genPool->threads[i] = CreateThread(
+            NULL,
+            0,
+            generationWorker,
+            genPool,
+            0,
+            NULL 
         );
-        
-        if (pool->threads[i] == NULL) {
-            throwError(ERROR_THREADS_CREATION_FAILED, "Error: failed to create thread for move generation"); 
-        }
     }
-
-    WaitForMultipleObjects(pool->maxThreads, pool->threads, TRUE, INFINITE);
-
-    for (int i = 0; i < pool->maxThreads; i++) {
-        CloseHandle(pool->threads[i]);
+    
+    DWORD waitResult = WaitForMultipleObjects(genPool->maxThreads, genPool->threads, TRUE, MAX_WAITTIME);
+    if (waitResult == WAIT_TIMEOUT) {
+        genPool->shutdown = true;
+        throwError(ERROR_THREADS_TIMEOUT, "Error: generation thread took too long and triggered the MAX_WAITTIME timeout. Threads were shutdown");
     }
+    destroyGenerationThreadPool(genPool); 
+    genPool = NULL;
 }
 
 MoveGenerationThreadPool* moveGenerationThreadPoolInit(const short maxDepth, const int maxThreads) {
@@ -307,7 +305,7 @@ MoveGenerationThreadPool* moveGenerationThreadPoolInit(const short maxDepth, con
  * @param value: the update value for workCounter. The value gets added to workCounter
  *
  * */
-static void updateWorkCounter(MoveGenerationThreadPool *pool, const int value) {
+static inline void updateWorkCounter(MoveGenerationThreadPool *pool, const int value) {
     EnterCriticalSection(&pool->lock);
     pool->workCounter += value;
     LeaveCriticalSection(&pool->lock);
@@ -319,8 +317,11 @@ static void updateWorkCounter(MoveGenerationThreadPool *pool, const int value) {
  * @param pool: the struct to destroy
  *
  * */
-static void destroyThreadPool(MoveGenerationThreadPool *pool) {
+static inline void destroyGenerationThreadPool(MoveGenerationThreadPool *pool) {
     DeleteCriticalSection(&pool->lock);
+    for (int i = 0; i < pool->maxThreads; i++) {
+        CloseHandle(pool->threads[i]);
+    }
     free(pool->threads);
     destroyQueue(pool->queue);
     free(pool);

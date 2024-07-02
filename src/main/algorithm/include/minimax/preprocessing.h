@@ -19,6 +19,9 @@
 #include "structs/tree.h"
 #include "utility/moveCalculation.h"
 #include "minimax/evaluation.h"
+#include "config.h"
+
+// MAX_WAIT_TIME is set in minimax.h
 
 typedef struct {
     HANDLE* threads;
@@ -37,7 +40,7 @@ typedef struct {
  * @param: it needs a MoveGenerationThreadPool struct to work
  *
  **/
-void minimax_preprocessing(const short maxDepth, const int maxThreads, Gamestate* gamestate);
+void preprocessing_start(const short maxDepth, const int maxThreads, Gamestate* gamestate);
 
 /*!
  * The function an generation worker thread executes to generate all possible moves
@@ -56,6 +59,5 @@ DWORD WINAPI generationWorker(LPVOID lpParam);
  * @return: the initialized MoveGenerationThreadPool pointer 
  * */
 MoveGenerationThreadPool* moveGenerationThreadPoolInit(const short maxDepth, const int maxThreads);
-
 
 #endif

@@ -24,7 +24,6 @@ typedef struct { // all initialized to false
     bool canEnPassant;
 } GamestateFlags;
 
-
 typedef struct {
     bool checkedCheck;
     struct Gamestate* lastGamestate; //forward declaration
@@ -32,6 +31,7 @@ typedef struct {
     GamestateTreeNode* parent;
     GamestateTreeNode* node;
     int evaluation;
+    float averageEvaluation;
 } GamestateConfig;
 
 typedef struct Gamestate {

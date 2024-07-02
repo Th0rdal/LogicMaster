@@ -9,8 +9,7 @@
 #include <math.h>
 
 #include "structs/gamestate.h"
-
-#define QUEUE_RESIZE // comment this out if the queue should not be resized 
+#include "config.h"
 
 static const int QUEUE_SIZE_BASE = 15;
 static const int QUEUE_SIZE_MULTIPLIER = 75;

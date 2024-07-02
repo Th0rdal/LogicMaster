@@ -21,7 +21,7 @@ void enqueue(Queue *queue, Gamestate* gamestate) {
     
     while ((queue->rear+1) % queue->maxSize == queue->front) {
         if (!SleepConditionVariableCS(&queue->condEnqueue, &queue->lock, ENQUEUE_WAIT_TIME)) {
-            throwWarning(WARNING_QUEUE_TOO_SMALL, "Warning: The queue was too small and waited over %d seconds", ENQUEUE_WAIT_TIME);
+            throwWarning(WARNING_QUEUE_TOO_SMALL, "Warning: The queue was too small and a thread waited over %d seconds", ENQUEUE_WAIT_TIME);
             #ifdef QUEUE_RESIZE
                 throwWarning(WARNING_RESIZING_QUEUE, "Warning: The queue was resized");
                 queue->maxSize *= 10;
@@ -31,6 +31,9 @@ void enqueue(Queue *queue, Gamestate* gamestate) {
                 }
                 queue->data = temp;
             #endif /* ifdef QUEUE_RESIZE */
+            #ifndef QUEUE_RESIZE
+                throwError(ERROR_QUEUE_TOO_SMALL, "Error: The queue is too small and resizing is not activated. To active resizing define 'QUEUE_RESIZE'");
+            #endif
             LeaveCriticalSection(&queue->lock);
         }
     }

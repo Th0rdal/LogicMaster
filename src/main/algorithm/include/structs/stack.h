@@ -2,8 +2,7 @@
 #define STACK_H
 
 #include "structs/tree.h"
-
-#define MAX_STACK_SIZE 10
+#include "config.h"
 
 typedef struct EvaluationData {
     short state; // if state = 0, push children. if state = 1, process evaluation
@@ -11,8 +10,9 @@ typedef struct EvaluationData {
 } EvaluationData;
 
 typedef struct EvaluationStack {
-   EvaluationData items[MAX_STACK_SIZE];
+   EvaluationData** items;
    int top;
+   int MAX_STACK_SIZE;
 } EvaluationStack;
 
 /*!
@@ -31,7 +31,9 @@ EvaluationStack* initializeStack();
  * @return: true if the stack is full, else false
  *
  * */
-bool isFull(const EvaluationStack* stack);
+__attribute__((always_inline)) inline bool isFull(const EvaluationStack* stack) {
+    return stack->top == stack->MAX_STACK_SIZE - 1;
+}
 
 /*!
  * check if the stack is empty
@@ -41,7 +43,9 @@ bool isFull(const EvaluationStack* stack);
  * @return: true if the stack is empty, else false
  *
  * */
-bool isEmpty(const EvaluationStack* stack);
+__attribute__((always_inline)) inline bool isEmpty(const EvaluationStack* stack) {
+    return stack->top == -1;
+}
 
 /*!
  * pushes a EvaluationData struct onto the stack
@@ -52,7 +56,24 @@ bool isEmpty(const EvaluationStack* stack);
  * @warning ERROR_STACK_OVERFLOW: if the stack is full
  *
  * */
-void pushEvaluationStack(EvaluationStack* stack, const EvaluationData* data);
+__attribute__((always_inline)) inline void pushEvaluationStack(EvaluationStack* stack, EvaluationData* data) {
+    if (isFull(stack)) {
+        throwWarning(WARNING_STACK_TOO_SMALL, "Warning: The stack was too small");
+        #ifdef STACK_RESIZE
+            throwWarning(WARNING_RESIZING_STACK, "Warning: The stack was resized");
+            stack->MAX_STACK_SIZE *= 2; 
+            EvaluationData** temp = (EvaluationData**)realloc(stack->items, sizeof(EvaluationData*) * stack->MAX_STACK_SIZE); 
+            if (temp == NULL) {
+                throwError(ERROR_MEMORY_REALLOC_FAILED, "Error: failed to resize the stack items");
+            }
+            stack->items = temp;
+        #endif
+        #ifndef STACK_RESIZE
+            throwError(ERROR_CUSTOM_STACK_OVERFLOW, "Error: trying to push on a full EvaluationStack");
+        #endif
+    }
+    stack->items[++(stack->top)] = data;
+} 
 
 /*!
  * pops the last element pushed onto the stack and returns it. It also deletes it from the stack
@@ -63,7 +84,12 @@ void pushEvaluationStack(EvaluationStack* stack, const EvaluationData* data);
  *
  * @warning ERROR_STACK_UNDERFLOW: if the stack is empty
  * */
-EvaluationData* popEvaluationStack(EvaluationStack* stack);
+__attribute__((always_inline)) inline EvaluationData* popEvaluationStack(EvaluationStack* stack) {
+    if (isEmpty(stack)) {
+        throwError(ERROR_CUSTOM_STACK_UNDERFLOW, "Error: trying to pop from empty EvaluationStack");
+    }
+    return stack->items[(stack->top)--];
+}
 
 /*!
  * pooks at the last element pushed onto the stack and returns it.
@@ -74,7 +100,12 @@ EvaluationData* popEvaluationStack(EvaluationStack* stack);
  *
  * @warning ERROR_STACK_UNDERFLOW: if the stack is empty
  * */
-const EvaluationData* peekEvaluationStack(const EvaluationStack* stack);
+__attribute__((always_inline)) inline const EvaluationData* peekEvaluationStack(const EvaluationStack* stack) {
+    if (isEmpty(stack)) {
+        throwError(ERROR_CUSTOM_STACK_UNDERFLOW, "Error: trying to peek from empty EvaluationStack");
+    }
+    return (stack->items[stack->top]);
+}
 
 /*!
  * creates an EvaluationData struct with the given data
@@ -85,5 +116,11 @@ const EvaluationData* peekEvaluationStack(const EvaluationStack* stack);
  * @return: pointer to the initialized EvaluationData struct
  *
  * */
-EvaluationData* createEvaluationData(GamestateTreeNode* node, const short state);
+__attribute__((always_inline)) inline EvaluationData* createEvaluationData(GamestateTreeNode* node, const short state) {
+    EvaluationData* data = (EvaluationData*)malloc(sizeof(EvaluationData));
+    data->node = node;
+    data->state = state;
+    return data;
+}
+
 #endif

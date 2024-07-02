@@ -18,8 +18,14 @@ static inline int setupMaxThreads() {
     return maxThreads;
 }
 
-void minimax(short maxDepth, bool algorithmColorWhite, Gamestate* gamestate) {
+Gamestate* minimax(short maxDepth, bool algorithmColorWhite, Gamestate* gamestate) {
     //TODO
     //preprocessing, core, postprocessing
     algorithmColorWhite = algorithmColorWhite;
+    int maxThreads = setupMaxThreads();
+   
+    initializeTree();
+    preprocessing_start(maxDepth, maxThreads, gamestate);
+    evaluation_start(maxThreads);
+    return evaluateLastGamestate(tree->head);
 }
