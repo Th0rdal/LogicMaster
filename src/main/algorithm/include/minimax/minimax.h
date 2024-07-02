@@ -7,8 +7,6 @@
 #include "preprocessing.h"
 #include "evaluation.h"
 
-extern bool algorithmColorWhite; // if true, the algorithm will optimize for white
-
-Gamestate* minimax(const short maxDepth, bool algorithmColorWhite, Gamestate* gamestate);
+Gamestate* minimax(const short maxDepth, int maxThreads, Gamestate* gamestate);
 
 #endif
