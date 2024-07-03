@@ -95,3 +95,20 @@ inline void destroyGamestateTreeBranchWithInside(GamestateTreeBranch* branch) {
     destroyGamestateTreeNodeWithInside(branch->node);
     free(branch);
 }
+
+GamestateTreeNode* searchGamestateInTree(GamestateTreeNode* node, Gamestate* gamestate) {
+    if (node->gamestate == gamestate) {
+        return node;
+    }
+
+    GamestateTreeBranch* branch = node->children;
+    GamestateTreeNode* searchResultNode;
+    while (branch != NULL) {
+        searchResultNode = searchGamestateInTree(branch->node, gamestate);
+        if (searchResultNode != NULL) {
+            return searchResultNode;
+        }
+        branch = branch->next;
+    }
+    return NULL;
+}

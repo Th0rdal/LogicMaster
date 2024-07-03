@@ -25,6 +25,10 @@ void evaluate(Gamestate* gamestate) {
         eval += gamestate->flags.isWhiteTurn ? CHECK : -CHECK;
     }
 
+    if (gamestate->move.flags.kCastle[gamestate->flags.isWhiteTurn ? 1 : 0] || gamestate->move.flags.kCastle[gamestate->flags.isWhiteTurn ? 1 : 0]) {
+        eval += (CASTLE * depth);
+    }
+
     int whitePawns = __builtin_popcountll(gamestate->bitboards.pawn & gamestate->bitboards.color[1]) * PAWNVALUE;
     int whiteRook = __builtin_popcountll(gamestate->bitboards.rook & gamestate->bitboards.color[1]) * ROOKVALUE;
     int whiteKnight = __builtin_popcountll(gamestate->bitboards.knight & gamestate->bitboards.color[1]) * KNIGHTVALUE;
@@ -109,11 +113,8 @@ DWORD WINAPI evaluationWorker(LPVOID lpParam) {
                 }
                 
                 gamestateTreeNode->gamestate->config.evaluation = bestEvaluation;
+                counter = counter == 0 ? 1 : counter;
                 gamestateTreeNode->gamestate->config.averageEvaluation = averageEval / counter;
-                #ifdef EVALUATION_MEMORY_SAVE
-                    //technically this is no longer needed, except for debugging purposes
-                    destroyGamestateTreeBranchWithInside(gamestateTreeNode->children);
-                #endif
             }
             free(data); // free the no longer needed EvaluationData struct. no node with no children should ever be here
         }
@@ -122,14 +123,14 @@ DWORD WINAPI evaluationWorker(LPVOID lpParam) {
     return 0;
 } 
 
-EvaluationThreadPool* evaluationThreadPoolInit(const int maxThreads, GamestateTreeNode* srcTree) {
+EvaluationThreadPool* evaluationThreadPoolInit(command_args* args, GamestateTreeNode* srcTree) {
     EvaluationThreadPool* pool = (EvaluationThreadPool*)malloc(sizeof(EvaluationThreadPool));
     if (pool == NULL) {
         throwError(ERROR_MEMORY_MALLOC_FAILED, "Error: failed to allocate memory for evaluationThreadPool");
     }
     InitializeCriticalSection(&pool->lock);
-    pool->maxThreads = maxThreads;
-    pool->threads = (HANDLE*)malloc(maxThreads * sizeof(HANDLE));
+    pool->maxThreads = args->maxThreads;
+    pool->threads = (HANDLE*)malloc(args->maxThreads * sizeof(HANDLE));
     if (pool->threads == NULL) {
         throwError(ERROR_MEMORY_MALLOC_FAILED, "Error: failed to allocate memory for evaluation threads");
     }
@@ -167,10 +168,6 @@ Gamestate* evaluateLastGamestate(GamestateTreeNode* gamestateTreeNode) {
         branch = branch->next;
     }
     
-    #ifdef EVALUATION_MEMORY_SAVE
-        //technically this is no longer needed, except for debugging purposes
-        destroyGamestateTreeBranchWithInside(gamestateTreeNode->children);
-    #endif
     return chosen;
 }
 
@@ -205,9 +202,9 @@ void destroyEvaluationThreadPool(EvaluationThreadPool* pool) {
     free(pool);
 }
 
-void evaluation_start(int maxThreads) {
-    EvaluationThreadPool* evalPool = evaluationThreadPoolInit(maxThreads, tree->head);
-    for (int i = 0; i < maxThreads; i++) {
+void evaluation_start(command_args* args) {
+    EvaluationThreadPool* evalPool = evaluationThreadPoolInit(args, tree->head);
+    for (int i = 0; i < args->maxThreads; i++) {
         evalPool->threads[i] = CreateThread(
             NULL,
             0,

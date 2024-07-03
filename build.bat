@@ -14,7 +14,7 @@ set CFLAGS=-Wall -g -Wextra -pedantic -std=c11 -I%ROOT_DIR%\include
 
 
 REM Target executable
-set TARGET=%TARGET_DIR%\algorithm.exe
+set TARGET=algorithm.exe
 
 REM Remove old .o and .s files if they exist
 if exist "%OBJECT_DIR%\*.o" (
@@ -94,7 +94,7 @@ echo Build successful.
 if "%1" neq "noExecution" (
 	echo Starting the executable...
 	echo.
-	"%TARGET%" -ifen -md 1 "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+	"%TARGET%" -ifen -md 4 -om -mt 1 "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR/ b KQkq - 0 1"
 )
 
 endlocal

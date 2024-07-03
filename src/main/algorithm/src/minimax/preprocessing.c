@@ -242,7 +242,7 @@ static __attribute__((always_inline)) inline void addToQueue(Gamestate* newGames
     (*movesAddedToQueue)++;
 } 
 
-void preprocessing_start(const short maxDepth, const int maxThreads, Gamestate* gamestate) {
+void preprocessing_start(command_args* args, Gamestate* gamestate) {
     /*
      * threading:
      * give each thread their own thread struct with id and result pointer
@@ -255,10 +255,10 @@ void preprocessing_start(const short maxDepth, const int maxThreads, Gamestate* 
      * 
      * */
     
-    MoveGenerationThreadPool* genPool = moveGenerationThreadPoolInit(maxDepth, maxThreads);
+    MoveGenerationThreadPool* genPool = moveGenerationThreadPoolInit(args);
     genPool->workCounter++;
     enqueue(genPool->queue, gamestate);
-    for (int i = 0; i < maxThreads; i++) {
+    for (int i = 0; i < args->maxThreads; i++) {
         genPool->threads[i] = CreateThread(
             NULL,
             0,
@@ -278,22 +278,22 @@ void preprocessing_start(const short maxDepth, const int maxThreads, Gamestate* 
     genPool = NULL;
 }
 
-MoveGenerationThreadPool* moveGenerationThreadPoolInit(const short maxDepth, const int maxThreads) {
+MoveGenerationThreadPool* moveGenerationThreadPoolInit(command_args* args) {
     MoveGenerationThreadPool* pool = (MoveGenerationThreadPool*)malloc(sizeof(MoveGenerationThreadPool));
     if (pool == NULL) {
         throwError(ERROR_MEMORY_MALLOC_FAILED, "Error: failed to allocate memory for moveGenerationThreadPool");
     }
-    pool->maxThreads = maxThreads;
-    pool->threads = (HANDLE*) malloc(maxThreads * sizeof(HANDLE));
+    pool->maxThreads = args->maxThreads;
+    pool->threads = (HANDLE*) malloc(args->maxThreads * sizeof(HANDLE));
     if (pool->threads == NULL) {
        throwError(ERROR_MEMORY_MALLOC_FAILED, "Error: failed to allocate memory for move generation worker threads"); 
     }
-    pool->queue = queueInit(maxDepth);
+    pool->queue = queueInit(args->maxDepth);
     InitializeCriticalSection(&pool->lock);
   
     pool->shutdown = false;
     pool->workCounter = 0;
-    pool->maxDepth = maxDepth;
+    pool->maxDepth = args->maxDepth;
 
     return pool;
 }

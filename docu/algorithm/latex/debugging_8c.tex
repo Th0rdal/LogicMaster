@@ -4,7 +4,7 @@
 \doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{debugging_8c_a56c60c6168b7d9915e5f319f3345b289}{print\+Board}} (uint64\+\_\+t board)
+void \mbox{\hyperlink{debugging_8c_a56c60c6168b7d9915e5f319f3345b289}{print\+Board}} (uint64\+\_\+t gamestate)
 \item 
 void \mbox{\hyperlink{debugging_8c_ae9d1cf0e4873de79081966daf56fa4f7}{debug\+Gamestate}} (\mbox{\hyperlink{struct_gamestate}{Gamestate}} \texorpdfstring{$\ast$}{*}gamestate)
 \end{DoxyCompactItemize}
@@ -28,12 +28,12 @@ prints out all variables of gamestate
 \index{printBoard@{printBoard}!debugging.c@{debugging.c}}
 \doxysubsubsection{\texorpdfstring{printBoard()}{printBoard()}}
 {\footnotesize\ttfamily \label{debugging_8c_a56c60c6168b7d9915e5f319f3345b289} 
-void print\+Board (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{board}{}\end{DoxyParamCaption})}
+void print\+Board (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{gamestate}{}\end{DoxyParamCaption})}
 
-prints a bitboard out in a chess board pattern
+prints a bitboard out in a chess gamestate pattern
 
 
 \begin{DoxyParams}{Parameters}
-{\em board} & uint64\+\_\+t representing the bitboard \\
+{\em gamestate} & uint64\+\_\+t representing the bitboard \\
 \hline
 \end{DoxyParams}

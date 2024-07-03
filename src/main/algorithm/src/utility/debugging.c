@@ -46,7 +46,6 @@ void debugGamestate(Gamestate* gamestate) {
     printf("black queen castle: %d\n", gamestate->flags.qCastle[0]);
     printf("can en passant: %d\n", gamestate->flags.canEnPassant);
 
-    printf("en Passant Position: %c", gamestate->enPassantPosition.rank + 64);
-    printf("%d", gamestate->enPassantPosition.file);
+    printf("en Passant Position: %c%d\n", gamestate->enPassantPosition.rank + 64, gamestate->enPassantPosition.file);
     
 }

@@ -12,9 +12,10 @@
 #define KNIGHTVALUE 3
 #define BISHOPVALUE 3
 #define QUEENVALUE 9
-#define CHECKMATE 100
-#define CHECK 10
+#define CHECKMATE 1000
+#define CHECK 20
 #define DRAW 0
+#define CASTLE 10
 
 #include <limits.h>
 #include <stdbool.h>
@@ -46,12 +47,12 @@ DWORD WINAPI evaluationWorker(LPVOID lpParam);
 /*!
  * initializes all variables of the struct
  *
- * @param maxthreads: the maximal amount of threads the pool may have
+ * @param args: command args struct pointer with configuration
  * @param srcTree: the base node for the evaluation
  *
  * @return: the initialized EvaluationThreadPool pointer 
  * */
-EvaluationThreadPool* evaluationThreadPoolInit(const int maxThreads, GamestateTreeNode* srcTree);
+EvaluationThreadPool* evaluationThreadPoolInit(command_args* args, GamestateTreeNode* srcTree);
 
 /*!
  * evaluates the best evaluation value out of all children and sets it for the gamestate.
@@ -72,6 +73,8 @@ void destroyEvaluationThreadPool(EvaluationThreadPool* pool);
 
 /*!
  * starts evaluating the gamestate tree
+ *
+ * @param args: command args struct pointer with configuration
  * */
-void evaluation_start(int maxThreads);
+void evaluation_start(command_args* args);
 #endif

@@ -70,6 +70,8 @@ void printMove(const Move* move, char* string) {
         if (!move->flags.promotion) {
             switch (move->piece) {
                 case PAWN:
+                    moveString[counter] = 'P';
+                    counter++;
                     break;
                 case ROOK:
                     moveString[counter] = 'R';
@@ -157,5 +159,6 @@ void printMove(const Move* move, char* string) {
         moveString[counter] = '+';
         counter++;
     }
+    moveString[counter] = '\0';
     strcpy(string, moveString);
 }
