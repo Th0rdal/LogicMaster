@@ -3,7 +3,6 @@ package GUI;
 import GUI.piece.*;
 import GUI.utilities.BoardCoordinate;
 import GUI.utilities.Calculator;
-import GUI.utilities.BoardConverter;
 import GUI.utilities.ImageLoader;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,7 +17,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 
-import java.awt.event.MouseMotionListener;
 import java.util.Objects;
 
 public class Controller {
@@ -40,17 +38,19 @@ public class Controller {
     private Pane promotionPane;
 
     // colors used for the board
-    Color color1 = Color.SIENNA;
-    Color color2 = Color.LIGHTGRAY;
+    Color color1 = Color.LIGHTGRAY;
+    Color color2 = Color.SIENNA;
 
     Pane selectedPane;  //represents the currently selected pane
     boolean selected = false; //true if a pane is currently selected
     BoardCoordinate startCoordinates;   //saves the start coordinations of the selected pane
     boolean whiteSideDown = true;   //TODO change. just a placeholder for board rotation. if true, white is starting on the bottom
-    Board board;
+    Gamestate gamestate;
 
     private Pane promotionSelectedPane = null;
     private Piece promotionPiece = null;
+
+    //promotion event handling
     EventHandler<MouseEvent> onMouseMoveHandler = event -> {
         if (this.promotionSelectedPane != null) {
             if (this.promotionSelectedPane.getBoundsInParent().contains(event.getX(), event.getY())) {
@@ -70,19 +70,64 @@ public class Controller {
         }
     };
 
-    EventHandler<MouseEvent> onMouseClickHandler = event -> {
+    // player movement event handling
+    private final EventHandler<MouseEvent> playerOnMousePressed = event -> {
+            for (Node node : visualBoard.getChildren()) {
+                if (node instanceof Pane && !(node instanceof StackPane)) {
+                    Pane tempPane = (Pane) node;
+                    if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) { // mouse is in a pane
+                        //tempPane.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null))); if change of selected pane is needed
+                        startCoordinates = new BoardCoordinate((int) Math.floor(event.getX()/100)+1, whiteSideDown ? 8 - (int) Math.floor(event.getY()/100) : (int) Math.floor(event.getY()/100));
+                        if (this.gamestate.isUsablePiece(startCoordinates)) {
+                            selectedPane = tempPane;
+                        } else {
+                            startCoordinates = null;
+                        }
+                    }
+                }
+            }
+        };
+    private final EventHandler<MouseEvent> playerOnMouseDragged = event -> {
+            if (selectedPane == null) {
+                return;
+            }
+
+            selectedPane.toFront();
+
+            ImageView tempView = (ImageView) selectedPane.getChildren().get(0);
+
+            double tempX = event.getX() - selectedPane.localToParent(0, 0).getX() - (tempView.getFitWidth() / 2);
+            double tempY = event.getY() - selectedPane.localToParent(0, 0).getY() - (tempView.getFitHeight() / 2);
+            tempView.setLayoutX(tempX);
+            tempView.setLayoutY(tempY);
+        };
+    private final EventHandler<MouseEvent> playerOnMouseReleased = event -> {
+            if (selectedPane == null) {
+                return;
+            }
+
+            this.checkMovePossible((int) event.getX(), (int) event.getY());
+        };
+    private final EventHandler<MouseEvent> playerOnMouseClicked = event -> {
+            if (selectedPane != null && selected) {
+                this.checkMovePossible((int) event.getX(), (int) event.getY());
+            }
+        };
+
+    //promotion event handler
+    private final EventHandler<MouseEvent> onMouseClickHandler = event -> {
         if (event.getButton() == MouseButton.PRIMARY) {
             // chosen
             Piece piece = switch (this.promotionSelectedPane.getId()) {
-                case "KNIGHT" -> this.board.promotePawn(this.promotionPiece, PIECE_ID.KNIGHT);
-                case "QUEEN" -> this.board.promotePawn(this.promotionPiece, PIECE_ID.QUEEN);
-                case "BISHOP" -> this.board.promotePawn(this.promotionPiece, PIECE_ID.BISHOP);
-                case "ROOK" -> this.board.promotePawn(this.promotionPiece, PIECE_ID.ROOK);
-                default -> throw new RuntimeException("Promoting piece that into something that is not allowed");
+                case "KNIGHT" -> this.gamestate.promotePawn(this.promotionPiece, PIECE_ID.KNIGHT);
+                case "QUEEN" -> this.gamestate.promotePawn(this.promotionPiece, PIECE_ID.QUEEN);
+                case "BISHOP" -> this.gamestate.promotePawn(this.promotionPiece, PIECE_ID.BISHOP);
+                case "ROOK" -> this.gamestate.promotePawn(this.promotionPiece, PIECE_ID.ROOK);
+                default -> throw new RuntimeException("Promoting piece into something that is not allowed");
             };
             this.visualBoard.getChildren().remove(this.promotionPiece.getPieceImage());
             this.visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
-            this.board.getSemaphore().release();
+            this.gamestate.getSemaphore().release();
             this.promotionPane.setOnMouseMoved(null);
             this.promotionPane.setOnMouseClicked(null);
             this.promotionPane.setVisible(false);
@@ -97,7 +142,9 @@ public class Controller {
 
     private Controller(Stage stage) {
         this.stage = stage;
-        this.board = new Board();
+        this.gamestate = new Gamestate();
+        this.gamestate.setWhitePlayer(new Player(true, "", "IAN"));
+        this.gamestate.setBlackPlayer(new Player(false, "algorithm.exe", "BOT"));
     }
 
     public static Controller getController(Stage stage) {
@@ -112,7 +159,7 @@ public class Controller {
      */
     public void clearBoard() {
         this.visualBoard.getChildren().clear();
-        this.board.clearBoard();
+        this.gamestate.clearBoard();
     }
 
     /**
@@ -120,7 +167,7 @@ public class Controller {
      */
     public void startNewBoard() {
         this.clearBoard();
-        this.board.loadStartPosition();
+        this.gamestate.loadStartPosition();
         this.loadBoard();
     }
 
@@ -193,68 +240,34 @@ public class Controller {
             }
         }
 
-        for (Piece piece : this.board.getPieces()) {
+        for (Piece piece : this.gamestate.getPieces()) {
             visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
         }
 
-        this.board.loadClocks(this.clockOpponentLabel, this.clockPlayerLabel);
+        this.gamestate.loadClocks(this.clockOpponentLabel, this.clockPlayerLabel);
 
         promotionPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         promotionPane.setVisible(false);
 
-        //TODO so it only works while promotionPane is visible, remove and re-add the handler when needed, or just if not visible return
-        //this.promotionPane.setOnMouseMoved(this.onMouseMoveHandler);
+        if (this.gamestate.currentPlayerHuman()) {
+            this.setPlayerEventHandling();
+        }
 
-        visualBoard.setOnMousePressed(event -> {
-            for (Node node : visualBoard.getChildren()) {
-                if (node instanceof Pane && !(node instanceof StackPane)) {
-                    Pane tempPane = (Pane) node;
-                    if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) { // mouse is in a pane
-                        //tempPane.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null))); if change of selected pane is needed
-                        startCoordinates = new BoardCoordinate((int) Math.floor(event.getX()/100)+1, whiteSideDown ? 8 - (int) Math.floor(event.getY()/100) : (int) Math.floor(event.getY()/100));
-                        if (this.board.isUsablePiece(startCoordinates)) {
-                            selectedPane = tempPane;
-                        } else {
-                            startCoordinates = null;
-                        }
-                    }
-                }
-            }
-        });
-
-        visualBoard.setOnMouseDragged(event -> {
-            if (selectedPane == null) {
-                return;
-            }
-
-            selectedPane.toFront();
-
-            ImageView tempView = (ImageView) selectedPane.getChildren().get(0);
-
-            double tempX = event.getX() - selectedPane.localToParent(0, 0).getX() - (tempView.getFitWidth() / 2);
-            double tempY = event.getY() - selectedPane.localToParent(0, 0).getY() - (tempView.getFitHeight() / 2);
-            tempView.setLayoutX(tempX);
-            tempView.setLayoutY(tempY);
-        });
-
-        visualBoard.setOnMouseReleased(event -> {
-            if (selectedPane == null) {
-                return;
-            }
-
-            this.checkMovePossible((int) event.getX(), (int) event.getY());
-        });
-
-        visualBoard.setOnMouseClicked(event -> {
-            if (selectedPane == null) {
-                return;
-            }
-
-            if (selected) {
-                this.checkMovePossible((int) event.getX(), (int) event.getY());
-            }
-        });
         stage.show();
+    }
+
+    void setPlayerEventHandling() {
+        visualBoard.setOnMousePressed(playerOnMousePressed);
+        visualBoard.setOnMouseDragged(playerOnMouseDragged);
+        visualBoard.setOnMouseReleased(playerOnMouseReleased);
+        visualBoard.setOnMouseClicked(playerOnMouseClicked);
+    }
+
+    void resetPlayerEventHandling() {
+        visualBoard.removeEventHandler(MouseEvent.MOUSE_PRESSED, playerOnMousePressed);
+        visualBoard.removeEventHandler(MouseEvent.MOUSE_DRAGGED, playerOnMouseDragged);
+        visualBoard.removeEventHandler(MouseEvent.MOUSE_RELEASED, playerOnMouseReleased);
+        visualBoard.setOnMouseClicked(playerOnMouseClicked);
     }
 
     /**
@@ -284,15 +297,14 @@ public class Controller {
         BoardCoordinate tempCoordinates = new BoardCoordinate(tempX+1, whiteSideDown ? 8 - (int) (double) (y / 100) : tempY);
 
         //TODO with movelist. this is just substitute until that is implemented
-        Piece piece = this.board.getPieceAtCoordinates(tempCoordinates);
+        Piece piece = this.gamestate.getPieceAtCoordinates(tempCoordinates);
         boolean capture;
         if (piece != null) { //TODO make this function of board. Calculations should be in board not visual board
-            if (piece.isWhite() == board.isWhiteTurn()) {
-                capture = false;
+            if (piece.isWhite() == gamestate.isWhiteTurn()) {
                 tempView.setLayoutX(0);
                 tempView.setLayoutY(0);
                 return;
-            } else if (piece.isWhite() != board.isWhiteTurn()) {
+            } else if (piece.isWhite() != gamestate.isWhiteTurn()) {
                 this.visualBoard.getChildren().remove(piece.getPieceImage());
                 //this.board.removePiece(tempCoordinates);
                 capture = true;
@@ -309,8 +321,8 @@ public class Controller {
         tempView.setLayoutY(0);
 
         if (!Objects.equals(startCoordinates, tempCoordinates)) {
-            if (this.board.promotable(startCoordinates, tempCoordinates)) { // promotion logic
-                this.promotionPiece = this.board.getPieceAtCoordinates(startCoordinates);
+            if (this.gamestate.promotable(startCoordinates, tempCoordinates)) { // promotion logic
+                this.promotionPiece = this.gamestate.getPieceAtCoordinates(startCoordinates);
                 loadPromotionPane(this.promotionPiece.isWhite());
                 this.promotionPane.setVisible(true);
                 this.promotionPane.setOnMouseMoved(this.onMouseMoveHandler);
@@ -326,7 +338,15 @@ public class Controller {
         selected = false;
         //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
         selectedPane = null;
-        board.makeMove(startCoordinates, tempCoordinates, capture);
+        if (this.gamestate.currentPlayerHuman()) {
+            this.resetPlayerEventHandling();
+        }
+        gamestate.makeMove(startCoordinates, tempCoordinates, capture);
+        if (this.gamestate.currentPlayerHuman()) {
+            this.setPlayerEventHandling();
+        } else {
+            this.gamestate.executeAlgorithm();
+        }
     }
 
 

@@ -10,22 +10,25 @@ public class BoardCoordinate {
         yLocation = y;
     }
     public BoardCoordinate(String coordinate) {
-        if (coordinate.length() != 2) {
+        if (coordinate.equals("-")) {
+            xLocation = -1;
+            yLocation = -1;
+        } else if (coordinate.length() != 2) {
             //TODO change to useful Error
             throw new RuntimeException("coordinate is not 2 character!");
-        }
-
-        char row = coordinate.charAt(0);
-        if (Character.isDigit(row)) {
-            xLocation = Integer.parseInt(coordinate);
         } else {
-            if (Character.isLowerCase(row)) {
-                xLocation = Character.getNumericValue(row - 'a');
+            int row = coordinate.charAt(0);
+            if (Character.isDigit(row)) {
+                xLocation = Integer.parseInt(coordinate);
             } else {
-                xLocation = Character.getNumericValue(row - 'A');
+                if (Character.isLowerCase(row)) {
+                    xLocation = Character.getNumericValue(row) - Character.getNumericValue('a') + 1;
+                } else {
+                    xLocation = Character.getNumericValue(row) - Character.getNumericValue('A') + 1;
+                }
             }
+            yLocation = Character.getNumericValue(coordinate.charAt(1));
         }
-        yLocation = Character.getNumericValue(coordinate.charAt(1));
     }
 
     public int getLocationInt() {
@@ -34,11 +37,17 @@ public class BoardCoordinate {
 
     @Override
     public String toString() {
+        if (xLocation == -1 && yLocation == -1) {
+            return "-";
+        }
         char xChar = (char) ('@' + xLocation);
         return "" + xChar + (char) (yLocation + '0');
     }
 
     public String toLowerCaseString() {
+        if (xLocation == -1 && yLocation == -1) {
+            return "-";
+        }
         char xChar = (char) ('`' + xLocation);
         return "" + xChar + (char) (yLocation + '0');
     }

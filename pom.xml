@@ -64,7 +64,13 @@
                 </execution>
             </executions>
             <configuration>
-                <mainClass>Main</mainClass>
+                <mainClass>GUI.Main</mainClass>
+                <arguments>
+                    <argument>--module-path</argument>
+                    <argument>C:\PatrickSimetzberger\projects\LogicMaster\out</argument>
+                    <argument>--add-modules</argument>
+                    <argument>javafx.controls,javafx.fxml</argument>
+                </arguments>
             </configuration>
         </plugin>
         </plugins>

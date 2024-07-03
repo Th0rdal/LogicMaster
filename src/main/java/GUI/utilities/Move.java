@@ -1,6 +1,9 @@
 package GUI.utilities;
 
 import GUI.piece.PIECE_ID;
+import GUI.piece.Piece;
+
+import java.util.Objects;
 
 /**
  * Represents a move
@@ -14,9 +17,12 @@ public class Move {
 
     private PIECE_ID piece_ID; // piece that moved if castling, the king should be the piece_id
     private PIECE_ID promotion_ID; // piece promotion ID
-    private boolean capture, check, checkmate, ambiguous; // different flags
+    private boolean capture = false;
+    private boolean check = false;
+    private boolean checkmate = false;
+    private boolean draw = false;
+    private boolean ambiguous = false; // different flags
     private SPECIAL_MOVE specialMove; // represents if a special move was made (e.g., en passant)
-
 
     public Move(PIECE_ID piece_ID,
                 BoardCoordinate oldPosition,
@@ -26,6 +32,7 @@ public class Move {
                 PIECE_ID promotion_ID,
                 boolean check,
                 boolean checkmate,
+                boolean draw,
                 boolean ambiguous) {
 
         this.piece_ID = piece_ID;
@@ -39,6 +46,51 @@ public class Move {
         this.specialMove = specialMove;
     }
 
+    public Move(String moveString) {
+        int counter = 0;
+        try {
+            if (Objects.equals(moveString, "1/2-1/2")) {
+                this.draw = true;
+            } else if (Objects.equals(moveString, "O-O")) {
+                this.specialMove = SPECIAL_MOVE.KING_CASTLE;
+            } else if (Objects.equals(moveString, "O-O-O")) {
+                this.specialMove = SPECIAL_MOVE.QUEEN_CASTLE;
+            } else {
+                this.piece_ID = PIECE_ID.fromString(moveString.substring(counter, counter + 1));
+                counter = counter + 1;
+
+                this.oldPosition = new BoardCoordinate(moveString.substring(counter, counter + 2));
+                counter = counter + 2;
+
+                if (Objects.equals(moveString.substring(counter, counter + 1), "x")) {
+                    this.capture = true;
+                }
+                counter = counter + 1;
+
+                this.newPosition = new BoardCoordinate(moveString.substring(counter, counter + 2));
+                counter = counter + 2;
+
+                if (Objects.equals(moveString.substring(counter, counter + 1), "=")) {
+                    this.specialMove = SPECIAL_MOVE.PROMOTION;
+                    this.promotion_ID = PIECE_ID.fromString(moveString.substring(counter + 1, counter + 2));
+                }
+                counter = counter + 2;
+
+                if (Objects.equals(moveString.substring(counter, counter + 2), "ep")) {
+                    this.specialMove = SPECIAL_MOVE.EN_PASSANT;
+                }
+                counter = counter + 2;
+
+                if (Objects.equals(moveString.substring(counter, counter + 2), "#")) {
+                    this.checkmate = true;
+                } else if (Objects.equals(moveString.substring(counter, counter + 2), "+")) {
+                    this.check = true;
+                }
+            }
+        } catch (StringIndexOutOfBoundsException e) {}
+
+    }
+
     @Override
     public String toString() {
         if (this.specialMove == SPECIAL_MOVE.QUEEN_CASTLE) {
@@ -49,18 +101,20 @@ public class Move {
 
         StringBuilder builder = new StringBuilder();
         builder.append(PIECE_ID.toAbbreviation(this.piece_ID));
-        if (this.ambiguous) {
-            builder.append(oldPosition.toLowerCaseString());
-        }
+
+        builder.append(oldPosition.toLowerCaseString());
+
         if (this.capture) {
             builder.append("x");
+        } else {
+            builder.append(" ");
         }
         builder.append(newPosition.toLowerCaseString());
 
         if (this.specialMove == SPECIAL_MOVE.PROMOTION) {
             builder.append("=").append(PIECE_ID.toAbbreviation(this.promotion_ID));
         } else if (this.specialMove == SPECIAL_MOVE.EN_PASSANT) {
-            builder.append(" e.p.");
+            builder.append("ep");
         }
 
         if (this.checkmate) {

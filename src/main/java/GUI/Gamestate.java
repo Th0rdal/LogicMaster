@@ -1,9 +1,7 @@
 package GUI;
 
 import GUI.piece.*;
-import GUI.utilities.BoardCoordinate;
-import GUI.utilities.Calculator;
-import GUI.utilities.Move;
+import GUI.utilities.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
@@ -13,17 +11,20 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
 
 /**
  * Represents the chess board (not visual) and handles all calculations.
  */
-public class Board {
+public class Gamestate {
 
     private static final String START_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-    private static Board instance = null;
+    private static Gamestate instance = null;
+
+    // players
+    private Player whitePlayer;
+    private Player blackPlayer;
 
     // hard coded Clock time = 10 minutes
     private static final int CLOCKTIME = 1 * 60 * 60 * 10;
@@ -75,6 +76,7 @@ public class Board {
         }
         System.out.println(fen);
     }
+
     /**
      * This function handles everything that is needed to be done, when a move was made.
      * TODO should take Move as parameter because move is chosen from Move list
@@ -235,6 +237,7 @@ public class Board {
         this.halfmoveClock = 0;
         this.fullmoveClock = 0;
         this.firstMoveMade = true;
+        this.enPassantCoordinates = new BoardCoordinate("-");
     }
 
     /**
@@ -334,9 +337,25 @@ public class Board {
         Timeline temp = this.currentTimeRunning;
         this.currentTimeRunning = this.currentTimeStopped;
         this.currentTimeStopped = temp;
-
     }
 
+    public boolean currentPlayerHuman() {
+        return this.getCurrentPlayer().isHuman();
+    }
+
+    public Player getCurrentPlayer() {
+        if (this.whiteTurn) {
+            return this.whitePlayer;
+        }
+        return this.blackPlayer;
+    }
+
+    public void executeAlgorithm() {
+        String fen = BoardConverter.createFEN(this);
+        AlgorithmHandler algoHandler = new AlgorithmHandler();
+        algoHandler.executeAlgorithmFen(this.getCurrentPlayer().getPathToExecutable(), fen);
+
+    }
 
     public void loadConfiguration(
             ArrayList<Piece> pieces,
@@ -364,33 +383,6 @@ public class Board {
 
     public void setPieces(ArrayList<Piece> pieces) {
         this.pieces = pieces;
-    }
-
-    public void setTurn(boolean whiteTurn) {
-        this.whiteTurn = whiteTurn;
-    }
-
-    public void setCastles(boolean whiteQCastle,
-                           boolean whiteKCastle,
-                           boolean blackQCastle,
-                           boolean blackKCastle) {
-
-        this.whiteQCastle = whiteQCastle;
-        this.whiteKCastle = whiteKCastle;
-        this.blackQCastle = blackQCastle;
-        this.blackKCastle = blackKCastle;
-    }
-
-    public void setEnPassantCoordinates(BoardCoordinate enPassantCoordinates) {
-        this.enPassantCoordinates = enPassantCoordinates;
-    }
-
-    public void setHalfmoveClock(int halfmoveClock) {
-        this.halfmoveClock = halfmoveClock;
-    }
-
-    public void setFullmoveClock(int fullmoveClock) {
-        this.fullmoveClock = fullmoveClock;
     }
 
     public ArrayList<Piece> getPieces() {
@@ -443,4 +435,7 @@ public class Board {
         }
         return null;
     }
+
+    public void setWhitePlayer(Player player) {this.whitePlayer = player;}
+    public void setBlackPlayer(Player player) {this.blackPlayer = player;}
 }
