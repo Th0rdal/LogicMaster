@@ -1,5 +1,6 @@
 package GUI;
 
+import GUI.Player.Player;
 import GUI.piece.*;
 import GUI.utilities.*;
 import javafx.animation.KeyFrame;
@@ -25,6 +26,8 @@ public class Gamestate {
     // players
     private Player whitePlayer;
     private Player blackPlayer;
+
+    private AlgorithmHandler algorithmHandler;
 
     // hard coded Clock time = 10 minutes
     private static final int CLOCKTIME = 1 * 60 * 60 * 10;
@@ -80,21 +83,34 @@ public class Gamestate {
     /**
      * This function handles everything that is needed to be done, when a move was made.
      * TODO should take Move as parameter because move is chosen from Move list
-     * @param startCoordinates
-     * @param endCoordinate
-     * @param capture: temp var until movelist is implemented
+     * @param move: The move taken
      */
-    public void makeMove(BoardCoordinate startCoordinates, BoardCoordinate endCoordinate, boolean capture) {
-        Piece piece = this.getPieceAtCoordinates(startCoordinates);
+    public void makeMove(Move move) {
+        Piece piece = this.getPieceAtCoordinates(move.getOldPosition());
         if (piece == null) {
             //TODO make this a useful Error
             throw new RuntimeException("UNEXPECTED. THIS SHOULD NEVER HAPPEN. piece is null in makeMove");
         }
-        if (capture) { // remove piece if already at end position
-            this.removePiece(endCoordinate);
+        if (move.isCapture()) { // remove piece if already at end position
+            this.removePiece(move.getNewPosition());
+        } else if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) {
+            piece.makeMove(move.getNewPosition());
+            if (this.whiteTurn) {
+                this.getPieceAtCoordinates(new BoardCoordinate("H1")).makeMove(new BoardCoordinate("F1"));
+            } else {
+                this.getPieceAtCoordinates(new BoardCoordinate("H8")).makeMove(new BoardCoordinate("F8"));
+            }
+        } else if (move.getSpecialMove() == SPECIAL_MOVE.QUEEN_CASTLE) {
+            if (this.whiteTurn) {
+                this.getPieceAtCoordinates(new BoardCoordinate("A1")).makeMove(new BoardCoordinate("D1"));
+            } else {
+                this.getPieceAtCoordinates(new BoardCoordinate("A8")).makeMove(new BoardCoordinate("D8"));
+            }
+        } else if (move.getSpecialMove() == SPECIAL_MOVE.EN_PASSANT) {
+            this.removePiece(new BoardCoordinate(move.getNewPosition().getXLocation(), move.getNewPosition().getYLocation()-1));
         }
 
-        piece.makeMove(endCoordinate);
+        piece.makeMove(move.getNewPosition());
 
         if (this.firstMoveMade) {
             this.firstMoveMade = false;
@@ -102,16 +118,16 @@ public class Gamestate {
         }
         this.swapTurn();
         this.fullmoveClock++;
-        if (piece.getID() == PIECE_ID.PAWN || capture) {
+        if (piece.getID() == PIECE_ID.PAWN || move.isCapture()) {
             this.halfmoveClock = 0;
         } else {
             this.halfmoveClock++;
         }
 
-        if (this.promotable(endCoordinate, endCoordinate) && this.promotionPiece == null) { // temp promotion code later removed for moveList
+        if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) { // temp promotion code later removed for moveList
             try {
                 this.semaphore.acquire();
-                this.removePiece(endCoordinate);
+                this.removePiece(move.getNewPosition());
                 if (this.promotionPiece == null) {
                     System.out.println("PROMOTION PIECE IS NULL");
                 }
@@ -238,6 +254,13 @@ public class Gamestate {
         this.fullmoveClock = 0;
         this.firstMoveMade = true;
         this.enPassantCoordinates = new BoardCoordinate("-");
+
+        String fen = BoardConverter.createFEN(this);
+        this.algorithmHandler = new AlgorithmHandler("algorithms/algorithm.exe");
+        this.algorithmHandler.addParameter("-ifen", "");
+        this.algorithmHandler.addParameter("-opm", "");
+        this.algorithmHandler.addParameter("-mt", "1");
+        this.algorithmHandler.executeAlgorithm(fen);
     }
 
     /**
@@ -350,11 +373,10 @@ public class Gamestate {
         return this.blackPlayer;
     }
 
-    public void executeAlgorithm() {
-        String fen = BoardConverter.createFEN(this);
-        AlgorithmHandler algoHandler = new AlgorithmHandler();
-        algoHandler.executeAlgorithmFen(this.getCurrentPlayer().getPathToExecutable(), fen);
-
+    public Move executeAlgorithm() {
+        this.getCurrentPlayer().executeAlgorithm(this);
+        this.algorithmHandler = this.getCurrentPlayer().getAlgorithmHandler();
+        return this.algorithmHandler.getChosenMove();
     }
 
     public void loadConfiguration(
@@ -383,6 +405,26 @@ public class Gamestate {
 
     public void setPieces(ArrayList<Piece> pieces) {
         this.pieces = pieces;
+    }
+
+    public ArrayList<Move> getPossibleMovesForCoordinates(BoardCoordinate coordinate) {
+        if (this.getPieceAtCoordinates(coordinate).getID() == PIECE_ID.KING) {
+            ArrayList<Move> temp1 = this.algorithmHandler.getPossibleMoves().get("CASTLE");
+            ArrayList<Move> temp2 = this.algorithmHandler.getPossibleMoves().get(coordinate.toString());
+            temp2.addAll(temp1);
+            return temp2;
+        } else {
+            return this.algorithmHandler.getPossibleMoves().get(coordinate.toString());
+        }
+    }
+
+    public Move getMoveFromPossibleMoves(ArrayList<Move> possibleMoves, BoardCoordinate endPosition) {
+        for (Move move : possibleMoves) {
+            if (move.getNewPosition().equals(endPosition)) {
+                return move;
+            }
+        }
+        return null;
     }
 
     public ArrayList<Piece> getPieces() {
@@ -436,6 +478,8 @@ public class Gamestate {
         return null;
     }
 
-    public void setWhitePlayer(Player player) {this.whitePlayer = player;}
+    public void setWhitePlayer(Player player) {
+        this.whitePlayer = player;
+    }
     public void setBlackPlayer(Player player) {this.blackPlayer = player;}
 }

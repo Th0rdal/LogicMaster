@@ -2,15 +2,15 @@ package GUI;
 
 import GUI.utilities.BoardCoordinate;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 /**
  * Represents a square of the Board grid
  */
 public class Square extends StackPane{
 
-    BoardCoordinate coordinate;
-    boolean occupied = false;
-
+    private BoardCoordinate coordinate;
 
     public Square(int x, int y) {
         /**
@@ -26,5 +26,4 @@ public class Square extends StackPane{
          */
         return this.coordinate.getLocationInt();
     }
-
 }

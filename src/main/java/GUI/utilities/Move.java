@@ -53,6 +53,7 @@ public class Move {
                 this.draw = true;
             } else if (Objects.equals(moveString, "O-O")) {
                 this.specialMove = SPECIAL_MOVE.KING_CASTLE;
+                this.oldPosition = new BoardCoordinate("G1");
             } else if (Objects.equals(moveString, "O-O-O")) {
                 this.specialMove = SPECIAL_MOVE.QUEEN_CASTLE;
             } else {
@@ -124,5 +125,45 @@ public class Move {
         }
 
         return builder.toString();
+    }
+
+    public BoardCoordinate getOldPosition() {
+        return oldPosition;
+    }
+
+    public BoardCoordinate getNewPosition() {
+        return newPosition;
+    }
+
+    public PIECE_ID getPiece_ID() {
+        return piece_ID;
+    }
+
+    public PIECE_ID getPromotion_ID() {
+        return promotion_ID;
+    }
+
+    public boolean isCapture() {
+        return capture;
+    }
+
+    public boolean isCheck() {
+        return check;
+    }
+
+    public boolean isCheckmate() {
+        return checkmate;
+    }
+
+    public boolean isDraw() {
+        return draw;
+    }
+
+    public boolean isAmbiguous() {
+        return ambiguous;
+    }
+
+    public SPECIAL_MOVE getSpecialMove() {
+        return specialMove;
     }
 }

@@ -3,7 +3,8 @@ package GUI.utilities;
 public class BoardCoordinate {
 
     // the locations are between 1 and 8!!!
-    private int xLocation, yLocation;
+    private final int xLocation;
+    private final int yLocation;
 
     public BoardCoordinate(int x, int y) {
         xLocation = x;
@@ -54,11 +55,11 @@ public class BoardCoordinate {
 
     @Override
     public boolean equals(Object obj) {
-        if (this.getXLocation() == ((BoardCoordinate) obj).getXLocation() &&
-            this.getYLocation() == ((BoardCoordinate) obj).getYLocation()) {
-            return true;
+        if (!(obj instanceof BoardCoordinate)) {
+            throw new IllegalArgumentException("the parameter must be of type BoardCoordinate");
         }
-        return false;
+        return this.getXLocation() == ((BoardCoordinate) obj).getXLocation() &&
+                this.getYLocation() == ((BoardCoordinate) obj).getYLocation();
     }
 
     public int getXLocation() {

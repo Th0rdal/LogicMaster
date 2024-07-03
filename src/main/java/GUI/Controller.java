@@ -1,12 +1,14 @@
 package GUI;
 
+import GUI.Player.Player;
 import GUI.piece.*;
-import GUI.utilities.BoardCoordinate;
-import GUI.utilities.Calculator;
-import GUI.utilities.ImageLoader;
+import GUI.utilities.*;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -17,6 +19,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 
 public class Controller {
@@ -40,6 +44,9 @@ public class Controller {
     // colors used for the board
     Color color1 = Color.LIGHTGRAY;
     Color color2 = Color.SIENNA;
+    private Color selectedColor = Color.web("#C6EDC3");
+
+    ArrayList<Move> possibleMoveList;
 
     Pane selectedPane;  //represents the currently selected pane
     boolean selected = false; //true if a pane is currently selected
@@ -72,21 +79,34 @@ public class Controller {
 
     // player movement event handling
     private final EventHandler<MouseEvent> playerOnMousePressed = event -> {
-            for (Node node : visualBoard.getChildren()) {
-                if (node instanceof Pane && !(node instanceof StackPane)) {
-                    Pane tempPane = (Pane) node;
-                    if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) { // mouse is in a pane
-                        //tempPane.setBackground(new Background(new BackgroundFill(Color.BLUE, null, null))); if change of selected pane is needed
-                        startCoordinates = new BoardCoordinate((int) Math.floor(event.getX()/100)+1, whiteSideDown ? 8 - (int) Math.floor(event.getY()/100) : (int) Math.floor(event.getY()/100));
-                        if (this.gamestate.isUsablePiece(startCoordinates)) {
-                            selectedPane = tempPane;
-                        } else {
-                            startCoordinates = null;
-                        }
+        for (Node node : visualBoard.getChildren()) {
+            if (node instanceof Pane tempPane && !(node instanceof StackPane)) {
+                if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) { // mouse is in a pane
+                    tempPane.setBackground(new Background(new BackgroundFill(this.selectedColor, null, null)));
+                    startCoordinates = new BoardCoordinate((int) Math.floor(event.getX() / 100) + 1, whiteSideDown ? 8 - (int) Math.floor(event.getY() / 100) : (int) Math.floor(event.getY() / 100));
+                    if (this.gamestate.isUsablePiece(startCoordinates)) {
+                        selectedPane = tempPane;
+                    } else {
+                        startCoordinates = null;
                     }
+                    break;
                 }
             }
-        };
+        }
+        if (startCoordinates != null) {
+            possibleMoveList = this.gamestate.getPossibleMovesForCoordinates(startCoordinates);
+            if (possibleMoveList == null || possibleMoveList.isEmpty()) {
+                return;
+            }
+            visualBoard.getChildren().removeIf(node -> node instanceof Circle);
+            for (Move move : possibleMoveList) {
+                Circle tempCircle = new Circle();
+                visualBoard.add(tempCircle, move.getNewPosition().getXLocation()-1, whiteSideDown ? 8 - move.getNewPosition().getYLocation() : move.getNewPosition().getYLocation());
+                GridPane.setHalignment(tempCircle, HPos.CENTER);
+                GridPane.setValignment(tempCircle, VPos.CENTER);
+            }
+        }
+    };
     private final EventHandler<MouseEvent> playerOnMouseDragged = event -> {
             if (selectedPane == null) {
                 return;
@@ -100,19 +120,12 @@ public class Controller {
             double tempY = event.getY() - selectedPane.localToParent(0, 0).getY() - (tempView.getFitHeight() / 2);
             tempView.setLayoutX(tempX);
             tempView.setLayoutY(tempY);
-        };
+    };
     private final EventHandler<MouseEvent> playerOnMouseReleased = event -> {
-            if (selectedPane == null) {
-                return;
-            }
-
+        if (selectedPane != null) {
             this.checkMovePossible((int) event.getX(), (int) event.getY());
-        };
-    private final EventHandler<MouseEvent> playerOnMouseClicked = event -> {
-            if (selectedPane != null && selected) {
-                this.checkMovePossible((int) event.getX(), (int) event.getY());
-            }
-        };
+        }
+    };
 
     //promotion event handler
     private final EventHandler<MouseEvent> onMouseClickHandler = event -> {
@@ -136,15 +149,11 @@ public class Controller {
         }
     };
 
-    //TODO change this to be better. currently saving the same thing here and on board
-    private Label clockCurrentlyRunning;
-    private Label clockCurrentlyNotRunning;
-
     private Controller(Stage stage) {
         this.stage = stage;
         this.gamestate = new Gamestate();
-        this.gamestate.setWhitePlayer(new Player(true, "", "IAN"));
-        this.gamestate.setBlackPlayer(new Player(false, "algorithm.exe", "BOT"));
+        this.gamestate.setWhitePlayer(new Player(false, "algorithms/algorithm.exe", "IAN"));
+        this.gamestate.setBlackPlayer(new Player(false, "algorithms/algorithm.exe", "BOT"));
     }
 
     public static Controller getController(Stage stage) {
@@ -232,11 +241,10 @@ public class Controller {
         int size = 8;
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                Square square = new Square(row, col);
+                Square square = new Square(row+1, col+1);
                 this.visualBoard.add(square, row, col, 1, 1);
                 Color color = (row + col) % 2 == 0 ? this.color1 : this.color2;
                 square.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
-
             }
         }
 
@@ -251,23 +259,23 @@ public class Controller {
 
         if (this.gamestate.currentPlayerHuman()) {
             this.setPlayerEventHandling();
+        } else {
+            new Thread(this::aiMove).start();
         }
 
         stage.show();
     }
 
     void setPlayerEventHandling() {
-        visualBoard.setOnMousePressed(playerOnMousePressed);
-        visualBoard.setOnMouseDragged(playerOnMouseDragged);
-        visualBoard.setOnMouseReleased(playerOnMouseReleased);
-        visualBoard.setOnMouseClicked(playerOnMouseClicked);
+        visualBoard.addEventFilter(MouseEvent.MOUSE_PRESSED, this.playerOnMousePressed);
+        visualBoard.addEventFilter(MouseEvent.MOUSE_DRAGGED, this.playerOnMouseDragged);
+        visualBoard.addEventFilter(MouseEvent.MOUSE_RELEASED, this.playerOnMouseReleased);
     }
 
     void resetPlayerEventHandling() {
-        visualBoard.removeEventHandler(MouseEvent.MOUSE_PRESSED, playerOnMousePressed);
-        visualBoard.removeEventHandler(MouseEvent.MOUSE_DRAGGED, playerOnMouseDragged);
-        visualBoard.removeEventHandler(MouseEvent.MOUSE_RELEASED, playerOnMouseReleased);
-        visualBoard.setOnMouseClicked(playerOnMouseClicked);
+        visualBoard.removeEventFilter(MouseEvent.MOUSE_PRESSED, playerOnMousePressed);
+        visualBoard.removeEventFilter(MouseEvent.MOUSE_DRAGGED, playerOnMouseDragged);
+        visualBoard.removeEventFilter(MouseEvent.MOUSE_RELEASED, playerOnMouseReleased);
     }
 
     /**
@@ -296,32 +304,63 @@ public class Controller {
 
         BoardCoordinate tempCoordinates = new BoardCoordinate(tempX+1, whiteSideDown ? 8 - (int) (double) (y / 100) : tempY);
 
-        //TODO with movelist. this is just substitute until that is implemented
-        Piece piece = this.gamestate.getPieceAtCoordinates(tempCoordinates);
-        boolean capture;
-        if (piece != null) { //TODO make this function of board. Calculations should be in board not visual board
-            if (piece.isWhite() == gamestate.isWhiteTurn()) {
-                tempView.setLayoutX(0);
-                tempView.setLayoutY(0);
-                return;
-            } else if (piece.isWhite() != gamestate.isWhiteTurn()) {
-                this.visualBoard.getChildren().remove(piece.getPieceImage());
-                //this.board.removePiece(tempCoordinates);
-                capture = true;
-            } else {
-                capture = false;
-            }
-        } else {
-            capture = false;
+        if (startCoordinates.equals(tempCoordinates)) {
+            tempView.setLayoutX(0);
+            tempView.setLayoutY(0);
+            return;
         }
 
-        GridPane.setRowIndex(selectedPane, tempY);
-        GridPane.setColumnIndex(selectedPane, tempX);
-        tempView.setLayoutX(0);
-        tempView.setLayoutY(0);
+        Move move = this.gamestate.getMoveFromPossibleMoves(this.possibleMoveList, tempCoordinates);
+        Piece piece = this.gamestate.getPieceAtCoordinates(tempCoordinates);
+        if (move != null) {
+            if (move.isCapture()) {
+                this.visualBoard.getChildren().remove(piece.getPieceImage());
+            }
+            if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) {
+                Pane king = this.gamestate.getPieceAtCoordinates(move.getOldPosition()).getPieceImage();
+                Pane rook;
+                if (this.gamestate.isWhiteTurn()) {
+                    rook = this.gamestate.getPieceAtCoordinates(new BoardCoordinate("H1")).getPieceImage();
+                    GridPane.setRowIndex(king, this.whiteSideDown ? 8 : 0);
+                    GridPane.setColumnIndex(king, 6);
+                    GridPane.setRowIndex(rook, this.whiteSideDown ? 8 : 0);
+                    GridPane.setColumnIndex(rook, 5);
+                } else {
+                    rook = this.gamestate.getPieceAtCoordinates(new BoardCoordinate("H8")).getPieceImage();
+                    GridPane.setRowIndex(king, this.whiteSideDown ? 0 : 8);
+                    GridPane.setColumnIndex(king, 6);
+                    GridPane.setRowIndex(rook, this.whiteSideDown ? 0 : 8);
+                    GridPane.setColumnIndex(rook, 5);
+                }
+            } else if (move.getSpecialMove() == SPECIAL_MOVE.QUEEN_CASTLE) {
+                Pane king = this.gamestate.getPieceAtCoordinates(move.getOldPosition()).getPieceImage();
+                Pane rook;
+                if (this.gamestate.isWhiteTurn()) {
+                    rook = this.gamestate.getPieceAtCoordinates(new BoardCoordinate("A1")).getPieceImage();
+                    GridPane.setRowIndex(rook, this.whiteSideDown ? 8 : 0);
+                    GridPane.setColumnIndex(rook, 3);
+                } else {
+                    rook = this.gamestate.getPieceAtCoordinates(new BoardCoordinate("A8")).getPieceImage();
+                    GridPane.setRowIndex(rook, this.whiteSideDown ? 0 : 8);
+                    GridPane.setColumnIndex(rook, 3);
+                }
+            } else if (move.getSpecialMove() == SPECIAL_MOVE.EN_PASSANT) {
+                int adding = 0;
+                if ((this.gamestate.isWhiteTurn() && this.whiteSideDown) || (!this.gamestate.isWhiteTurn() && !this.whiteSideDown)) {
+                    adding = 1;
+                } else if ((this.gamestate.isWhiteTurn() && !this.whiteSideDown) ||(!this.gamestate.isWhiteTurn() && this.whiteSideDown)) {
+                    adding = -1;
+                }
+                Piece pawn = this.gamestate.getPieceAtCoordinates(new BoardCoordinate(move.getNewPosition().getXLocation(),
+                        this.whiteSideDown ? 8 - move.getNewPosition().getYLocation() : move.getNewPosition().getYLocation() + adding));
+                this.visualBoard.getChildren().remove(pawn.getPieceImage());
+            }
 
-        if (!Objects.equals(startCoordinates, tempCoordinates)) {
-            if (this.gamestate.promotable(startCoordinates, tempCoordinates)) { // promotion logic
+            GridPane.setRowIndex(selectedPane, tempY);
+            GridPane.setColumnIndex(selectedPane, tempX);
+            this.resetSelected();
+
+            if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) { // promotion logic
                 this.promotionPiece = this.gamestate.getPieceAtCoordinates(startCoordinates);
                 loadPromotionPane(this.promotionPiece.isWhite());
                 this.promotionPane.setVisible(true);
@@ -329,25 +368,68 @@ public class Controller {
                 this.promotionPane.setOnMouseClicked(this.onMouseClickHandler);
             }
             new Thread(() -> {
-                this.makeMove(tempCoordinates, capture);
+                this.makeMove(move);
             }).start();
+        } else {
+            this.resetSelected();
         }
     }
 
-    private void makeMove(BoardCoordinate tempCoordinates, boolean capture) {
-        selected = false;
-        //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
+    private void resetSelected() {
+        ImageView tempView = (ImageView) selectedPane.getChildren().get(0);
+        tempView.setLayoutX(0);
+        tempView.setLayoutY(0);
+        selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
         selectedPane = null;
+        visualBoard.getChildren().removeIf(node -> node instanceof Circle);
+    }
+
+    private void makeMove(Move move) {
+        selectedPane = null;
+        //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
         if (this.gamestate.currentPlayerHuman()) {
             this.resetPlayerEventHandling();
         }
-        gamestate.makeMove(startCoordinates, tempCoordinates, capture);
-        if (this.gamestate.currentPlayerHuman()) {
-            this.setPlayerEventHandling();
-        } else {
-            this.gamestate.executeAlgorithm();
+        gamestate.makeMove(move);
+        if (!this.gamestate.currentPlayerHuman()) {
+            this.aiMove();
         }
+        this.setPlayerEventHandling();
     }
 
+    private void aiMove() {
+        while (!this.gamestate.currentPlayerHuman()) {
+            Move aiMove = this.gamestate.executeAlgorithm();
 
+            Piece piece = this.gamestate.getPieceAtCoordinates(aiMove.getNewPosition());
+            if (aiMove.isCapture()) {
+                Platform.runLater(() -> {
+                    this.visualBoard.getChildren().remove(piece.getPieceImage());
+                });
+            }
+
+            this.gamestate.makeMove(aiMove);
+
+            // piece movement
+            Pane piecePane = null;
+            for (Node node : this.visualBoard.getChildren()) {
+                if (node instanceof Pane && !(node instanceof StackPane)) {
+                    int tempY = this.whiteSideDown ? 8 - aiMove.getOldPosition().getYLocation() : aiMove.getOldPosition().getYLocation() - 1;
+                    if (GridPane.getRowIndex(node) == tempY &&
+                        GridPane.getColumnIndex(node) == aiMove.getOldPosition().getXLocation() - 1) {
+                        piecePane = (Pane) node;
+                        break;
+                    }
+                }
+            }
+            if (piecePane == null) {
+                throw new RuntimeException();
+            }
+            ImageView tempView = (ImageView) piecePane.getChildren().get(0);
+            tempView.setLayoutX(0);
+            tempView.setLayoutY(0);
+            GridPane.setRowIndex(piecePane, this.whiteSideDown ? 8 - aiMove.getNewPosition().getYLocation() : aiMove.getNewPosition().getYLocation() - 1);
+            GridPane.setColumnIndex(piecePane, aiMove.getNewPosition().getXLocation() - 1);
+        }
+    }
 }
