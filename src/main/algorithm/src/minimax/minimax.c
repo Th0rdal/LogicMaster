@@ -24,8 +24,11 @@ Gamestate* minimax(command_args* args, Gamestate* gamestate) {
    
     initializeTree();
     preprocessing_start(args, gamestate);
-    evaluation_start(args);
-    return evaluateLastGamestate(tree->head);
+    if (!args->onlyPossibleMoves) {
+        evaluation_start(args);
+        return evaluateLastGamestate(tree->head);
+    }
+    return gamestate;
 }
 
 void printAllPossibleMoves(command_args* args, Gamestate* gamestate) {

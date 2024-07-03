@@ -15,6 +15,7 @@ typedef enum {
 typedef struct command_args {
     INPUTFORMAT inputFormat;
     bool opponentMovesFlag;
+    bool onlyPossibleMoves;
     char inputString[1024];
     int maxDepth;
     int maxThreads;

@@ -24,10 +24,14 @@ void preprocessing(command_args* args, Gamestate* gamestate)  {
 }
 
 void postprocessing(command_args* args, Gamestate* gamestate) {
-    char moveString[20];
-    printMove(&gamestate->move, moveString);
-    printf("%s\n", moveString);
-    if (args->opponentMovesFlag) {
+    if (!args->onlyPossibleMoves) {
+        char moveString[20];
+        printMove(&gamestate->move, moveString);
+        printf("%s\n", moveString);
+    } else {
+        printf("\n"); //print empty line so gui does not think first possible move is chosen move
+    }
+    if (args->opponentMovesFlag || args->onlyPossibleMoves) {
         printAllPossibleMoves(args, gamestate);
     }
 }
@@ -43,17 +47,22 @@ int main(int argc, char *argv[]) {
     strcpy(args->inputString, "");
     args->maxDepth = 4;
     args->maxThreads = -1;
+    args->onlyPossibleMoves = false;
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
             printf("Usage: %s [options]\n", argv[0]);
             printf("Options:\n");
-            printf("\t-h, --help\tShow this help message\n");
-            printf("\t-om, --opponents-moves\tPrints all moves the opponent can make after the algorithm move");
+            printf("\t-h, --help\t\t\tShow this help message\n");
+            printf("\t-opm, --only-possible-moves\tOnly returns all possible moves (first line empty because of gui formatting\n");
+            printf("\t-om, --opponents-moves\t\tPrints all moves the opponent can make after the algorithm move\n");
             printf("\t-ifen, --input-fen-notation\tDefine the input as given in fen notation\n");
-            printf("\t-md, --max-depth\tDefine the max depth to calculate to. Use between 1 and 4. 5 and higher needs more than 40GB memory and will likely fail unless enough memory is provided\n");
-            printf("\t-mt, --max-threads\tDefine the maximal amount of threads the program may use for each generation adn evaluation. If not given, the program will calculate it based on the system\n");
+            printf("\t-md, --max-depth\t\tDefine the max depth to calculate to. Use between 1 and 4. 5 and higher needs more than 40GB memory and will likely fail unless enough memory is provided\n");
+            printf("\t-mt, --max-threads\t\tDefine the maximal amount of threads the program may use for each generation adn evaluation. If not given, the program will calculate it based on the system\n");
             return 0;
+        } else if (strcmp(argv[i], "-opm") == 0 || strcmp(argv[i], "--only-possible-moves") == 0) {
+            args->onlyPossibleMoves = true;
+            args->maxDepth = 1;
         } else if (strcmp(argv[i], "-om") == 0 || strcmp(argv[i], "--opponents-moves") == 0) {
             args->opponentMovesFlag = true;
             continue;
