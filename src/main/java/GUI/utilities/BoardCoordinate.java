@@ -10,6 +10,10 @@ public class BoardCoordinate {
         xLocation = x;
         yLocation = y;
     }
+    public BoardCoordinate(BoardCoordinate copy) {
+        this.xLocation = copy.getXLocation();
+        this.yLocation = copy.getYLocation();
+    }
     public BoardCoordinate(String coordinate) {
         if (coordinate.equals("-")) {
             xLocation = -1;
