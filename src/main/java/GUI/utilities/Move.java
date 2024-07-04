@@ -46,6 +46,19 @@ public class Move {
         this.specialMove = specialMove;
     }
 
+    public Move(Move move) {
+        this.piece_ID = move.piece_ID;
+        this.oldPosition = move.oldPosition;
+        this.newPosition = move.newPosition;
+        this.capture = move.capture;
+        this.promotion_ID = move.promotion_ID;
+        this.check = move.check;
+        this.checkmate = move.checkmate;
+        this.draw = move.draw;
+        this.ambiguous = move.ambiguous;
+        this.specialMove = move.specialMove;
+    }
+
     public Move(String moveString) {
         int counter = 0;
         try {
@@ -165,5 +178,9 @@ public class Move {
 
     public SPECIAL_MOVE getSpecialMove() {
         return specialMove;
+    }
+
+    public void setPromotionID(PIECE_ID piece) {
+        this.promotion_ID = piece;
     }
 }

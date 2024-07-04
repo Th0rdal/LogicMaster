@@ -24,9 +24,8 @@ public class King extends Piece{
         }
     }
 
-    @Override
-    public void getMoves() {
-        throw new UnsupportedOperationException("Method not implemented yet");
+    public King(King king) {
+        super(king);
     }
 
     @Override

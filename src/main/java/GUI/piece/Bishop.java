@@ -24,9 +24,8 @@ public class Bishop extends Piece{
         }
     }
 
-    @Override
-    public void getMoves() {
-        throw new UnsupportedOperationException("Method not implemented yet");
+    public Bishop(Bishop bishop) {
+        super(bishop);
     }
 
     @Override

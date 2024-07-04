@@ -25,9 +25,8 @@ public class Pawn extends Piece{
         }
     }
 
-    @Override
-    public void getMoves() {
-        throw new UnsupportedOperationException("Method not implemented yet");
+    public Pawn(Pawn pawn) {
+        super(pawn);
     }
 
     @Override

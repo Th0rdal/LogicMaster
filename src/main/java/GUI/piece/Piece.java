@@ -22,7 +22,14 @@ public abstract class Piece {
         this.isWhite = isWhite;
     }
 
-    public abstract void getMoves(); // get this from algorithm and just return it
+    public Piece(Piece piece) {
+        this.coordinate = piece.coordinate;
+        this.path = piece.path;
+        this.id = piece.id;
+        this.isWhite = piece.isWhite;
+        this.thisPane = piece.thisPane;
+    }
+
     public abstract void makeMove(BoardCoordinate newCoordinates); // change to be a move from a movelist
 
     /**

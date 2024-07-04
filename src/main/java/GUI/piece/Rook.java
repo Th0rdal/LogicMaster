@@ -24,9 +24,8 @@ public class Rook extends Piece{
         }
     }
 
-    @Override
-    public void getMoves() {
-        throw new UnsupportedOperationException("Method not implemented yet");
+    public Rook(Rook rook) {
+        super(rook);
     }
 
     @Override
