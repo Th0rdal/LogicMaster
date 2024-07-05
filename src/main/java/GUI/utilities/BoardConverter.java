@@ -75,7 +75,7 @@ public class BoardConverter {
                 fullmoveNumber);
     }
 
-    public static String createFEN(Gamestate gamestate) {
+    public static String createFEN(Gamestate gamestate, boolean whiteTurn) {
         StringBuilder fen = new StringBuilder();
         String[][] piecesChars = new String[8][8];
 
@@ -104,7 +104,7 @@ public class BoardConverter {
         }
 
         fen.append(" ");
-        fen.append(gamestate.isWhiteTurn() ? 'w' : 'b');
+        fen.append(whiteTurn? 'w' : 'b');
 
         fen.append(" ");
         fen.append(gamestate.canWhiteKCastle() ? 'K' : "");

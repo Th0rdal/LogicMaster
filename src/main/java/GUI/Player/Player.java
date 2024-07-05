@@ -3,8 +3,11 @@ package GUI.Player;
 import GUI.Gamestate;
 import GUI.utilities.AlgorithmHandler;
 import GUI.utilities.BoardConverter;
+import GUI.utilities.Move;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * This class saves all player information as well as AI information if it is an AI player.
@@ -20,19 +23,13 @@ public class Player {
 
     public Player(boolean isPlayer, String pathToExecutable, String name) {
         this.isHuman = isPlayer;
-        this.pathToExecutable = pathToExecutable;
+        this.pathToExecutable = isPlayer && pathToExecutable.isEmpty() ? "algorithms/algorithm.exe" : pathToExecutable;
         this.name = name;
 
+        this.algorithmHandler = new AlgorithmHandler(this.pathToExecutable);
         if (!isPlayer) {
-            this.algorithmHandler = new AlgorithmHandler(this.pathToExecutable);
-            HashMap<String, String> temp = new HashMap<>();
-            temp.put("-ifen", "");
-            temp.put("-md", "4");
-            temp.put("-om", "");
-            temp.put("-mt", "16");
-            this.algorithmHandler.setParameter(temp);
-        } else {
-            this.algorithmHandler = null;
+            this.algorithmHandler.setParameter();
+
         }
     }
 
@@ -44,11 +41,14 @@ public class Player {
         return isHuman;
     }
 
-    public void executeAlgorithm(Gamestate gamestate) {
-        String fen = BoardConverter.createFEN(gamestate);
-        this.algorithmHandler.executeAlgorithm(fen);
+    public void executeAlgorithm(Gamestate gamestate, boolean whiteTurn, BlockingQueue<Move> moveQueue) throws InterruptedException {
+        String fen = BoardConverter.createFEN(gamestate, whiteTurn);
+        moveQueue.put(this.algorithmHandler.calculateMove(fen));
     }
-    public AlgorithmHandler getAlgorithmHandler() {
-        return algorithmHandler;
+
+    public HashMap<String, ArrayList<Move>> executeGetPossibleMoves(Gamestate gamestate, boolean whiteTurn) {
+        String fen = BoardConverter.createFEN(gamestate, whiteTurn);
+        return this.algorithmHandler.calculatePossibleMoves(fen);
     }
+
 }

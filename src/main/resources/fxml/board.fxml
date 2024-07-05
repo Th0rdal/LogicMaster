@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -12,7 +13,6 @@
    <children>
       <Label fx:id="clockOpponentLabel" layoutX="10.0" layoutY="230.0" prefHeight="40.0" prefWidth="85.0" text="Label" />
       <Label fx:id="clockPlayerLabel" layoutX="10.0" layoutY="630.0" prefHeight="40.0" prefWidth="85.0" text="Label" />
-      <Label fx:id="moveHistoryTextField" alignment="TOP_LEFT" layoutX="940.0" layoutY="50.0" prefHeight="800.0" prefWidth="140.0" text="Label" />
       <StackPane layoutX="125.0" layoutY="50.0" prefHeight="800.0" prefWidth="800.0">
          <children>
             <GridPane fx:id="visualBoard" prefHeight="800.0" prefWidth="800.0">
@@ -40,5 +40,15 @@
             <Pane fx:id="promotionPane" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </StackPane>
+      <ScrollPane fx:id="moveHistoryScrollPane" layoutX="940.0" layoutY="50.0" prefHeight="800.0" prefWidth="140.0">
+         <content>
+            <GridPane fx:id="moveHistoryGridPane" prefHeight="800.0" prefWidth="140.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="10.0" prefWidth="45.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="45.0" minWidth="10.0" prefWidth="45.0" />
+              </columnConstraints>
+            </GridPane>
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

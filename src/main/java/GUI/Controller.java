@@ -16,12 +16,14 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.concurrent.BlockingQueue;
 
 public class Controller {
 
@@ -37,25 +39,43 @@ public class Controller {
     @FXML
     private Label clockPlayerLabel;
     @FXML
-    private Label moveHistoryTextField;
-    @FXML
     private Pane promotionPane;
+    @FXML
+    private GridPane moveHistoryGridPane;
 
     // colors used for the board
     Color color1 = Color.LIGHTGRAY;
     Color color2 = Color.SIENNA;
+    private Color selectedMoveHistory = Color.LIGHTBLUE;
     private Color selectedColor = Color.web("#C6EDC3");
+    private static Color selectedTextColor = Color.BLUE;
+    private static Color defaultTextColor = Color.BLACK;
 
+    private BlockingQueue<Move> moveQueue = null;
     ArrayList<Move> possibleMoveList;
 
     Pane selectedPane;  //represents the currently selected pane
     boolean selected = false; //true if a pane is currently selected
     BoardCoordinate startCoordinates;   //saves the start coordinations of the selected pane
     boolean whiteSideDown = true;   //TODO change. just a placeholder for board rotation. if true, white is starting on the bottom
-    Gamestate gamestate;
+    GameHandler gameHandler;
+    private boolean inSnapshot = false;
 
     private Pane promotionSelectedPane = null;
     private Piece promotionPiece = null;
+    private StackPane selectedHistoryTextPane = null;
+    private Move move = null;
+
+    private static final MouseEvent mouseClickedHistoryTextSelected = new MouseEvent(
+                MouseEvent.MOUSE_CLICKED,
+                0, 0,
+                0, 0,
+                MouseButton.PRIMARY,
+                1, // click count
+                true, true, true, true,
+                true, true, true, true,
+                true, true,
+                null);
 
     //promotion event handling
     EventHandler<MouseEvent> onMouseMoveHandler = event -> {
@@ -84,9 +104,9 @@ public class Controller {
                 if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) { // mouse is in a pane
                     tempPane.setBackground(new Background(new BackgroundFill(this.selectedColor, null, null)));
                     startCoordinates = new BoardCoordinate((int) Math.floor(event.getX() / 100) + 1, whiteSideDown ? 8 - (int) Math.floor(event.getY() / 100) : (int) Math.floor(event.getY() / 100));
-                    if (this.gamestate.isUsablePiece(startCoordinates)) {
+                    if (this.gameHandler.isUsablePiece(startCoordinates)) {
                         selectedPane = tempPane;
-                    } else {
+                    } else if (this.selectedPane == null) {
                         startCoordinates = null;
                     }
                     break;
@@ -94,7 +114,7 @@ public class Controller {
             }
         }
         if (startCoordinates != null) {
-            possibleMoveList = this.gamestate.getPossibleMovesForCoordinates(startCoordinates);
+            possibleMoveList = this.gameHandler.getPossibleMovesForCoordinates(startCoordinates);
             if (possibleMoveList == null || possibleMoveList.isEmpty()) {
                 return;
             }
@@ -107,6 +127,7 @@ public class Controller {
             }
         }
     };
+
     private final EventHandler<MouseEvent> playerOnMouseDragged = event -> {
             if (selectedPane == null) {
                 return;
@@ -131,29 +152,30 @@ public class Controller {
     private final EventHandler<MouseEvent> onMouseClickHandler = event -> {
         if (event.getButton() == MouseButton.PRIMARY) {
             // chosen
-            Piece piece = switch (this.promotionSelectedPane.getId()) {
-                case "KNIGHT" -> this.gamestate.promotePawn(this.promotionPiece, PIECE_ID.KNIGHT);
-                case "QUEEN" -> this.gamestate.promotePawn(this.promotionPiece, PIECE_ID.QUEEN);
-                case "BISHOP" -> this.gamestate.promotePawn(this.promotionPiece, PIECE_ID.BISHOP);
-                case "ROOK" -> this.gamestate.promotePawn(this.promotionPiece, PIECE_ID.ROOK);
+            switch (this.promotionSelectedPane.getId()) {
+                case "KNIGHT" -> this.move.setPromotionID(PIECE_ID.KNIGHT);
+                case "QUEEN" -> this.move.setPromotionID(PIECE_ID.QUEEN);
+                case "BISHOP" -> this.move.setPromotionID(PIECE_ID.BISHOP);
+                case "ROOK" -> this.move.setPromotionID(PIECE_ID.ROOK);
                 default -> throw new RuntimeException("Promoting piece into something that is not allowed");
             };
-            this.visualBoard.getChildren().remove(this.promotionPiece.getPieceImage());
-            this.visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
-            this.gamestate.getSemaphore().release();
             this.promotionPane.setOnMouseMoved(null);
             this.promotionPane.setOnMouseClicked(null);
             this.promotionPane.setVisible(false);
-        } else if (event.getButton() == MouseButton.SECONDARY) {
+        } else if (event.getButton() == MouseButton.SECONDARY) { //TODO find out purpose
             this.promotionSelectedPane.setVisible(false);
         }
     };
 
-    private Controller(Stage stage) {
+    public Controller(Stage stage) {
         this.stage = stage;
-        this.gamestate = new Gamestate();
-        this.gamestate.setWhitePlayer(new Player(false, "algorithms/algorithm.exe", "IAN"));
-        this.gamestate.setBlackPlayer(new Player(false, "algorithms/algorithm.exe", "BOT"));
+        this.gameHandler = new GameHandler();
+        this.gameHandler.setWhitePlayer(new Player(false, "algorithms/algorithm.exe", "IAN"));
+        this.gameHandler.setBlackPlayer(new Player(false, "algorithms/algorithm.exe", "BOT"));
+        this.gameHandler.setController(this);
+        new Thread(() -> {
+            this.gameHandler.gameLoop();
+        }).start();
     }
 
     public static Controller getController(Stage stage) {
@@ -168,7 +190,8 @@ public class Controller {
      */
     public void clearBoard() {
         this.visualBoard.getChildren().clear();
-        this.gamestate.clearBoard();
+        //TODO add gameHandler clearBoard function
+        //this.gameHandler.clearBoard();
     }
 
     /**
@@ -176,7 +199,8 @@ public class Controller {
      */
     public void startNewBoard() {
         this.clearBoard();
-        this.gamestate.loadStartPosition();
+        //TODO add gameHandler loadStartPosition function
+        //this.gameHandler.loadStartPosition();
         this.loadBoard();
     }
 
@@ -248,28 +272,51 @@ public class Controller {
             }
         }
 
-        for (Piece piece : this.gamestate.getPieces()) {
-            visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
-        }
+        loadPieces();
 
-        this.gamestate.loadClocks(this.clockOpponentLabel, this.clockPlayerLabel);
+        this.gameHandler.loadClocks(this.clockOpponentLabel, this.clockPlayerLabel);
 
         promotionPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         promotionPane.setVisible(false);
 
-        if (this.gamestate.currentPlayerHuman()) {
-            this.setPlayerEventHandling();
-        } else {
-            new Thread(this::aiMove).start();
-        }
+        // TODO fix bug that starting with 3rd row, the rows are too small
+        this.moveHistoryGridPane.setHgap(45);
+        this.moveHistoryGridPane.setVgap(8);
+        ColumnConstraints column1 = new ColumnConstraints(45);
+        ColumnConstraints column2 = new ColumnConstraints(45);
+        column1.setMaxWidth(45);
+        column2.setMaxWidth(45);
+        RowConstraints row1 = new RowConstraints(50);
+        RowConstraints row2 = new RowConstraints(50);
+        row1.setMinHeight(50);
+        row2.setMinHeight(50);
+        row1.setMaxHeight(50);
+        row2.setMaxHeight(50);
+        this.moveHistoryGridPane.getColumnConstraints().addAll(column1, column2);
+        this.moveHistoryGridPane.getRowConstraints().addAll(row1, row2);
 
         stage.show();
     }
 
-    void setPlayerEventHandling() {
+    public void loadPieces() {
+        this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
+        for (Piece piece : this.gameHandler.getPieces()) {
+            visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
+        }
+    }
+
+    public void loadPieces(int moveNumber) {
+        this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
+        for (Piece piece : this.gameHandler.getSnapshot(moveNumber).getPieces()) {
+            visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
+        }
+    }
+
+    public void setPlayerEventHandling(BlockingQueue<Move> moveQueue) {
         visualBoard.addEventFilter(MouseEvent.MOUSE_PRESSED, this.playerOnMousePressed);
         visualBoard.addEventFilter(MouseEvent.MOUSE_DRAGGED, this.playerOnMouseDragged);
         visualBoard.addEventFilter(MouseEvent.MOUSE_RELEASED, this.playerOnMouseReleased);
+        this.moveQueue = moveQueue;
     }
 
     void resetPlayerEventHandling() {
@@ -310,66 +357,27 @@ public class Controller {
             return;
         }
 
-        Move move = this.gamestate.getMoveFromPossibleMoves(this.possibleMoveList, tempCoordinates);
-        Piece piece = this.gamestate.getPieceAtCoordinates(tempCoordinates);
-        if (move != null) {
-            if (move.isCapture()) {
-                this.visualBoard.getChildren().remove(piece.getPieceImage());
+        for (Move move : this.possibleMoveList) {
+            if (move.getNewPosition().equals(tempCoordinates)) {
+                this.move = move;
             }
-            if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) {
-                Pane king = this.gamestate.getPieceAtCoordinates(move.getOldPosition()).getPieceImage();
-                Pane rook;
-                if (this.gamestate.isWhiteTurn()) {
-                    rook = this.gamestate.getPieceAtCoordinates(new BoardCoordinate("H1")).getPieceImage();
-                    GridPane.setRowIndex(king, this.whiteSideDown ? 8 : 0);
-                    GridPane.setColumnIndex(king, 6);
-                    GridPane.setRowIndex(rook, this.whiteSideDown ? 8 : 0);
-                    GridPane.setColumnIndex(rook, 5);
-                } else {
-                    rook = this.gamestate.getPieceAtCoordinates(new BoardCoordinate("H8")).getPieceImage();
-                    GridPane.setRowIndex(king, this.whiteSideDown ? 0 : 8);
-                    GridPane.setColumnIndex(king, 6);
-                    GridPane.setRowIndex(rook, this.whiteSideDown ? 0 : 8);
-                    GridPane.setColumnIndex(rook, 5);
-                }
-            } else if (move.getSpecialMove() == SPECIAL_MOVE.QUEEN_CASTLE) {
-                Pane king = this.gamestate.getPieceAtCoordinates(move.getOldPosition()).getPieceImage();
-                Pane rook;
-                if (this.gamestate.isWhiteTurn()) {
-                    rook = this.gamestate.getPieceAtCoordinates(new BoardCoordinate("A1")).getPieceImage();
-                    GridPane.setRowIndex(rook, this.whiteSideDown ? 8 : 0);
-                    GridPane.setColumnIndex(rook, 3);
-                } else {
-                    rook = this.gamestate.getPieceAtCoordinates(new BoardCoordinate("A8")).getPieceImage();
-                    GridPane.setRowIndex(rook, this.whiteSideDown ? 0 : 8);
-                    GridPane.setColumnIndex(rook, 3);
-                }
-            } else if (move.getSpecialMove() == SPECIAL_MOVE.EN_PASSANT) {
-                int adding = 0;
-                if ((this.gamestate.isWhiteTurn() && this.whiteSideDown) || (!this.gamestate.isWhiteTurn() && !this.whiteSideDown)) {
-                    adding = 1;
-                } else if ((this.gamestate.isWhiteTurn() && !this.whiteSideDown) ||(!this.gamestate.isWhiteTurn() && this.whiteSideDown)) {
-                    adding = -1;
-                }
-                Piece pawn = this.gamestate.getPieceAtCoordinates(new BoardCoordinate(move.getNewPosition().getXLocation(),
-                        this.whiteSideDown ? 8 - move.getNewPosition().getYLocation() : move.getNewPosition().getYLocation() + adding));
-                this.visualBoard.getChildren().remove(pawn.getPieceImage());
-            }
-
-            GridPane.setRowIndex(selectedPane, tempY);
-            GridPane.setColumnIndex(selectedPane, tempX);
+        }
+        if (this.move != null) {
             this.resetSelected();
 
             if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) { // promotion logic
-                this.promotionPiece = this.gamestate.getPieceAtCoordinates(startCoordinates);
+                //this.promotionPiece = this.gameHandler.getPieceAtCoordinates(startCoordinates);
                 loadPromotionPane(this.promotionPiece.isWhite());
                 this.promotionPane.setVisible(true);
                 this.promotionPane.setOnMouseMoved(this.onMouseMoveHandler);
                 this.promotionPane.setOnMouseClicked(this.onMouseClickHandler);
             }
-            new Thread(() -> {
-                this.makeMove(move);
-            }).start();
+
+            try {
+                this.moveQueue.put(move);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             this.resetSelected();
         }
@@ -384,52 +392,43 @@ public class Controller {
         visualBoard.getChildren().removeIf(node -> node instanceof Circle);
     }
 
-    private void makeMove(Move move) {
-        selectedPane = null;
-        //selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null))); if color change of pane needed
-        if (this.gamestate.currentPlayerHuman()) {
-            this.resetPlayerEventHandling();
-        }
-        gamestate.makeMove(move);
-        if (!this.gamestate.currentPlayerHuman()) {
-            this.aiMove();
-        }
-        this.setPlayerEventHandling();
-    }
+    public void addMoveToMovelist(Move move) {
+        Platform.runLater(() -> {
+            int moveCounter = this.gameHandler.getFullmoveClock();
+            Text temp = new Text(moveCounter + ": " + move.toString());
+            StackPane tempPane = new StackPane();
+            tempPane.getChildren().add(temp);
 
-    private void aiMove() {
-        while (!this.gamestate.currentPlayerHuman()) {
-            Move aiMove = this.gamestate.executeAlgorithm();
-
-            Piece piece = this.gamestate.getPieceAtCoordinates(aiMove.getNewPosition());
-            if (aiMove.isCapture()) {
-                Platform.runLater(() -> {
-                    this.visualBoard.getChildren().remove(piece.getPieceImage());
-                });
-            }
-
-            this.gamestate.makeMove(aiMove);
-
-            // piece movement
-            Pane piecePane = null;
-            for (Node node : this.visualBoard.getChildren()) {
-                if (node instanceof Pane && !(node instanceof StackPane)) {
-                    int tempY = this.whiteSideDown ? 8 - aiMove.getOldPosition().getYLocation() : aiMove.getOldPosition().getYLocation() - 1;
-                    if (GridPane.getRowIndex(node) == tempY &&
-                        GridPane.getColumnIndex(node) == aiMove.getOldPosition().getXLocation() - 1) {
-                        piecePane = (Pane) node;
-                        break;
+            tempPane.setOnMouseClicked(event -> {
+                if (this.selectedHistoryTextPane != null) {
+                    ((Text)this.selectedHistoryTextPane.getChildren().get(0)).setFill(Controller.defaultTextColor);
+                    this.selectedHistoryTextPane.getChildren().get(0).setStyle("");
+                    this.selectedHistoryTextPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
+                    int currentFieldNumber = Integer.parseInt((
+                            (Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0,
+                            ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':')));
+                    int moveNumber = Integer.parseInt(temp.getText().substring(0, temp.getText().indexOf(':')));
+                    if (moveNumber !=  this.gameHandler.getFullmoveClock() || currentFieldNumber != this.gameHandler.getFullmoveClock()) {
+                        this.loadPieces(moveNumber);
                     }
                 }
+
+                tempPane.setBackground(new Background(new BackgroundFill(selectedMoveHistory, CornerRadii.EMPTY, Insets.EMPTY)));
+
+                ((Text) tempPane.getChildren().get(0)).setFill(Controller.selectedTextColor);
+                ((Text)tempPane.getChildren().get(0)).setStyle("-fx-font-weight: bold;");
+                this.selectedHistoryTextPane = tempPane;
+            });
+
+            // if selectedHistoryText is the last move taken or is empty, fire event
+            if (this.selectedHistoryTextPane != null &&
+                    Integer.parseInt(((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0, ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))) + 1 == moveCounter) {
+                temp.fireEvent(Controller.mouseClickedHistoryTextSelected);
+            } else if (this.selectedHistoryTextPane == null) {
+                temp.fireEvent(Controller.mouseClickedHistoryTextSelected);
             }
-            if (piecePane == null) {
-                throw new RuntimeException();
-            }
-            ImageView tempView = (ImageView) piecePane.getChildren().get(0);
-            tempView.setLayoutX(0);
-            tempView.setLayoutY(0);
-            GridPane.setRowIndex(piecePane, this.whiteSideDown ? 8 - aiMove.getNewPosition().getYLocation() : aiMove.getNewPosition().getYLocation() - 1);
-            GridPane.setColumnIndex(piecePane, aiMove.getNewPosition().getXLocation() - 1);
-        }
+
+            this.moveHistoryGridPane.add(tempPane, (moveCounter-1)%2, (moveCounter-1)/2);
+        });
     }
 }

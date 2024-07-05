@@ -19,73 +19,24 @@ import java.util.concurrent.Semaphore;
  */
 public class Gamestate {
 
-    private static final String START_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-    private static Gamestate instance = null;
-
-    // players
-    private Player whitePlayer;
-    private Player blackPlayer;
-
-    private AlgorithmHandler algorithmHandler;
-
-    // hard coded Clock time = 10 minutes
-    private static final int CLOCKTIME = 1 * 60 * 60 * 10;
-
     private ArrayList<Piece> pieces = new ArrayList<>(); // contains all pieces currently on the board
 
     // SPECIAL MOVES AND COUNTER VARIABLES
-    private boolean whiteTurn; // true if it is the white turn
-    // true if castle is possible (ONLY TRUE IF GENERAL CASTLING IS POSSIBLE. DOES NOT LOOK AT THE BOARD AT ALL)
+
+    // true if castle is possible (TRUE IF GENERAL CASTLING IS POSSIBLE. DOES NOT LOOK AT THE BOARD AT ALL)
     private boolean whiteQCastle = true, whiteKCastle = true, blackQCastle = true, blackKCastle = true;
     private BoardCoordinate enPassantCoordinates; // the coordinates of a field that can be taken by en Passant
     private int halfmoveClock = 0; // half move counts moves since last pawn capture or pawn move
     private int fullmoveClock = 0; // full move clock counts the total amount of moves
-    private boolean firstMoveMade = true; // true only once if there is no move taken yet
 
-    // TIME VARIABLES
-    private Timeline clockOpponent, clockPlayer; // the clock objects
-    // counters counting down each time event (0.1 seconds) representing the displayed time remaining
-    private int clockOpponentCounter, clockPlayerCounter;
-    // current time that is running / stopped
-    private Timeline currentTimeRunning, currentTimeStopped;
-
-    // MOVE HISTORY
-    private ArrayList<Move> moveHistory; // represents the moves taken
-
-    private final Semaphore semaphore = new Semaphore(0);
-    private int promotableRowWhite = 8;
-    private int promotableRowBlack = 0;
     private Piece promotionPiece = null;
-
-    private void debugPrint() {
-        StringBuilder fen = new StringBuilder();
-        String[][] piecesChars = new String[8][8];
-
-        for (Piece piece : this.getPieces()) {
-            piecesChars[piece.getLocationX()-1][8-piece.getLocationY()] = PIECE_ID.toFenAbbreviation(piece.getID(), piece.isWhite());
-        }
-
-        int counter = 0;
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (piecesChars[j][i] == null) {
-                    fen.append("0 ");
-                } else {
-                    fen.append(piecesChars[j][i]).append(" ");
-                }
-            }
-            fen.append("\n");
-        }
-        System.out.println(fen);
-    }
 
     /**
      * This function handles everything that is needed to be done, when a move was made.
      * TODO should take Move as parameter because move is chosen from Move list
      * @param move: The move taken
      */
-    public void makeMove(Move move) {
+    public GamestateSnapshot makeMove(Move move, boolean whiteTurn, int whiteClockCounter, int blackClockCounter) {
         Piece piece = this.getPieceAtCoordinates(move.getOldPosition());
         if (piece == null) {
             //TODO make this a useful Error
@@ -95,13 +46,13 @@ public class Gamestate {
             this.removePiece(move.getNewPosition());
         } else if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) {
             piece.makeMove(move.getNewPosition());
-            if (this.whiteTurn) {
+            if (whiteTurn) {
                 this.getPieceAtCoordinates(new BoardCoordinate("H1")).makeMove(new BoardCoordinate("F1"));
             } else {
                 this.getPieceAtCoordinates(new BoardCoordinate("H8")).makeMove(new BoardCoordinate("F8"));
             }
         } else if (move.getSpecialMove() == SPECIAL_MOVE.QUEEN_CASTLE) {
-            if (this.whiteTurn) {
+            if (whiteTurn) {
                 this.getPieceAtCoordinates(new BoardCoordinate("A1")).makeMove(new BoardCoordinate("D1"));
             } else {
                 this.getPieceAtCoordinates(new BoardCoordinate("A8")).makeMove(new BoardCoordinate("D8"));
@@ -112,11 +63,6 @@ public class Gamestate {
 
         piece.makeMove(move.getNewPosition());
 
-        if (this.firstMoveMade) {
-            this.firstMoveMade = false;
-            this.startClocks(true);
-        }
-        this.swapTurn();
         this.fullmoveClock++;
         if (piece.getID() == PIECE_ID.PAWN || move.isCapture()) {
             this.halfmoveClock = 0;
@@ -125,31 +71,11 @@ public class Gamestate {
         }
 
         if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) { // temp promotion code later removed for moveList
-            try {
-                this.semaphore.acquire();
                 this.removePiece(move.getNewPosition());
-                if (this.promotionPiece == null) {
-                    System.out.println("PROMOTION PIECE IS NULL");
-                }
                 pieces.add(promotionPiece);
-                this.promotionPiece = null;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
-    }
 
-    public Semaphore getSemaphore() {
-        return this.semaphore;
-    }
-
-    public boolean promotable(BoardCoordinate startCoordinates, BoardCoordinate endCoordinate) {
-        Piece piece = this.getPieceAtCoordinates(startCoordinates);
-        if (piece.getID() == PIECE_ID.PAWN) {
-            //this.promotionPiece = ((Pawn) piece).promote(promotedTo);
-            return piece.isWhite() && endCoordinate.getYLocation() == 8 || !piece.isWhite() && endCoordinate.getYLocation() == 1;
-        }
-        return false;
+        return this.saveSnapshot(move, whiteClockCounter, blackClockCounter);
     }
 
     public Piece promotePawn(Piece piece, PIECE_ID promoteTo) {
@@ -158,10 +84,6 @@ public class Gamestate {
             throw new RuntimeException("trying to promote something that is not a pawn");
         }
         this.promotionPiece = ((Pawn) piece).promote(promoteTo);
-        return this.promotionPiece;
-    }
-
-    public Piece getPromotionPiece() {
         return this.promotionPiece;
     }
 
@@ -184,28 +106,18 @@ public class Gamestate {
      * @param coordinates The coordinates to check
      * @return true if the piece is usable, else false
      */
-    public boolean isUsablePiece(BoardCoordinate coordinates) {
-        /*
-         * This function checks if the piece at the given coordinates is usable. This means that the piece belongs
-         * to the color whose turn it currently is
-         */
-
+    public boolean isUsablePiece(BoardCoordinate coordinates, boolean whiteTurn) {
         Piece piece = this.getPieceAtCoordinates(coordinates);
         if (piece == null) { // return false if there is no piece at this coordinates
             return false;
         }
 
-        return piece.isWhite() == this.whiteTurn;
+        return piece.isWhite() == whiteTurn;
 
     }
 
-    /**
-     * Clears pieces and moveHistory
-     */
     public void clearBoard() {
         this.pieces = new ArrayList<>();
-        //create new moveHistory
-        this.moveHistory = new ArrayList<>();
     }
 
     /**
@@ -241,9 +153,6 @@ public class Gamestate {
         pieces.add(new Bishop(new BoardCoordinate(3, 1), true));
         pieces.add(new Bishop(new BoardCoordinate(6, 1), true));
 
-        // set start turn to white
-        this.whiteTurn = true;
-
         // all Castling possible
         this.whiteQCastle = true;
         this.whiteKCastle = true;
@@ -252,15 +161,8 @@ public class Gamestate {
         this.enPassantCoordinates = null;
         this.halfmoveClock = 0;
         this.fullmoveClock = 0;
-        this.firstMoveMade = true;
         this.enPassantCoordinates = new BoardCoordinate("-");
 
-        String fen = BoardConverter.createFEN(this);
-        this.algorithmHandler = new AlgorithmHandler("algorithms/algorithm.exe");
-        this.algorithmHandler.addParameter("-ifen", "");
-        this.algorithmHandler.addParameter("-opm", "");
-        this.algorithmHandler.addParameter("-mt", "1");
-        this.algorithmHandler.executeAlgorithm(fen);
     }
 
     /**
@@ -277,106 +179,19 @@ public class Gamestate {
         return false;
     }
 
-    /**
-     * Loads and configures the clocks
-     * @param opponentLabel The label to put the opponents time in
-     * @param playerLabel The label to put the players time in
-     */
-    public void loadClocks(Label opponentLabel, Label playerLabel) {
-        this.clockOpponentCounter = CLOCKTIME;
-        this.clockPlayerCounter = CLOCKTIME;
-
-        // creates Timelines that trigger every 0.1 seconds
-        this.clockOpponent = new Timeline( // defines new Timeline for the opponents clock (top of board)
-            new KeyFrame(Duration.seconds(0.1), event -> {
-                clockOpponentCounter--;
-                opponentLabel.setText(Calculator.getClockTimeInFormat(clockOpponentCounter));
-            })
-        );
-        this.clockPlayer = new Timeline( // defines new Timeline for the player clock (bottom of the board)
-            new KeyFrame(Duration.seconds(0.1), event -> {
-                clockPlayerCounter--;
-                playerLabel.setText(Calculator.getClockTimeInFormat(clockPlayerCounter));
-            })
-        );
-
-        // changes background olor of the running clock to black and text color to white
-        this.clockOpponent.statusProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == Timeline.Status.PAUSED) {
-                opponentLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-                opponentLabel.setTextFill(Color.BLACK);
-            }
-        });
-        this.clockOpponent.statusProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == Timeline.Status.RUNNING) {
-                opponentLabel.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-                opponentLabel.setTextFill(Color.WHITE);
-            }
-        });
-        this.clockPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == Timeline.Status.PAUSED) {
-                playerLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-                playerLabel.setTextFill(Color.BLACK);
-            }
-        });
-        this.clockPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == Timeline.Status.RUNNING) {
-                playerLabel.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
-                playerLabel.setTextFill(Color.WHITE);
-            }
-        });
-
-        //set clock time
-        this.clockOpponent.setCycleCount(CLOCKTIME);
-        this.clockPlayer.setCycleCount(CLOCKTIME);
-
-        //sets clocks for the first time
-        opponentLabel.setText(Calculator.getClockTimeInFormat(clockOpponentCounter));
-        playerLabel.setText(Calculator.getClockTimeInFormat(clockPlayerCounter));
-    }
-
-    /**
-     * This starts the clock
-     * @param whiteStart if true, white made the first move, black if false
-     */
-    public void startClocks(boolean whiteStart) {
-        if (whiteStart) {
-            this.currentTimeRunning = this.clockPlayer;
-            this.currentTimeStopped = this.clockOpponent;
-        } else {
-            this.currentTimeRunning = this.clockOpponent;
-            this.currentTimeStopped = this.clockPlayer;
-        }
-    }
-
-    /**
-     * Swaps the turn and changes the running clock
-     */
-    private void swapTurn() {
-        this.whiteTurn = !this.whiteTurn;
-        this.currentTimeRunning.pause();
-        this.currentTimeStopped.play();
-
-        Timeline temp = this.currentTimeRunning;
-        this.currentTimeRunning = this.currentTimeStopped;
-        this.currentTimeStopped = temp;
-    }
-
-    public boolean currentPlayerHuman() {
-        return this.getCurrentPlayer().isHuman();
-    }
-
-    public Player getCurrentPlayer() {
-        if (this.whiteTurn) {
-            return this.whitePlayer;
-        }
-        return this.blackPlayer;
-    }
-
-    public Move executeAlgorithm() {
-        this.getCurrentPlayer().executeAlgorithm(this);
-        this.algorithmHandler = this.getCurrentPlayer().getAlgorithmHandler();
-        return this.algorithmHandler.getChosenMove();
+    private GamestateSnapshot saveSnapshot(Move move, int whiteClockCounter, int blackClockCounter) {
+        return new GamestateSnapshot(
+                this.pieces,
+                this.whiteQCastle,
+                this.whiteKCastle,
+                this.blackQCastle,
+                this.blackKCastle,
+                this.enPassantCoordinates,
+                this.fullmoveClock,
+                this.halfmoveClock,
+                whiteClockCounter,
+                blackClockCounter,
+                move);
     }
 
     public void loadConfiguration(
@@ -393,7 +208,6 @@ public class Gamestate {
         this.clearBoard();
 
         this.pieces = pieces;
-        this.whiteTurn = turn;
         this.whiteKCastle = whiteKCastle;
         this.whiteQCastle = whiteQCastle;
         this.blackKCastle = blackKCastle;
@@ -407,32 +221,10 @@ public class Gamestate {
         this.pieces = pieces;
     }
 
-    public ArrayList<Move> getPossibleMovesForCoordinates(BoardCoordinate coordinate) {
-        if (this.getPieceAtCoordinates(coordinate).getID() == PIECE_ID.KING) {
-            ArrayList<Move> temp1 = this.algorithmHandler.getPossibleMoves().get("CASTLE");
-            ArrayList<Move> temp2 = this.algorithmHandler.getPossibleMoves().get(coordinate.toString());
-            temp2.addAll(temp1);
-            return temp2;
-        } else {
-            return this.algorithmHandler.getPossibleMoves().get(coordinate.toString());
-        }
-    }
 
-    public Move getMoveFromPossibleMoves(ArrayList<Move> possibleMoves, BoardCoordinate endPosition) {
-        for (Move move : possibleMoves) {
-            if (move.getNewPosition().equals(endPosition)) {
-                return move;
-            }
-        }
-        return null;
-    }
 
     public ArrayList<Piece> getPieces() {
         return pieces;
-    }
-
-    public boolean isWhiteTurn() {
-        return whiteTurn;
     }
 
     public boolean canWhiteQCastle() {
@@ -478,8 +270,4 @@ public class Gamestate {
         return null;
     }
 
-    public void setWhitePlayer(Player player) {
-        this.whitePlayer = player;
-    }
-    public void setBlackPlayer(Player player) {this.blackPlayer = player;}
 }
