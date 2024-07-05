@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField fx:id="fenTextBox" layoutX="140.0" layoutY="500.0" prefHeight="40.0" prefWidth="800.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <Button fx:id="startGameButton" layoutX="390.0" layoutY="125.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" text="start game" />
+      <Button fx:id="loadButton" layoutX="390.0" layoutY="200.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" text="load from database" />
+      <Button fx:id="resetFenButton" layoutX="490.0" layoutY="556.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Reset FEN" />
+      <CheckBox fx:id="timeControlCheckBox" contentDisplay="RIGHT" layoutX="440.0" layoutY="275.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="150.0" text="time control">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </CheckBox>
+      <ChoiceBox fx:id="whitePlayerChoiceBox" layoutX="628.0" layoutY="321.0" prefWidth="150.0" visible="false" />
+      <ChoiceBox fx:id="blackPlayerChoiceBox" layoutX="628.0" layoutY="366.0" prefWidth="150.0" visible="false" />
+      <CheckBox fx:id="whitePlayerHumanCheckBox" contentDisplay="RIGHT" layoutX="390.0" layoutY="320.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="200.0" text="white player human">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </CheckBox>
+      <CheckBox fx:id="blackPlayerHumanCheckBox" contentDisplay="RIGHT" layoutX="390.0" layoutY="365.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="200.0" text="black player human">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </CheckBox>
+      <CheckBox fx:id="whiteSideDownCheckBox" contentDisplay="RIGHT" layoutX="340.0" layoutY="410.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="250.0" text="white side facing down">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </CheckBox>
+      <ChoiceBox fx:id="timeControlChoiceBox" layoutX="630.0" layoutY="275.0" prefWidth="150.0" visible="false" />
+      <TextField fx:id="timeControleTextField" layoutX="820.0" layoutY="276.0" visible="false" />
+   </children>
+</AnchorPane>
