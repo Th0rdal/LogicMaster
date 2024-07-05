@@ -68,6 +68,10 @@ public class GamestateSnapshot {
         this.move = new Move(move);
     }
 
+    public boolean isWhiteTurn() {
+        return this.fullmoveCounter%2 == 1;
+    }
+
     public Move getMove() {
         return move;
     }

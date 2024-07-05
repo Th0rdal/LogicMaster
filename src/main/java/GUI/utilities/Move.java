@@ -24,6 +24,10 @@ public class Move {
     private boolean ambiguous = false; // different flags
     private SPECIAL_MOVE specialMove; // represents if a special move was made (e.g., en passant)
 
+    public Move(boolean draw) { // if a draw offer is accepted this is used to communicate with the GameHandler
+        this.draw = draw;
+    }
+
     public Move(PIECE_ID piece_ID,
                 BoardCoordinate oldPosition,
                 BoardCoordinate newPosition,

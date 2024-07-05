@@ -10,19 +10,21 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 
 public class Controller {
@@ -42,24 +44,29 @@ public class Controller {
     private Pane promotionPane;
     @FXML
     private GridPane moveHistoryGridPane;
+    @FXML
+    private Button drawButton;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Button saveButton;
 
     // colors used for the board
-    Color color1 = Color.LIGHTGRAY;
-    Color color2 = Color.SIENNA;
-    private Color selectedMoveHistory = Color.LIGHTBLUE;
-    private Color selectedColor = Color.web("#C6EDC3");
-    private static Color selectedTextColor = Color.BLUE;
-    private static Color defaultTextColor = Color.BLACK;
+    private static final Color color1 = Color.LIGHTGRAY;
+    private static final Color color2 = Color.SIENNA;
+    private static final Color selectedMoveHistory = Color.LIGHTBLUE;
+    private static final Color selectedColor = Color.web("#C6EDC3");
+    private static final Color selectedTextColor = Color.BLUE;
+    private static final Color defaultTextColor = Color.BLACK;
 
     private BlockingQueue<Move> moveQueue = null;
-    ArrayList<Move> possibleMoveList;
+    private ArrayList<Move> possibleMoveList;
 
-    Pane selectedPane;  //represents the currently selected pane
-    boolean selected = false; //true if a pane is currently selected
-    BoardCoordinate startCoordinates;   //saves the start coordinations of the selected pane
-    boolean whiteSideDown = true;   //TODO change. just a placeholder for board rotation. if true, white is starting on the bottom
-    GameHandler gameHandler;
-    private boolean inSnapshot = false;
+    private Pane selectedPane;  //represents the currently selected pane
+    private boolean selected = false; //true if a pane is currently selected
+    private BoardCoordinate startCoordinates;   //saves the start coordinations of the selected pane
+    private boolean whiteSideDown = true;   //TODO change. just a placeholder for board rotation. if true, white is starting on the bottom
+    private GameHandler gameHandler;
 
     private Pane promotionSelectedPane = null;
     private Piece promotionPiece = null;
@@ -78,7 +85,7 @@ public class Controller {
                 null);
 
     //promotion event handling
-    EventHandler<MouseEvent> onMouseMoveHandler = event -> {
+    private final EventHandler<MouseEvent> onMouseMoveHandler = event -> {
         if (this.promotionSelectedPane != null) {
             if (this.promotionSelectedPane.getBoundsInParent().contains(event.getX(), event.getY())) {
                 return;
@@ -256,6 +263,33 @@ public class Controller {
          * This function loads the board with squares and gives each square a chess board color
          */
 
+        // config buttons
+        this.drawButton.setOnAction(event -> {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Draw offer");
+            alert.setHeaderText(null);
+            alert.setContentText("Your opponent offered a draw. Do you want to accept");
+            ButtonType buttonYes = new ButtonType("YES");
+            ButtonType buttonNo = new ButtonType("NO");
+            alert.getButtonTypes().setAll(buttonYes, buttonNo);
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == buttonYes) {
+                Move move = new Move(true);
+                try {
+                    this.moveQueue.put(move);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        this.saveButton.setOnAction(event -> {
+            this.gameHandler.saveCurrentSnapshot();
+        });
+
+
+
         this.clockOpponentLabel.setFont(Font.font("Arial", 22));
         clockOpponentLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
         this.clockPlayerLabel.setFont(Font.font("Arial", 22));
@@ -301,14 +335,14 @@ public class Controller {
     public void loadPieces() {
         this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
         for (Piece piece : this.gameHandler.getPieces()) {
-            visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
+            visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY()-1);
         }
     }
 
     public void loadPieces(int moveNumber) {
         this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
         for (Piece piece : this.gameHandler.getSnapshot(moveNumber).getPieces()) {
-            visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY());
+            visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY()-1);
         }
     }
 
@@ -430,5 +464,30 @@ public class Controller {
 
             this.moveHistoryGridPane.add(tempPane, (moveCounter-1)%2, (moveCounter-1)/2);
         });
+    }
+
+    public void setCheckmateAlert(CHECKMATE_TYPE type, boolean whitePlayer) {
+        String text = switch (type) {
+            case DRAW -> "The players agreed to a draw";
+            case TIME -> String.format("The %s player ran out of time. %s wins!!!", whitePlayer ? "white" : "black", whitePlayer ? "black" : "white");
+            case CHECKMATE -> String.format("The %s player is checkmate. %s wins!!!", whitePlayer ? "white" : "black", whitePlayer ? "black" : "white");
+            case STALEMATE -> String.format("The %s player can no longer make a legal move in his turn. The game is a stalemate", whitePlayer ? "white" : "black");
+        };
+
+        text = text + "\nDo you wish to save the game in the database?";
+        //TODO make dialog out of this to let players add their name
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Game over!!!");
+        alert.setHeaderText(null);
+        alert.setContentText(text);
+        alert.showAndWait();
+        ButtonType buttonYes = new ButtonType("YES");
+        ButtonType buttonNo = new ButtonType("NO");
+        alert.getButtonTypes().setAll(buttonYes, buttonNo);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == buttonYes) {
+            //TODO save game in database
+        }
     }
 }

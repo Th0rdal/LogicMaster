@@ -1,18 +1,11 @@
 package GUI;
 
-import GUI.Player.Player;
 import GUI.piece.*;
 import GUI.utilities.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
+import java.util.stream.Collectors;
 
 /**
  * Represents the chess board (not visual) and handles all calculations.
@@ -26,10 +19,46 @@ public class Gamestate {
     // true if castle is possible (TRUE IF GENERAL CASTLING IS POSSIBLE. DOES NOT LOOK AT THE BOARD AT ALL)
     private boolean whiteQCastle = true, whiteKCastle = true, blackQCastle = true, blackKCastle = true;
     private BoardCoordinate enPassantCoordinates; // the coordinates of a field that can be taken by en Passant
-    private int halfmoveClock = 0; // half move counts moves since last pawn capture or pawn move
-    private int fullmoveClock = 0; // full move clock counts the total amount of moves
+    private int halfmoveCounter = 0; // half move counts moves since last pawn capture or pawn move
+    private int fullmoveCounter = 0; // full move clock counts the total amount of moves
 
     private Piece promotionPiece = null;
+    private Semaphore semaphore = new Semaphore(1);
+
+    public Gamestate() {}
+
+    public Gamestate(GamestateSnapshot snapshot) {
+        this.pieces = (ArrayList<Piece>) snapshot.getPieces().stream().map(piece -> {
+            switch (piece.getID()) {
+                case PAWN -> {
+                    return new Pawn((Pawn) piece);
+                }
+                case ROOK -> {
+                    return new Rook((Rook) piece);
+                }
+                case KNIGHT -> {
+                    return new Knight((Knight) piece);
+                }
+                case BISHOP -> {
+                    return new Bishop((Bishop) piece);
+                }
+                case QUEEN -> {
+                    return new Queen((Queen) piece);
+                }
+                case KING -> {
+                    return new King((King) piece);
+                }
+            }
+            return null;
+        }).collect(Collectors.toList());
+        this.whiteQCastle = snapshot.isWhiteQCastle();
+        this.whiteKCastle = snapshot.isWhiteKCastle();
+        this.blackQCastle = snapshot.isBlackQCastle();
+        this.blackKCastle = snapshot.isBlackKCastle();
+        this.enPassantCoordinates = new BoardCoordinate(enPassantCoordinates);
+        this.fullmoveCounter = snapshot.getFullmoveCounter();
+        this.halfmoveCounter = snapshot.getHalfmoveCounter();
+    }
 
     /**
      * This function handles everything that is needed to be done, when a move was made.
@@ -37,6 +66,12 @@ public class Gamestate {
      * @param move: The move taken
      */
     public GamestateSnapshot makeMove(Move move, boolean whiteTurn, int whiteClockCounter, int blackClockCounter) {
+        try {
+            this.semaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         Piece piece = this.getPieceAtCoordinates(move.getOldPosition());
         if (piece == null) {
             //TODO make this a useful Error
@@ -63,11 +98,11 @@ public class Gamestate {
 
         piece.makeMove(move.getNewPosition());
 
-        this.fullmoveClock++;
+        this.fullmoveCounter++;
         if (piece.getID() == PIECE_ID.PAWN || move.isCapture()) {
-            this.halfmoveClock = 0;
+            this.halfmoveCounter = 0;
         } else {
-            this.halfmoveClock++;
+            this.halfmoveCounter++;
         }
 
         if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) { // temp promotion code later removed for moveList
@@ -75,7 +110,10 @@ public class Gamestate {
                 pieces.add(promotionPiece);
         }
 
-        return this.saveSnapshot(move, whiteClockCounter, blackClockCounter);
+
+        GamestateSnapshot snapshot =  this.saveSnapshot(move, whiteClockCounter, blackClockCounter);
+        this.semaphore.release();
+        return snapshot;
     }
 
     public Piece promotePawn(Piece piece, PIECE_ID promoteTo) {
@@ -159,8 +197,8 @@ public class Gamestate {
         this.blackQCastle = true;
         this.blackKCastle = true;
         this.enPassantCoordinates = null;
-        this.halfmoveClock = 0;
-        this.fullmoveClock = 0;
+        this.halfmoveCounter = 0;
+        this.fullmoveCounter = 0;
         this.enPassantCoordinates = new BoardCoordinate("-");
 
     }
@@ -187,14 +225,26 @@ public class Gamestate {
                 this.blackQCastle,
                 this.blackKCastle,
                 this.enPassantCoordinates,
-                this.fullmoveClock,
-                this.halfmoveClock,
+                this.fullmoveCounter,
+                this.halfmoveCounter,
                 whiteClockCounter,
                 blackClockCounter,
                 move);
     }
 
-    public void loadConfiguration(
+    public GamestateSnapshot getCurrentSnapshot(int whiteClockCounter, int blackClockCounter) {
+        try {
+            this.semaphore.acquire();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        GamestateSnapshot snapshot = this.saveSnapshot(null, whiteClockCounter, blackClockCounter);
+        this.semaphore.release();
+        return snapshot;
+    }
+
+        public void loadConfiguration(
             ArrayList<Piece> pieces,
             boolean turn,
             boolean whiteKCastle,
@@ -213,8 +263,8 @@ public class Gamestate {
         this.blackKCastle = blackKCastle;
         this.blackQCastle = blackQCastle;
         this.enPassantCoordinates = new BoardCoordinate(enPassant);
-        this.halfmoveClock = halfmoveClock;
-        this.fullmoveClock = fullmoveClock;
+        this.halfmoveCounter = halfmoveClock;
+        this.fullmoveCounter = fullmoveClock;
     }
 
     public void setPieces(ArrayList<Piece> pieces) {
@@ -247,12 +297,12 @@ public class Gamestate {
         return enPassantCoordinates;
     }
 
-    public int getHalfmoveClock() {
-        return halfmoveClock;
+    public int getHalfmoveCounter() {
+        return halfmoveCounter;
     }
 
-    public int getFullmoveClock() {
-        return fullmoveClock;
+    public int getFullmoveCounter() {
+        return fullmoveCounter;
     }
 
     /**

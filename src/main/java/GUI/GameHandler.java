@@ -3,10 +3,7 @@ package GUI;
 import GUI.Player.Player;
 import GUI.piece.PIECE_ID;
 import GUI.piece.Piece;
-import GUI.utilities.AlgorithmHandler;
-import GUI.utilities.BoardCoordinate;
-import GUI.utilities.Calculator;
-import GUI.utilities.Move;
+import GUI.utilities.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -47,6 +44,7 @@ public class GameHandler {
     private final BlockingQueue<Move> moveQueue = new LinkedBlockingQueue<>();
 
     private boolean inSnapshot = false;
+    private boolean drawAccepted = false;
 
     public GameHandler() {
         this.gamestate = new Gamestate();
@@ -88,6 +86,12 @@ public class GameHandler {
 
                 move = this.moveQueue.take();
 
+                if (move.isDraw()) {
+                    Platform.runLater(() -> {
+                        this.controller.setCheckmateAlert(CHECKMATE_TYPE.DRAW, this.whiteTurn);
+                    });
+                    break;
+                }
                 if (this.isFirstMoveMade) {
                     this.isFirstMoveMade = false;
                     this.startClocks(true);
@@ -112,7 +116,18 @@ public class GameHandler {
             }
             this.swapTurn();
 
-        } while (!move.isDraw() && !move.isCheckmate());
+            if (move.isCheckmate()) { // here because if move.isCheckmate is true, the other player is in checkmate
+                Platform.runLater(() -> {
+                    this.controller.setCheckmateAlert(CHECKMATE_TYPE.CHECKMATE, whiteTurn);
+                });
+                break;
+            } else if (move.isDraw()) {
+                Platform.runLater(() -> {
+                    this.controller.setCheckmateAlert(CHECKMATE_TYPE.STALEMATE, whiteTurn);
+                });
+                break;
+            }
+        } while (true);
     }
 
     /**
@@ -129,16 +144,26 @@ public class GameHandler {
             new KeyFrame(Duration.seconds(0.1), event -> {
                 clockOpponentCounter--;
                 opponentLabel.setText(Calculator.getClockTimeInFormat(clockOpponentCounter));
+                if (clockOpponentCounter == 0) {
+                    Platform.runLater(() -> {
+                        this.controller.setCheckmateAlert(CHECKMATE_TYPE.TIME, false);
+                    });
+                }
             })
         );
         this.clockPlayer = new Timeline( // defines new Timeline for the player clock (bottom of the board)
             new KeyFrame(Duration.seconds(0.1), event -> {
                 clockPlayerCounter--;
                 playerLabel.setText(Calculator.getClockTimeInFormat(clockPlayerCounter));
+                if (clockPlayerCounter == 0) {
+                    Platform.runLater(() -> {
+                        this.controller.setCheckmateAlert(CHECKMATE_TYPE.TIME, true);
+                    });
+                }
             })
         );
 
-        // changes background olor of the running clock to black and text color to white
+        // changes background color of the running clock to black and text color to white
         this.clockOpponent.statusProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == Timeline.Status.PAUSED) {
                 opponentLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
@@ -200,14 +225,27 @@ public class GameHandler {
         this.currentTimeStopped = temp;
     }
 
+    public void saveCurrentSnapshot() {
+        GamestateSnapshot snapshot = this.gamestate.getCurrentSnapshot(this.clockPlayerCounter, this.clockOpponentCounter);
+        this.snapshotHistory.add(snapshot);
+    }
+
+    public void loadCurrentSnapshot() {
+        GamestateSnapshot currentSnapshot = this.snapshotHistory.get(this.snapshotHistory.size()-1);
+        this.snapshotHistory.remove(this.snapshotHistory.size()-1);
+        this.gamestate = new Gamestate(currentSnapshot);
+        this.clockPlayerCounter = currentSnapshot.getClockWhitePlayer();
+        this.clockOpponentCounter = currentSnapshot.getClockBlackPlayer();
+        this.whiteTurn = currentSnapshot.isWhiteTurn();
+        this.startClocks(this.whiteTurn);
+        Platform.runLater(() -> {
+            this.controller.loadPieces();
+        });
+    }
+
     // getter
     public boolean isCurrentPlayerHuman() {
         return this.getCurrentPlayer().isHuman();
-    }
-
-    public Move getMoveFromPossibleMoves(ArrayList<Move> possibleMoves, BoardCoordinate endPosition) {
-
-        return null;
     }
 
     public Player getCurrentPlayer() {
@@ -270,7 +308,7 @@ public class GameHandler {
     }
 
     public int getFullmoveClock() {
-        return this.gamestate.getFullmoveClock();
+        return this.gamestate.getFullmoveCounter();
     }
 
     public void setController(Controller controller) {

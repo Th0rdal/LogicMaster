@@ -116,10 +116,10 @@ public class BoardConverter {
         fen.append(gamestate.getEnPassantCoordinates().toLowerCaseString());
 
         fen.append(" ");
-        fen.append(gamestate.getHalfmoveClock());
+        fen.append(gamestate.getHalfmoveCounter());
 
         fen.append(" ");
-        fen.append(gamestate.getFullmoveClock());
+        fen.append(gamestate.getFullmoveCounter());
 
         return fen.toString();
     }
