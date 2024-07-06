@@ -104,7 +104,7 @@ public class GameHandler {
                 throw new RuntimeException(e);
             }
 
-            GamestateSnapshot snapshot = this.gamestate.makeMove(move, this.whiteTurn, this.clockPlayerCounter, this.clockOpponentCounter);
+            GamestateSnapshot snapshot = this.gamestate.makeMove(move, this.clockPlayerCounter, this.clockOpponentCounter);
             this.snapshotHistory.add(snapshot);
             Move finalMove = move;
             if (!this.inSnapshot) {

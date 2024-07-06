@@ -22,11 +22,18 @@ public class Gamestate {
     private int halfmoveCounter = 0; // half move counts moves since last pawn capture or pawn move
     private int fullmoveCounter = 0; // full move clock counts the total amount of moves
 
-    private Piece promotionPiece = null;
-    private Semaphore semaphore = new Semaphore(1);
+    private Semaphore semaphore = new Semaphore(1); // needed as more than one thread could concurrently do something (e.g., makeMove and snapshot at same time)
 
+    /**
+     * empty constructor if just a Gamestate should be created.
+     * NEEDS TO BE LOADED LATER ON USING BoardConverter.loadFEN
+     */
     public Gamestate() {}
 
+    /**
+     * This constructor is used to load a GamestateSnapshot into the Gamestate
+     * @param snapshot: the snapshot to load
+     */
     public Gamestate(GamestateSnapshot snapshot) {
         this.pieces = (ArrayList<Piece>) snapshot.getPieces().stream().map(piece -> {
             switch (piece.getID()) {
@@ -62,15 +69,19 @@ public class Gamestate {
 
     /**
      * This function handles everything that is needed to be done, when a move was made.
-     * TODO should take Move as parameter because move is chosen from Move list
+     * It takes the clockCounters, because they are needed for GamestateSnapshot creation.
      * @param move: The move taken
+     * @param whiteClockCounter: the current time of the white player
+     * @param blackClockCounter: the current time of the black player
      */
-    public GamestateSnapshot makeMove(Move move, boolean whiteTurn, int whiteClockCounter, int blackClockCounter) {
+    public GamestateSnapshot makeMove(Move move, int whiteClockCounter, int blackClockCounter) {
         try {
             this.semaphore.acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        boolean whiteTurn = this.fullmoveCounter+1 % 2 == 1;
 
         Piece piece = this.getPieceAtCoordinates(move.getOldPosition());
         if (piece == null) {
@@ -79,14 +90,13 @@ public class Gamestate {
         }
         if (move.isCapture()) { // remove piece if already at end position
             this.removePiece(move.getNewPosition());
-        } else if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) {
-            piece.makeMove(move.getNewPosition());
+        } else if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) { // move Rook when castling
             if (whiteTurn) {
                 this.getPieceAtCoordinates(new BoardCoordinate("H1")).makeMove(new BoardCoordinate("F1"));
             } else {
                 this.getPieceAtCoordinates(new BoardCoordinate("H8")).makeMove(new BoardCoordinate("F8"));
             }
-        } else if (move.getSpecialMove() == SPECIAL_MOVE.QUEEN_CASTLE) {
+        } else if (move.getSpecialMove() == SPECIAL_MOVE.QUEEN_CASTLE) { // move rook when castling
             if (whiteTurn) {
                 this.getPieceAtCoordinates(new BoardCoordinate("A1")).makeMove(new BoardCoordinate("D1"));
             } else {
@@ -96,8 +106,9 @@ public class Gamestate {
             this.removePiece(new BoardCoordinate(move.getNewPosition().getXLocation(), move.getNewPosition().getYLocation()-1));
         }
 
-        piece.makeMove(move.getNewPosition());
+        piece.makeMove(move.getNewPosition()); // make actual move
 
+        // update full and half move counter
         this.fullmoveCounter++;
         if (piece.getID() == PIECE_ID.PAWN || move.isCapture()) {
             this.halfmoveCounter = 0;
@@ -105,32 +116,44 @@ public class Gamestate {
             this.halfmoveCounter++;
         }
 
-        if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) { // temp promotion code later removed for moveList
+        // handle special move promotion
+        if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) {
                 this.removePiece(move.getNewPosition());
-                pieces.add(promotionPiece);
+                this.pieces.add(this.createPromotionPiece(move, whiteTurn));
         }
-
 
         GamestateSnapshot snapshot =  this.saveSnapshot(move, whiteClockCounter, blackClockCounter);
         this.semaphore.release();
         return snapshot;
     }
 
-    public Piece promotePawn(Piece piece, PIECE_ID promoteTo) {
-        if (piece.getID() != PIECE_ID.PAWN) {
-            // TODO change
-            throw new RuntimeException("trying to promote something that is not a pawn");
+    /**
+     * This function returns a new piece equivalent to the ID of the move.promotion_ID ID.
+     * @param move: the move taken
+     * @param whiteTurn: the side that took the move
+     * @return: Piece object
+     */
+    private Piece createPromotionPiece(Move move, boolean whiteTurn) {
+        Piece promotionPiece = switch (move.getPromotion_ID()) {
+            case ROOK -> new Rook(move.getNewPosition(), whiteTurn);
+            case KNIGHT -> new Knight(move.getNewPosition(), whiteTurn);
+            case BISHOP -> new Bishop(move.getNewPosition(), whiteTurn);
+            case QUEEN -> new Queen(move.getNewPosition(), whiteTurn);
+            default -> null;
+        };
+        if (promotionPiece == null) {
+            throw new RuntimeException("UNEXPECTED. PROMOTION IS NULL in makeMove");
         }
-        this.promotionPiece = ((Pawn) piece).promote(promoteTo);
-        return this.promotionPiece;
+        return promotionPiece;
     }
 
     /**
-     * Checks if the there is a piece on the given coordinates
+     * Checks if the there is a piece on the given coordinates.
      * @param coordinates The coordinates to check
      * @return true if there is a piece, else false
      */
     public boolean hasPiece(BoardCoordinate coordinates) {
+        // TODO check if needed
         Piece piece = this.getPieceAtCoordinates(coordinates);
         if (piece == null) { // return false if there is no piece at this coordinates
             return false;
@@ -154,16 +177,13 @@ public class Gamestate {
 
     }
 
-    public void clearBoard() {
-        this.pieces = new ArrayList<>();
-    }
-
     /**
      * loads a fresh new default board and resets all values needed: This is equivalent to the FEN notation
      * that is saved in the variable START_POSITION
      */
     public void loadStartPosition() {
-        this.clearBoard();
+        // TODO check if this is useful
+        // prob not, because a new Gamestate can just be created
 
         // add all black pieces
         for (int i = 1; i <= 8; i++) {
@@ -200,7 +220,6 @@ public class Gamestate {
         this.halfmoveCounter = 0;
         this.fullmoveCounter = 0;
         this.enPassantCoordinates = new BoardCoordinate("-");
-
     }
 
     /**
@@ -217,6 +236,13 @@ public class Gamestate {
         return false;
     }
 
+    /**
+     * Creates a snapshot of the current state of the Gamestate object.
+     * @param move: the move taken
+     * @param whiteClockCounter: the remaining time of the white player
+     * @param blackClockCounter: the remaining time of the black player
+     * @return GamestateSnapshot instance representing the current Gamestate state
+     */
     private GamestateSnapshot saveSnapshot(Move move, int whiteClockCounter, int blackClockCounter) {
         return new GamestateSnapshot(
                 this.pieces,
@@ -232,6 +258,12 @@ public class Gamestate {
                 move);
     }
 
+    /**
+     * Creates a snapshot of the current Gamestate. The move will be null.
+     * @param whiteClockCounter: the remaining time of the white player
+     * @param blackClockCounter: the remaining time of the black player
+     * @return GamestateSnapshot instance representing the current Gamestate state
+     */
     public GamestateSnapshot getCurrentSnapshot(int whiteClockCounter, int blackClockCounter) {
         try {
             this.semaphore.acquire();
@@ -244,7 +276,20 @@ public class Gamestate {
         return snapshot;
     }
 
-        public void loadConfiguration(
+    /**
+     * Loads the given configuration into the Gamestate
+     * TODO check if this should not just be a constructor
+     * @param pieces
+     * @param turn
+     * @param whiteKCastle
+     * @param whiteQCastle
+     * @param blackKCastle
+     * @param blackQCastle
+     * @param enPassant
+     * @param halfmoveClock
+     * @param fullmoveClock
+     */
+    public void loadConfiguration(
             ArrayList<Piece> pieces,
             boolean turn,
             boolean whiteKCastle,
@@ -254,8 +299,6 @@ public class Gamestate {
             String enPassant,
             int halfmoveClock,
             int fullmoveClock) {
-
-        this.clearBoard();
 
         this.pieces = pieces;
         this.whiteKCastle = whiteKCastle;
@@ -267,43 +310,23 @@ public class Gamestate {
         this.fullmoveCounter = fullmoveClock;
     }
 
-    public void setPieces(ArrayList<Piece> pieces) {
-        this.pieces = pieces;
-    }
+    public void setPieces(ArrayList<Piece> pieces) {this.pieces = pieces;}
 
+    public ArrayList<Piece> getPieces() {return pieces;}
 
+    public boolean canWhiteQCastle() {return whiteQCastle;}
 
-    public ArrayList<Piece> getPieces() {
-        return pieces;
-    }
+    public boolean canWhiteKCastle() {return whiteKCastle;}
 
-    public boolean canWhiteQCastle() {
-        return whiteQCastle;
-    }
+    public boolean canBlackQCastle() {return blackQCastle;}
 
-    public boolean canWhiteKCastle() {
-        return whiteKCastle;
-    }
+    public boolean canBlackKCastle() {return blackKCastle;}
 
-    public boolean canBlackQCastle() {
-        return blackQCastle;
-    }
+    public BoardCoordinate getEnPassantCoordinates() {return enPassantCoordinates;}
 
-    public boolean canBlackKCastle() {
-        return blackKCastle;
-    }
+    public int getHalfmoveCounter() {return halfmoveCounter;}
 
-    public BoardCoordinate getEnPassantCoordinates() {
-        return enPassantCoordinates;
-    }
-
-    public int getHalfmoveCounter() {
-        return halfmoveCounter;
-    }
-
-    public int getFullmoveCounter() {
-        return fullmoveCounter;
-    }
+    public int getFullmoveCounter() {return fullmoveCounter;}
 
     /**
      * BoardCoordinate coordinates: The coordinates you need the piece of

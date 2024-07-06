@@ -7,6 +7,9 @@ import GUI.utilities.Move;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a "snapshot" of the current configuration of a Gamestate instance
+ */
 public class GamestateSnapshot {
 
     private final ArrayList<Piece> pieces;
@@ -21,6 +24,20 @@ public class GamestateSnapshot {
 
     private final Move move;
 
+    /**
+     * Create GamestateSnapshot
+     * @param pieces
+     * @param whiteQCastle
+     * @param whiteKCastle
+     * @param blackQCastle
+     * @param blackKCastle
+     * @param enPassantCoordinates
+     * @param fullmoveCounter
+     * @param halfmoveCounter
+     * @param clockWhitePlayer
+     * @param clockBlackPlayer
+     * @param move
+     */
     public GamestateSnapshot(ArrayList<Piece> pieces,
                              boolean whiteQCastle,
                              boolean whiteKCastle,
