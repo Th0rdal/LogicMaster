@@ -1,4 +1,4 @@
-package GUI;
+package GUI.gamestate;
 
 import GUI.piece.*;
 import GUI.utilities.BoardCoordinate;

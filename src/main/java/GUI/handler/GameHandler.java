@@ -1,5 +1,8 @@
-package GUI;
+package GUI.handler;
 
+import GUI.Controller;
+import GUI.gamestate.Gamestate;
+import GUI.gamestate.GamestateSnapshot;
 import GUI.Player.Player;
 import GUI.piece.PIECE_ID;
 import GUI.piece.Piece;
@@ -309,6 +312,10 @@ public class GameHandler {
 
     public int getFullmoveClock() {
         return this.gamestate.getFullmoveCounter();
+    }
+
+    public Controller getController() {
+        return this.controller;
     }
 
     public void setController(Controller controller) {

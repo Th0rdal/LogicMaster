@@ -1,6 +1,6 @@
 package GUI.Player;
 
-import GUI.Gamestate;
+import GUI.gamestate.Gamestate;
 import GUI.utilities.AlgorithmHandler;
 import GUI.utilities.BoardConverter;
 import GUI.utilities.Move;

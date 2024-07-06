@@ -1,6 +1,5 @@
-package GUI;
+package GUI.shapes;
 
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class Circle extends javafx.scene.shape.Circle{

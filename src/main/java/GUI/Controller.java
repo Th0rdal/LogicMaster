@@ -1,7 +1,10 @@
 package GUI;
 
 import GUI.Player.Player;
+import GUI.handler.GameHandler;
 import GUI.piece.*;
+import GUI.shapes.Circle;
+import GUI.shapes.Square;
 import GUI.utilities.*;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -22,7 +25,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
@@ -30,7 +32,6 @@ import java.util.concurrent.BlockingQueue;
 public class Controller {
 
     private Stage stage = null;
-    private static Controller controller = null;
 
     @FXML
     private GridPane visualBoard;
@@ -183,13 +184,6 @@ public class Controller {
         new Thread(() -> {
             this.gameHandler.gameLoop();
         }).start();
-    }
-
-    public static Controller getController(Stage stage) {
-        if (Controller.controller == null) {
-            Controller.controller = new Controller(stage);
-        }
-        return Controller.controller;
     }
 
     /**
@@ -353,7 +347,7 @@ public class Controller {
         this.moveQueue = moveQueue;
     }
 
-    void resetPlayerEventHandling() {
+    public void resetPlayerEventHandling() {
         visualBoard.removeEventFilter(MouseEvent.MOUSE_PRESSED, playerOnMousePressed);
         visualBoard.removeEventFilter(MouseEvent.MOUSE_DRAGGED, playerOnMouseDragged);
         visualBoard.removeEventFilter(MouseEvent.MOUSE_RELEASED, playerOnMouseReleased);
