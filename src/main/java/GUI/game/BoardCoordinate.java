@@ -73,4 +73,20 @@ public class BoardCoordinate {
     public int getYLocation() {
         return yLocation;
     }
+
+    public BoardCoordinate getLeft() {
+        return new BoardCoordinate(xLocation - 1, yLocation);
+    }
+
+    public BoardCoordinate getRight() {
+        return new BoardCoordinate(xLocation + 1, yLocation);
+    }
+
+    public BoardCoordinate getUp() {
+        return new BoardCoordinate(xLocation, yLocation + 1);
+    }
+
+    public BoardCoordinate getDown() {
+        return new BoardCoordinate(xLocation, yLocation - 1);
+    }
 }

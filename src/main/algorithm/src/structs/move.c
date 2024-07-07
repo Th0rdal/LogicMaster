@@ -97,7 +97,10 @@ void printMove(const Move* move, char* string) {
                     break;
                 default:
                     break;
-            }    
+            }
+        } else {
+            moveString[counter] = 'P';
+            counter++;
         }
         
     

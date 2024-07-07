@@ -1,6 +1,7 @@
 package GUI.game;
 
 import GUI.piece.*;
+import GUI.utilities.Timecontrol;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -22,6 +23,8 @@ public class GamestateSnapshot {
 
     private final Move move;
 
+    private final Timecontrol timecontrol;
+
     /**
      * Create GamestateSnapshot
      * @param pieces
@@ -34,7 +37,6 @@ public class GamestateSnapshot {
      * @param halfmoveCounter
      * @param clockWhitePlayer
      * @param clockBlackPlayer
-     * @param move
      */
     public GamestateSnapshot(ArrayList<Piece> pieces,
                              boolean whiteQCastle,
@@ -46,7 +48,8 @@ public class GamestateSnapshot {
                              int halfmoveCounter,
                              int clockWhitePlayer,
                              int clockBlackPlayer,
-                             Move tempMove) {
+                             Move tempMove,
+                             Timecontrol timecontrol) {
 
         this.pieces = (ArrayList<Piece>) pieces.stream().map(piece -> {
             switch (piece.getID()) {
@@ -85,6 +88,7 @@ public class GamestateSnapshot {
         } else {
             this.move = new Move(tempMove);
         }
+        this.timecontrol = timecontrol;
     }
 
     public boolean isWhiteTurn() {

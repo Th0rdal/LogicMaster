@@ -146,6 +146,10 @@ public class Move {
         return builder.toString();
     }
 
+    public boolean pawnMoved2Squares() {
+        return this.piece_ID == PIECE_ID.PAWN && Math.abs(this.oldPosition.getYLocation() - this.newPosition.getYLocation()) == 2;
+    }
+
     public BoardCoordinate getOldPosition() {
         return oldPosition;
     }

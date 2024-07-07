@@ -1,6 +1,7 @@
 package GUI.game;
 
 import GUI.piece.*;
+import GUI.utilities.Timecontrol;
 
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
@@ -22,6 +23,7 @@ public class Gamestate {
     private int fullmoveCounter = 0; // full move clock counts the total amount of moves
 
     private Semaphore semaphore = new Semaphore(1); // needed as more than one thread could concurrently do something (e.g., makeMove and snapshot at same time)
+    private Timecontrol timecontrol;
 
     /**
      * empty constructor if just a Gamestate should be created.
@@ -61,8 +63,8 @@ public class Gamestate {
         this.whiteKCastle = snapshot.isWhiteKCastle();
         this.blackQCastle = snapshot.isBlackQCastle();
         this.blackKCastle = snapshot.isBlackKCastle();
-        this.enPassantCoordinates = new BoardCoordinate(enPassantCoordinates);
-        this.fullmoveCounter = snapshot.getFullmoveCounter();
+        this.enPassantCoordinates = new BoardCoordinate(snapshot.getEnPassantCoordinates());
+        this.fullmoveCounter = snapshot.getMove() == null ? snapshot.getFullmoveCounter() : snapshot.getFullmoveCounter()+1;
         this.halfmoveCounter = snapshot.getHalfmoveCounter();
     }
 
@@ -70,17 +72,15 @@ public class Gamestate {
      * This function handles everything that is needed to be done, when a move was made.
      * It takes the clockCounters, because they are needed for GamestateSnapshot creation.
      * @param move: The move taken
-     * @param whiteClockCounter: the current time of the white player
-     * @param blackClockCounter: the current time of the black player
      */
-    public GamestateSnapshot makeMove(Move move, int whiteClockCounter, int blackClockCounter) {
+    public void makeMove(Move move) {
         try {
             this.semaphore.acquire();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        boolean whiteTurn = this.fullmoveCounter+1 % 2 == 1;
+        boolean whiteTurn = this.fullmoveCounter % 2 == 1;
 
         Piece piece = this.getPieceAtCoordinates(move.getOldPosition());
         if (piece == null) {
@@ -92,14 +92,18 @@ public class Gamestate {
         } else if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) { // move Rook when castling
             if (whiteTurn) {
                 this.getPieceAtCoordinates(new BoardCoordinate("H1")).makeMove(new BoardCoordinate("F1"));
+                this.whiteKCastle = false;
             } else {
                 this.getPieceAtCoordinates(new BoardCoordinate("H8")).makeMove(new BoardCoordinate("F8"));
+                this.blackKCastle = false;
             }
         } else if (move.getSpecialMove() == SPECIAL_MOVE.QUEEN_CASTLE) { // move rook when castling
             if (whiteTurn) {
                 this.getPieceAtCoordinates(new BoardCoordinate("A1")).makeMove(new BoardCoordinate("D1"));
+                this.whiteQCastle = false;
             } else {
                 this.getPieceAtCoordinates(new BoardCoordinate("A8")).makeMove(new BoardCoordinate("D8"));
+                this.blackQCastle = false;
             }
         } else if (move.getSpecialMove() == SPECIAL_MOVE.EN_PASSANT) {
             this.removePiece(new BoardCoordinate(move.getNewPosition().getXLocation(), move.getNewPosition().getYLocation()-1));
@@ -113,8 +117,6 @@ public class Gamestate {
                 this.pieces.add(this.createPromotionPiece(move, whiteTurn));
         }
 
-        GamestateSnapshot snapshot =  this.saveSnapshot(move, whiteClockCounter, blackClockCounter);
-
         // update full and half move counter
         this.fullmoveCounter++;
         if (piece.getID() == PIECE_ID.PAWN || move.isCapture()) {
@@ -123,8 +125,28 @@ public class Gamestate {
             this.halfmoveCounter++;
         }
 
+        //calculate new en Passant possible
+        if (move.pawnMoved2Squares()) {
+            // check if there are pawns next to the just moved pawn
+            Piece leftPiece = this.getPieceAtCoordinates(move.getNewPosition().getLeft());
+            leftPiece = leftPiece != null && leftPiece.getID() == PIECE_ID.PAWN ? this.getPieceAtCoordinates(move.getNewPosition().getLeft()) : null;
+            Piece rightPiece = this.getPieceAtCoordinates(move.getNewPosition().getRight());
+            rightPiece = rightPiece != null && rightPiece.getID() == PIECE_ID.PAWN ? this.getPieceAtCoordinates(move.getNewPosition().getRight()) : null;
+            if (leftPiece != null) { // if there is check if it is the correct color (opposite color)
+                if (leftPiece.isWhite() == (this.fullmoveCounter % 2 == 1)) {
+                    this.enPassantCoordinates = this.fullmoveCounter % 2 == 1 ? move.getNewPosition().getDown() : move.getNewPosition().getUp();
+                }
+            }
+            if (rightPiece != null) {
+                if (rightPiece.isWhite() == (this.fullmoveCounter % 2 == 1)) {
+                    this.enPassantCoordinates = this.fullmoveCounter % 2 == 1 ? move.getNewPosition().getDown() : move.getNewPosition().getUp();
+                }
+            }
+        } else {
+            this.enPassantCoordinates = new BoardCoordinate("-");
+        }
+
         this.semaphore.release();
-        return snapshot;
     }
 
     /**
@@ -216,7 +238,6 @@ public class Gamestate {
         this.whiteKCastle = true;
         this.blackQCastle = true;
         this.blackKCastle = true;
-        this.enPassantCoordinates = null;
         this.halfmoveCounter = 0;
         this.fullmoveCounter = 0;
         this.enPassantCoordinates = new BoardCoordinate("-");
@@ -243,7 +264,7 @@ public class Gamestate {
      * @param blackClockCounter: the remaining time of the black player
      * @return GamestateSnapshot instance representing the current Gamestate state
      */
-    private GamestateSnapshot saveSnapshot(Move move, int whiteClockCounter, int blackClockCounter) {
+    private GamestateSnapshot saveSnapshot(Move move, int whiteClockCounter, int blackClockCounter, Timecontrol timecontrol) {
         return new GamestateSnapshot(
                 this.pieces,
                 this.whiteQCastle,
@@ -255,7 +276,8 @@ public class Gamestate {
                 this.halfmoveCounter,
                 whiteClockCounter,
                 blackClockCounter,
-                move);
+                move,
+                timecontrol);
     }
 
     /**
@@ -264,14 +286,14 @@ public class Gamestate {
      * @param blackClockCounter: the remaining time of the black player
      * @return GamestateSnapshot instance representing the current Gamestate state
      */
-    public GamestateSnapshot getCurrentSnapshot(int whiteClockCounter, int blackClockCounter) {
+    public GamestateSnapshot getCurrentSnapshot(int whiteClockCounter, int blackClockCounter, Timecontrol timecontrol) {
         try {
             this.semaphore.acquire();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        GamestateSnapshot snapshot = this.saveSnapshot(null, whiteClockCounter, blackClockCounter);
+        GamestateSnapshot snapshot = this.saveSnapshot(null, whiteClockCounter, blackClockCounter, this.timecontrol);
         this.semaphore.release();
         return snapshot;
     }

@@ -64,14 +64,14 @@ public class IndexController {
              if (!whitePlayerHumanCheckBox.isSelected()) {
                  whiteName = "";
                  if (whitePath == null) {
-                     AlertHandler.throwAlert(Alert.AlertType.INFORMATION, "AI missing", "no AI chosen for white player");
+                     AlertHandler.showAlert(Alert.AlertType.INFORMATION, "AI missing", "no AI chosen for white player");
                      return;
                  }
              }
              if (!blackPlayerHumanCheckBox.isSelected()) {
                  blackName = "";
                  if (blackPath == null) {
-                     AlertHandler.throwAlert(Alert.AlertType.INFORMATION, "AI missing", "no AI chosen for black player");
+                     AlertHandler.showAlert(Alert.AlertType.INFORMATION, "AI missing", "no AI chosen for black player");
                      return;
                  }
              }
@@ -83,7 +83,7 @@ public class IndexController {
                      try {
                          timecontrol = new Timecontrol(timeControlTextField.getText());
                      } catch (RuntimeException ex) {
-                         AlertHandler.throwAlert(Alert.AlertType.ERROR, "Error", "The time control string could not be converted. It must only include numbers, '/', '.', ':' and '+'!");
+                         AlertHandler.showAlert(Alert.AlertType.ERROR, "Error", "The time control string could not be converted. It must only include numbers, '/', '.', ':' and '+'!");
                          return;
                      }
                  }

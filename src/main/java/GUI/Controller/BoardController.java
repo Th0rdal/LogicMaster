@@ -1,9 +1,6 @@
 package GUI.Controller;
 
-import GUI.game.BoardCoordinate;
-import GUI.game.CHECKMATE_TYPE;
-import GUI.game.Move;
-import GUI.game.SPECIAL_MOVE;
+import GUI.game.*;
 import GUI.handler.GameHandler;
 import GUI.handler.SceneHandler;
 import GUI.piece.*;
@@ -32,6 +29,7 @@ import javafx.scene.control.Alert.AlertType;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CompletableFuture;
 
 public class BoardController {
 
@@ -75,12 +73,13 @@ public class BoardController {
 
     private Pane selectedPane;  //represents the currently selected pane
     private BoardCoordinate startCoordinates;   //saves the start coordinations of the selected pane
-    private boolean whiteSideDown = true;   //TODO change. just a placeholder for board rotation. if true, white is starting on the bottom
+    private boolean whiteSideDown = true;
     private GameHandler gameHandler;
 
     private final int moveHistoryGridPaneHeight = 50;
 
     private Pane promotionSelectedPane = null;
+    private CompletableFuture<Boolean> promotionWait = new CompletableFuture<>();
     private StackPane selectedHistoryTextPane = null;
     private Move move = null;
 
@@ -119,17 +118,48 @@ public class BoardController {
         for (Node node : visualBoard.getChildren()) {
             if (node instanceof Pane tempPane && !(node instanceof StackPane)) {
                 if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) { // mouse is in a pane
-                    startCoordinates = new BoardCoordinate((int) Math.floor(event.getX() / 100) + 1, whiteSideDown ? 8 - (int) Math.floor(event.getY() / 100) : (int) Math.floor(event.getY() / 100)+1);
-                    if (this.gameHandler.isUsablePiece(startCoordinates)) {
-                        if (selectedPane != null) {
-                            selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+                    int tempX = (int) Math.floor(event.getX() / 100);
+                    int tempY = (int) Math.floor(event.getY() / 100);
+                    startCoordinates = new BoardCoordinate(
+                            whiteSideDown ? tempX + 1 : 8 - tempX,
+                            whiteSideDown ? 8 - tempY : tempY+1);
+
+                    if (this.gameHandler.isInSnapshot()) { // snapshot
+                        int currentFieldNumber = Integer.parseInt((
+                            (Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0,
+                            ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':')));
+
+                        // currentFieldNumber % 2 != 1, because you need to check for the enemy. If it is snapshot turn 2,
+                        // then it is whites turn
+                        if (!this.gameHandler.isUsablePieceSnapshot(startCoordinates, currentFieldNumber)) {
+                            startCoordinates = null;
+                            break;
                         }
-                        selectedPane = tempPane;
-                        selectedPane.setBackground(new Background(new BackgroundFill(BoardController.selectedColor, null, null)));
-                    } else if (this.selectedPane == null) {
+                        if (AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "New game?",
+                                "You are currently in a snapshot of a previous move. Do you wish to start a new game from this position?")) {
+                            if (AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "save old game?", "Do you wish to save the game in the database?")) {
+                                //TODO save in db
+                            }
+                            new Thread(() -> { // new thread so javafx thread never has to wait for anything
+                                this.gameHandler.setContinueFromSnapshotFlag(Integer.parseInt((
+                                    (Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0,
+                                    ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))));
+                            }).start();
+                        }
                         startCoordinates = null;
+                        break;
+                    } else { // not snapshot
+                        if (this.gameHandler.isUsablePiece(startCoordinates)) {
+                            if (selectedPane != null) {
+                                selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+                            }
+                            selectedPane = tempPane;
+                            selectedPane.setBackground(new Background(new BackgroundFill(BoardController.selectedColor, null, null)));
+                        } else if (this.selectedPane == null) {
+                            startCoordinates = null;
+                        }
+                        break;
                     }
-                    break;
                 }
             }
         }
@@ -144,7 +174,9 @@ public class BoardController {
                 if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) {
                     visualBoard.add(tempCircle, 6, 7);
                 } else {
-                    visualBoard.add(tempCircle, move.getNewPosition().getXLocation()-1, whiteSideDown ? 8 - move.getNewPosition().getYLocation() : move.getNewPosition().getYLocation()-1);
+                    visualBoard.add(tempCircle,
+                            whiteSideDown ? move.getNewPosition().getXLocation()-1 : 8 - move.getNewPosition().getXLocation(),
+                            whiteSideDown ? 8 - move.getNewPosition().getYLocation() : move.getNewPosition().getYLocation()-1);
                 }
                 GridPane.setHalignment(tempCircle, HPos.CENTER);
                 GridPane.setValignment(tempCircle, VPos.CENTER);
@@ -176,18 +208,25 @@ public class BoardController {
     private final EventHandler<MouseEvent> onMouseClickHandler = event -> {
         if (event.getButton() == MouseButton.PRIMARY) {
             // chosen
-            switch (this.promotionSelectedPane.getId()) {
-                case "KNIGHT" -> this.move.setPromotionID(PIECE_ID.KNIGHT);
-                case "QUEEN" -> this.move.setPromotionID(PIECE_ID.QUEEN);
-                case "BISHOP" -> this.move.setPromotionID(PIECE_ID.BISHOP);
-                case "ROOK" -> this.move.setPromotionID(PIECE_ID.ROOK);
+            PIECE_ID id = switch (this.promotionSelectedPane.getId()) {
+                case "KNIGHT" -> PIECE_ID.KNIGHT;
+                case "QUEEN" -> PIECE_ID.QUEEN;
+                case "BISHOP" -> PIECE_ID.BISHOP;
+                case "ROOK" -> PIECE_ID.ROOK;
                 default -> throw new RuntimeException("Promoting piece into something that is not allowed");
             };
+
+            for (Move move : this.possibleMoveList) {
+                if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION && move.getPromotion_ID() == id) {
+                    this.move = move;
+                }
+            }
             this.promotionPane.setOnMouseMoved(null);
             this.promotionPane.setOnMouseClicked(null);
             this.promotionPane.setVisible(false);
-        } else if (event.getButton() == MouseButton.SECONDARY) { //TODO find out purpose
-            this.promotionSelectedPane.setVisible(false);
+            this.putMove();
+        } else if (event.getButton() == MouseButton.SECONDARY) {
+            this.promotionPane.setVisible(!this.promotionPane.isVisible());
         }
     };
 
@@ -290,7 +329,9 @@ public class BoardController {
         });
 
         this.backButton.setOnAction(event -> {
-            this.gameHandler.setInterruptFlag();
+            new Thread(() -> { // new thread so javafx thread never has to wait
+                this.gameHandler.setInterruptFlag();
+            });
             SceneHandler.getInstance().activate("index");
         });
 
@@ -328,8 +369,7 @@ public class BoardController {
         promotionPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         promotionPane.setVisible(false);
 
-        // TODO fix bug that starting with 3rd row, the rows are too small
-        this.moveHistoryGridPane.setHgap(10);
+        this.moveHistoryGridPane.setHgap(12);
         this.moveHistoryScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         stage.show();
     }
@@ -337,14 +377,18 @@ public class BoardController {
     public void loadPieces() {
         this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
         for (Piece piece : this.gameHandler.getPieces()) {
-            visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY()-1);
+            visualBoard.add(piece.getPieceImage(),
+                    whiteSideDown ? piece.getLocationX()-1 : 8 - piece.getLocationX(),
+                    whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY()-1);
         }
     }
 
     public void loadPieces(int moveNumber) {
         this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
         for (Piece piece : this.gameHandler.getSnapshot(moveNumber).getPieces()) {
-            visualBoard.add(piece.getPieceImage(), piece.getLocationX()-1, whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY()-1);
+            visualBoard.add(piece.getPieceImage(),
+                    whiteSideDown ? piece.getLocationX()-1 : 8 - piece.getLocationX(),
+                    whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY()-1);
         }
     }
 
@@ -385,7 +429,10 @@ public class BoardController {
             return;
         }
 
-        BoardCoordinate tempCoordinates = new BoardCoordinate(tempX+1, whiteSideDown ? 8 - (int) (double) (y / 100) : tempY+1);
+        BoardCoordinate tempCoordinates = new BoardCoordinate(
+                whiteSideDown ? tempX+1 : 8 - tempX,
+                whiteSideDown ? 8 - tempY : tempY+1);
+        System.out.println(tempCoordinates);
 
         if (startCoordinates.equals(tempCoordinates)) {
             tempView.setLayoutX(0);
@@ -400,6 +447,7 @@ public class BoardController {
             }
         }
         if (this.move != null) {
+
             this.resetSelected();
 
             if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) { // promotion logic
@@ -407,15 +455,19 @@ public class BoardController {
                 this.promotionPane.setVisible(true);
                 this.promotionPane.setOnMouseMoved(this.onMouseMoveHandler);
                 this.promotionPane.setOnMouseClicked(this.onMouseClickHandler);
-            }
-
-            try {
-                this.moveQueue.put(move);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            } else {
+                this.putMove();
             }
         } else {
             this.resetSelected();
+        }
+    }
+
+    private void putMove() {
+        try {
+            this.moveQueue.put(move);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -428,9 +480,9 @@ public class BoardController {
         visualBoard.getChildren().removeIf(node -> node instanceof Circle);
     }
 
-    public void addMoveToMovelist(Move move) {
+    public void addMoveToMovelist(Move move, int fullmovecounter) {
         Platform.runLater(() -> {
-            int moveCounter = this.gameHandler.getFullmoveClock() - 1;
+            int moveCounter = fullmovecounter - 1;
             Text temp = new Text(moveCounter + ": " + move.toString()); //-1 because gamestate is already incremented
             StackPane tempPane = new StackPane();
             tempPane.getChildren().add(temp);
@@ -444,7 +496,7 @@ public class BoardController {
                             (Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0,
                             ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':')));
                     int moveNumber = Integer.parseInt(temp.getText().substring(0, temp.getText().indexOf(':')));
-                    if (moveNumber !=  this.gameHandler.getFullmoveClock() || currentFieldNumber != this.gameHandler.getFullmoveClock()) {
+                    if (moveNumber !=  moveCounter || currentFieldNumber != moveCounter-1) {
                         this.loadPieces(moveNumber);
                     }
                 }
@@ -458,44 +510,44 @@ public class BoardController {
 
             // if selectedHistoryText is the last move taken or is empty, fire event
             if (this.selectedHistoryTextPane != null &&
-                    Integer.parseInt(((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0, ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))) == moveCounter) {
+                    Integer.parseInt(((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0, ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))) + 1 == moveCounter) {
                 temp.fireEvent(BoardController.mouseClickedHistoryTextSelected);
             } else if (this.selectedHistoryTextPane == null) {
                 temp.fireEvent(BoardController.mouseClickedHistoryTextSelected);
             }
 
-            if ((moveCounter+1)%2 == 0) {
+            if ((moveCounter-1)%2 == 0) {
                 RowConstraints row = new RowConstraints(moveHistoryGridPaneHeight);
                 row.setMinHeight(moveHistoryGridPaneHeight);
                 row.setMaxHeight(moveHistoryGridPaneHeight);
                 this.moveHistoryGridPane.getRowConstraints().add(row);
             }
-            this.moveHistoryGridPane.add(tempPane, (moveCounter+1)%2, (moveCounter+1)/2-1);
+            this.moveHistoryGridPane.add(tempPane, (moveCounter-1)%2, (moveCounter-1)/2);
         });
+    }
+
+    public void reloadMoveHistory() {
+        this.moveHistoryGridPane.getChildren().clear();
+        this.moveHistoryGridPane.getRowConstraints().clear();
+        for (GamestateSnapshot sn : this.gameHandler.getSnapshotHistory()) {
+            addMoveToMovelist(sn.getMove(), sn.getFullmoveCounter()+1);
+        }
     }
 
     public void setCheckmateAlert(CHECKMATE_TYPE type, boolean whitePlayer) {
         //TODO use AlertHandler
         String text = switch (type) {
             case DRAW -> "The players agreed to a draw";
-            case TIME -> String.format("The %s player ran out of time. %s wins!!!", whitePlayer ? "white" : "black", whitePlayer ? "black" : "white");
-            case CHECKMATE -> String.format("The %s player is checkmate. %s wins!!!", whitePlayer ? "white" : "black", whitePlayer ? "black" : "white");
-            case STALEMATE -> String.format("The %s player can no longer make a legal move in his turn. The game is a stalemate", whitePlayer ? "white" : "black");
+            case TIME -> String.format("%s ran out of time. %s wins!!!", this.gameHandler.getPlayer(whitePlayer).getName(), this.gameHandler.getPlayer(!whitePlayer).getName());
+            case CHECKMATE -> String.format("%s player is checkmate. %s wins!!!", this.gameHandler.getPlayer(whitePlayer).getName(), this.gameHandler.getPlayer(!whitePlayer).getName());
+            case STALEMATE -> String.format("%s player can no longer make a legal move in his turn. The game is a stalemate", this.gameHandler.getPlayer(whitePlayer).getName());
         };
 
         text = text + "\nDo you wish to save the game in the database?";
-        //TODO make dialog out of this to let players add their name
-        // TODO make this be part of AlertHandler
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Game over!!!");
-        alert.setHeaderText(null);
-        alert.setContentText(text);
-        ButtonType buttonYes = new ButtonType("YES");
-        ButtonType buttonNo = new ButtonType("NO");
-        alert.getButtonTypes().setAll(buttonYes, buttonNo);
-        Optional<ButtonType> result = alert.showAndWait();
 
-        if (result.isPresent() && result.get() == buttonYes) {
+
+
+        if (AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "Game over!!!", text)) {
             //TODO save game in database
         }
     }
@@ -504,4 +556,9 @@ public class BoardController {
         this.gameHandler = gameHandler;
     }
 
+    public void updateClock(boolean whiteTurn) {
+        if (whiteTurn) {
+
+        }
+    }
 }

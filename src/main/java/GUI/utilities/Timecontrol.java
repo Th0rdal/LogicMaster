@@ -35,15 +35,15 @@ public class Timecontrol {
             endIndex = timecontrolString.indexOf("/", index);
             endIndex = endIndex == -1 ? timecontrolString.length() : endIndex;
             this.increment = this.interpretIncrement(timecontrolString.substring(index, endIndex));
-            index = endIndex + 1;
-            endIndex = timecontrolString.indexOf("/", index);
 
-            while (endIndex != -1) {
-                timecontrolChangeMap.put(
-                        Integer.parseInt(timecontrolString.substring(index, timecontrolString.indexOf(":", index))),
-                        timecontrolString.substring(timecontrolString.indexOf(":", index) + 1, endIndex));
-                index = endIndex + 1;
-                endIndex = timecontrolString.indexOf("/", index);
+            if (!(timecontrolString.indexOf("/", endIndex+1) == -1)) {
+                do {
+                    index = endIndex + 1;
+                    endIndex = timecontrolString.indexOf("/", index) == -1 ? timecontrolString.length() : timecontrolString.indexOf("/", index);
+                    timecontrolChangeMap.put(
+                            Integer.parseInt(timecontrolString.substring(index, timecontrolString.indexOf(":", index))),
+                            timecontrolString.substring(timecontrolString.indexOf(":", index) + 1, endIndex));
+                } while (endIndex != timecontrolString.length());
             }
         } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
             throw new RuntimeException();

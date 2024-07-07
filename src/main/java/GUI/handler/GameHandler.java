@@ -19,6 +19,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -27,6 +28,9 @@ import java.util.concurrent.*;
 public class GameHandler {
     private static final String START_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     private static final int CLOCKBASETIME = 10; //this is needed because time needs to be in tenth of a second
+    private static final int WAITTIME = 50;
+    private static final TimeUnit TIMEUNIT = TimeUnit.MILLISECONDS;
+
     // players
     private Player whitePlayer;
     private Player blackPlayer;
@@ -38,8 +42,8 @@ public class GameHandler {
     private Timecontrol timecontrol;
     private AlgorithmHandler algorithmHandler;
     private CyclicBarrier barrier = new CyclicBarrier(2);
-    private Semaphore interruptFlagLock = new Semaphore(1);
-    private final BlockingQueue<Move> moveQueue = new LinkedBlockingQueue<>();
+    private Semaphore flagLock = new Semaphore(1);
+    private final BlockingQueue<Move> moveQueue = new LinkedBlockingQueue<>(1);
 
     // TIME VARIABLES
     private Timeline clockWhitePlayer, clockBlackPlayer; // the clock objects
@@ -56,6 +60,7 @@ public class GameHandler {
     private boolean inSnapshot = false;
     private boolean interruptFlag = false;
     private boolean gameInitialized = false;
+    private int continueFromSnapshotFlag = 0; // if this is not 0, continue from the snapshot that contains the fullmoveCounter equal to this var
 
     public GameHandler() {
         this.gamestate = new Gamestate();
@@ -67,8 +72,11 @@ public class GameHandler {
     public void gameLoop() {
         Move move;
         this.gameInitialized = true;
-        do {
 
+        AlertHandler.showAlertAndWait(Alert.AlertType.INFORMATION, "start game?", "Press 'OK' to start the game");
+        this.startClocks(true);
+
+        do {
             try {
                 if (this.whiteTurn) {
                     if (this.whitePlayer.isHuman()) {
@@ -96,14 +104,19 @@ public class GameHandler {
                     }
                 }
 
-                this.interruptFlagLock.acquire();
-                if (this.interruptFlag) {
-                    this.saveCurrentSnapshot();
-                    this.interruptFlag = false;
-                    break;
+                move = null;
+                while (move == null) {
+                    move = this.moveQueue.poll(GameHandler.WAITTIME, GameHandler.TIMEUNIT);
+                    this.flagLock.acquire();
+                    if (this.interruptFlag) {
+                        this.saveCurrentSnapshot();
+                        this.interruptFlag = false;
+                    } else if (this.continueFromSnapshotFlag != 0) {
+                        this.loadSnapshot(this.continueFromSnapshotFlag);
+                        this.continueFromSnapshotFlag = 0;
+                    }
+                    this.flagLock.release();
                 }
-                this.interruptFlagLock.release();
-                move = this.moveQueue.take();
 
                 if (move.isDraw()) {
                     Platform.runLater(() -> {
@@ -111,28 +124,25 @@ public class GameHandler {
                     });
                     break;
                 }
-                if (this.isFirstMoveMade) {
-                    this.isFirstMoveMade = false;
-                    this.startClocks(true);
-                }
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
 
-            GamestateSnapshot snapshot = this.gamestate.makeMove(move, this.clockBlackPlayerCounter, this.clockWhitePlayerCounter);
-            this.snapshotHistory.add(snapshot);
+            this.gamestate.makeMove(move);
+
             Move finalMove = move;
             if (!this.inSnapshot) {
                 Platform.runLater(() -> {
-                    this.boardController.addMoveToMovelist(finalMove);
+                    this.boardController.addMoveToMovelist(finalMove, this.gamestate.getFullmoveCounter());
                     this.boardController.loadPieces();
                 });
             } else {
                 Platform.runLater(() -> {
-                    this.boardController.addMoveToMovelist(finalMove);
+                    this.boardController.addMoveToMovelist(finalMove, this.gamestate.getFullmoveCounter());
                 });
             }
+
             this.swapTurn();
 
             if (move.isCheckmate()) { // here because if move.isCheckmate is true, the other player is in checkmate
@@ -147,16 +157,14 @@ public class GameHandler {
                 break;
             }
 
-            // handle time updates
-            this.clockBlackPlayerCounter += increment;
-            this.clockWhitePlayerCounter += increment;
-
-            if (this.timecontrol.hasTimecontrolSpecialChanges(this.gamestate.getFullmoveCounter())) {
-                int[] temp = this.timecontrol.getTimecontrolChanges(this.gamestate.getFullmoveCounter());
-                this.clockBlackPlayerCounter += temp[0];
-                this.clockWhitePlayerCounter += temp[0];
-                this.increment = temp[1];
+            if (this.timecontrol.hasTimecontrolSpecialChanges(this.gamestate.getFullmoveCounter()-1)) {
+                int[] temp = this.timecontrol.getTimecontrolChanges(this.gamestate.getFullmoveCounter()-1);
+                this.clockBlackPlayerCounter += temp[0] * GameHandler.CLOCKBASETIME;
+                this.clockWhitePlayerCounter += temp[0] * GameHandler.CLOCKBASETIME;
+                this.increment = temp[1] * GameHandler.CLOCKBASETIME;
             }
+
+            this.saveCurrentSnapshot();
         } while (!Thread.currentThread().isInterrupted());
     }
 
@@ -169,8 +177,8 @@ public class GameHandler {
                           boolean whiteSideDown) {
 
         this.timecontrol = timecontrol;
-        this.clockStartTime = timecontrol.getStartTime() * CLOCKBASETIME;
-        this.increment = timecontrol.getIncrement();
+        this.clockStartTime = timecontrol.getStartTime() * GameHandler.CLOCKBASETIME;
+        this.increment = timecontrol.getIncrement() * GameHandler.CLOCKBASETIME;
 
         if (Objects.equals(whiteName, "")) {
             this.setWhitePlayer(new Player(
@@ -202,7 +210,7 @@ public class GameHandler {
 
         this.gamestate = BoardConverter.loadFEN(fen);
         if (this.gamestate == null) {
-            AlertHandler.throwAlert(Alert.AlertType.ERROR, "Error", "The fen notation is not valid!");
+            AlertHandler.showAlert(Alert.AlertType.ERROR, "Error", "The fen notation is not valid!");
            return;
         }
         this.whiteTurn = this.gamestate.getSideFromFullmoveCounter();
@@ -256,8 +264,12 @@ public class GameHandler {
         // changes background color of the running clock to black and text color to white
         this.clockWhitePlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == Timeline.Status.PAUSED) {
-                whitePlayerLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-                whitePlayerLabel.setTextFill(Color.BLACK);
+                Platform.runLater(() -> {
+                    clockWhitePlayerCounter += increment;
+                    whitePlayerLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+                    whitePlayerLabel.setText(Calculator.getClockTimeInFormat(clockWhitePlayerCounter));
+                    whitePlayerLabel.setTextFill(Color.BLACK);
+                });
             }
         });
         this.clockWhitePlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
@@ -268,8 +280,12 @@ public class GameHandler {
         });
         this.clockBlackPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == Timeline.Status.PAUSED) {
-                blackPlayerLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-                blackPlayerLabel.setTextFill(Color.BLACK);
+                Platform.runLater(() -> {
+                    clockBlackPlayerCounter += increment;
+                    blackPlayerLabel.setText(Calculator.getClockTimeInFormat(clockBlackPlayerCounter));
+                    blackPlayerLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+                    blackPlayerLabel.setTextFill(Color.BLACK);
+                });
             }
         });
         this.clockBlackPlayer.statusProperty().addListener((observable, oldValue, newValue) -> {
@@ -300,6 +316,7 @@ public class GameHandler {
             this.currentTimeRunning = this.clockBlackPlayer;
             this.currentTimeStopped = this.clockWhitePlayer;
         }
+        this.currentTimeRunning.play();
     }
 
     /**
@@ -316,19 +333,21 @@ public class GameHandler {
     }
 
     public void saveCurrentSnapshot() {
-        GamestateSnapshot snapshot = this.gamestate.getCurrentSnapshot(this.clockBlackPlayerCounter, this.clockWhitePlayerCounter);
+        GamestateSnapshot snapshot = this.gamestate.getCurrentSnapshot(this.clockBlackPlayerCounter, this.clockWhitePlayerCounter, this.timecontrol);
         this.snapshotHistory.add(snapshot);
     }
 
-    public void loadCurrentSnapshot() {
-        GamestateSnapshot currentSnapshot = this.snapshotHistory.get(this.snapshotHistory.size()-1);
-        this.snapshotHistory.remove(this.snapshotHistory.size()-1);
+    public void loadSnapshot(int snapshotNumber) {
+        GamestateSnapshot currentSnapshot = this.getSnapshot(snapshotNumber);
+        this.snapshotHistory.removeIf(snapshot -> snapshot.getFullmoveCounter() > snapshotNumber);
         this.gamestate = new Gamestate(currentSnapshot);
         this.clockBlackPlayerCounter = currentSnapshot.getClockWhitePlayer();
         this.clockWhitePlayerCounter = currentSnapshot.getClockBlackPlayer();
-        this.whiteTurn = currentSnapshot.isWhiteTurn();
+        this.whiteTurn = (currentSnapshot.getMove() == null) == currentSnapshot.isWhiteTurn();
         this.startClocks(this.whiteTurn);
+        this.inSnapshot = false;
         Platform.runLater(() -> {
+            this.boardController.reloadMoveHistory();
             this.boardController.loadPieces();
         });
     }
@@ -349,11 +368,18 @@ public class GameHandler {
         return this.gamestate.isUsablePiece(coordinate, this.whiteTurn);
     }
 
+    public boolean isUsablePiece(BoardCoordinate coordinate, boolean turn) {
+        return this.gamestate.isUsablePiece(coordinate, turn);
+    }
+
     public ArrayList<Move> getPossibleMovesForCoordinates(BoardCoordinate coordinate) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
         if (this.whiteTurn) {
             HashMap<String, ArrayList<Move>> temp = this.whitePlayer.executeGetPossibleMoves(gamestate, true);
             Piece piece = this.gamestate.getPieceAtCoordinates(coordinate);
+            if (piece == null) {
+                return possibleMoves;
+            }
             if (temp.containsKey(coordinate.toString())) {
                 possibleMoves.addAll(temp.get(coordinate.toString()));
             }
@@ -403,13 +429,21 @@ public class GameHandler {
 
     public void setInterruptFlag() {
         try {
-            this.interruptFlagLock.acquire();
+            this.flagLock.acquire();
             this.interruptFlag = true;
-            this.interruptFlagLock.release();
+            this.flagLock.release();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+    }
+    public void setContinueFromSnapshotFlag(int number) {
+        try {
+            this.flagLock.acquire();
+            this.continueFromSnapshotFlag = number;
+            this.flagLock.release();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public GamestateSnapshot getSnapshot(int moveNumber) {
@@ -434,10 +468,34 @@ public class GameHandler {
         return this.boardController;
     }
 
+    public boolean isInSnapshot() {return this.inSnapshot;}
+
+    public boolean isUsablePieceSnapshot(BoardCoordinate coordinate, int moveCounter) {
+        GamestateSnapshot gamestateSnapshot = this.getSnapshot(moveCounter);
+        Piece piece = null;
+        for (Piece temp : gamestateSnapshot.getPieces()) {
+            if (temp.getCoordinates().equals(coordinate)) {
+                piece = temp;
+                break;
+            }
+        }
+        if (piece == null) {
+            return false;
+        }
+        boolean tempBool = (moveCounter + 1) % 2 == 1;
+        return piece.isWhite() == tempBool;
+    }
+
+    public Player getPlayer(boolean whitePlayer) {
+        return whitePlayer ? this.whitePlayer : this.blackPlayer;
+    }
+
     public void setController(BoardController boardController) {
         this.boardController = boardController;
         this.boardController.setGameHandler(this);
     }
 
     public boolean isGameInitialized() {return this.gameInitialized;}
+
+    public ArrayList<GamestateSnapshot> getSnapshotHistory() {return this.snapshotHistory;}
 }
