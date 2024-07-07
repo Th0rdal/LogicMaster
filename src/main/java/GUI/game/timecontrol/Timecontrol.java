@@ -1,5 +1,7 @@
 package GUI.game.timecontrol;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -126,6 +128,15 @@ public class Timecontrol {
             }
         }
         return true;
+    }
+
+    public static ArrayList<Integer> convertByteTimeToArrayList(byte[] timeBytes) {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < timeBytes.length; i=i+4) {
+            byte[] temp = {timeBytes[i], timeBytes[i+1], timeBytes[i+2], timeBytes[i+3]};
+            list.add(ByteBuffer.wrap(temp).getInt());
+        }
+        return list;
     }
 
     public boolean hasNoStartValue() {

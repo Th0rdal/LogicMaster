@@ -66,6 +66,10 @@ public class BoardCoordinate {
                 this.getYLocation() == ((BoardCoordinate) obj).getYLocation();
     }
 
+    public byte convertToByte() {
+        return (byte) ((byte) ((byte) (xLocation & 0xff) << 3) | (byte) (yLocation & 0xff));
+    }
+
     public int getXLocation() {
         return xLocation;
     }

@@ -66,6 +66,8 @@ public class GameHandler {
     private boolean gameInitialized = false;
     private int continueFromSnapshotFlag = 0; // if this is not 0, continue from the snapshot that contains the fullmoveCounter equal to this var
 
+    private String startFen = "";
+
     public GameHandler() {
         this.gamestate = new Gamestate();
         this.gamestate.loadStartPosition();
@@ -213,6 +215,8 @@ public class GameHandler {
         }
 
         this.gamestate = BoardConverter.loadFEN(fen);
+        this.startFen = fen;
+
         if (this.gamestate == null) {
             AlertHandler.showAlert(Alert.AlertType.ERROR, "Error", "The fen notation is not valid!");
            return;

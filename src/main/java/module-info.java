@@ -1,10 +1,12 @@
-module GUI {
+module LogicMaster {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
     requires java.rmi;
     requires com.h2database;
     requires com.google.gson;
+    requires ormlite.jdbc;
+    requires java.sql;
     opens GUI;
     opens GUI.utilities;
     opens GUI.player;
@@ -14,4 +16,5 @@ module GUI {
     opens GUI.game.timecontrol;
     opens GUI.game.gamestate;
     opens GUI.game.move;
+    opens database;
 }
