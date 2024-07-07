@@ -1,5 +1,6 @@
-package GUI.game;
+package GUI.game.move;
 
+import GUI.game.BoardCoordinate;
 import GUI.piece.PIECE_ID;
 
 import java.util.Objects;

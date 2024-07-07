@@ -1,4 +1,4 @@
-package GUI;
+package GUI.player.Algorithm;
 
 public class AIFile {
     private final String path;

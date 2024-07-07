@@ -1,6 +1,6 @@
-package GUI.Player;
+package GUI.player.Algorithm;
 
-import GUI.game.Move;
+import GUI.game.move.Move;
 
 import java.util.ArrayList;
 import java.util.HashMap;

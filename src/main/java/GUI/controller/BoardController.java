@@ -1,6 +1,10 @@
-package GUI.Controller;
+package GUI.controller;
 
 import GUI.game.*;
+import GUI.game.gamestate.CHECKMATE_TYPE;
+import GUI.game.gamestate.GamestateSnapshot;
+import GUI.game.move.Move;
+import GUI.game.move.SPECIAL_MOVE;
 import GUI.handler.GameHandler;
 import GUI.handler.SceneHandler;
 import GUI.piece.*;

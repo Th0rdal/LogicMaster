@@ -1,8 +1,9 @@
-package GUI.Player;
+package GUI.player;
 
-import GUI.game.Gamestate;
+import GUI.player.Algorithm.AlgorithmHandler;
+import GUI.game.gamestate.Gamestate;
 import GUI.utilities.BoardConverter;
-import GUI.game.Move;
+import GUI.game.move.Move;
 
 import java.util.ArrayList;
 import java.util.HashMap;

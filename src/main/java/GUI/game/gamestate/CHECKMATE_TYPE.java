@@ -1,4 +1,4 @@
-package GUI.game;
+package GUI.game.gamestate;
 
 public enum CHECKMATE_TYPE {
     DRAW, TIME, CHECKMATE, STALEMATE
