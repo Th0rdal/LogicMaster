@@ -19,11 +19,37 @@ static inline int setupMaxThreads(int maxThreads) {
     return maxThreadsCalc;
 }
 
-Gamestate* minimax(short maxDepth, int maxThreadsInput, Gamestate* gamestate) {
-    int maxThreads = setupMaxThreads(maxThreadsInput);
+Gamestate* minimax(command_args* args, Gamestate* gamestate) {
+    args->maxThreads = setupMaxThreads(args->maxThreads);
    
     initializeTree();
-    preprocessing_start(maxDepth, maxThreads, gamestate);
-    evaluation_start(maxThreads);
-    return evaluateLastGamestate(tree->head);
+    preprocessing_start(args, gamestate);
+    if (!args->onlyPossibleMoves) {
+        evaluation_start(args);
+        return evaluateLastGamestate(tree->head);
+    }
+    return gamestate;
+}
+
+void printAllPossibleMoves(command_args* args, Gamestate* gamestate) {
+    if (tree->head == NULL) {
+        minimax(args, gamestate);
+    }
+    
+    GamestateTreeNode* node;
+    GamestateTreeBranch* branch;
+    
+    if (tree->head->gamestate == gamestate) {
+        node = tree->head;
+    } else {
+        node = searchGamestateInTree(tree->head, gamestate);
+    }
+
+    branch = node->children;
+    while (branch != NULL) {
+        char move[20];
+        printMove(&branch->node->gamestate->move, move);
+        printf("%s\n", move);
+        branch = branch->next;
+    }
 }

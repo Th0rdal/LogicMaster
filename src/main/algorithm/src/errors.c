@@ -80,8 +80,9 @@ _Noreturn void throwError(int exitCode, char* format, ...) {
 void throwWarning(int warningCode, char* format, ...) {
     va_list args;
     va_start(args, format);
-    printf("\x1b[33" "Warning code: %d", warningCode);
+    printf("\x1b[33m" "Warning code: %d\n", warningCode);
     vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
     printf("\x1b[0m");
     va_end(args);
 }

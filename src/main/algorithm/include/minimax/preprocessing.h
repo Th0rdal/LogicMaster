@@ -37,10 +37,11 @@ typedef struct {
  * function representing the work a MoveGenerationThreadPool thread does. It works until the shutdown command is issued or the workCounter reaches 0 (which means work done)
  * it gets a new gamestate from the queue, processes it and then updates the workCounter. If the maxDepth is reached, it enqueues the gamestate to the result queue
  *
- * @param: it needs a MoveGenerationThreadPool struct to work
+ * @param args: command args struct pointer with configuration
+ * @param gamestate: the starting gamestate
  *
  **/
-void preprocessing_start(const short maxDepth, const int maxThreads, Gamestate* gamestate);
+void preprocessing_start(command_args* args, Gamestate* gamestate);
 
 /*!
  * The function an generation worker thread executes to generate all possible moves
@@ -53,11 +54,10 @@ DWORD WINAPI generationWorker(LPVOID lpParam);
 /*!
  * initializes all variables of the struct
  *
- * @param maxDepth: the maximal depth of the move generation
- * @param maxthreads: the maximal amount of threads the pool may have
+ * @param args: command args struct pointer with configuration
  *
  * @return: the initialized MoveGenerationThreadPool pointer 
  * */
-MoveGenerationThreadPool* moveGenerationThreadPoolInit(const short maxDepth, const int maxThreads);
+MoveGenerationThreadPool* moveGenerationThreadPoolInit(command_args* args);
 
 #endif

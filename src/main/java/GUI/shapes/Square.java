@@ -1,6 +1,6 @@
-package GUI;
+package GUI.shapes;
 
-import GUI.utilities.BoardCoordinate;
+import GUI.game.BoardCoordinate;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -8,9 +8,7 @@ import javafx.scene.layout.StackPane;
  */
 public class Square extends StackPane{
 
-    BoardCoordinate coordinate;
-    boolean occupied = false;
-
+    private BoardCoordinate coordinate;
 
     public Square(int x, int y) {
         /**
@@ -26,5 +24,4 @@ public class Square extends StackPane{
          */
         return this.coordinate.getLocationInt();
     }
-
 }

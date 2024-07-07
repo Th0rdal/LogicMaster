@@ -1,18 +1,24 @@
 package GUI.utilities;
 
-import GUI.Board;
+import GUI.game.Gamestate;
 import GUI.piece.*;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BoardConverter {
 
     /**
      * loads FEN notation and converts it into a board
-     * @param board: The board to save to
      * @param fen FEN notation to convert
      */
-    public static void loadFEN(Board board, String fen) {
+    public static Gamestate loadFEN(String fen) {
+
+        if (!BoardConverter.validFEN(fen)) {
+            return null;
+        }
+
         int rowCounter = 8;
         int colCounter = 1;
         int counter = 0;
@@ -56,6 +62,7 @@ public class BoardConverter {
             }
             if (Character.isLetter(c)) {
                 pieces.add(Piece.createFromChar(c, colCounter, rowCounter));
+                colCounter++;
             } else if (Character.isDigit(c)) {
                 colCounter += Character.getNumericValue(c);
             } else if (c == '/') {
@@ -63,57 +70,73 @@ public class BoardConverter {
                 colCounter=1;
             }
         }
-        board.loadConfiguration(
+
+        Gamestate gamestate = new Gamestate();
+        gamestate.loadConfiguration(
                 pieces,
                 whiteTurn,
                 whiteKCastle,
                 whiteQCastle,
                 blackKCastle,
                 blackQCastle,
-                en_passant.toString(),
+                en_passant.toString().isEmpty() ? "-" :  en_passant.toString(), // if en_passant is "" then it is a - in the fen notation
                 halfmoveClock,
                 fullmoveNumber);
+
+        return gamestate;
     }
 
-    public static String createFEN(Board board) {
+    public static boolean validFEN(String fen) {
+        Pattern fenPattern = Pattern.compile("^((?:[rnbqkpRNBQKP1-8]{1,8}/){7}[rnbqkpRNBQKP1-8]{1,8})\\s([wb])\\s((?:K?Q?k?q?|-)?)\\s((?:[a-h][36]|-))\\s(\\d+)\\s(\\d+)$");
+        Matcher matcher = fenPattern.matcher(fen);
+        return matcher.matches();
+    }
+
+    public static String createFEN(Gamestate gamestate, boolean whiteTurn) {
         StringBuilder fen = new StringBuilder();
         String[][] piecesChars = new String[8][8];
 
-        for (Piece piece : board.getPieces()) {
-            piecesChars[piece.getLocationX()-1][8-piece.getLocationY()] = PIECE_ID.toFenAbbreviation(piece.getID(), piece.isWhite());
+        for (Piece piece : gamestate.getPieces()) {
+            piecesChars[piece.getLocationY()-1][piece.getLocationX()-1] = PIECE_ID.toFenAbbreviation(piece.getID(), piece.isWhite());
         }
 
         int counter = 0;
-        for (int i = 0; i < 8; i++) {
+        for (int i = 7; i >= 0; i--) {
             for (int j = 0; j < 8; j++) {
                 if (piecesChars[i][j] == null) {
                     counter++;
                 } else {
-                    fen.append(counter);
-                    counter = 0;
+                    if (counter > 0) {
+                        fen.append(counter);
+                        counter = 0;
+                    }
                     fen.append(piecesChars[i][j]);
                 }
+            }
+            if (counter > 0) {
+                fen.append(counter);
+                counter = 0;
             }
             fen.append("/");
         }
 
         fen.append(" ");
-        fen.append(board.isWhiteTurn() ? 'w' : 'b');
+        fen.append(whiteTurn? 'w' : 'b');
 
         fen.append(" ");
-        fen.append(board.canWhiteKCastle() ? 'K' : "");
-        fen.append(board.canWhiteQCastle() ? 'Q' : "");
-        fen.append(board.canBlackKCastle() ? 'k' : "");
-        fen.append(board.canBlackQCastle() ? 'q' : "");
+        fen.append(gamestate.canWhiteKCastle() ? 'K' : "");
+        fen.append(gamestate.canWhiteQCastle() ? 'Q' : "");
+        fen.append(gamestate.canBlackKCastle() ? 'k' : "");
+        fen.append(gamestate.canBlackQCastle() ? 'q' : "");
 
         fen.append(" ");
-        fen.append(board.getEnPassantCoordinates().toLowerCaseString());
+        fen.append(gamestate.getEnPassantCoordinates().toLowerCaseString());
 
         fen.append(" ");
-        fen.append(board.getHalfmoveClock());
+        fen.append(gamestate.getHalfmoveCounter());
 
         fen.append(" ");
-        fen.append(board.getFullmoveClock());
+        fen.append(gamestate.getFullmoveCounter());
 
         return fen.toString();
     }
@@ -122,10 +145,10 @@ public class BoardConverter {
      * Converts a board into a bitboard representation based on the
      * algorithm.
      * TODO write documents
-     * @param board The board to create the bitboard from
+     * @param gamestate The board to create the bitboard from
      * @return bitboard array
      */
-    public static long[] toBitboard(Board board) {
+    public static long[] toBitboard(Gamestate gamestate) {
         long[] bitboard = new long[9];
         for (int i = 0; i < 9; i++) {
             bitboard[i] = 0;
@@ -134,7 +157,7 @@ public class BoardConverter {
         int pawn = 1, knight = 2, bishop = 3, rook = 4, queen = 5, king = 6;
         int white = 7, black = 8;
 
-        for (Piece piece : board.getPieces()) {
+        for (Piece piece : gamestate.getPieces()) {
             long mask = 1L << piece.getCoordinates().getLocationInt();
             bitboard[occupancy] |= mask;
             switch (piece.getID()) {

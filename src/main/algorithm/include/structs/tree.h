@@ -72,5 +72,25 @@ void destroyGamestateTreeBranchWithInside(GamestateTreeBranch* branch);
  * */
 GamestateTreeNode* criticalCreateGamestateTreeNode(struct Gamestate* gamestate);
 
+/*!
+ * A recursive function that calculates the size of the tree, starting with the node given.
+ * The counting starts with the node given as base.
+ *
+ * @param node: the base node for the calculations
+ *
+ * @return: the amount of nodes in the tree
+ *
+ * */
 int size(GamestateTreeNode* node);
+
+/*!
+ * A recursive function that seraches through the tree to find the given gamestate and return its tree node
+ * CAREFUL: comparison is by pointer!!!
+ *
+ * @param node: the GamestateTreeNode to check
+ * @param gamestate: the gamestate to search
+ *
+ * @return: The GamestateTreeNode pointer to the node containing the gamestate. If the gamestate was not found, it will return NULL
+ *  */
+GamestateTreeNode* searchGamestateInTree(GamestateTreeNode* node, Gamestate* gamestate);
 #endif

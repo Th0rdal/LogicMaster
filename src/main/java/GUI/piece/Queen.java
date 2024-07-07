@@ -1,12 +1,6 @@
 package GUI.piece;
 
-import GUI.utilities.BoardCoordinate;
-import GUI.utilities.ImageLoader;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-
-import java.util.Objects;
+import GUI.game.BoardCoordinate;
 
 public class Queen extends Piece{
     /**
@@ -24,9 +18,8 @@ public class Queen extends Piece{
         }
     }
 
-    @Override
-    public void getMoves() {
-        throw new UnsupportedOperationException("Method not implemented yet");
+    public Queen(Queen queen) {
+        super(queen);
     }
 
     @Override
