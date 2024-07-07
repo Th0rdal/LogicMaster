@@ -1,7 +1,10 @@
-package GUI.game;
+package GUI.game.gamestate;
 
+import GUI.game.BoardCoordinate;
+import GUI.game.move.Move;
+import GUI.game.move.SPECIAL_MOVE;
+import GUI.game.timecontrol.Timecontrol;
 import GUI.piece.*;
-import GUI.utilities.Timecontrol;
 
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
@@ -264,7 +267,7 @@ public class Gamestate {
      * @param blackClockCounter: the remaining time of the black player
      * @return GamestateSnapshot instance representing the current Gamestate state
      */
-    private GamestateSnapshot saveSnapshot(Move move, int whiteClockCounter, int blackClockCounter, Timecontrol timecontrol) {
+    private GamestateSnapshot saveSnapshot(Move move, int whiteClockCounter, int blackClockCounter) {
         return new GamestateSnapshot(
                 this.pieces,
                 this.whiteQCastle,
@@ -276,8 +279,7 @@ public class Gamestate {
                 this.halfmoveCounter,
                 whiteClockCounter,
                 blackClockCounter,
-                move,
-                timecontrol);
+                move);
     }
 
     /**
@@ -293,7 +295,7 @@ public class Gamestate {
             throw new RuntimeException(e);
         }
 
-        GamestateSnapshot snapshot = this.saveSnapshot(null, whiteClockCounter, blackClockCounter, this.timecontrol);
+        GamestateSnapshot snapshot = this.saveSnapshot(null, whiteClockCounter, blackClockCounter);
         this.semaphore.release();
         return snapshot;
     }

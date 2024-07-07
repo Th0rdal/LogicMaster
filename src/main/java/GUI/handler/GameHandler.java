@@ -1,11 +1,16 @@
 package GUI.handler;
 
-import GUI.AIFile;
-import GUI.Controller.AlertHandler;
-import GUI.Controller.BoardController;
-import GUI.Player.AlgorithmHandler;
+import GUI.game.gamestate.CHECKMATE_TYPE;
+import GUI.player.Algorithm.AIFile;
+import GUI.controller.AlertHandler;
+import GUI.controller.BoardController;
+import GUI.player.Algorithm.AlgorithmHandler;
 import GUI.game.*;
-import GUI.Player.Player;
+import GUI.player.Player;
+import GUI.game.gamestate.Gamestate;
+import GUI.game.gamestate.GamestateSnapshot;
+import GUI.game.move.Move;
+import GUI.game.timecontrol.Timecontrol;
 import GUI.piece.PIECE_ID;
 import GUI.piece.Piece;
 import GUI.utilities.*;
@@ -19,7 +24,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;

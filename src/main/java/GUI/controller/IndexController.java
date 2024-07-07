@@ -1,9 +1,9 @@
-package GUI.Controller;
+package GUI.controller;
 
-import GUI.AIFile;
+import GUI.player.Algorithm.AIFile;
 import GUI.Config;
 import GUI.handler.GameHandler;
-import GUI.utilities.Timecontrol;
+import GUI.game.timecontrol.Timecontrol;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;

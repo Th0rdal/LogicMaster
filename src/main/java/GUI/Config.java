@@ -1,7 +1,8 @@
 package GUI;
 
-import GUI.utilities.Timecontrol;
-import GUI.utilities.TimecontrolSerializer;
+import GUI.player.Algorithm.AIFile;
+import GUI.game.timecontrol.Timecontrol;
+import GUI.game.timecontrol.TimecontrolSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;

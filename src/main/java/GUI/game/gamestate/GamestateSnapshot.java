@@ -1,7 +1,8 @@
-package GUI.game;
+package GUI.game.gamestate;
 
+import GUI.game.BoardCoordinate;
+import GUI.game.move.Move;
 import GUI.piece.*;
-import GUI.utilities.Timecontrol;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -22,8 +23,6 @@ public class GamestateSnapshot {
     private final int clockWhitePlayer, clockBlackPlayer;
 
     private final Move move;
-
-    private final Timecontrol timecontrol;
 
     /**
      * Create GamestateSnapshot
@@ -48,8 +47,7 @@ public class GamestateSnapshot {
                              int halfmoveCounter,
                              int clockWhitePlayer,
                              int clockBlackPlayer,
-                             Move tempMove,
-                             Timecontrol timecontrol) {
+                             Move tempMove) {
 
         this.pieces = (ArrayList<Piece>) pieces.stream().map(piece -> {
             switch (piece.getID()) {
@@ -88,7 +86,6 @@ public class GamestateSnapshot {
         } else {
             this.move = new Move(tempMove);
         }
-        this.timecontrol = timecontrol;
     }
 
     public boolean isWhiteTurn() {

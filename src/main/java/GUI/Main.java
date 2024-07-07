@@ -1,10 +1,10 @@
 package GUI;
 
-import GUI.Controller.BoardController;
-import GUI.Controller.IndexController;
+import GUI.controller.BoardController;
+import GUI.controller.IndexController;
 import GUI.handler.GameHandler;
 import GUI.handler.SceneHandler;
-import GUI.utilities.Timecontrol;
+import GUI.game.timecontrol.Timecontrol;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
