@@ -1,6 +1,6 @@
 package GUI.piece;
 
-import GUI.utilities.BoardCoordinate;
+import GUI.game.BoardCoordinate;
 import GUI.utilities.ImageLoader;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;

@@ -1,6 +1,6 @@
 package GUI.shapes;
 
-import GUI.utilities.BoardCoordinate;
+import GUI.game.BoardCoordinate;
 import javafx.scene.layout.StackPane;
 
 /**

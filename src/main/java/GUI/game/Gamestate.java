@@ -1,7 +1,6 @@
-package GUI.gamestate;
+package GUI.game;
 
 import GUI.piece.*;
-import GUI.utilities.*;
 
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
@@ -108,6 +107,14 @@ public class Gamestate {
 
         piece.makeMove(move.getNewPosition()); // make actual move
 
+        // handle special move promotion
+        if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) {
+                this.removePiece(move.getNewPosition());
+                this.pieces.add(this.createPromotionPiece(move, whiteTurn));
+        }
+
+        GamestateSnapshot snapshot =  this.saveSnapshot(move, whiteClockCounter, blackClockCounter);
+
         // update full and half move counter
         this.fullmoveCounter++;
         if (piece.getID() == PIECE_ID.PAWN || move.isCapture()) {
@@ -116,13 +123,6 @@ public class Gamestate {
             this.halfmoveCounter++;
         }
 
-        // handle special move promotion
-        if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) {
-                this.removePiece(move.getNewPosition());
-                this.pieces.add(this.createPromotionPiece(move, whiteTurn));
-        }
-
-        GamestateSnapshot snapshot =  this.saveSnapshot(move, whiteClockCounter, blackClockCounter);
         this.semaphore.release();
         return snapshot;
     }
@@ -341,6 +341,10 @@ public class Gamestate {
             }
         }
         return null;
+    }
+
+    public boolean getSideFromFullmoveCounter() {
+        return this.fullmoveCounter % 2 == 1;
     }
 
 }

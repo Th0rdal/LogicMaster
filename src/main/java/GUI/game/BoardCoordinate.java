@@ -1,4 +1,4 @@
-package GUI.utilities;
+package GUI.game;
 
 public class BoardCoordinate {
 

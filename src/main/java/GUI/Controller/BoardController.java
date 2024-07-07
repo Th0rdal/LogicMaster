@@ -1,7 +1,11 @@
-package GUI;
+package GUI.Controller;
 
-import GUI.Player.Player;
+import GUI.game.BoardCoordinate;
+import GUI.game.CHECKMATE_TYPE;
+import GUI.game.Move;
+import GUI.game.SPECIAL_MOVE;
 import GUI.handler.GameHandler;
+import GUI.handler.SceneHandler;
 import GUI.piece.*;
 import GUI.shapes.Circle;
 import GUI.shapes.Square;
@@ -29,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 
-public class Controller {
+public class BoardController {
 
     private Stage stage = null;
 
@@ -38,9 +42,9 @@ public class Controller {
     @FXML
     private AnchorPane anchorPane;
     @FXML
-    private Label clockOpponentLabel;
+    private Label clockTopLabel;
     @FXML
-    private Label clockPlayerLabel;
+    private Label clockBottomLabel;
     @FXML
     private Pane promotionPane;
     @FXML
@@ -51,6 +55,12 @@ public class Controller {
     private Button backButton;
     @FXML
     private Button saveButton;
+    @FXML
+    private ScrollPane moveHistoryScrollPane;
+    @FXML
+    private GridPane boardRowHeaders;
+    @FXML
+    private GridPane boardColumnHeaders;
 
     // colors used for the board
     private static final Color color1 = Color.LIGHTGRAY;
@@ -64,13 +74,13 @@ public class Controller {
     private ArrayList<Move> possibleMoveList;
 
     private Pane selectedPane;  //represents the currently selected pane
-    private boolean selected = false; //true if a pane is currently selected
     private BoardCoordinate startCoordinates;   //saves the start coordinations of the selected pane
     private boolean whiteSideDown = true;   //TODO change. just a placeholder for board rotation. if true, white is starting on the bottom
     private GameHandler gameHandler;
 
+    private final int moveHistoryGridPaneHeight = 50;
+
     private Pane promotionSelectedPane = null;
-    private Piece promotionPiece = null;
     private StackPane selectedHistoryTextPane = null;
     private Move move = null;
 
@@ -95,8 +105,7 @@ public class Controller {
             }
         }
         for (Node node : this.promotionPane.getChildren()) {
-            if (node instanceof Pane) {
-                Pane tempPane = (Pane) node;
+            if (node instanceof Pane tempPane) {
                 if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) {
                     promotionSelectedPane = tempPane;
                     promotionSelectedPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
@@ -110,10 +119,13 @@ public class Controller {
         for (Node node : visualBoard.getChildren()) {
             if (node instanceof Pane tempPane && !(node instanceof StackPane)) {
                 if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) { // mouse is in a pane
-                    tempPane.setBackground(new Background(new BackgroundFill(this.selectedColor, null, null)));
-                    startCoordinates = new BoardCoordinate((int) Math.floor(event.getX() / 100) + 1, whiteSideDown ? 8 - (int) Math.floor(event.getY() / 100) : (int) Math.floor(event.getY() / 100));
+                    startCoordinates = new BoardCoordinate((int) Math.floor(event.getX() / 100) + 1, whiteSideDown ? 8 - (int) Math.floor(event.getY() / 100) : (int) Math.floor(event.getY() / 100)+1);
                     if (this.gameHandler.isUsablePiece(startCoordinates)) {
+                        if (selectedPane != null) {
+                            selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+                        }
                         selectedPane = tempPane;
+                        selectedPane.setBackground(new Background(new BackgroundFill(BoardController.selectedColor, null, null)));
                     } else if (this.selectedPane == null) {
                         startCoordinates = null;
                     }
@@ -129,7 +141,11 @@ public class Controller {
             visualBoard.getChildren().removeIf(node -> node instanceof Circle);
             for (Move move : possibleMoveList) {
                 Circle tempCircle = new Circle();
-                visualBoard.add(tempCircle, move.getNewPosition().getXLocation()-1, whiteSideDown ? 8 - move.getNewPosition().getYLocation() : move.getNewPosition().getYLocation());
+                if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) {
+                    visualBoard.add(tempCircle, 6, 7);
+                } else {
+                    visualBoard.add(tempCircle, move.getNewPosition().getXLocation()-1, whiteSideDown ? 8 - move.getNewPosition().getYLocation() : move.getNewPosition().getYLocation()-1);
+                }
                 GridPane.setHalignment(tempCircle, HPos.CENTER);
                 GridPane.setValignment(tempCircle, VPos.CENTER);
             }
@@ -175,15 +191,8 @@ public class Controller {
         }
     };
 
-    public Controller(Stage stage) {
+    public BoardController(Stage stage) {
         this.stage = stage;
-        this.gameHandler = new GameHandler();
-        this.gameHandler.setWhitePlayer(new Player(false, "algorithms/algorithm.exe", "IAN"));
-        this.gameHandler.setBlackPlayer(new Player(false, "algorithms/algorithm.exe", "BOT"));
-        this.gameHandler.setController(this);
-        new Thread(() -> {
-            this.gameHandler.gameLoop();
-        }).start();
     }
 
     /**
@@ -193,16 +202,6 @@ public class Controller {
         this.visualBoard.getChildren().clear();
         //TODO add gameHandler clearBoard function
         //this.gameHandler.clearBoard();
-    }
-
-    /**
-     * Clears everything and starts a new board
-     */
-    public void startNewBoard() {
-        this.clearBoard();
-        //TODO add gameHandler loadStartPosition function
-        //this.gameHandler.loadStartPosition();
-        this.loadBoard();
     }
 
     public void loadPromotionPane(boolean isWhite) {
@@ -252,10 +251,22 @@ public class Controller {
      * creates the board visually and adds all the pieces based on the board variable
      * adds event listeners for piece movement
      */
-    public void loadBoard() {
+    public void loadBoard(boolean whiteSideDown) {
         /*
          * This function loads the board with squares and gives each square a chess board color
          */
+
+        this.whiteSideDown = whiteSideDown;
+
+        for (Node node : this.boardRowHeaders.getChildren()) {
+            String text = this.whiteSideDown ? String.valueOf(8 - GridPane.getRowIndex(node)) : String.valueOf(GridPane.getRowIndex(node)+1);
+            ((Label)node).setText(text);
+        }
+
+        for (Node node : this.boardColumnHeaders.getChildren()) {
+            String text = this.whiteSideDown ? Character.toString((char) 65 + GridPane.getColumnIndex(node)) : Character.toString((char) 65 + 7 - GridPane.getColumnIndex(node));
+            ((Label)node).setText(text);
+        }
 
         // config buttons
         this.drawButton.setOnAction(event -> {
@@ -278,16 +289,22 @@ public class Controller {
             }
         });
 
+        this.backButton.setOnAction(event -> {
+            this.gameHandler.setInterruptFlag();
+            SceneHandler.getInstance().activate("index");
+        });
+
         this.saveButton.setOnAction(event -> {
+            //TODO save in database not in snapshot array like now
             this.gameHandler.saveCurrentSnapshot();
         });
 
 
 
-        this.clockOpponentLabel.setFont(Font.font("Arial", 22));
-        clockOpponentLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
-        this.clockPlayerLabel.setFont(Font.font("Arial", 22));
-        clockPlayerLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.clockTopLabel.setFont(Font.font("Arial", 22));
+        clockTopLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.clockBottomLabel.setFont(Font.font("Arial", 22));
+        clockBottomLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
 
         // adding squares to board
         int size = 8;
@@ -295,34 +312,25 @@ public class Controller {
             for (int col = 0; col < size; col++) {
                 Square square = new Square(row+1, col+1);
                 this.visualBoard.add(square, row, col, 1, 1);
-                Color color = (row + col) % 2 == 0 ? this.color1 : this.color2;
+                Color color = (row + col) % 2 == 0 ? BoardController.color1 : BoardController.color2;
                 square.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
             }
         }
 
         loadPieces();
 
-        this.gameHandler.loadClocks(this.clockOpponentLabel, this.clockPlayerLabel);
+        if (this.whiteSideDown) {
+            this.gameHandler.loadClocks(this.clockBottomLabel, this.clockTopLabel);
+        } else {
+            this.gameHandler.loadClocks(this.clockTopLabel, this.clockBottomLabel);
+        }
 
         promotionPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         promotionPane.setVisible(false);
 
         // TODO fix bug that starting with 3rd row, the rows are too small
-        this.moveHistoryGridPane.setHgap(45);
-        this.moveHistoryGridPane.setVgap(8);
-        ColumnConstraints column1 = new ColumnConstraints(45);
-        ColumnConstraints column2 = new ColumnConstraints(45);
-        column1.setMaxWidth(45);
-        column2.setMaxWidth(45);
-        RowConstraints row1 = new RowConstraints(50);
-        RowConstraints row2 = new RowConstraints(50);
-        row1.setMinHeight(50);
-        row2.setMinHeight(50);
-        row1.setMaxHeight(50);
-        row2.setMaxHeight(50);
-        this.moveHistoryGridPane.getColumnConstraints().addAll(column1, column2);
-        this.moveHistoryGridPane.getRowConstraints().addAll(row1, row2);
-
+        this.moveHistoryGridPane.setHgap(10);
+        this.moveHistoryScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         stage.show();
     }
 
@@ -377,7 +385,7 @@ public class Controller {
             return;
         }
 
-        BoardCoordinate tempCoordinates = new BoardCoordinate(tempX+1, whiteSideDown ? 8 - (int) (double) (y / 100) : tempY);
+        BoardCoordinate tempCoordinates = new BoardCoordinate(tempX+1, whiteSideDown ? 8 - (int) (double) (y / 100) : tempY+1);
 
         if (startCoordinates.equals(tempCoordinates)) {
             tempView.setLayoutX(0);
@@ -385,6 +393,7 @@ public class Controller {
             return;
         }
 
+        this.move = null;
         for (Move move : this.possibleMoveList) {
             if (move.getNewPosition().equals(tempCoordinates)) {
                 this.move = move;
@@ -394,8 +403,7 @@ public class Controller {
             this.resetSelected();
 
             if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) { // promotion logic
-                //this.promotionPiece = this.gameHandler.getPieceAtCoordinates(startCoordinates);
-                loadPromotionPane(this.promotionPiece.isWhite());
+                loadPromotionPane(this.gameHandler.isTurnWhite());
                 this.promotionPane.setVisible(true);
                 this.promotionPane.setOnMouseMoved(this.onMouseMoveHandler);
                 this.promotionPane.setOnMouseClicked(this.onMouseClickHandler);
@@ -422,14 +430,14 @@ public class Controller {
 
     public void addMoveToMovelist(Move move) {
         Platform.runLater(() -> {
-            int moveCounter = this.gameHandler.getFullmoveClock();
-            Text temp = new Text(moveCounter + ": " + move.toString());
+            int moveCounter = this.gameHandler.getFullmoveClock() - 1;
+            Text temp = new Text(moveCounter + ": " + move.toString()); //-1 because gamestate is already incremented
             StackPane tempPane = new StackPane();
             tempPane.getChildren().add(temp);
 
             tempPane.setOnMouseClicked(event -> {
                 if (this.selectedHistoryTextPane != null) {
-                    ((Text)this.selectedHistoryTextPane.getChildren().get(0)).setFill(Controller.defaultTextColor);
+                    ((Text)this.selectedHistoryTextPane.getChildren().get(0)).setFill(BoardController.defaultTextColor);
                     this.selectedHistoryTextPane.getChildren().get(0).setStyle("");
                     this.selectedHistoryTextPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
                     int currentFieldNumber = Integer.parseInt((
@@ -443,24 +451,31 @@ public class Controller {
 
                 tempPane.setBackground(new Background(new BackgroundFill(selectedMoveHistory, CornerRadii.EMPTY, Insets.EMPTY)));
 
-                ((Text) tempPane.getChildren().get(0)).setFill(Controller.selectedTextColor);
+                ((Text) tempPane.getChildren().get(0)).setFill(BoardController.selectedTextColor);
                 ((Text)tempPane.getChildren().get(0)).setStyle("-fx-font-weight: bold;");
                 this.selectedHistoryTextPane = tempPane;
             });
 
             // if selectedHistoryText is the last move taken or is empty, fire event
             if (this.selectedHistoryTextPane != null &&
-                    Integer.parseInt(((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0, ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))) + 1 == moveCounter) {
-                temp.fireEvent(Controller.mouseClickedHistoryTextSelected);
+                    Integer.parseInt(((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0, ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))) == moveCounter) {
+                temp.fireEvent(BoardController.mouseClickedHistoryTextSelected);
             } else if (this.selectedHistoryTextPane == null) {
-                temp.fireEvent(Controller.mouseClickedHistoryTextSelected);
+                temp.fireEvent(BoardController.mouseClickedHistoryTextSelected);
             }
 
-            this.moveHistoryGridPane.add(tempPane, (moveCounter-1)%2, (moveCounter-1)/2);
+            if ((moveCounter+1)%2 == 0) {
+                RowConstraints row = new RowConstraints(moveHistoryGridPaneHeight);
+                row.setMinHeight(moveHistoryGridPaneHeight);
+                row.setMaxHeight(moveHistoryGridPaneHeight);
+                this.moveHistoryGridPane.getRowConstraints().add(row);
+            }
+            this.moveHistoryGridPane.add(tempPane, (moveCounter+1)%2, (moveCounter+1)/2-1);
         });
     }
 
     public void setCheckmateAlert(CHECKMATE_TYPE type, boolean whitePlayer) {
+        //TODO use AlertHandler
         String text = switch (type) {
             case DRAW -> "The players agreed to a draw";
             case TIME -> String.format("The %s player ran out of time. %s wins!!!", whitePlayer ? "white" : "black", whitePlayer ? "black" : "white");
@@ -470,11 +485,11 @@ public class Controller {
 
         text = text + "\nDo you wish to save the game in the database?";
         //TODO make dialog out of this to let players add their name
+        // TODO make this be part of AlertHandler
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Game over!!!");
         alert.setHeaderText(null);
         alert.setContentText(text);
-        alert.showAndWait();
         ButtonType buttonYes = new ButtonType("YES");
         ButtonType buttonNo = new ButtonType("NO");
         alert.getButtonTypes().setAll(buttonYes, buttonNo);
@@ -484,4 +499,9 @@ public class Controller {
             //TODO save game in database
         }
     }
+
+    public void setGameHandler(GameHandler gameHandler) {
+        this.gameHandler = gameHandler;
+    }
+
 }

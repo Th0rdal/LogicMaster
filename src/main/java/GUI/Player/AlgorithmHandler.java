@@ -1,4 +1,7 @@
-package GUI.utilities;
+package GUI.Player;
+
+import GUI.game.Move;
+import GUI.game.SPECIAL_MOVE;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +15,7 @@ import java.util.Objects;
  * Handles the algorithm call.
  * The calculate functions could be called multiple times on the same fen!!!
  */
-public class AlgorithmHandler {
+public class AlgorithmHandler extends AlgorithmHandlerBase{
 
     private Move chosenMove = null;
     private HashMap<String, ArrayList<Move>> possibleMoves = new HashMap<>();
@@ -26,7 +29,7 @@ public class AlgorithmHandler {
         this.path = path;
     }
 
-    public void clearCalculation() {
+    private void clearCalculation() {
         this.possibleMoves.clear();
         this.chosenMove = null;
         this.inputString = "";
@@ -164,25 +167,5 @@ public class AlgorithmHandler {
 
         stderrThread.start();
         return stderrThread;
-    }
-
-    public Move getChosenMove() {
-        return this.chosenMove;
-    }
-
-    public HashMap<String, ArrayList<Move>> getPossibleMoves() {
-        return possibleMoves;
-    }
-
-    public void addParameter(String key, String value) {
-        this.parameter.put(key, value);
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public void setInputString(String inputString) {
-        this.inputString = inputString;
     }
 }

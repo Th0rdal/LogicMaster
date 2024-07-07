@@ -1,18 +1,24 @@
 package GUI.utilities;
 
-import GUI.gamestate.Gamestate;
+import GUI.game.Gamestate;
 import GUI.piece.*;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BoardConverter {
 
     /**
      * loads FEN notation and converts it into a board
-     * @param gamestate: The board to save to
      * @param fen FEN notation to convert
      */
-    public static void loadFEN(Gamestate gamestate, String fen) {
+    public static Gamestate loadFEN(String fen) {
+
+        if (!BoardConverter.validFEN(fen)) {
+            return null;
+        }
+
         int rowCounter = 8;
         int colCounter = 1;
         int counter = 0;
@@ -56,6 +62,7 @@ public class BoardConverter {
             }
             if (Character.isLetter(c)) {
                 pieces.add(Piece.createFromChar(c, colCounter, rowCounter));
+                colCounter++;
             } else if (Character.isDigit(c)) {
                 colCounter += Character.getNumericValue(c);
             } else if (c == '/') {
@@ -63,6 +70,8 @@ public class BoardConverter {
                 colCounter=1;
             }
         }
+
+        Gamestate gamestate = new Gamestate();
         gamestate.loadConfiguration(
                 pieces,
                 whiteTurn,
@@ -70,9 +79,17 @@ public class BoardConverter {
                 whiteQCastle,
                 blackKCastle,
                 blackQCastle,
-                en_passant.toString(),
+                en_passant.toString().isEmpty() ? "-" :  en_passant.toString(), // if en_passant is "" then it is a - in the fen notation
                 halfmoveClock,
                 fullmoveNumber);
+
+        return gamestate;
+    }
+
+    public static boolean validFEN(String fen) {
+        Pattern fenPattern = Pattern.compile("^((?:[rnbqkpRNBQKP1-8]{1,8}/){7}[rnbqkpRNBQKP1-8]{1,8})\\s([wb])\\s((?:K?Q?k?q?|-)?)\\s((?:[a-h][36]|-))\\s(\\d+)\\s(\\d+)$");
+        Matcher matcher = fenPattern.matcher(fen);
+        return matcher.matches();
     }
 
     public static String createFEN(Gamestate gamestate, boolean whiteTurn) {

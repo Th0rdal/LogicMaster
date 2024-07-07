@@ -1,5 +1,6 @@
 package GUI.handler;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -33,7 +34,9 @@ public class SceneHandler {
     }
 
     public void activate(String name) {
-        this.stage.setScene(this.screenMap.get(name));
-        this.stage.show();
+        Platform.runLater(() -> {
+            this.stage.setScene(this.screenMap.get(name));
+            this.stage.show();
+        });
     }
 }

@@ -1,7 +1,6 @@
-package GUI.utilities;
+package GUI.game;
 
 import GUI.piece.PIECE_ID;
-import GUI.piece.Piece;
 
 import java.util.Objects;
 
@@ -70,9 +69,12 @@ public class Move {
                 this.draw = true;
             } else if (Objects.equals(moveString, "O-O")) {
                 this.specialMove = SPECIAL_MOVE.KING_CASTLE;
-                this.oldPosition = new BoardCoordinate("G1");
+                this.oldPosition = new BoardCoordinate("E1");
+                this.newPosition = new BoardCoordinate("G1");
             } else if (Objects.equals(moveString, "O-O-O")) {
                 this.specialMove = SPECIAL_MOVE.QUEEN_CASTLE;
+                this.oldPosition = new BoardCoordinate("E1");
+                this.newPosition = new BoardCoordinate("C1");
             } else {
                 this.piece_ID = PIECE_ID.fromString(moveString.substring(counter, counter + 1));
                 counter = counter + 1;

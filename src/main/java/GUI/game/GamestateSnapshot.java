@@ -1,8 +1,6 @@
-package GUI.gamestate;
+package GUI.game;
 
 import GUI.piece.*;
-import GUI.utilities.BoardCoordinate;
-import GUI.utilities.Move;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -48,7 +46,7 @@ public class GamestateSnapshot {
                              int halfmoveCounter,
                              int clockWhitePlayer,
                              int clockBlackPlayer,
-                             Move move) {
+                             Move tempMove) {
 
         this.pieces = (ArrayList<Piece>) pieces.stream().map(piece -> {
             switch (piece.getID()) {
@@ -82,7 +80,11 @@ public class GamestateSnapshot {
         this.halfmoveCounter = halfmoveCounter;
         this.clockWhitePlayer = clockWhitePlayer;
         this.clockBlackPlayer = clockBlackPlayer;
-        this.move = new Move(move);
+        if (tempMove == null) {
+            this.move = null;
+        } else {
+            this.move = new Move(tempMove);
+        }
     }
 
     public boolean isWhiteTurn() {

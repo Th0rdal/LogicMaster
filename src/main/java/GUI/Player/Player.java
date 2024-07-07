@@ -1,9 +1,8 @@
 package GUI.Player;
 
-import GUI.gamestate.Gamestate;
-import GUI.utilities.AlgorithmHandler;
+import GUI.game.Gamestate;
 import GUI.utilities.BoardConverter;
-import GUI.utilities.Move;
+import GUI.game.Move;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,17 +15,17 @@ import java.util.concurrent.BlockingQueue;
  */
 public class Player {
 
+    private static final String DEFAULTALGORITHMPATH = "algorithms/algorithm.exe";
     private final boolean isHuman;
-    private final String pathToExecutable; // should be empty string if the player is a human
     private final AlgorithmHandler algorithmHandler;
     private final String name;
 
     public Player(boolean isPlayer, String pathToExecutable, String name) {
         this.isHuman = isPlayer;
-        this.pathToExecutable = isPlayer && pathToExecutable.isEmpty() ? "algorithms/algorithm.exe" : pathToExecutable;
+        String tempPath = isPlayer && pathToExecutable.isEmpty() ? DEFAULTALGORITHMPATH : pathToExecutable;
         this.name = name;
 
-        this.algorithmHandler = new AlgorithmHandler(this.pathToExecutable);
+        this.algorithmHandler = new AlgorithmHandler(tempPath);
         if (!isPlayer) {
             this.algorithmHandler.setParameter();
 
