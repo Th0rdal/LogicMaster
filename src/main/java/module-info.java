@@ -7,7 +7,11 @@ module GUI {
     requires com.google.gson;
     opens GUI;
     opens GUI.utilities;
-    opens GUI.Player;
+    opens GUI.player;
     opens GUI.game;
-    opens GUI.Controller;
+    opens GUI.controller;
+    opens GUI.player.Algorithm;
+    opens GUI.game.timecontrol;
+    opens GUI.game.gamestate;
+    opens GUI.game.move;
 }

@@ -1,7 +1,7 @@
-package GUI.Player;
+package GUI.player.Algorithm;
 
-import GUI.game.Move;
-import GUI.game.SPECIAL_MOVE;
+import GUI.game.move.Move;
+import GUI.game.move.SPECIAL_MOVE;
 
 import java.io.BufferedReader;
 import java.io.IOException;

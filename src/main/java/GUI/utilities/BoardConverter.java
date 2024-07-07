@@ -1,6 +1,6 @@
 package GUI.utilities;
 
-import GUI.game.Gamestate;
+import GUI.game.gamestate.Gamestate;
 import GUI.piece.*;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package GUI.utilities;
+package GUI.game.timecontrol;
 
 import com.google.gson.*;
 

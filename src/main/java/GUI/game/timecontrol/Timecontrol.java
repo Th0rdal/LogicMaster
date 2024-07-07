@@ -1,4 +1,4 @@
-package GUI.utilities;
+package GUI.game.timecontrol;
 
 import java.util.HashMap;
 import java.util.Map;
