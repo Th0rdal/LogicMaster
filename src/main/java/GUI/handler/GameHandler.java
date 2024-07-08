@@ -35,7 +35,6 @@ import java.util.Objects;
 import java.util.concurrent.*;
 
 public class GameHandler {
-    private static final String START_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     private static final int CLOCKBASETIME = 10; //this is needed because time needs to be in tenth of a second
     private static final int WAITTIME = 50;
     private static final TimeUnit TIMEUNIT = TimeUnit.MILLISECONDS;
@@ -601,4 +600,8 @@ public class GameHandler {
     public boolean isGameInitialized() {return this.gameInitialized;}
 
     public ArrayList<GamestateSnapshot> getSnapshotHistory() {return this.snapshotHistory;}
+
+    public boolean canDrawFiftyMoves() {
+        return this.gamestate.getHalfmoveCounter() >= 50;
+    }
 }

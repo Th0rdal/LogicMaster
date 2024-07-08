@@ -27,11 +27,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 
@@ -313,21 +311,17 @@ public class BoardController {
 
         // config buttons
         this.drawButton.setOnAction(event -> {
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Draw offer");
-            alert.setHeaderText(null);
-            alert.setContentText("Your opponent offered a draw. Do you want to accept");
-            ButtonType buttonYes = new ButtonType("YES");
-            ButtonType buttonNo = new ButtonType("NO");
-            alert.getButtonTypes().setAll(buttonYes, buttonNo);
-            Optional<ButtonType> result = alert.showAndWait();
-
-            if (result.isPresent() && result.get() == buttonYes) {
-                Move move = new Move(true);
-                try {
-                    this.moveQueue.put(move);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+            if (this.gameHandler.canDrawFiftyMoves()) {
+                this.setCheckmateAlert(CHECKMATE_TYPE.FIFTY_MOVE_RULE, this.gameHandler.isTurnWhite());
+            } else {
+                boolean result = AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "Draw offer", "Your opponent offered a draw. Do you want to accept");
+                if (result) {
+                    Move move = new Move(true);
+                    try {
+                        this.moveQueue.put(move);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });
@@ -545,6 +539,7 @@ public class BoardController {
             case TIME -> String.format("%s ran out of time. %s wins!!!", this.gameHandler.getPlayer(whitePlayer).getName(), this.gameHandler.getPlayer(!whitePlayer).getName());
             case CHECKMATE -> String.format("%s player is checkmate. %s wins!!!", this.gameHandler.getPlayer(whitePlayer).getName(), this.gameHandler.getPlayer(!whitePlayer).getName());
             case STALEMATE -> String.format("%s player can no longer make a legal move in his turn. The game is a stalemate", this.gameHandler.getPlayer(whitePlayer).getName());
+            case FIFTY_MOVE_RULE -> String.format("%s claimed a draw with the fifty move rule", this.gameHandler.getPlayer(whitePlayer).getName());
         };
 
         text = text + "\nDo you wish to save the game in the database?";

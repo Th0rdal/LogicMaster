@@ -17,6 +17,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class Config {
+    public static final String START_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
     public static final String aiFilesPath = "algorithms";
     private static final ArrayList<AIFile> aiFiles = new ArrayList<>();
     private ArrayList<Timecontrol> timecontrol;

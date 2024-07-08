@@ -213,9 +213,9 @@ public class IndexController {
          this.timeControlChoiceBox.getSelectionModel().select(0);
 
          // fen text box configuration
-         this.fenTextBox.setText("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+         this.fenTextBox.setText(Config.START_POSITION);
          this.resetFenButton.setOnAction(e -> {
-             fenTextBox.setText("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+             fenTextBox.setText(Config.START_POSITION);
          });
 
          this.whitePlayerChoiceBox.getItems().addAll(Config.getAiFiles());
