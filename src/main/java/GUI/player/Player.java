@@ -20,10 +20,12 @@ public class Player {
     private final boolean isHuman;
     private final AlgorithmHandler algorithmHandler;
     private final String name;
+    private final String pathToExecutable;
 
     public Player(boolean isPlayer, String pathToExecutable, String name) {
         this.isHuman = isPlayer;
         String tempPath = isPlayer && pathToExecutable.isEmpty() ? DEFAULTALGORITHMPATH : pathToExecutable;
+        this.pathToExecutable = tempPath;
         this.name = name;
 
         this.algorithmHandler = new AlgorithmHandler(tempPath);
@@ -50,5 +52,7 @@ public class Player {
         String fen = BoardConverter.createFEN(gamestate, whiteTurn);
         return this.algorithmHandler.calculatePossibleMoves(fen);
     }
+
+    public String getPath() {return this.pathToExecutable;}
 
 }

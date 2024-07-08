@@ -1,5 +1,5 @@
-package database;
+package GUI.game.gamestate;
 
-public enum Gamestatus {
+public enum GAMESTATUS {
     ONGOING, CHECKMATE_WHITE, CHECKMATE_BLACK, DRAW_TIME, DRAW_AGREED, STALEMATE
 }

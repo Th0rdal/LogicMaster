@@ -1,6 +1,6 @@
 package database;
 
-import GUI.game.gamestate.GamestateSnapshot;
+import GUI.game.gamestate.GAMESTATUS;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -12,25 +12,25 @@ public class ChessGame {
     @DatabaseField(generatedId = true)
     private long id;
 
-    @DatabaseField(dataType= DataType.BYTE_ARRAY)
+    @DatabaseField(dataType= DataType.BYTE_ARRAY, canBeNull = false)
     private byte[] moves;
     @DatabaseField(dataType= DataType.BYTE_ARRAY)
     private byte[] time;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private String timeControl;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private String whitePlayerName;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private String blackPlayerName;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private String whitePlayerPath;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private String blackPlayerPath;
-    @DatabaseField
-    private Gamestatus gameStatus;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
+    private GAMESTATUS gameStatus;
+    @DatabaseField(canBeNull = false)
     private Timestamp creationDatetime;
-    @DatabaseField
+    @DatabaseField(canBeNull = false)
     private String startingFen;
     @DatabaseField
     private String endFen;
@@ -43,7 +43,7 @@ public class ChessGame {
         this.blackPlayerName = "black";
         this.whitePlayerPath = "whitePath";
         this.blackPlayerPath = "blackPath";
-        this.gameStatus = Gamestatus.ONGOING;
+        this.gameStatus = GAMESTATUS.ONGOING;
         this.creationDatetime = new Timestamp(System.currentTimeMillis());
         this.startingFen = "start";
         this.endFen = "end";
@@ -57,7 +57,7 @@ public class ChessGame {
             String blackPlayerName,
             String whitePlayerPath,
             String blackPlayerPath,
-            Gamestatus gameStatus,
+            GAMESTATUS gameStatus,
             String startingFen,
             String endFen) {
 
@@ -106,7 +106,7 @@ public class ChessGame {
         return blackPlayerPath;
     }
 
-    public Gamestatus getGameStatus() {
+    public GAMESTATUS getGameStatus() {
         return gameStatus;
     }
 

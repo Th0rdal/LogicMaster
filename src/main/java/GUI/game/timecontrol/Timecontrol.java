@@ -132,6 +132,11 @@ public class Timecontrol {
 
     public static ArrayList<Integer> convertByteTimeToArrayList(byte[] timeBytes) {
         ArrayList<Integer> list = new ArrayList<>();
+        if (timeBytes == null) {
+            for(int i = 0; i < timeBytes.length/4; i=i+4) {
+                list.add(0);
+            }
+        }
         for (int i = 0; i < timeBytes.length; i=i+4) {
             byte[] temp = {timeBytes[i], timeBytes[i+1], timeBytes[i+2], timeBytes[i+3]};
             list.add(ByteBuffer.wrap(temp).getInt());

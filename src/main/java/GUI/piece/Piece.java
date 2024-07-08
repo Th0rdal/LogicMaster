@@ -102,6 +102,24 @@ public abstract class Piece {
         return this.prepareImage(new ImageView(ImageLoader.getImage(this.id, this.isWhite)));
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Piece)) {
+            return false;
+        }
+        Piece other = (Piece) obj;
+        if (this.isWhite != other.isWhite) {
+            return false;
+        }
+        if (this.id != other.id) {
+            return false;
+        }
+        if (this.coordinate != other.coordinate) {
+            return false;
+        }
+        return true;
+    }
+
     public int getLocationX() {
         return this.coordinate.getXLocation();
     }

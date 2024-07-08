@@ -1,6 +1,7 @@
 package GUI.handler;
 
 import GUI.game.gamestate.CHECKMATE_TYPE;
+import GUI.game.gamestate.GAMESTATUS;
 import GUI.player.Algorithm.AIFile;
 import GUI.controller.AlertHandler;
 import GUI.controller.BoardController;
@@ -14,6 +15,8 @@ import GUI.game.timecontrol.Timecontrol;
 import GUI.piece.PIECE_ID;
 import GUI.piece.Piece;
 import GUI.utilities.*;
+import database.ChessGame;
+import database.Database;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -24,6 +27,8 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+import java.nio.ByteBuffer;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -64,6 +69,7 @@ public class GameHandler {
     private boolean inSnapshot = false;
     private boolean interruptFlag = false;
     private boolean gameInitialized = false;
+    private GAMESTATUS gamestatus;
     private int continueFromSnapshotFlag = 0; // if this is not 0, continue from the snapshot that contains the fullmoveCounter equal to this var
 
     private String startFen = "";
@@ -80,7 +86,8 @@ public class GameHandler {
         this.gameInitialized = true;
 
         AlertHandler.showAlertAndWait(Alert.AlertType.INFORMATION, "start game?", "Press 'OK' to start the game");
-        this.startClocks(true);
+        this.startClocks(this.whiteTurn);
+        this.gamestatus = GAMESTATUS.ONGOING;
 
         do {
             try {
@@ -360,6 +367,83 @@ public class GameHandler {
         });
     }
 
+    public void saveCurrentInDatabase() {
+        ArrayList<Byte> byteMoveList = new ArrayList<>();
+        ArrayList<Integer> timeList = new ArrayList<>();
+
+        for (GamestateSnapshot snapshot : this.snapshotHistory) {
+            timeList.add(snapshot.getClockChanged());
+            byte[] byteMove = snapshot.getMove().convertToByte();
+            for (Byte tempByte : byteMove) {
+                byteMoveList.add(tempByte);
+            }
+        }
+
+        byte[] byteArray = new byte[byteMoveList.size()];
+        for (int i = 0; i < byteArray.length; i++) {
+            byteArray[i] = byteMoveList.get(i);
+        }
+
+        byte[] timeArray = new byte[timeList.size()*4];
+        for (int i = 0; i < timeArray.length; i++) {
+            for (Byte tempByte : ByteBuffer.allocate(4).putInt(timeList.get(i)).array()) {
+                timeArray[i] = tempByte;
+                i++;
+            }
+        }
+
+        String endFen = BoardConverter.createFEN(gamestate, this.isTurnWhite());
+        ChessGame game = new ChessGame(
+                byteArray,
+                timeArray,
+                this.timecontrol.toString(),
+                this.whitePlayer.getName(),
+                this.blackPlayer.getName(),
+                this.whitePlayer.getPath(),
+                this.blackPlayer.getPath(),
+                this.gamestatus,
+                this.startFen,
+                endFen);
+
+        try {
+            Database.getInstance().getDao().create(game);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void loadFromDatabase(ChessGame game) {
+        this.setWhitePlayer(new Player(game.getWhitePlayerPath().isEmpty(), game.getWhitePlayerPath(), game.getWhitePlayerName()));
+        this.setBlackPlayer(new Player(game.getBlackPlayerPath().isEmpty(), game.getBlackPlayerPath(), game.getBlackPlayerName()));
+        this.timecontrol = new Timecontrol(game.getTimeControl());
+        this.startFen = game.getStartingFen();
+        this.gamestatus = game.getGameStatus();
+        this.gamestate = BoardConverter.loadFEN(startFen);
+        ArrayList<Move> moveList = Move.convertByteMovesToArrayList(game.getMoves());
+        ArrayList<Integer> timeList = Timecontrol.convertByteTimeToArrayList(game.getTime());
+        this.executeMoveList(moveList, timeList);
+        if (BoardConverter.loadFEN(game.getEndFen()) != this.gamestate) {
+            throw new RuntimeException();
+        }
+    }
+
+    private void executeMoveList(ArrayList<Move> moveList, ArrayList<Integer> timeList) {
+        for (int i = 0; i < moveList.size(); i++) {
+            if (this.gamestate.isWhiteTurn()) {
+                this.clockWhitePlayerCounter += timeList.get(i);
+            } else {
+                this.clockBlackPlayerCounter += timeList.get(i);
+            }
+            this.gamestate.makeMove(moveList.get(i));
+            this.saveCurrentSnapshot();
+        }
+        this.whiteTurn = this.gamestate.isWhiteTurn();
+        Platform.runLater(() -> {
+            this.boardController.reloadMoveHistory();
+            this.boardController.loadPieces();
+        });
+    }
+
     // getter
     public boolean isCurrentPlayerHuman() {
         return this.getCurrentPlayer().isHuman();
@@ -418,8 +502,6 @@ public class GameHandler {
     public boolean isTurnWhite() {
         return this.whiteTurn;
     }
-
-
 
     // setter
     public void loadedBoard() {

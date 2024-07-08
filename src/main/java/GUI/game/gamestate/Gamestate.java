@@ -26,7 +26,6 @@ public class Gamestate {
     private int fullmoveCounter = 0; // full move clock counts the total amount of moves
 
     private Semaphore semaphore = new Semaphore(1); // needed as more than one thread could concurrently do something (e.g., makeMove and snapshot at same time)
-    private Timecontrol timecontrol;
 
     /**
      * empty constructor if just a Gamestate should be created.
@@ -332,6 +331,44 @@ public class Gamestate {
         this.enPassantCoordinates = new BoardCoordinate(enPassant);
         this.halfmoveCounter = halfmoveClock;
         this.fullmoveCounter = fullmoveClock;
+        if (turn != this.isWhiteTurn()) {
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Gamestate)) {
+            return false;
+        }
+        Gamestate other = (Gamestate) obj;
+        for (Piece piece : this.pieces) {
+            if (!other.pieces.contains(piece)) {
+                return false;
+            }
+        }
+        if (this.whiteQCastle != other.whiteQCastle) {
+            return false;
+        }
+        if (this.whiteKCastle != other.whiteKCastle) {
+            return false;
+        }
+        if (this.blackQCastle != other.blackQCastle) {
+            return false;
+        }
+        if (this.blackKCastle != other.blackKCastle) {
+            return false;
+        }
+        if (!this.enPassantCoordinates.equals(other.enPassantCoordinates)) {
+            return false;
+        }
+        if (this.fullmoveCounter != other.fullmoveCounter) {
+            return false;
+        }
+        if (this.halfmoveCounter != other.halfmoveCounter) {
+            return false;
+        }
+        return true;
     }
 
     public void setPieces(ArrayList<Piece> pieces) {this.pieces = pieces;}
@@ -371,4 +408,7 @@ public class Gamestate {
         return this.fullmoveCounter % 2 == 1;
     }
 
+    public boolean isWhiteTurn() {
+        return this.fullmoveCounter%2 == 1;
+    }
 }
