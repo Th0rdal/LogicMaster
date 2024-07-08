@@ -15,7 +15,7 @@ import java.util.Objects;
  * Handles the algorithm call.
  * The calculate functions could be called multiple times on the same fen!!!
  */
-public class AlgorithmHandler extends AlgorithmHandlerBase{
+public class BadMinimaxAlgorithm extends AlgorithmHandlerBase{
 
     private Move chosenMove = null;
     private HashMap<String, ArrayList<Move>> possibleMoves = new HashMap<>();
@@ -25,7 +25,7 @@ public class AlgorithmHandler extends AlgorithmHandlerBase{
     private boolean possibleMovesDone = false;
     private boolean moveDone = false;
 
-    public AlgorithmHandler(String path) {
+    public BadMinimaxAlgorithm(String path) {
         this.path = path;
     }
 

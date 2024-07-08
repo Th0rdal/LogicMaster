@@ -5,7 +5,6 @@ import GUI.game.gamestate.GAMESTATUS;
 import GUI.player.Algorithm.AIFile;
 import GUI.controller.AlertHandler;
 import GUI.controller.BoardController;
-import GUI.player.Algorithm.AlgorithmHandler;
 import GUI.game.*;
 import GUI.player.Player;
 import GUI.game.gamestate.Gamestate;
@@ -48,7 +47,6 @@ public class GameHandler {
     private BoardController boardController;
     private Gamestate gamestate;
     private Timecontrol timecontrol;
-    private AlgorithmHandler algorithmHandler;
     private CyclicBarrier barrier = new CyclicBarrier(2);
     private Semaphore flagLock = new Semaphore(1);
     private final BlockingQueue<Move> moveQueue = new LinkedBlockingQueue<>(1);

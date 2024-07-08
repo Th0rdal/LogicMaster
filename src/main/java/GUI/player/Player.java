@@ -1,10 +1,11 @@
 package GUI.player;
 
-import GUI.player.Algorithm.AlgorithmHandler;
 import GUI.game.gamestate.Gamestate;
+import GUI.player.Algorithm.AlgorithmHandlerBase;
 import GUI.utilities.BoardConverter;
 import GUI.game.move.Move;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
@@ -18,7 +19,7 @@ public class Player {
 
     private static final String DEFAULTALGORITHMPATH = "algorithms/algorithm.exe";
     private final boolean isHuman;
-    private final AlgorithmHandler algorithmHandler;
+    private final AlgorithmHandlerBase algorithmHandler;
     private final String name;
     private final String pathToExecutable;
 
@@ -28,7 +29,14 @@ public class Player {
         this.pathToExecutable = tempPath;
         this.name = name;
 
-        this.algorithmHandler = new AlgorithmHandler(tempPath);
+        try {
+            Class<?> clazz = Class.forName(this.name);
+            Object instance = clazz.getDeclaredConstructor(String.class).newInstance(tempPath);
+            this.algorithmHandler = (AlgorithmHandlerBase) instance;
+        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException |
+                 NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
         if (!isPlayer) {
             this.algorithmHandler.setParameter();
 
