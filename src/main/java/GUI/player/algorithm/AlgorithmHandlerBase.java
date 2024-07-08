@@ -1,4 +1,4 @@
-package GUI.player.Algorithm;
+package GUI.player.algorithm;
 
 import GUI.game.move.Move;
 

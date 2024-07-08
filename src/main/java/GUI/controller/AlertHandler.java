@@ -31,10 +31,12 @@ public class AlertHandler {
             });
         }
 
-        try {
-            future.get();
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
+        if (wait) {
+            try {
+                future.get();
+            } catch (ExecutionException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

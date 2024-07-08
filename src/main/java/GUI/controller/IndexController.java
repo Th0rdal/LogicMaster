@@ -1,12 +1,10 @@
 package GUI.controller;
 
 import GUI.game.timecontrol.TimecontrolChoiceBoxConverter;
-import GUI.player.Algorithm.AIFile;
+import GUI.player.algorithm.AIFile;
 import GUI.Config;
 import GUI.handler.GameHandler;
 import GUI.game.timecontrol.Timecontrol;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 

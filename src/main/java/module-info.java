@@ -12,7 +12,7 @@ module LogicMaster {
     opens GUI.player;
     opens GUI.game;
     opens GUI.controller;
-    opens GUI.player.Algorithm;
+    opens GUI.player.algorithm;
     opens GUI.game.timecontrol;
     opens GUI.game.gamestate;
     opens GUI.game.move;

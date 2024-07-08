@@ -2,7 +2,7 @@ package GUI.handler;
 
 import GUI.game.gamestate.CHECKMATE_TYPE;
 import GUI.game.gamestate.GAMESTATUS;
-import GUI.player.Algorithm.AIFile;
+import GUI.player.algorithm.AIFile;
 import GUI.controller.AlertHandler;
 import GUI.controller.BoardController;
 import GUI.game.*;
