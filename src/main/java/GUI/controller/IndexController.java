@@ -1,5 +1,6 @@
 package GUI.controller;
 
+import GUI.game.timecontrol.TimecontrolChoiceBoxConverter;
 import GUI.player.Algorithm.AIFile;
 import GUI.Config;
 import GUI.handler.GameHandler;
@@ -77,7 +78,7 @@ public class IndexController {
              }
 
              if (timeControlCheckBox.isSelected()) {
-                 if (timeControlChoiceBox.getValue().hasNoStartValue()) {
+                 if (timeControlChoiceBox.getValue().isActive()) {
                      timecontrol = timeControlChoiceBox.getValue();
                  } else {
                      try {
@@ -90,7 +91,7 @@ public class IndexController {
              }
 
              // the thread needs effectively final variables
-             Timecontrol finalTimecontrol = timecontrol;
+             Timecontrol finalTimecontrol = timeControlCheckBox.isSelected() ? timecontrol : new Timecontrol("0+0");
              String finalWhiteName = whiteName;
              String finalBlackName = blackName;
              if (gameHandler.isGameInitialized()) {
@@ -128,46 +129,37 @@ public class IndexController {
                  }).start();
              }
          });
-         this.timeControlCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-              @Override
-              public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-                   timeControlChoiceBox.setVisible(newValue);
-                   deleteTimeControlButton.setVisible(newValue);
-                   if (newValue && Objects.equals(timeControlChoiceBox.getValue().toString(), "custom")) {
-                       saveTimeControlButton.setVisible(true);
-                       timeControlTextField.setVisible(true);
-                       deleteTimeControlButton.setVisible(false);
-                   } else {
-                       saveTimeControlButton.setVisible(false);
-                       timeControlTextField.setVisible(false);
-                   }
+         this.timeControlCheckBox.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
+              timeControlChoiceBox.setVisible(newValue);
+              deleteTimeControlButton.setVisible(newValue);
+              if (newValue && Objects.equals(timeControlChoiceBox.getValue().toString(), "custom")) {
+                  saveTimeControlButton.setVisible(true);
+                  timeControlTextField.setVisible(true);
+                  deleteTimeControlButton.setVisible(false);
+              } else {
+                  saveTimeControlButton.setVisible(false);
+                  timeControlTextField.setVisible(false);
+              }
 
-              }
          });
-         this.whitePlayerHumanCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-              @Override
-              public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-                   whiteNameLabel.setVisible(newValue);
-                   whitePlayerNameTextBox.setVisible(newValue);
-                   whitePlayerChoiceBox.setVisible(!newValue);
-              }
+         this.whitePlayerHumanCheckBox.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
+              whiteNameLabel.setVisible(newValue);
+              whitePlayerNameTextBox.setVisible(newValue);
+              whitePlayerChoiceBox.setVisible(!newValue);
          });
-         this.blackPlayerHumanCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-              @Override
-              public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-                   blackNameLabel.setVisible(newValue);
-                   blackPlayerNameTextBox.setVisible(newValue);
-                   blackPlayerChoiceBox.setVisible(!newValue);
-              }
+         this.blackPlayerHumanCheckBox.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
+              blackNameLabel.setVisible(newValue);
+              blackPlayerNameTextBox.setVisible(newValue);
+              blackPlayerChoiceBox.setVisible(!newValue);
          });
 
          this.timeControlChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
              if (newValue == null) {
                  return;
              }
-             timeControlTextField.setVisible(Objects.equals(newValue.toString(), "custom"));
-             saveTimeControlButton.setVisible(Objects.equals(newValue.toString(), "custom"));
-             deleteTimeControlButton.setVisible(!Objects.equals(newValue.toString(), "custom"));
+             timeControlTextField.setVisible(!newValue.isActive());
+             saveTimeControlButton.setVisible(!newValue.isActive());
+             deleteTimeControlButton.setVisible(newValue.isActive());
          });
 
          this.saveTimeControlButton.setOnAction(e -> {
@@ -209,6 +201,7 @@ public class IndexController {
          // time control choice box configuration
          List<Timecontrol> tcArray = new ArrayList<>(Config.getInstance().getTimecontrol());
          tcArray.add(Timecontrol.zeroTimecontrol);
+         this.timeControlChoiceBox.setConverter(new TimecontrolChoiceBoxConverter());
          this.timeControlChoiceBox.getItems().addAll(tcArray);
          this.timeControlChoiceBox.getSelectionModel().select(0);
 

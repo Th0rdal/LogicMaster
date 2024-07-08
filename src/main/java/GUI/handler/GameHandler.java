@@ -251,6 +251,9 @@ public class GameHandler {
      * @param blackPlayerLabel The label to put the players time in
      */
     public void loadClocks(Label whitePlayerLabel, Label blackPlayerLabel) {
+        if (!this.timecontrol.isActive()) {
+            return;
+        }
         this.clockWhitePlayerCounter = clockStartTime;
         this.clockBlackPlayerCounter = clockStartTime;
 
@@ -328,6 +331,9 @@ public class GameHandler {
      * @param whiteStart if true, white made the first move, black if false
      */
     public void startClocks(boolean whiteStart) {
+        if (!this.timecontrol.isActive()) {
+            return;
+        }
         if (whiteStart) {
             this.currentTimeRunning = this.clockWhitePlayer;
             this.currentTimeStopped = this.clockBlackPlayer;
@@ -343,12 +349,15 @@ public class GameHandler {
      */
     private void swapTurn() {
         this.whiteTurn = !this.whiteTurn;
-        this.currentTimeRunning.pause();
-        this.currentTimeStopped.play();
 
-        Timeline temp = this.currentTimeRunning;
-        this.currentTimeRunning = this.currentTimeStopped;
-        this.currentTimeStopped = temp;
+        if (this.timecontrol.isActive()) {
+            this.currentTimeRunning.pause();
+            this.currentTimeStopped.play();
+
+            Timeline temp = this.currentTimeRunning;
+            this.currentTimeRunning = this.currentTimeStopped;
+            this.currentTimeStopped = temp;
+        }
     }
 
     public void saveCurrentSnapshot() {

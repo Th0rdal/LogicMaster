@@ -83,8 +83,8 @@ public class Timecontrol {
 
     @Override
     public String toString() {
-        if (this.startTime == 0) {
-            return "custom";
+        if (!this.isActive()) {
+            return "no timecontrol";
         }
         int minutes = this.startTime / 60;
         int seconds = this.startTime - minutes * 60;
@@ -116,8 +116,6 @@ public class Timecontrol {
             return false;
         } else if (this.increment != ((Timecontrol) obj).increment) {
             return false;
-        } else if (this.custom != ((Timecontrol) obj).custom) {
-            return false;
         } else if (this.timecontrolChangeMap.size() != ((Timecontrol) obj).timecontrolChangeMap.size()) {
             return false;
         } else {
@@ -144,8 +142,8 @@ public class Timecontrol {
         return list;
     }
 
-    public boolean hasNoStartValue() {
-        return this.startTime != 0;
+    public boolean isActive() {
+        return !(this.startTime == 0 && this.increment == 0 && this.timecontrolChangeMap.isEmpty());
     }
 
     public boolean isCustom() {
