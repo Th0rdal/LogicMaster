@@ -132,6 +132,7 @@ public class GameHandler {
                 }
 
                 if (move.isDraw()) {
+                    this.gamestatus = move.isDrawOffered() ? GAMESTATUS.DRAW_AGREED : GAMESTATUS.STALEMATE;
                     Platform.runLater(() -> {
                         this.boardController.setCheckmateAlert(CHECKMATE_TYPE.DRAW, this.whiteTurn);
                     });
@@ -159,11 +160,13 @@ public class GameHandler {
             this.swapTurn();
 
             if (move.isCheckmate()) { // here because if move.isCheckmate is true, the other player is in checkmate
+                this.gamestatus = whiteTurn ? GAMESTATUS.CHECKMATE_WHITE : GAMESTATUS.CHECKMATE_BLACK;
                 Platform.runLater(() -> {
                     this.boardController.setCheckmateAlert(CHECKMATE_TYPE.CHECKMATE, whiteTurn);
                 });
                 break;
             } else if (move.isDraw()) {
+                this.gamestatus = GAMESTATUS.STALEMATE;
                 Platform.runLater(() -> {
                     this.boardController.setCheckmateAlert(CHECKMATE_TYPE.STALEMATE, whiteTurn);
                 });
@@ -258,6 +261,7 @@ public class GameHandler {
                 clockWhitePlayerCounter--;
                 whitePlayerLabel.setText(Calculator.getClockTimeInFormat(clockWhitePlayerCounter));
                 if (clockWhitePlayerCounter == 0) {
+                    this.gamestatus = GAMESTATUS.CHECKMATE_TIME_WHITE;
                     Platform.runLater(() -> {
                         this.boardController.setCheckmateAlert(CHECKMATE_TYPE.TIME, false);
                     });
@@ -269,6 +273,7 @@ public class GameHandler {
                 clockBlackPlayerCounter--;
                 blackPlayerLabel.setText(Calculator.getClockTimeInFormat(clockBlackPlayerCounter));
                 if (clockBlackPlayerCounter == 0) {
+                    this.gamestatus = GAMESTATUS.CHECKMATE_TIME_BLACK;
                     Platform.runLater(() -> {
                         this.boardController.setCheckmateAlert(CHECKMATE_TYPE.TIME, true);
                     });
@@ -510,6 +515,14 @@ public class GameHandler {
         } catch (BrokenBarrierException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setGamestatusDrawAgreed() {
+        this.gamestatus = GAMESTATUS.DRAW_AGREED;
+    }
+
+    public void setGamestatusCheckmateTime(boolean whiteTurn) {
+        this.gamestatus = whiteTurn ? GAMESTATUS.CHECKMATE_TIME_WHITE : GAMESTATUS.CHECKMATE_TIME_BLACK;
     }
 
     public void setWhitePlayer(Player player) {

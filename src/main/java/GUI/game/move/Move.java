@@ -18,15 +18,16 @@ public class Move {
 
     private PIECE_ID piece_ID; // piece that moved if castling, the king should be the piece_id
     private PIECE_ID promotion_ID; // piece promotion ID
+    private boolean drawOffered = false;
     private boolean capture = false;
     private boolean check = false;
     private boolean checkmate = false;
     private boolean draw = false;
-    private boolean ambiguous = false; // different flags
     private SPECIAL_MOVE specialMove; // represents if a special move was made (e.g., en passant)
 
     public Move(boolean draw) { // if a draw offer is accepted this is used to communicate with the GameHandler
         this.draw = draw;
+        this.drawOffered = true;
     }
 
     public Move(PIECE_ID piece_ID,
@@ -37,8 +38,7 @@ public class Move {
                 PIECE_ID promotion_ID,
                 boolean check,
                 boolean checkmate,
-                boolean draw,
-                boolean ambiguous) {
+                boolean draw) {
 
         this.piece_ID = piece_ID;
         this.oldPosition = oldPosition;
@@ -47,8 +47,8 @@ public class Move {
         this.promotion_ID = promotion_ID;
         this.check = check;
         this.checkmate = checkmate;
-        this.ambiguous = ambiguous;
         this.specialMove = specialMove;
+        this.draw = draw;
     }
 
     public Move(byte base, byte base2, byte extended) {
@@ -67,8 +67,8 @@ public class Move {
         int endY = ((base2 & 4) >> 2) + 1;
         this.newPosition = new BoardCoordinate(endX, endY);
 
-        int startX = ((base2 & 224) >> 5) + 1;
-        int startY = ((base2 & 4) >> 2) + 1;
+        int startX = ((extended & 224) >> 5) + 1;
+        int startY = ((extended & 4) >> 2) + 1;
         this.oldPosition = new BoardCoordinate(startX, startY);
 
         if (((base2 & 2) >> 1) == 1) {
@@ -96,8 +96,8 @@ public class Move {
         this.check = move.check;
         this.checkmate = move.checkmate;
         this.draw = move.draw;
-        this.ambiguous = move.ambiguous;
         this.specialMove = move.specialMove;
+        this.drawOffered = move.drawOffered;
     }
 
     public Move(String moveString) {
@@ -277,15 +277,10 @@ public class Move {
         return draw;
     }
 
-    public boolean isAmbiguous() {
-        return ambiguous;
-    }
+    public boolean isDrawOffered() {return this.drawOffered;}
 
     public SPECIAL_MOVE getSpecialMove() {
         return specialMove;
     }
 
-    public void setPromotionID(PIECE_ID piece) {
-        this.promotion_ID = piece;
-    }
 }
