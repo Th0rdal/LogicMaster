@@ -1,8 +1,10 @@
 package GUI.game.move;
 
+import GUI.controller.AlertHandler;
 import GUI.game.BoardCoordinate;
 import GUI.piece.PIECE_ID;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -225,7 +227,10 @@ public class Move {
             case 3 -> PIECE_ID.BISHOP;
             case 4 -> PIECE_ID.QUEEN;
             case 5, 6, 7 -> PIECE_ID.KING;
-            default -> throw new RuntimeException();
+            default -> {
+                AlertHandler.throwError();
+                throw new IllegalArgumentException(MessageFormat.format("The byte ({0}) not between 0 and 7", pieceByte));
+            }
         };
     }
 

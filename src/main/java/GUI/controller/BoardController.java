@@ -1,6 +1,7 @@
 package GUI.controller;
 
 import GUI.Config;
+import GUI.exceptions.ObjectInterruptedException;
 import GUI.game.*;
 import GUI.game.gamestate.CHECKMATE_TYPE;
 import GUI.game.gamestate.GamestateSnapshot;
@@ -28,9 +29,9 @@ import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Alert.AlertType;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CompletableFuture;
 
 public class BoardController {
 
@@ -39,9 +40,9 @@ public class BoardController {
     @FXML
     private AnchorPane anchorPane;
     @FXML
-    private Label clockTopLabel;
+    private Label clockWhiteLabel;
     @FXML
-    private Label clockBottomLabel;
+    private Label clockBlackLabel;
     @FXML
     private Pane promotionPane;
     @FXML
@@ -58,8 +59,15 @@ public class BoardController {
     private GridPane boardRowHeaders;
     @FXML
     private GridPane boardColumnHeaders;
+    @FXML
+    private CheckBox turnBoardAfterMoveCheckBox;
+    @FXML
+    private Button turnBoardButton;
+    @FXML
+    private VBox leftSideBar;
 
-
+    private static final int UP_CLOCK_LABEL = 1;
+    private static final int DOWN_CLOCK_LABEL = 2;
 
     private BlockingQueue<Move> moveQueue = null;
     private ArrayList<Move> possibleMoveList;
@@ -205,7 +213,11 @@ public class BoardController {
                 case "QUEEN" -> PIECE_ID.QUEEN;
                 case "BISHOP" -> PIECE_ID.BISHOP;
                 case "ROOK" -> PIECE_ID.ROOK;
-                default -> throw new RuntimeException("Promoting piece into something that is not allowed");
+                default -> {
+                    String message = MessageFormat.format("Promoting piece into something that is not allowed ({0})", this.promotionSelectedPane.getId());
+                    AlertHandler.throwError();
+                    throw new IllegalArgumentException(message);
+                }
             };
 
             for (Move move : this.possibleMoveList) {
@@ -221,15 +233,6 @@ public class BoardController {
             this.promotionPane.setVisible(!this.promotionPane.isVisible());
         }
     };
-
-    /**
-     * Resets the board
-     */
-    public void clearBoard() {
-        this.visualBoard.getChildren().clear();
-        //TODO add gameHandler clearBoard function
-        //this.gameHandler.clearBoard();
-    }
 
     public void loadPromotionPane(boolean isWhite) {
         //399 because of weird calc with border.
@@ -288,13 +291,15 @@ public class BoardController {
             if (this.gameHandler.canDrawFiftyMoves()) {
                 this.setCheckmateAlert(CHECKMATE_TYPE.FIFTY_MOVE_RULE, this.gameHandler.isTurnWhite());
             } else {
-                boolean result = AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "Draw offer", "Your opponent offered a draw. Do you want to accept");
+                String player = this.gameHandler.getPlayer(this.gameHandler.isTurnWhite()).getName();
+                boolean result = AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "Draw offer", player + " offered a draw. Do you want to accept?");
                 if (result) {
                     Move move = new Move(true);
                     try {
                         this.moveQueue.put(move);
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        AlertHandler.throwError();
+                        throw new ObjectInterruptedException("Move queue interrupted unexpectedly", e);
                     }
                 }
             }
@@ -306,13 +311,34 @@ public class BoardController {
         });
 
         this.saveButton.setOnAction(event -> {
+            AlertHandler.showAlert(AlertType.INFORMATION, "saved game", "The game was saved in the database");
             this.gameHandler.saveCurrentInDatabase();
         });
 
-        this.clockTopLabel.setFont(Font.font("Arial", 22));
-        clockTopLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
-        this.clockBottomLabel.setFont(Font.font("Arial", 22));
-        clockBottomLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.turnBoardButton.setOnAction(event -> {
+            this.whiteSideDown = !this.whiteSideDown;
+            this.loadBoard();
+            int index1 = this.leftSideBar.getChildren().indexOf(this.clockWhiteLabel);
+            int index2 = this.leftSideBar.getChildren().indexOf(this.clockBlackLabel);
+
+            this.leftSideBar.getChildren().remove(this.clockWhiteLabel);
+            this.leftSideBar.getChildren().remove(this.clockBlackLabel);
+
+            if (index1 < index2) {
+                this.leftSideBar.getChildren().add(index1, this.clockBlackLabel);
+                this.leftSideBar.getChildren().add(index2, this.clockWhiteLabel);
+            } else {
+                this.leftSideBar.getChildren().add(index2, this.clockWhiteLabel);
+                this.leftSideBar.getChildren().add(index1, this.clockBlackLabel);
+            }
+
+
+        });
+
+        this.clockWhiteLabel.setFont(Font.font("Arial", 22));
+        clockWhiteLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.clockBlackLabel.setFont(Font.font("Arial", 22));
+        clockBlackLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
 
         // adding squares to board
         int size = 8;
@@ -345,16 +371,12 @@ public class BoardController {
         }
 
         if (this.whiteSideDown) {
-            this.gameHandler.loadClocks(this.clockBottomLabel, this.clockTopLabel);
+            this.gameHandler.loadClocks(this.clockBlackLabel, this.clockWhiteLabel);
         } else {
-            this.gameHandler.loadClocks(this.clockTopLabel, this.clockBottomLabel);
+            this.gameHandler.loadClocks(this.clockWhiteLabel, this.clockBlackLabel);
         }
 
         loadPieces();
-    }
-
-    public void setWhiteSideDown(boolean whiteSideDown) {
-        this.whiteSideDown = whiteSideDown;
     }
 
     public void loadPieces() {
@@ -450,7 +472,11 @@ public class BoardController {
         try {
             this.moveQueue.put(move);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            AlertHandler.throwError();
+            throw new ObjectInterruptedException("Move queue interrupted unexpectedly", e);
+        }
+        if (this.turnBoardAfterMoveCheckBox.isSelected()) {
+            this.turnBoardButton.fire();
         }
     }
 
@@ -519,7 +545,6 @@ public class BoardController {
     }
 
     public void setCheckmateAlert(CHECKMATE_TYPE type, boolean whitePlayer) {
-        //TODO use AlertHandler
         String text = switch (type) {
             case DRAW -> "The players agreed to a draw";
             case TIME -> String.format("%s ran out of time. %s wins!!!", this.gameHandler.getPlayer(whitePlayer).getName(), this.gameHandler.getPlayer(!whitePlayer).getName());
@@ -541,9 +566,4 @@ public class BoardController {
         this.gameHandler = gameHandler;
     }
 
-    public void updateClock(boolean whiteTurn) {
-        if (whiteTurn) {
-
-        }
-    }
 }

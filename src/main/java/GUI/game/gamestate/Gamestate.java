@@ -1,9 +1,11 @@
 package GUI.game.gamestate;
 
+import GUI.controller.AlertHandler;
+import GUI.exceptions.GamestateLoadingException;
+import GUI.exceptions.ObjectInterruptedException;
 import GUI.game.BoardCoordinate;
 import GUI.game.move.Move;
 import GUI.game.move.SPECIAL_MOVE;
-import GUI.game.timecontrol.Timecontrol;
 import GUI.piece.*;
 
 import java.util.ArrayList;
@@ -88,8 +90,8 @@ public class Gamestate {
 
         Piece piece = this.getPieceAtCoordinates(move.getOldPosition());
         if (piece == null) {
-            //TODO make this a useful Error
-            throw new RuntimeException("UNEXPECTED. THIS SHOULD NEVER HAPPEN. piece is null in makeMove");
+            AlertHandler.throwError();
+            throw new IllegalArgumentException("Piece is null in makeMove");
         }
         if (move.isCapture()) { // remove piece if already at end position
             this.removePiece(move.getNewPosition());
@@ -169,7 +171,8 @@ public class Gamestate {
             default -> null;
         };
         if (promotionPiece == null) {
-            throw new RuntimeException("UNEXPECTED. PROMOTION IS NULL in makeMove");
+            AlertHandler.throwError();
+            throw new IllegalArgumentException("promotion piece is null in makeMove");
         }
         return promotionPiece;
     }
@@ -309,7 +312,8 @@ public class Gamestate {
         try {
             this.semaphore.acquire();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            AlertHandler.throwError();
+            throw new ObjectInterruptedException("semaphore interrupted unexpectedly", e);
         }
 
         GamestateSnapshot snapshot = this.getSnapshot(null, whiteClockCounter, blackClockCounter);
@@ -350,7 +354,8 @@ public class Gamestate {
         this.halfmoveCounter = halfmoveClock;
         this.fullmoveCounter = fullmoveClock;
         if (turn != this.isWhiteTurn()) {
-            throw new RuntimeException();
+            AlertHandler.throwError();
+            throw new GamestateLoadingException("The side passed does not match the side calculated");
         }
     }
 

@@ -1,5 +1,6 @@
 package GUI.piece;
 
+import GUI.controller.AlertHandler;
 import GUI.game.BoardCoordinate;
 import GUI.utilities.ImageLoader;
 import javafx.scene.image.ImageView;
@@ -94,8 +95,8 @@ public abstract class Piece {
                 return new Rook(new BoardCoordinate(colCounter, rowCounter), true);
         }
         String message = "piece value is unexpected (" + pieceChar + ")";
-        //TODO exchange with useful message and Error
-        throw new RuntimeException(message);
+        AlertHandler.throwError();
+        throw new IllegalArgumentException(message);
     }
 
     public Pane getPieceImage(int size) {

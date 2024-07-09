@@ -1,5 +1,7 @@
 package GUI.game.timecontrol;
 
+import GUI.exceptions.InvalidTimecontrolException;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +50,7 @@ public class Timecontrol {
                 } while (endIndex != timecontrolString.length());
             }
         } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
-            throw new RuntimeException();
+            throw new InvalidTimecontrolException();
         }
     }
 

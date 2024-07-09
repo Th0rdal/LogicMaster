@@ -7,6 +7,7 @@ module LogicMaster {
     requires com.google.gson;
     requires ormlite.jdbc;
     requires java.sql;
+    requires java.naming;
     opens GUI;
     opens GUI.utilities;
     opens GUI.player;

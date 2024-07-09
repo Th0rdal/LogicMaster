@@ -1,5 +1,7 @@
 package GUI.player;
 
+import GUI.controller.AlertHandler;
+import GUI.exceptions.AlgorithmLoadingException;
 import GUI.game.gamestate.Gamestate;
 import GUI.player.algorithm.AlgorithmHandlerBase;
 import GUI.player.algorithm.BadMinimaxAlgorithm;
@@ -43,7 +45,8 @@ public class Player {
             }
         } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException |
                  NoSuchMethodException e) {
-            throw new RuntimeException(e);
+            AlertHandler.throwError();
+            throw new AlgorithmLoadingException("The algorithm could not be loaded", e);
         }
     }
 

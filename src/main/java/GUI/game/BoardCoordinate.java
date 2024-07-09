@@ -1,5 +1,9 @@
 package GUI.game;
 
+import GUI.controller.AlertHandler;
+
+import java.text.MessageFormat;
+
 public class BoardCoordinate {
 
     // the locations are between 1 and 8!!!
@@ -19,8 +23,9 @@ public class BoardCoordinate {
             xLocation = -1;
             yLocation = -1;
         } else if (coordinate.length() != 2) {
-            //TODO change to useful Error
-            throw new RuntimeException("coordinate is not 2 character!");
+            String message = MessageFormat.format("The coordinate string ({0}) has %d letters. Expected {1}", coordinate, coordinate.length());
+            AlertHandler.throwError();
+            throw new IllegalArgumentException(message);
         } else {
             int row = coordinate.charAt(0);
             if (Character.isDigit(row)) {
@@ -60,6 +65,7 @@ public class BoardCoordinate {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof BoardCoordinate)) {
+            AlertHandler.throwError();
             throw new IllegalArgumentException("the parameter must be of type BoardCoordinate");
         }
         return this.getXLocation() == ((BoardCoordinate) obj).getXLocation() &&

@@ -1,5 +1,7 @@
 package GUI.player.algorithm;
 
+import GUI.controller.AlertHandler;
+import GUI.exceptions.AlgorithmExecutionException;
 import GUI.game.move.Move;
 import GUI.game.move.SPECIAL_MOVE;
 
@@ -133,17 +135,19 @@ public class BadMinimaxAlgorithm extends AlgorithmHandlerBase{
                }
                 stdInput.close();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                AlertHandler.throwError();
+                throw new AlgorithmExecutionException("Something went wrong while trying to read a line", e);
             }
 
             stderrThread.join();
 
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            AlertHandler.throwError();
+            throw new AlgorithmExecutionException("Something went wrong executing the algorithm", e);
         }
     }
 
-    public void setParameter() { // TODO should me mandatory function in base
+    public void setParameter() {
         this.parameter.put("-ifen", "");
         this.parameter.put("-md", "4");
         this.parameter.put("-om", "");

@@ -2,26 +2,26 @@ package GUI.UIElements;
 
 import GUI.Config;
 import GUI.controller.AlertHandler;
+import GUI.exceptions.DatabaseConnectionException;
 import GUI.game.gamestate.Gamestate;
 import GUI.piece.Piece;
 import GUI.utilities.BoardConverter;
 import database.ChessGame;
 import database.Database;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ChessGameCell extends ListCell<ChessGame> {
     private static final Paint WON = Color.GREEN;
@@ -55,7 +55,7 @@ public class ChessGameCell extends ListCell<ChessGame> {
             try {
                 loader.load();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                AlertHandler.throwWarningAndWait("failed to load fxml file", "While creating an item the loading of the fxml file failed. The element wont be shown");
             }
 
             switch (item.getGameStatus()) {
@@ -95,8 +95,11 @@ public class ChessGameCell extends ListCell<ChessGame> {
             this.whitePlayerName.setText(item.getWhitePlayerName());
             this.blackPlayerName.setText(item.getBlackPlayerName());
             this.timeControl.setText("time control: " + item.getTimeControl());
-            this.creationDatetime.setText("game date: " + item.getCreationDatetime().toString());
             this.turnLabel.setText(item.isWhiteTurn() ? "white" : "black" + "'s turn");
+
+            LocalDateTime localDateTime = item.getCreationDatetime().toLocalDateTime();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
+            this.creationDatetime.setText("game date: " + localDateTime.format(formatter));
 
             Gamestate gamestate = BoardConverter.loadFEN(item.getEndFen());
             if (gamestate != null) {
@@ -126,10 +129,11 @@ public class ChessGameCell extends ListCell<ChessGame> {
                 if (result) {
                     try {
                         Database.getInstance().getDao().delete(item);
-                        getListView().getItems().remove(item);
                     } catch (SQLException e) {
-                        throw new RuntimeException(e);
+                        AlertHandler.throwError();
+                        throw new DatabaseConnectionException("There was an error when trying to delete an item from the view list", e);
                     }
+                    getListView().getItems().remove(item);
                 }
             });
 

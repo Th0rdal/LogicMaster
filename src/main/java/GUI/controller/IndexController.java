@@ -6,14 +6,10 @@ import GUI.player.algorithm.AIFile;
 import GUI.Config;
 import GUI.handler.GameHandler;
 import GUI.game.timecontrol.Timecontrol;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 public class IndexController {
 
@@ -33,8 +29,6 @@ public class IndexController {
      private CheckBox whitePlayerHumanCheckBox;
      @FXML
      private CheckBox blackPlayerHumanCheckBox;
-     @FXML
-     private CheckBox whiteSideDownCheckBox;
      @FXML
      private ChoiceBox<Timecontrol> timeControlChoiceBox;
      @FXML
@@ -98,18 +92,15 @@ public class IndexController {
              String finalWhiteName = whiteName;
              String finalBlackName = blackName;
              if (gameHandler.isGameInitialized()) {
-                 //TODO make alerthandler
-                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                 alert.setTitle("old game found");
-                 alert.setHeaderText(null);
-                 alert.setContentText("You already have a game running. Do you wish to continue or start a new Game? The old game will be lost if it was not saved in the database");
-                 ButtonType buttonYes = new ButtonType("start new game");
-                 ButtonType buttonNo = new ButtonType("continue old game");
-                 alert.getButtonTypes().setAll(buttonYes, buttonNo);
-                 Optional<ButtonType> result = alert.showAndWait();
-                 if (result.isPresent() && result.get() == buttonYes) {
+                String title = "old game found";
+                String context = "You already have a game running. Do you wish to continue or start a new Game? The old game will be lost if it was not saved in the database";
+                ArrayList<String> temp = new ArrayList<>();
+                temp.add("start new game");
+                temp.add("continue old game");
+
+                 if (Objects.equals(AlertHandler.showCustomConfirmationAlertAndWait(title, context, temp), "start new game")) {
                      gameHandler.setShutdownFlag();
-                     gameHandler.resetInterruptFlag(true);
+                     gameHandler.resetInterruptFlag();
                      gameHandler.waitForOldThreadShutdown();
                      new Thread(() -> {
                      gameHandler.startGame(finalTimecontrol,
@@ -117,11 +108,10 @@ public class IndexController {
                              finalBlackName,
                              whitePath,
                              blackPath,
-                             fenTextBox.getText().strip().strip(),
-                             whiteSideDownCheckBox.isSelected());
+                             fenTextBox.getText().strip().strip());
                      }).start();
                  } else {
-                    gameHandler.resetInterruptFlag(whiteSideDownCheckBox.isSelected());
+                    gameHandler.resetInterruptFlag();
                  }
              } else {
                  new Thread(() -> {
@@ -130,8 +120,7 @@ public class IndexController {
                              finalBlackName,
                              whitePath,
                              blackPath,
-                             fenTextBox.getText().strip(),
-                             whiteSideDownCheckBox.isSelected());
+                             fenTextBox.getText().strip());
                  }).start();
              }
          });
