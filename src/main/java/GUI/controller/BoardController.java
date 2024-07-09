@@ -1,5 +1,6 @@
 package GUI.controller;
 
+import GUI.Config;
 import GUI.game.*;
 import GUI.game.gamestate.CHECKMATE_TYPE;
 import GUI.game.gamestate.GamestateSnapshot;
@@ -8,8 +9,7 @@ import GUI.game.move.SPECIAL_MOVE;
 import GUI.handler.GameHandler;
 import GUI.handler.SceneHandler;
 import GUI.piece.*;
-import GUI.shapes.Circle;
-import GUI.shapes.Square;
+import GUI.UIElements.Circle;
 import GUI.utilities.*;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -25,7 +25,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Alert.AlertType;
 
@@ -34,8 +33,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 
 public class BoardController {
-
-    private Stage stage = null;
 
     @FXML
     private GridPane visualBoard;
@@ -62,13 +59,7 @@ public class BoardController {
     @FXML
     private GridPane boardColumnHeaders;
 
-    // colors used for the board
-    private static final Color color1 = Color.LIGHTGRAY;
-    private static final Color color2 = Color.SIENNA;
-    private static final Color selectedMoveHistory = Color.LIGHTBLUE;
-    private static final Color selectedColor = Color.web("#C6EDC3");
-    private static final Color selectedTextColor = Color.BLUE;
-    private static final Color defaultTextColor = Color.BLACK;
+
 
     private BlockingQueue<Move> moveQueue = null;
     private ArrayList<Move> possibleMoveList;
@@ -81,7 +72,6 @@ public class BoardController {
     private final int moveHistoryGridPaneHeight = 50;
 
     private Pane promotionSelectedPane = null;
-    private CompletableFuture<Boolean> promotionWait = new CompletableFuture<>();
     private StackPane selectedHistoryTextPane = null;
     private Move move = null;
 
@@ -137,10 +127,10 @@ public class BoardController {
                             startCoordinates = null;
                             break;
                         }
-                        if (AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "New game?",
+                        if (AlertHandler.showConfirmationAlertAndWait("New game?",
                                 "You are currently in a snapshot of a previous move. Do you wish to start a new game from this position?")) {
-                            if (AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "save old game?", "Do you wish to save the game in the database?")) {
-                                //TODO save in db
+                            if (AlertHandler.showChoiceAlertYesNo(AlertType.CONFIRMATION, "save old game?", "Do you wish to save the game in the database?")) {
+                                this.gameHandler.saveCurrentInDatabase();
                             }
                             new Thread(() -> { // new thread so javafx thread never has to wait for anything
                                 this.gameHandler.setContinueFromSnapshotFlag(Integer.parseInt((
@@ -156,7 +146,7 @@ public class BoardController {
                                 selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
                             }
                             selectedPane = tempPane;
-                            selectedPane.setBackground(new Background(new BackgroundFill(BoardController.selectedColor, null, null)));
+                            selectedPane.setBackground(new Background(new BackgroundFill(Config.selectedColor, null, null)));
                         } else if (this.selectedPane == null) {
                             startCoordinates = null;
                         }
@@ -232,10 +222,6 @@ public class BoardController {
         }
     };
 
-    public BoardController(Stage stage) {
-        this.stage = stage;
-    }
-
     /**
      * Resets the board
      */
@@ -292,22 +278,10 @@ public class BoardController {
      * creates the board visually and adds all the pieces based on the board variable
      * adds event listeners for piece movement
      */
-    public void loadBoard(boolean whiteSideDown) {
+    public void loadElements() {
         /*
          * This function loads the board with squares and gives each square a chess board color
          */
-
-        this.whiteSideDown = whiteSideDown;
-
-        for (Node node : this.boardRowHeaders.getChildren()) {
-            String text = this.whiteSideDown ? String.valueOf(8 - GridPane.getRowIndex(node)) : String.valueOf(GridPane.getRowIndex(node)+1);
-            ((Label)node).setText(text);
-        }
-
-        for (Node node : this.boardColumnHeaders.getChildren()) {
-            String text = this.whiteSideDown ? Character.toString((char) 65 + GridPane.getColumnIndex(node)) : Character.toString((char) 65 + 7 - GridPane.getColumnIndex(node));
-            ((Label)node).setText(text);
-        }
 
         // config buttons
         this.drawButton.setOnAction(event -> {
@@ -327,18 +301,13 @@ public class BoardController {
         });
 
         this.backButton.setOnAction(event -> {
-            new Thread(() -> { // new thread so javafx thread never has to wait
-                this.gameHandler.setInterruptFlag();
-            });
+            this.gameHandler.setInterruptFlag();
             SceneHandler.getInstance().activate("index");
         });
 
         this.saveButton.setOnAction(event -> {
-            //TODO save in database not in snapshot array like now
-            this.gameHandler.saveCurrentSnapshot();
+            this.gameHandler.saveCurrentInDatabase();
         });
-
-
 
         this.clockTopLabel.setFont(Font.font("Arial", 22));
         clockTopLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
@@ -349,19 +318,11 @@ public class BoardController {
         int size = 8;
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                Square square = new Square(row+1, col+1);
+                StackPane square = new StackPane();
                 this.visualBoard.add(square, row, col, 1, 1);
-                Color color = (row + col) % 2 == 0 ? BoardController.color1 : BoardController.color2;
+                Color color = (row + col) % 2 == 0 ? Config.squareColorWhite : Config.squareColorBlack;
                 square.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
             }
-        }
-
-        loadPieces();
-
-        if (this.whiteSideDown) {
-            this.gameHandler.loadClocks(this.clockBottomLabel, this.clockTopLabel);
-        } else {
-            this.gameHandler.loadClocks(this.clockTopLabel, this.clockBottomLabel);
         }
 
         promotionPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
@@ -369,13 +330,37 @@ public class BoardController {
 
         this.moveHistoryGridPane.setHgap(12);
         this.moveHistoryScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        stage.show();
+
+    }
+
+    public void loadBoard() {
+        for (Node node : this.boardRowHeaders.getChildren()) {
+            String text = this.whiteSideDown ? String.valueOf(8 - GridPane.getRowIndex(node)) : String.valueOf(GridPane.getRowIndex(node)+1);
+            ((Label)node).setText(text);
+        }
+
+        for (Node node : this.boardColumnHeaders.getChildren()) {
+            String text = this.whiteSideDown ? Character.toString((char) 65 + GridPane.getColumnIndex(node)) : Character.toString((char) 65 + 7 - GridPane.getColumnIndex(node));
+            ((Label)node).setText(text);
+        }
+
+        if (this.whiteSideDown) {
+            this.gameHandler.loadClocks(this.clockBottomLabel, this.clockTopLabel);
+        } else {
+            this.gameHandler.loadClocks(this.clockTopLabel, this.clockBottomLabel);
+        }
+
+        loadPieces();
+    }
+
+    public void setWhiteSideDown(boolean whiteSideDown) {
+        this.whiteSideDown = whiteSideDown;
     }
 
     public void loadPieces() {
         this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
         for (Piece piece : this.gameHandler.getPieces()) {
-            visualBoard.add(piece.getPieceImage(),
+            visualBoard.add(piece.getPieceImage(100),
                     whiteSideDown ? piece.getLocationX()-1 : 8 - piece.getLocationX(),
                     whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY()-1);
         }
@@ -384,7 +369,7 @@ public class BoardController {
     public void loadPieces(int moveNumber) {
         this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
         for (Piece piece : this.gameHandler.getSnapshot(moveNumber).getPieces()) {
-            visualBoard.add(piece.getPieceImage(),
+            visualBoard.add(piece.getPieceImage(100),
                     whiteSideDown ? piece.getLocationX()-1 : 8 - piece.getLocationX(),
                     whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY()-1);
         }
@@ -481,54 +466,55 @@ public class BoardController {
     public void addMoveToMovelist(Move move, int fullmovecounter) {
         Platform.runLater(() -> {
             int moveCounter = fullmovecounter - 1;
-            Text temp = new Text(moveCounter + ": " + move.toString()); //-1 because gamestate is already incremented
+            Text temp = new Text(fullmovecounter + ": " + move.toString()); //-1 because gamestate is already incremented
             StackPane tempPane = new StackPane();
             tempPane.getChildren().add(temp);
 
             tempPane.setOnMouseClicked(event -> {
                 if (this.selectedHistoryTextPane != null) {
-                    ((Text)this.selectedHistoryTextPane.getChildren().get(0)).setFill(BoardController.defaultTextColor);
+                    ((Text)this.selectedHistoryTextPane.getChildren().get(0)).setFill(Config.defaultTextColor);
                     this.selectedHistoryTextPane.getChildren().get(0).setStyle("");
                     this.selectedHistoryTextPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
                     int currentFieldNumber = Integer.parseInt((
                             (Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0,
                             ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':')));
                     int moveNumber = Integer.parseInt(temp.getText().substring(0, temp.getText().indexOf(':')));
-                    if (moveNumber !=  moveCounter || currentFieldNumber != moveCounter-1) {
+                    if (moveNumber !=  fullmovecounter || currentFieldNumber != fullmovecounter-1) {
                         this.loadPieces(moveNumber);
                     }
                 }
 
-                tempPane.setBackground(new Background(new BackgroundFill(selectedMoveHistory, CornerRadii.EMPTY, Insets.EMPTY)));
+                tempPane.setBackground(new Background(new BackgroundFill(Config.selectedMoveHistory, CornerRadii.EMPTY, Insets.EMPTY)));
 
-                ((Text) tempPane.getChildren().get(0)).setFill(BoardController.selectedTextColor);
+                ((Text) tempPane.getChildren().get(0)).setFill(Config.selectedTextColor);
                 ((Text)tempPane.getChildren().get(0)).setStyle("-fx-font-weight: bold;");
                 this.selectedHistoryTextPane = tempPane;
             });
 
             // if selectedHistoryText is the last move taken or is empty, fire event
             if (this.selectedHistoryTextPane != null &&
-                    Integer.parseInt(((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0, ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))) + 1 == moveCounter) {
+                    Integer.parseInt(((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0, ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))) + 1 == fullmovecounter) {
                 temp.fireEvent(BoardController.mouseClickedHistoryTextSelected);
             } else if (this.selectedHistoryTextPane == null) {
                 temp.fireEvent(BoardController.mouseClickedHistoryTextSelected);
             }
 
-            if ((moveCounter-1)%2 == 0) {
+            if ((moveCounter)%2 == 0) {
                 RowConstraints row = new RowConstraints(moveHistoryGridPaneHeight);
                 row.setMinHeight(moveHistoryGridPaneHeight);
                 row.setMaxHeight(moveHistoryGridPaneHeight);
                 this.moveHistoryGridPane.getRowConstraints().add(row);
             }
-            this.moveHistoryGridPane.add(tempPane, (moveCounter-1)%2, (moveCounter-1)/2);
+            this.moveHistoryGridPane.add(tempPane, (moveCounter)%2, (moveCounter)/2);
         });
     }
 
     public void reloadMoveHistory() {
+        this.selectedHistoryTextPane = null;
         this.moveHistoryGridPane.getChildren().clear();
         this.moveHistoryGridPane.getRowConstraints().clear();
         for (GamestateSnapshot sn : this.gameHandler.getSnapshotHistory()) {
-            addMoveToMovelist(sn.getMove(), sn.getFullmoveCounter()+1);
+            addMoveToMovelist(sn.getMove(), sn.getFullmoveCounter());
         }
     }
 
@@ -547,7 +533,7 @@ public class BoardController {
 
 
         if (AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "Game over!!!", text)) {
-            //TODO save game in database
+            this.gameHandler.saveCurrentInDatabase();
         }
     }
 

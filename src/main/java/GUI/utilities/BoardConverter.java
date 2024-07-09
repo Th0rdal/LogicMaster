@@ -87,8 +87,8 @@ public class BoardConverter {
     }
 
     public static boolean validFEN(String fen) {
-        Pattern fenPattern = Pattern.compile("^((?:[rnbqkpRNBQKP1-8]{1,8}/){7}[rnbqkpRNBQKP1-8]{1,8})\\s([wb])\\s((?:K?Q?k?q?|-)?)\\s((?:[a-h][36]|-))\\s(\\d+)\\s(\\d+)$");
-        Matcher matcher = fenPattern.matcher(fen);
+        Pattern fenPattern = Pattern.compile("^(([pnbrqkPNBRQK1-8]{1,8})\\/?){8}\\s+(b|w)\\s+(-|K?Q?k?q)\\s+(-|[a-h][3-6])\\s+(\\d+)\\s+(\\d+)\\s*");
+        Matcher matcher = fenPattern.matcher(fen.strip());
         return matcher.matches();
     }
 

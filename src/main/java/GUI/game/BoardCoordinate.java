@@ -67,7 +67,7 @@ public class BoardCoordinate {
     }
 
     public byte convertToByte() {
-        return (byte) ((byte) ((byte) (xLocation & 0xff) << 3) | (byte) (yLocation & 0xff));
+        return (byte) ((byte) ((byte) (xLocation-1 & 0xff) << 3) | (byte) (yLocation-1 & 0xff));
     }
 
     public int getXLocation() {

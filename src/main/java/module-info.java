@@ -16,5 +16,6 @@ module LogicMaster {
     opens GUI.game.timecontrol;
     opens GUI.game.gamestate;
     opens GUI.game.move;
+    opens GUI.UIElements;
     opens database;
 }

@@ -64,11 +64,11 @@ public class Move {
         this.draw = ((base & 2) >> 1) == 1;
 
         int endX = ((base2 & 224) >> 5) + 1;
-        int endY = ((base2 & 4) >> 2) + 1;
+        int endY = ((base2 & 28) >> 2) + 1;
         this.newPosition = new BoardCoordinate(endX, endY);
 
         int startX = ((extended & 224) >> 5) + 1;
-        int startY = ((extended & 4) >> 2) + 1;
+        int startY = ((extended & 28) >> 2) + 1;
         this.oldPosition = new BoardCoordinate(startX, startY);
 
         if (((base2 & 2) >> 1) == 1) {

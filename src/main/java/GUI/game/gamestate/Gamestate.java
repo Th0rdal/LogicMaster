@@ -24,6 +24,8 @@ public class Gamestate {
     private BoardCoordinate enPassantCoordinates; // the coordinates of a field that can be taken by en Passant
     private int halfmoveCounter = 0; // half move counts moves since last pawn capture or pawn move
     private int fullmoveCounter = 0; // full move clock counts the total amount of moves
+    private int oldHalfmoveCounter = 0;
+    private int oldFullmoveCounter = 1;
 
     private Semaphore semaphore = new Semaphore(1); // needed as more than one thread could concurrently do something (e.g., makeMove and snapshot at same time)
 
@@ -120,11 +122,12 @@ public class Gamestate {
         }
 
         // update full and half move counter
-        this.fullmoveCounter++;
+        this.oldFullmoveCounter = this.fullmoveCounter++;
         if (piece.getID() == PIECE_ID.PAWN || move.isCapture()) {
+            this.oldHalfmoveCounter = this.halfmoveCounter;
             this.halfmoveCounter = 0;
         } else {
-            this.halfmoveCounter++;
+            this.oldHalfmoveCounter = this.halfmoveCounter++;
         }
 
         //calculate new en Passant possible
@@ -266,19 +269,34 @@ public class Gamestate {
      * @param blackClockCounter: the remaining time of the black player
      * @return GamestateSnapshot instance representing the current Gamestate state
      */
-    private GamestateSnapshot saveSnapshot(Move move, int whiteClockCounter, int blackClockCounter) {
-        return new GamestateSnapshot(
-                this.pieces,
-                this.whiteQCastle,
-                this.whiteKCastle,
-                this.blackQCastle,
-                this.blackKCastle,
-                this.enPassantCoordinates,
-                this.fullmoveCounter,
-                this.halfmoveCounter,
-                whiteClockCounter,
-                blackClockCounter,
-                move);
+    public GamestateSnapshot getSnapshot(Move move, int whiteClockCounter, int blackClockCounter) {
+        if (move == null) {
+            return new GamestateSnapshot(
+                    this.pieces,
+                    this.whiteQCastle,
+                    this.whiteKCastle,
+                    this.blackQCastle,
+                    this.blackKCastle,
+                    this.enPassantCoordinates,
+                    this.fullmoveCounter,
+                    this.halfmoveCounter,
+                    whiteClockCounter,
+                    blackClockCounter,
+                    move);
+        } else {
+            return new GamestateSnapshot(
+                    this.pieces,
+                    this.whiteQCastle,
+                    this.whiteKCastle,
+                    this.blackQCastle,
+                    this.blackKCastle,
+                    this.enPassantCoordinates,
+                    this.oldFullmoveCounter,
+                    this.oldHalfmoveCounter,
+                    whiteClockCounter,
+                    blackClockCounter,
+                    move);
+        }
     }
 
     /**
@@ -287,14 +305,14 @@ public class Gamestate {
      * @param blackClockCounter: the remaining time of the black player
      * @return GamestateSnapshot instance representing the current Gamestate state
      */
-    public GamestateSnapshot getCurrentSnapshot(int whiteClockCounter, int blackClockCounter, Timecontrol timecontrol) {
+    public GamestateSnapshot getSnapshot(int whiteClockCounter, int blackClockCounter) {
         try {
             this.semaphore.acquire();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        GamestateSnapshot snapshot = this.saveSnapshot(null, whiteClockCounter, blackClockCounter);
+        GamestateSnapshot snapshot = this.getSnapshot(null, whiteClockCounter, blackClockCounter);
         this.semaphore.release();
         return snapshot;
     }
@@ -347,16 +365,16 @@ public class Gamestate {
                 return false;
             }
         }
-        if (this.whiteQCastle != other.whiteQCastle) {
+        if (!(this.whiteQCastle == other.whiteQCastle)) {
             return false;
         }
-        if (this.whiteKCastle != other.whiteKCastle) {
+        if (!(this.whiteKCastle == other.whiteKCastle)) {
             return false;
         }
-        if (this.blackQCastle != other.blackQCastle) {
+        if (!(this.blackQCastle == other.blackQCastle)) {
             return false;
         }
-        if (this.blackKCastle != other.blackKCastle) {
+        if (!(this.blackKCastle == other.blackKCastle)) {
             return false;
         }
         if (!this.enPassantCoordinates.equals(other.enPassantCoordinates)) {
@@ -410,5 +428,9 @@ public class Gamestate {
 
     public boolean isWhiteTurn() {
         return this.fullmoveCounter%2 == 1;
+    }
+
+    public int getOldFullmoveCounter() {
+        return oldFullmoveCounter;
     }
 }

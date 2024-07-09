@@ -37,15 +37,15 @@ public abstract class Piece {
      * @param imageView:  ImageView representing the image
      * @return Pane wrapped around the ImageView
      */
-    protected Pane prepareImage(ImageView imageView) {
+    protected Pane prepareImage(ImageView imageView, int size) {
         if (this.thisPane != null) {
             return this.thisPane;
         }
 
         //image config
         imageView.setPreserveRatio(true);
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
+        imageView.setFitWidth(size);
+        imageView.setFitHeight(size);
 
         //pane config
         Pane pane = new Pane();
@@ -98,26 +98,22 @@ public abstract class Piece {
         throw new RuntimeException(message);
     }
 
-    public Pane getPieceImage() {
-        return this.prepareImage(new ImageView(ImageLoader.getImage(this.id, this.isWhite)));
+    public Pane getPieceImage(int size) {
+        return this.prepareImage(new ImageView(ImageLoader.getImage(this.id, this.isWhite)), size);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Piece)) {
+        if (!(obj instanceof Piece other)) {
             return false;
         }
-        Piece other = (Piece) obj;
-        if (this.isWhite != other.isWhite) {
+        if (!(this.isWhite == other.isWhite)) {
             return false;
         }
         if (this.id != other.id) {
             return false;
         }
-        if (this.coordinate != other.coordinate) {
-            return false;
-        }
-        return true;
+        return this.coordinate.equals(other.coordinate);
     }
 
     public int getLocationX() {

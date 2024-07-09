@@ -1,14 +1,19 @@
 package GUI.controller;
 
 import GUI.game.timecontrol.TimecontrolChoiceBoxConverter;
+import GUI.handler.SceneHandler;
 import GUI.player.algorithm.AIFile;
 import GUI.Config;
 import GUI.handler.GameHandler;
 import GUI.game.timecontrol.Timecontrol;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class IndexController {
 
@@ -49,7 +54,7 @@ public class IndexController {
      @FXML
      private Button saveTimeControlButton;
 
-     public void loadData(GameHandler gameHandler) {
+     public void loadElements(GameHandler gameHandler) {
          // defining actions
          this.startGameButton.setOnAction(e -> {
              Timecontrol timecontrol = null;
@@ -94,7 +99,7 @@ public class IndexController {
              String finalBlackName = blackName;
              if (gameHandler.isGameInitialized()) {
                  //TODO make alerthandler
-                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                  alert.setTitle("old game found");
                  alert.setHeaderText(null);
                  alert.setContentText("You already have a game running. Do you wish to continue or start a new Game? The old game will be lost if it was not saved in the database");
@@ -103,17 +108,20 @@ public class IndexController {
                  alert.getButtonTypes().setAll(buttonYes, buttonNo);
                  Optional<ButtonType> result = alert.showAndWait();
                  if (result.isPresent() && result.get() == buttonYes) {
+                     gameHandler.setShutdownFlag();
+                     gameHandler.resetInterruptFlag(true);
+                     gameHandler.waitForOldThreadShutdown();
                      new Thread(() -> {
                      gameHandler.startGame(finalTimecontrol,
                              finalWhiteName,
                              finalBlackName,
                              whitePath,
                              blackPath,
-                             fenTextBox.getText().strip(),
+                             fenTextBox.getText().strip().strip(),
                              whiteSideDownCheckBox.isSelected());
                      }).start();
                  } else {
-                    new Thread(gameHandler::gameLoop);
+                    gameHandler.resetInterruptFlag(whiteSideDownCheckBox.isSelected());
                  }
              } else {
                  new Thread(() -> {
@@ -127,6 +135,27 @@ public class IndexController {
                  }).start();
              }
          });
+
+         this.whitePlayerNameTextBox.setTextFormatter(new TextFormatter<>(change -> {
+             if (change.getControlNewText().length() <= Config.MAX_CHARACTER_NAME) {
+                return change;
+             } else {
+                return null;
+             }
+         }));
+
+         this.blackPlayerNameTextBox.setTextFormatter(new TextFormatter<>(change -> {
+             if (change.getControlNewText().length() <= Config.MAX_CHARACTER_NAME) {
+                return change;
+             } else {
+                return null;
+             }
+         }));
+
+         this.loadButton.setOnAction(e -> {
+             SceneHandler.getInstance().activate("gameSelection");
+         });
+
          this.timeControlCheckBox.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
               timeControlChoiceBox.setVisible(newValue);
               deleteTimeControlButton.setVisible(newValue);

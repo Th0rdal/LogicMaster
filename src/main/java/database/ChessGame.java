@@ -18,6 +18,8 @@ public class ChessGame {
     private byte[] time;
     @DatabaseField(canBeNull = false)
     private String timeControl;
+    @DatabaseField
+    private boolean whiteTurn;
     @DatabaseField(canBeNull = false)
     private String whitePlayerName;
     @DatabaseField(canBeNull = false)
@@ -58,6 +60,7 @@ public class ChessGame {
             String whitePlayerPath,
             String blackPlayerPath,
             GAMESTATUS gameStatus,
+            boolean turn,
             String startingFen,
             String endFen) {
 
@@ -69,6 +72,7 @@ public class ChessGame {
         this.whitePlayerPath = whitePlayerPath;
         this.blackPlayerPath = blackPlayerPath;
         this.gameStatus = gameStatus;
+        this.whiteTurn = turn;
         this.startingFen = startingFen;
         this.endFen = endFen;
         this.creationDatetime = new Timestamp(System.currentTimeMillis());
@@ -121,4 +125,6 @@ public class ChessGame {
     public String getEndFen() {
         return endFen;
     }
+
+    public boolean isWhiteTurn() {return this.whiteTurn;}
 }

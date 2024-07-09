@@ -29,7 +29,7 @@ public class Player {
     public Player(boolean isPlayer, String pathToExecutable, String name) {
         this.isHuman = isPlayer;
         String tempPath = isPlayer && pathToExecutable.isEmpty() ? DEFAULTALGORITHMPATH : pathToExecutable;
-        this.pathToExecutable = tempPath;
+        this.pathToExecutable = isPlayer ? "" : pathToExecutable;
         this.name = name;
 
         try {

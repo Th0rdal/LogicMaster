@@ -1,4 +1,4 @@
-package GUI.shapes;
+package GUI.UIElements;
 
 import javafx.scene.paint.Color;
 
@@ -8,6 +8,7 @@ public class Circle extends javafx.scene.shape.Circle{
     private static Color circleColor = Color.web("#C6EDC3");
 
     public Circle() {
+        super();
         this.setRadius(circleRadius);
         this.setFill(circleColor);
         this.setStroke(null);
