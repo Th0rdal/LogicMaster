@@ -100,19 +100,19 @@ public class GamestateSnapshot {
         return pieces;
     }
 
-    public boolean isWhiteQCastle() {
+    public boolean canWhiteQCastle() {
         return whiteQCastle;
     }
 
-    public boolean isWhiteKCastle() {
+    public boolean canWhiteKCastle() {
         return whiteKCastle;
     }
 
-    public boolean isBlackQCastle() {
+    public boolean canBlackQCastle() {
         return blackQCastle;
     }
 
-    public boolean isBlackKCastle() {
+    public boolean canBlackKCastle() {
         return blackKCastle;
     }
 

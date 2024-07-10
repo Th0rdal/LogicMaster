@@ -107,7 +107,6 @@ public class Config {
 
             try (Stream<Path> filePathStream = Files.walk(directoryPath)) {
              filePathStream.filter(Files::isRegularFile).forEach(element -> {
-                 String tempPath = element.toString();
 
                  Config.aiFiles.add(
                      new AIFile(
@@ -115,9 +114,11 @@ public class Config {
                          element.getFileName().toString().substring(0, element.getFileName().toString().lastIndexOf("."))
                      )
                  );
-                //paths.add(tempPath.substring(tempPath.lastIndexOf("\\")+1, tempPath.indexOf(".", tempPath.lastIndexOf("/"))));
              });
-         } catch (IOException e) {}
+         } catch (IOException e) {
+                AlertHandler.throwError();
+                throw new ConfigurationException("Failed to load AI files", e);
+            }
         }
 
         return Config.aiFiles;

@@ -23,8 +23,8 @@
             <Font size="18.0" />
          </font>
       </CheckBox>
-      <ChoiceBox fx:id="whitePlayerChoiceBox" layoutX="630.0" layoutY="321.0" prefWidth="150.0" visible="false" />
-      <ChoiceBox fx:id="blackPlayerChoiceBox" layoutX="628.0" layoutY="366.0" prefWidth="150.0" visible="false" />
+      <ChoiceBox fx:id="whitePlayerChoiceBox" layoutX="630.0" layoutY="360.0" prefWidth="150.0" visible="false" />
+      <ChoiceBox fx:id="blackPlayerChoiceBox" layoutX="628.0" layoutY="420.0" prefWidth="150.0" visible="false" />
       <CheckBox fx:id="whitePlayerHumanCheckBox" contentDisplay="RIGHT" layoutX="390.0" layoutY="360.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="200.0" selected="true" text="white player human">
          <font>
             <Font size="18.0" />
@@ -36,7 +36,7 @@
          </font>
       </CheckBox>
       <ChoiceBox fx:id="timeControlChoiceBox" layoutX="630.0" layoutY="300.0" prefHeight="20.0" prefWidth="150.0" />
-      <TextField fx:id="timeControlTextField" layoutX="800.0" layoutY="275.0" visible="false" />
+      <TextField fx:id="timeControlTextField" disable="true" layoutX="800.0" layoutY="300.0" visible="false" />
       <TextField fx:id="whitePlayerNameTextBox" layoutX="670.0" layoutY="360.0" />
       <TextField fx:id="blackPlayerNameTextBox" layoutX="670.0" layoutY="420.0" />
       <Label fx:id="whiteNameLabel" layoutX="600.0" layoutY="360.0" prefWidth="60.0" text="Name:">

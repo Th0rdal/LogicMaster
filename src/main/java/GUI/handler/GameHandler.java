@@ -67,6 +67,7 @@ public class GameHandler {
 
     // snapshot history
     private ArrayList<GamestateSnapshot> snapshotHistory = new ArrayList<>();
+    private GamestateSnapshot startGamestateSnapshot = null; // needed for 3-fold repetition
 
     // internal flags
     private boolean inSnapshot = false;
@@ -79,8 +80,6 @@ public class GameHandler {
     private String startFen = "";
 
     public GameHandler() {
-        this.gamestate = new Gamestate();
-        this.gamestate.loadStartPosition();
         this.whiteTurn = true;
     }
 
@@ -97,7 +96,7 @@ public class GameHandler {
             try {
                 if (this.whiteTurn) {
                     if (this.whitePlayer.isHuman()) {
-                        this.whitePlayer.executeGetPossibleMoves(this.gamestate, this.whiteTurn);
+                        this.whitePlayer.executeGetPossibleMoves(this.gamestate, this.whiteTurn); // only loads the possible moves. does not actually use results
                         Platform.runLater(() -> {
                             this.boardController.setPlayerEventHandling(this.moveQueue);
                         });
@@ -126,7 +125,7 @@ public class GameHandler {
                     move = this.moveQueue.poll(GameHandler.WAITTIME, GameHandler.TIMEUNIT);
                     this.flagLock.acquire();
                     if (this.interruptFlag) {
-                        this.currentTimeRunning.pause();
+                        this.toggleRunningTime();
                         this.saveCurrentSnapshot();
                         while (this.interruptFlag) {
                             this.flagLock.release();
@@ -141,7 +140,7 @@ public class GameHandler {
                         }
                         this.loadBoard();
                         this.flagLock.release();
-                        this.currentTimeRunning.play();
+                        this.toggleRunningTime();
                         continue;
                     } else if (this.continueFromSnapshotFlag != 0) {
                         this.loadSnapshot(this.continueFromSnapshotFlag);
@@ -155,21 +154,18 @@ public class GameHandler {
                     this.flagLock.release();
                 }
 
-                if (move.isDraw()) {
-                    this.gamestatus = move.isDrawOffered() ? GAMESTATUS.DRAW_AGREED : GAMESTATUS.STALEMATE;
-                    Platform.runLater(() -> {
-                        this.boardController.setCheckmateAlert(CHECKMATE_TYPE.DRAW, this.whiteTurn);
-                    });
-                    break;
-                }
-
             } catch (InterruptedException e) {
                 this.saveCurrentInDatabase();
                 AlertHandler.throwError();
                 throw new ObjectInterruptedException("The game loop was interrupted unexpectedly!", e);
             }
 
+
             this.gamestate.makeMove(move);
+
+            if (!this.getPlayer(this.whiteTurn).isHuman()) {
+                Platform.runLater(this.boardController::afterMove);
+            }
 
             Move finalMove = move;
             if (!this.inSnapshot) {
@@ -185,20 +181,6 @@ public class GameHandler {
 
             this.swapTurn();
 
-            if (move.isCheckmate()) { // here because if move.isCheckmate is true, the other player is in checkmate
-                this.gamestatus = whiteTurn ? GAMESTATUS.CHECKMATE_WHITE : GAMESTATUS.CHECKMATE_BLACK;
-                Platform.runLater(() -> {
-                    this.boardController.setCheckmateAlert(CHECKMATE_TYPE.CHECKMATE, whiteTurn);
-                });
-                break;
-            } else if (move.isDraw()) {
-                this.gamestatus = GAMESTATUS.STALEMATE;
-                Platform.runLater(() -> {
-                    this.boardController.setCheckmateAlert(CHECKMATE_TYPE.STALEMATE, whiteTurn);
-                });
-                break;
-            }
-
             if (this.timecontrol.hasTimecontrolSpecialChanges(this.gamestate.getFullmoveCounter()-1)) {
                 int[] temp = this.timecontrol.getTimecontrolChanges(this.gamestate.getFullmoveCounter()-1);
                 this.clockBlackPlayerCounter += temp[0] * GameHandler.CLOCKBASETIME;
@@ -207,6 +189,29 @@ public class GameHandler {
             }
 
             this.saveMoveSnapshot(move);
+
+            if (move.isCheckmate()) { // here because if move.isCheckmate is true, the other player is in checkmate
+                this.gamestatus = whiteTurn ? GAMESTATUS.CHECKMATE_WHITE : GAMESTATUS.CHECKMATE_BLACK;
+                Platform.runLater(() -> {
+                    this.boardController.setCheckmateAlert(CHECKMATE_TYPE.CHECKMATE, whiteTurn);
+                });
+                break;
+            } else if (this.checkMove3FoldRepetition()) {
+                this.gamestatus = GAMESTATUS.DRAW;
+                CHECKMATE_TYPE type = CHECKMATE_TYPE.THREEFOLD_REPETITION;
+                Platform.runLater(() -> {
+                    this.boardController.setCheckmateAlert(type, this.whiteTurn);
+                });
+                break;
+            }else if (move.isDraw()) {
+                this.gamestatus = move.isDrawOffered() ? GAMESTATUS.DRAW : GAMESTATUS.STALEMATE;
+                CHECKMATE_TYPE type = move.isDrawOffered() ? CHECKMATE_TYPE.DRAW : CHECKMATE_TYPE.STALEMATE;
+                Platform.runLater(() -> {
+                    this.boardController.setCheckmateAlert(type, this.whiteTurn);
+                });
+                break;
+            }
+
         } while (!Thread.currentThread().isInterrupted());
     }
 
@@ -253,12 +258,14 @@ public class GameHandler {
         }
 
         this.gamestate = BoardConverter.loadFEN(fen);
-        this.startFen = fen;
+        this.startFen = fen.trim();
 
         if (this.gamestate == null) {
             AlertHandler.showAlert(Alert.AlertType.ERROR, "Error", "The fen notation is not valid!");
-           return;
+            return;
         }
+        this.startGamestateSnapshot = this.gamestate.getStartSnapshot(this.clockWhitePlayerCounter, this.clockBlackPlayerCounter);
+
         this.whiteTurn = this.gamestate.getSideFromFullmoveCounter();
         this.snapshotHistory = new ArrayList<>();
 
@@ -291,9 +298,9 @@ public class GameHandler {
      * @param whitePlayerLabel The label to put the opponents time in
      * @param blackPlayerLabel The label to put the players time in
      */
-    public void loadClocks(Label whitePlayerLabel, Label blackPlayerLabel) {
+    public boolean loadClocks(Label whitePlayerLabel, Label blackPlayerLabel) {
         if (!this.timecontrol.isActive()) {
-            return;
+            return false;
         }
         if (this.clockWhitePlayerCounter == -1) {
             this.clockWhitePlayerCounter = clockStartTime;
@@ -371,8 +378,42 @@ public class GameHandler {
             this.clockBlackPlayer.setCycleCount(Animation.INDEFINITE);
             blackPlayerLabel.setText(Calculator.getClockTimeInFormat(clockBlackPlayerCounter));
         }
+        return true;
+    }
 
+    private boolean checkMove3FoldRepetition() {
+        int counter = 0;
+        ArrayList<GamestateSnapshot> tempSnapshots = new ArrayList<>(this.snapshotHistory);
+        tempSnapshots.add(this.startGamestateSnapshot);
 
+        for (GamestateSnapshot snapshot : tempSnapshots) {
+            if (snapshot.getPieces().size() != this.gamestate.getPieces().size()) {
+                continue;
+            }
+            boolean flag = true;
+            for (Piece piece : this.gamestate.getPieces()) {
+                if (!snapshot.getPieces().contains(piece)) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (!(snapshot.isWhiteTurn() == this.gamestate.isWhiteTurn())) {
+                flag = false;
+            /*} else if (!(snapshot.canWhiteQCastle() == this.gamestate.canWhiteQCastle())
+                || !(snapshot.canWhiteKCastle() == this.gamestate.canWhiteKCastle())
+                || !(snapshot.canBlackKCastle() == this.gamestate.canBlackKCastle())
+                || !(snapshot.canBlackQCastle() == this.gamestate.canBlackQCastle())) {
+
+                flag = false;
+            } else if (!(snapshot.getEnPassantCoordinates().equals(this.gamestate.getEnPassantCoordinates()))) {
+                flag = false;*/
+            }
+
+            if (flag) {
+                counter++;
+            }
+        }
+        return counter >= 3;
     }
 
     /**
@@ -540,32 +581,28 @@ public class GameHandler {
 
     public ArrayList<Move> getPossibleMovesForCoordinates(BoardCoordinate coordinate) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
-        if (this.whiteTurn) {
-            HashMap<String, ArrayList<Move>> temp = this.whitePlayer.executeGetPossibleMoves(gamestate, true);
-            Piece piece = this.gamestate.getPieceAtCoordinates(coordinate);
-            if (piece == null) {
-                return possibleMoves;
-            }
-            if (temp.containsKey(coordinate.toString())) {
-                possibleMoves.addAll(temp.get(coordinate.toString()));
-            }
-            if (piece.getID() == PIECE_ID.KING && piece.isWhite()) {
-                if (temp.containsKey("CASTLE")) {
-                    possibleMoves.addAll(temp.get("CASTLE"));
-                }
-            }
-        } else {
-            HashMap<String, ArrayList<Move>> temp = this.blackPlayer.executeGetPossibleMoves(gamestate, false);
-            Piece piece = this.gamestate.getPieceAtCoordinates(coordinate);
-            if (temp.containsKey(coordinate.toString())) {
-                possibleMoves.addAll(temp.get(coordinate.toString()));
-            }
-            if (piece.getID() == PIECE_ID.KING && !piece.isWhite()) { //TODO sometimes piece ID is null. fix it
-                if (temp.containsKey("CASTLE")) {
-                    possibleMoves.addAll(temp.get("CASTLE"));
-                }
+        HashMap<String, ArrayList<Move>> temp = this.getPlayer(this.whiteTurn).executeGetPossibleMoves(this.gamestate, this.whiteTurn);
+        if (!temp.get("DRAW").isEmpty()) {
+            try {
+                this.moveQueue.put(temp.get("DRAW").get(0));
+            } catch (InterruptedException e) {
+                AlertHandler.throwError();
+                throw new ObjectInterruptedException("Move queue interrupted unexpectedly", e);
             }
         }
+        Piece piece = this.gamestate.getPieceAtCoordinates(coordinate);
+        if (piece == null) {
+            return possibleMoves;
+        }
+        if (temp.containsKey(coordinate.toString())) {
+            possibleMoves.addAll(temp.get(coordinate.toString()));
+        }
+        if (piece.getID() == PIECE_ID.KING && piece.isWhite()) {
+            if (temp.containsKey("CASTLE")) {
+                possibleMoves.addAll(temp.get("CASTLE"));
+            }
+        }
+
         return possibleMoves;
     }
 
@@ -588,7 +625,7 @@ public class GameHandler {
     }
 
     public void setGamestatusDrawAgreed() {
-        this.gamestatus = GAMESTATUS.DRAW_AGREED;
+        this.gamestatus = GAMESTATUS.DRAW;
     }
 
     public void setGamestatusCheckmateTime(boolean whiteTurn) {
@@ -699,6 +736,17 @@ public class GameHandler {
         } catch (InterruptedException | ExecutionException e) {
             AlertHandler.throwError();
             throw new ObjectInterruptedException("future interrupted unexpectedly", e);
+        }
+    }
+
+    private void toggleRunningTime() {
+        if (!this.timecontrol.isActive()) {
+            return;
+        }
+        if (this.currentTimeRunning.getStatus() == Animation.Status.PAUSED) {
+            this.currentTimeRunning.play();
+        } else if (this.currentTimeRunning.getStatus() == Animation.Status.RUNNING) {
+            this.currentTimeRunning.pause();
         }
     }
 }

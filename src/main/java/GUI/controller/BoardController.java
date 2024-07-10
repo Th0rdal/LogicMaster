@@ -13,8 +13,11 @@ import GUI.piece.*;
 import GUI.UIElements.Circle;
 import GUI.utilities.*;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -331,8 +334,6 @@ public class BoardController {
                 this.leftSideBar.getChildren().add(index2, this.clockWhiteLabel);
                 this.leftSideBar.getChildren().add(index1, this.clockBlackLabel);
             }
-
-
         });
 
         this.clockWhiteLabel.setFont(Font.font("Arial", 22));
@@ -370,10 +371,15 @@ public class BoardController {
             ((Label)node).setText(text);
         }
 
+        boolean clockUsed;
         if (this.whiteSideDown) {
-            this.gameHandler.loadClocks(this.clockBlackLabel, this.clockWhiteLabel);
+            clockUsed = this.gameHandler.loadClocks(this.clockBlackLabel, this.clockWhiteLabel);
         } else {
-            this.gameHandler.loadClocks(this.clockWhiteLabel, this.clockBlackLabel);
+            clockUsed = this.gameHandler.loadClocks(this.clockWhiteLabel, this.clockBlackLabel);
+        }
+        if (!clockUsed) {
+            this.clockWhiteLabel.setVisible(false);
+            this.clockBlackLabel.setVisible(false);
         }
 
         loadPieces();
@@ -475,6 +481,10 @@ public class BoardController {
             AlertHandler.throwError();
             throw new ObjectInterruptedException("Move queue interrupted unexpectedly", e);
         }
+        this.afterMove();
+    }
+
+    public void afterMove() {
         if (this.turnBoardAfterMoveCheckBox.isSelected()) {
             this.turnBoardButton.fire();
         }
@@ -531,7 +541,11 @@ public class BoardController {
                 row.setMaxHeight(moveHistoryGridPaneHeight);
                 this.moveHistoryGridPane.getRowConstraints().add(row);
             }
+            moveHistoryScrollPane.applyCss();
+            moveHistoryScrollPane.layout();
+
             this.moveHistoryGridPane.add(tempPane, (moveCounter)%2, (moveCounter)/2);
+            moveHistoryScrollPane.setVvalue(1.2);
         });
     }
 
@@ -551,6 +565,7 @@ public class BoardController {
             case CHECKMATE -> String.format("%s player is checkmate. %s wins!!!", this.gameHandler.getPlayer(whitePlayer).getName(), this.gameHandler.getPlayer(!whitePlayer).getName());
             case STALEMATE -> String.format("%s player can no longer make a legal move in his turn. The game is a stalemate", this.gameHandler.getPlayer(whitePlayer).getName());
             case FIFTY_MOVE_RULE -> String.format("%s claimed a draw with the fifty move rule", this.gameHandler.getPlayer(whitePlayer).getName());
+            case THREEFOLD_REPETITION -> "The game is a draw, because of the Threefold Repetition rule.";
         };
 
         text = text + "\nDo you wish to save the game in the database?";

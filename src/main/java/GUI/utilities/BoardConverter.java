@@ -71,8 +71,7 @@ public class BoardConverter {
             }
         }
 
-        Gamestate gamestate = new Gamestate();
-        gamestate.loadConfiguration(
+        Gamestate gamestate = new Gamestate(
                 pieces,
                 whiteTurn,
                 whiteKCastle,

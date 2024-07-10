@@ -4,7 +4,7 @@ import GUI.controller.AlertHandler;
 import GUI.exceptions.AlgorithmLoadingException;
 import GUI.game.gamestate.Gamestate;
 import GUI.player.algorithm.AlgorithmHandlerBase;
-import GUI.player.algorithm.BadMinimaxAlgorithm;
+import GUI.player.algorithm.BadMinimax;
 import GUI.utilities.BoardConverter;
 import GUI.game.move.Move;
 
@@ -20,8 +20,8 @@ import java.util.concurrent.BlockingQueue;
  */
 public class Player {
 
-    private static final String DEFAULTALGORITHMPATH = "algorithms/BadMinimaxAlgorithm.exe";
-    private static final String DEFAULTNAME = "BadMinimaxAlgorithm";
+    private static final String DEFAULTNAME = "BadMinimax";
+    private static final String DEFAULTALGORITHMPATH = "algorithms/" + DEFAULTNAME;
     private static final String DEFAULTNAMEPREFIX = "GUI.player.algorithm.";
     private final boolean isHuman;
     private final AlgorithmHandlerBase algorithmHandler;
@@ -41,7 +41,7 @@ public class Player {
                 this.algorithmHandler = (AlgorithmHandlerBase) instance;
                 this.algorithmHandler.setParameter();
             } else {
-                this.algorithmHandler = (BadMinimaxAlgorithm) Class.forName(Player.DEFAULTNAMEPREFIX+Player.DEFAULTNAME).getDeclaredConstructor(String.class).newInstance(DEFAULTALGORITHMPATH);
+                this.algorithmHandler = (BadMinimax) Class.forName(Player.DEFAULTNAMEPREFIX+Player.DEFAULTNAME).getDeclaredConstructor(String.class).newInstance(DEFAULTALGORITHMPATH);
             }
         } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException |
                  NoSuchMethodException e) {

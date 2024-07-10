@@ -147,7 +147,7 @@ public class Move {
                     this.check = true;
                 }
             }
-        } catch (StringIndexOutOfBoundsException e) {}
+        } catch (StringIndexOutOfBoundsException ignored) {}
 
     }
 

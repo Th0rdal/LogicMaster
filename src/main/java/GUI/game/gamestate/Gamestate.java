@@ -29,13 +29,32 @@ public class Gamestate {
     private int oldHalfmoveCounter = 0;
     private int oldFullmoveCounter = 1;
 
-    private Semaphore semaphore = new Semaphore(1); // needed as more than one thread could concurrently do something (e.g., makeMove and snapshot at same time)
+    private final Semaphore semaphore = new Semaphore(1); // needed as more than one thread could concurrently do something (e.g., makeMove and snapshot at same time)
 
-    /**
-     * empty constructor if just a Gamestate should be created.
-     * NEEDS TO BE LOADED LATER ON USING BoardConverter.loadFEN
-     */
-    public Gamestate() {}
+    public Gamestate(
+            ArrayList<Piece> pieces,
+            boolean turn,
+            boolean whiteKCastle,
+            boolean whiteQCastle,
+            boolean blackKCastle,
+            boolean blackQCastle,
+            String enPassant,
+            int halfmoveClock,
+            int fullmoveClock) {
+
+        this.pieces = pieces;
+        this.whiteKCastle = whiteKCastle;
+        this.whiteQCastle = whiteQCastle;
+        this.blackKCastle = blackKCastle;
+        this.blackQCastle = blackQCastle;
+        this.enPassantCoordinates = new BoardCoordinate(enPassant);
+        this.halfmoveCounter = halfmoveClock;
+        this.fullmoveCounter = fullmoveClock;
+        if (turn != this.isWhiteTurn()) {
+            AlertHandler.throwError();
+            throw new GamestateLoadingException("The side passed does not match the side calculated");
+        }
+    }
 
     /**
      * This constructor is used to load a GamestateSnapshot into the Gamestate
@@ -65,10 +84,10 @@ public class Gamestate {
             }
             return null;
         }).collect(Collectors.toList());
-        this.whiteQCastle = snapshot.isWhiteQCastle();
-        this.whiteKCastle = snapshot.isWhiteKCastle();
-        this.blackQCastle = snapshot.isBlackQCastle();
-        this.blackKCastle = snapshot.isBlackKCastle();
+        this.whiteQCastle = snapshot.canWhiteQCastle();
+        this.whiteKCastle = snapshot.canWhiteKCastle();
+        this.blackQCastle = snapshot.canBlackQCastle();
+        this.blackKCastle = snapshot.canBlackKCastle();
         this.enPassantCoordinates = new BoardCoordinate(snapshot.getEnPassantCoordinates());
         this.fullmoveCounter = snapshot.getMove() == null ? snapshot.getFullmoveCounter() : snapshot.getFullmoveCounter()+1;
         this.halfmoveCounter = snapshot.getHalfmoveCounter();
@@ -273,33 +292,33 @@ public class Gamestate {
      * @return GamestateSnapshot instance representing the current Gamestate state
      */
     public GamestateSnapshot getSnapshot(Move move, int whiteClockCounter, int blackClockCounter) {
-        if (move == null) {
-            return new GamestateSnapshot(
-                    this.pieces,
-                    this.whiteQCastle,
-                    this.whiteKCastle,
-                    this.blackQCastle,
-                    this.blackKCastle,
-                    this.enPassantCoordinates,
-                    this.fullmoveCounter,
-                    this.halfmoveCounter,
-                    whiteClockCounter,
-                    blackClockCounter,
-                    move);
-        } else {
-            return new GamestateSnapshot(
-                    this.pieces,
-                    this.whiteQCastle,
-                    this.whiteKCastle,
-                    this.blackQCastle,
-                    this.blackKCastle,
-                    this.enPassantCoordinates,
-                    this.oldFullmoveCounter,
-                    this.oldHalfmoveCounter,
-                    whiteClockCounter,
-                    blackClockCounter,
-                    move);
-        }
+        return new GamestateSnapshot(
+                this.pieces,
+                this.whiteQCastle,
+                this.whiteKCastle,
+                this.blackQCastle,
+                this.blackKCastle,
+                this.enPassantCoordinates,
+                this.fullmoveCounter,
+                this.halfmoveCounter,
+                whiteClockCounter,
+                blackClockCounter,
+                move);
+    }
+
+    public GamestateSnapshot getStartSnapshot(int whiteClockCounter, int blackClockCounter) {
+        return new GamestateSnapshot(
+                this.pieces,
+                this.whiteQCastle,
+                this.whiteKCastle,
+                this.blackQCastle,
+                this.blackKCastle,
+                this.enPassantCoordinates,
+                this.fullmoveCounter,
+                this.halfmoveCounter,
+                whiteClockCounter,
+                blackClockCounter,
+                null);
     }
 
     /**
@@ -319,44 +338,6 @@ public class Gamestate {
         GamestateSnapshot snapshot = this.getSnapshot(null, whiteClockCounter, blackClockCounter);
         this.semaphore.release();
         return snapshot;
-    }
-
-    /**
-     * Loads the given configuration into the Gamestate
-     * TODO check if this should not just be a constructor
-     * @param pieces
-     * @param turn
-     * @param whiteKCastle
-     * @param whiteQCastle
-     * @param blackKCastle
-     * @param blackQCastle
-     * @param enPassant
-     * @param halfmoveClock
-     * @param fullmoveClock
-     */
-    public void loadConfiguration(
-            ArrayList<Piece> pieces,
-            boolean turn,
-            boolean whiteKCastle,
-            boolean whiteQCastle,
-            boolean blackKCastle,
-            boolean blackQCastle,
-            String enPassant,
-            int halfmoveClock,
-            int fullmoveClock) {
-
-        this.pieces = pieces;
-        this.whiteKCastle = whiteKCastle;
-        this.whiteQCastle = whiteQCastle;
-        this.blackKCastle = blackKCastle;
-        this.blackQCastle = blackQCastle;
-        this.enPassantCoordinates = new BoardCoordinate(enPassant);
-        this.halfmoveCounter = halfmoveClock;
-        this.fullmoveCounter = fullmoveClock;
-        if (turn != this.isWhiteTurn()) {
-            AlertHandler.throwError();
-            throw new GamestateLoadingException("The side passed does not match the side calculated");
-        }
     }
 
     @Override
@@ -438,4 +419,5 @@ public class Gamestate {
     public int getOldFullmoveCounter() {
         return oldFullmoveCounter;
     }
+
 }

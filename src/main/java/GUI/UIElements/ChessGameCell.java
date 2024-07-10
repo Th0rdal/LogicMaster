@@ -70,7 +70,7 @@ public class ChessGameCell extends ListCell<ChessGame> {
                     this.whitePlayerName.setTextFill(ChessGameCell.LOST);
                     this.blackPlayerName.setTextFill(ChessGameCell.WON);
                 }
-                case DRAW_AGREED -> this.gamestatus.setText("1/2 : 1/2 AGREED DRAW");
+                case DRAW -> this.gamestatus.setText("1/2 : 1/2 AGREED DRAW");
                 case STALEMATE -> this.gamestatus.setText("1/2 : 1/2 STALEMATE");
                 case CHECKMATE_TIME_WHITE -> {
                     this.gamestatus.setText("1 : 0 LOSS ON TIME");
