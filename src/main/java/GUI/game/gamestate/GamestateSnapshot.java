@@ -136,4 +136,12 @@ public class GamestateSnapshot {
         return clockBlackPlayer;
     }
 
+    public int getClockChanged() {
+        if (this.isWhiteTurn()) {
+            return this.clockWhitePlayer;
+        } else {
+            return this.clockBlackPlayer;
+        }
+    }
+
 }

@@ -1,5 +1,7 @@
 package GUI.controller;
 
+import GUI.Config;
+import GUI.exceptions.ObjectInterruptedException;
 import GUI.game.*;
 import GUI.game.gamestate.CHECKMATE_TYPE;
 import GUI.game.gamestate.GamestateSnapshot;
@@ -8,8 +10,7 @@ import GUI.game.move.SPECIAL_MOVE;
 import GUI.handler.GameHandler;
 import GUI.handler.SceneHandler;
 import GUI.piece.*;
-import GUI.shapes.Circle;
-import GUI.shapes.Square;
+import GUI.UIElements.Circle;
 import GUI.utilities.*;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -25,28 +26,23 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.scene.paint.Color;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CompletableFuture;
 
 public class BoardController {
-
-    private Stage stage = null;
 
     @FXML
     private GridPane visualBoard;
     @FXML
     private AnchorPane anchorPane;
     @FXML
-    private Label clockTopLabel;
+    private Label clockWhiteLabel;
     @FXML
-    private Label clockBottomLabel;
+    private Label clockBlackLabel;
     @FXML
     private Pane promotionPane;
     @FXML
@@ -63,14 +59,15 @@ public class BoardController {
     private GridPane boardRowHeaders;
     @FXML
     private GridPane boardColumnHeaders;
+    @FXML
+    private CheckBox turnBoardAfterMoveCheckBox;
+    @FXML
+    private Button turnBoardButton;
+    @FXML
+    private VBox leftSideBar;
 
-    // colors used for the board
-    private static final Color color1 = Color.LIGHTGRAY;
-    private static final Color color2 = Color.SIENNA;
-    private static final Color selectedMoveHistory = Color.LIGHTBLUE;
-    private static final Color selectedColor = Color.web("#C6EDC3");
-    private static final Color selectedTextColor = Color.BLUE;
-    private static final Color defaultTextColor = Color.BLACK;
+    private static final int UP_CLOCK_LABEL = 1;
+    private static final int DOWN_CLOCK_LABEL = 2;
 
     private BlockingQueue<Move> moveQueue = null;
     private ArrayList<Move> possibleMoveList;
@@ -83,7 +80,6 @@ public class BoardController {
     private final int moveHistoryGridPaneHeight = 50;
 
     private Pane promotionSelectedPane = null;
-    private CompletableFuture<Boolean> promotionWait = new CompletableFuture<>();
     private StackPane selectedHistoryTextPane = null;
     private Move move = null;
 
@@ -139,10 +135,10 @@ public class BoardController {
                             startCoordinates = null;
                             break;
                         }
-                        if (AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "New game?",
+                        if (AlertHandler.showConfirmationAlertAndWait("New game?",
                                 "You are currently in a snapshot of a previous move. Do you wish to start a new game from this position?")) {
-                            if (AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "save old game?", "Do you wish to save the game in the database?")) {
-                                //TODO save in db
+                            if (AlertHandler.showChoiceAlertYesNo(AlertType.CONFIRMATION, "save old game?", "Do you wish to save the game in the database?")) {
+                                this.gameHandler.saveCurrentInDatabase();
                             }
                             new Thread(() -> { // new thread so javafx thread never has to wait for anything
                                 this.gameHandler.setContinueFromSnapshotFlag(Integer.parseInt((
@@ -158,7 +154,7 @@ public class BoardController {
                                 selectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
                             }
                             selectedPane = tempPane;
-                            selectedPane.setBackground(new Background(new BackgroundFill(BoardController.selectedColor, null, null)));
+                            selectedPane.setBackground(new Background(new BackgroundFill(Config.selectedColor, null, null)));
                         } else if (this.selectedPane == null) {
                             startCoordinates = null;
                         }
@@ -217,7 +213,11 @@ public class BoardController {
                 case "QUEEN" -> PIECE_ID.QUEEN;
                 case "BISHOP" -> PIECE_ID.BISHOP;
                 case "ROOK" -> PIECE_ID.ROOK;
-                default -> throw new RuntimeException("Promoting piece into something that is not allowed");
+                default -> {
+                    String message = MessageFormat.format("Promoting piece into something that is not allowed ({0})", this.promotionSelectedPane.getId());
+                    AlertHandler.throwError();
+                    throw new IllegalArgumentException(message);
+                }
             };
 
             for (Move move : this.possibleMoveList) {
@@ -233,19 +233,6 @@ public class BoardController {
             this.promotionPane.setVisible(!this.promotionPane.isVisible());
         }
     };
-
-    public BoardController(Stage stage) {
-        this.stage = stage;
-    }
-
-    /**
-     * Resets the board
-     */
-    public void clearBoard() {
-        this.visualBoard.getChildren().clear();
-        //TODO add gameHandler clearBoard function
-        //this.gameHandler.clearBoard();
-    }
 
     public void loadPromotionPane(boolean isWhite) {
         //399 because of weird calc with border.
@@ -294,13 +281,85 @@ public class BoardController {
      * creates the board visually and adds all the pieces based on the board variable
      * adds event listeners for piece movement
      */
-    public void loadBoard(boolean whiteSideDown) {
+    public void loadElements() {
         /*
          * This function loads the board with squares and gives each square a chess board color
          */
 
-        this.whiteSideDown = whiteSideDown;
+        // config buttons
+        this.drawButton.setOnAction(event -> {
+            if (this.gameHandler.canDrawFiftyMoves()) {
+                this.setCheckmateAlert(CHECKMATE_TYPE.FIFTY_MOVE_RULE, this.gameHandler.isTurnWhite());
+            } else {
+                String player = this.gameHandler.getPlayer(this.gameHandler.isTurnWhite()).getName();
+                boolean result = AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "Draw offer", player + " offered a draw. Do you want to accept?");
+                if (result) {
+                    Move move = new Move(true);
+                    try {
+                        this.moveQueue.put(move);
+                    } catch (InterruptedException e) {
+                        AlertHandler.throwError();
+                        throw new ObjectInterruptedException("Move queue interrupted unexpectedly", e);
+                    }
+                }
+            }
+        });
 
+        this.backButton.setOnAction(event -> {
+            this.gameHandler.setInterruptFlag();
+            SceneHandler.getInstance().activate("index");
+        });
+
+        this.saveButton.setOnAction(event -> {
+            AlertHandler.showAlert(AlertType.INFORMATION, "saved game", "The game was saved in the database");
+            this.gameHandler.saveCurrentInDatabase();
+        });
+
+        this.turnBoardButton.setOnAction(event -> {
+            this.whiteSideDown = !this.whiteSideDown;
+            this.loadBoard();
+            int index1 = this.leftSideBar.getChildren().indexOf(this.clockWhiteLabel);
+            int index2 = this.leftSideBar.getChildren().indexOf(this.clockBlackLabel);
+
+            this.leftSideBar.getChildren().remove(this.clockWhiteLabel);
+            this.leftSideBar.getChildren().remove(this.clockBlackLabel);
+
+            if (index1 < index2) {
+                this.leftSideBar.getChildren().add(index1, this.clockBlackLabel);
+                this.leftSideBar.getChildren().add(index2, this.clockWhiteLabel);
+            } else {
+                this.leftSideBar.getChildren().add(index2, this.clockWhiteLabel);
+                this.leftSideBar.getChildren().add(index1, this.clockBlackLabel);
+            }
+
+
+        });
+
+        this.clockWhiteLabel.setFont(Font.font("Arial", 22));
+        clockWhiteLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+        this.clockBlackLabel.setFont(Font.font("Arial", 22));
+        clockBlackLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
+
+        // adding squares to board
+        int size = 8;
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                StackPane square = new StackPane();
+                this.visualBoard.add(square, row, col, 1, 1);
+                Color color = (row + col) % 2 == 0 ? Config.squareColorWhite : Config.squareColorBlack;
+                square.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
+            }
+        }
+
+        promotionPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
+        promotionPane.setVisible(false);
+
+        this.moveHistoryGridPane.setHgap(12);
+        this.moveHistoryScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+    }
+
+    public void loadBoard() {
         for (Node node : this.boardRowHeaders.getChildren()) {
             String text = this.whiteSideDown ? String.valueOf(8 - GridPane.getRowIndex(node)) : String.valueOf(GridPane.getRowIndex(node)+1);
             ((Label)node).setText(text);
@@ -311,77 +370,19 @@ public class BoardController {
             ((Label)node).setText(text);
         }
 
-        // config buttons
-        this.drawButton.setOnAction(event -> {
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Draw offer");
-            alert.setHeaderText(null);
-            alert.setContentText("Your opponent offered a draw. Do you want to accept");
-            ButtonType buttonYes = new ButtonType("YES");
-            ButtonType buttonNo = new ButtonType("NO");
-            alert.getButtonTypes().setAll(buttonYes, buttonNo);
-            Optional<ButtonType> result = alert.showAndWait();
-
-            if (result.isPresent() && result.get() == buttonYes) {
-                Move move = new Move(true);
-                try {
-                    this.moveQueue.put(move);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-
-        this.backButton.setOnAction(event -> {
-            new Thread(() -> { // new thread so javafx thread never has to wait
-                this.gameHandler.setInterruptFlag();
-            });
-            SceneHandler.getInstance().activate("index");
-        });
-
-        this.saveButton.setOnAction(event -> {
-            //TODO save in database not in snapshot array like now
-            this.gameHandler.saveCurrentSnapshot();
-        });
-
-
-
-        this.clockTopLabel.setFont(Font.font("Arial", 22));
-        clockTopLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
-        this.clockBottomLabel.setFont(Font.font("Arial", 22));
-        clockBottomLabel.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
-
-        // adding squares to board
-        int size = 8;
-        for (int row = 0; row < size; row++) {
-            for (int col = 0; col < size; col++) {
-                Square square = new Square(row+1, col+1);
-                this.visualBoard.add(square, row, col, 1, 1);
-                Color color = (row + col) % 2 == 0 ? BoardController.color1 : BoardController.color2;
-                square.setBackground(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
-            }
+        if (this.whiteSideDown) {
+            this.gameHandler.loadClocks(this.clockBlackLabel, this.clockWhiteLabel);
+        } else {
+            this.gameHandler.loadClocks(this.clockWhiteLabel, this.clockBlackLabel);
         }
 
         loadPieces();
-
-        if (this.whiteSideDown) {
-            this.gameHandler.loadClocks(this.clockBottomLabel, this.clockTopLabel);
-        } else {
-            this.gameHandler.loadClocks(this.clockTopLabel, this.clockBottomLabel);
-        }
-
-        promotionPane.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-        promotionPane.setVisible(false);
-
-        this.moveHistoryGridPane.setHgap(12);
-        this.moveHistoryScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        stage.show();
     }
 
     public void loadPieces() {
         this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
         for (Piece piece : this.gameHandler.getPieces()) {
-            visualBoard.add(piece.getPieceImage(),
+            visualBoard.add(piece.getPieceImage(100),
                     whiteSideDown ? piece.getLocationX()-1 : 8 - piece.getLocationX(),
                     whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY()-1);
         }
@@ -390,7 +391,7 @@ public class BoardController {
     public void loadPieces(int moveNumber) {
         this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
         for (Piece piece : this.gameHandler.getSnapshot(moveNumber).getPieces()) {
-            visualBoard.add(piece.getPieceImage(),
+            visualBoard.add(piece.getPieceImage(100),
                     whiteSideDown ? piece.getLocationX()-1 : 8 - piece.getLocationX(),
                     whiteSideDown ? 8 - piece.getLocationY() : piece.getLocationY()-1);
         }
@@ -471,7 +472,11 @@ public class BoardController {
         try {
             this.moveQueue.put(move);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            AlertHandler.throwError();
+            throw new ObjectInterruptedException("Move queue interrupted unexpectedly", e);
+        }
+        if (this.turnBoardAfterMoveCheckBox.isSelected()) {
+            this.turnBoardButton.fire();
         }
     }
 
@@ -487,64 +492,65 @@ public class BoardController {
     public void addMoveToMovelist(Move move, int fullmovecounter) {
         Platform.runLater(() -> {
             int moveCounter = fullmovecounter - 1;
-            Text temp = new Text(moveCounter + ": " + move.toString()); //-1 because gamestate is already incremented
+            Text temp = new Text(fullmovecounter + ": " + move.toString()); //-1 because gamestate is already incremented
             StackPane tempPane = new StackPane();
             tempPane.getChildren().add(temp);
 
             tempPane.setOnMouseClicked(event -> {
                 if (this.selectedHistoryTextPane != null) {
-                    ((Text)this.selectedHistoryTextPane.getChildren().get(0)).setFill(BoardController.defaultTextColor);
+                    ((Text)this.selectedHistoryTextPane.getChildren().get(0)).setFill(Config.defaultTextColor);
                     this.selectedHistoryTextPane.getChildren().get(0).setStyle("");
                     this.selectedHistoryTextPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, CornerRadii.EMPTY, Insets.EMPTY)));
                     int currentFieldNumber = Integer.parseInt((
                             (Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0,
                             ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':')));
                     int moveNumber = Integer.parseInt(temp.getText().substring(0, temp.getText().indexOf(':')));
-                    if (moveNumber !=  moveCounter || currentFieldNumber != moveCounter-1) {
+                    if (moveNumber !=  fullmovecounter || currentFieldNumber != fullmovecounter-1) {
                         this.loadPieces(moveNumber);
                     }
                 }
 
-                tempPane.setBackground(new Background(new BackgroundFill(selectedMoveHistory, CornerRadii.EMPTY, Insets.EMPTY)));
+                tempPane.setBackground(new Background(new BackgroundFill(Config.selectedMoveHistory, CornerRadii.EMPTY, Insets.EMPTY)));
 
-                ((Text) tempPane.getChildren().get(0)).setFill(BoardController.selectedTextColor);
+                ((Text) tempPane.getChildren().get(0)).setFill(Config.selectedTextColor);
                 ((Text)tempPane.getChildren().get(0)).setStyle("-fx-font-weight: bold;");
                 this.selectedHistoryTextPane = tempPane;
             });
 
             // if selectedHistoryText is the last move taken or is empty, fire event
             if (this.selectedHistoryTextPane != null &&
-                    Integer.parseInt(((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0, ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))) + 1 == moveCounter) {
+                    Integer.parseInt(((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0, ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))) + 1 == fullmovecounter) {
                 temp.fireEvent(BoardController.mouseClickedHistoryTextSelected);
             } else if (this.selectedHistoryTextPane == null) {
                 temp.fireEvent(BoardController.mouseClickedHistoryTextSelected);
             }
 
-            if ((moveCounter-1)%2 == 0) {
+            if ((moveCounter)%2 == 0) {
                 RowConstraints row = new RowConstraints(moveHistoryGridPaneHeight);
                 row.setMinHeight(moveHistoryGridPaneHeight);
                 row.setMaxHeight(moveHistoryGridPaneHeight);
                 this.moveHistoryGridPane.getRowConstraints().add(row);
             }
-            this.moveHistoryGridPane.add(tempPane, (moveCounter-1)%2, (moveCounter-1)/2);
+            this.moveHistoryGridPane.add(tempPane, (moveCounter)%2, (moveCounter)/2);
         });
     }
 
     public void reloadMoveHistory() {
+        this.selectedHistoryTextPane = null;
         this.moveHistoryGridPane.getChildren().clear();
         this.moveHistoryGridPane.getRowConstraints().clear();
         for (GamestateSnapshot sn : this.gameHandler.getSnapshotHistory()) {
-            addMoveToMovelist(sn.getMove(), sn.getFullmoveCounter()+1);
+            addMoveToMovelist(sn.getMove(), sn.getFullmoveCounter());
         }
     }
 
     public void setCheckmateAlert(CHECKMATE_TYPE type, boolean whitePlayer) {
-        //TODO use AlertHandler
         String text = switch (type) {
             case DRAW -> "The players agreed to a draw";
             case TIME -> String.format("%s ran out of time. %s wins!!!", this.gameHandler.getPlayer(whitePlayer).getName(), this.gameHandler.getPlayer(!whitePlayer).getName());
             case CHECKMATE -> String.format("%s player is checkmate. %s wins!!!", this.gameHandler.getPlayer(whitePlayer).getName(), this.gameHandler.getPlayer(!whitePlayer).getName());
             case STALEMATE -> String.format("%s player can no longer make a legal move in his turn. The game is a stalemate", this.gameHandler.getPlayer(whitePlayer).getName());
+            case FIFTY_MOVE_RULE -> String.format("%s claimed a draw with the fifty move rule", this.gameHandler.getPlayer(whitePlayer).getName());
         };
 
         text = text + "\nDo you wish to save the game in the database?";
@@ -552,7 +558,7 @@ public class BoardController {
 
 
         if (AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "Game over!!!", text)) {
-            //TODO save game in database
+            this.gameHandler.saveCurrentInDatabase();
         }
     }
 
@@ -560,9 +566,4 @@ public class BoardController {
         this.gameHandler = gameHandler;
     }
 
-    public void updateClock(boolean whiteTurn) {
-        if (whiteTurn) {
-
-        }
-    }
 }

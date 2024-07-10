@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -9,12 +11,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="clockTopLabel" layoutX="10.0" layoutY="230.0" prefHeight="40.0" prefWidth="85.0" text="Label" />
-      <Label fx:id="clockBottomLabel" layoutX="10.0" layoutY="630.0" prefHeight="40.0" prefWidth="85.0" text="Label" />
       <StackPane layoutX="140.0" layoutY="50.0" prefHeight="800.0" prefWidth="800.0">
          <children>
             <GridPane fx:id="visualBoard" prefHeight="800.0" prefWidth="800.0">
@@ -57,9 +58,6 @@
               }
           </style>
       </ScrollPane>
-      <Button fx:id="drawButton" layoutX="10.0" layoutY="300.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Draw" />
-      <Button fx:id="saveButton" layoutX="10.0" layoutY="400.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Save" />
-      <Button fx:id="backButton" layoutX="10.0" layoutY="500.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Back" />
       <GridPane fx:id="boardColumnHeaders" layoutX="140.0" layoutY="860.0" prefHeight="10.0" prefWidth="800.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
@@ -177,5 +175,19 @@
             </Label>
          </children>
       </GridPane>
+      <VBox fx:id="leftSideBar" layoutX="10.0" prefHeight="900.0" prefWidth="100.0" spacing="50.0">
+         <children>
+            <Label fx:id="clockWhiteLabel" prefHeight="40.0" prefWidth="85.0" text="Label" />
+            <Button fx:id="drawButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Draw" />
+            <Button fx:id="saveButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Save" />
+            <Button fx:id="backButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Back" />
+            <Label fx:id="clockBlackLabel" prefHeight="40.0" prefWidth="85.0" text="Label" />
+            <CheckBox fx:id="turnBoardAfterMoveCheckBox" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="100.0" text="turn board after move" wrapText="true" />
+            <Button fx:id="turnBoardButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="100.0" text="Turn board" />
+         </children>
+         <padding>
+            <Insets top="235.0" />
+         </padding>
+      </VBox>
    </children>
 </AnchorPane>

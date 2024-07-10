@@ -1,5 +1,6 @@
 package GUI.controller;
 
+import GUI.exceptions.ProblemWhileWaitingException;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -31,10 +32,13 @@ public class AlertHandler {
             });
         }
 
-        try {
-            future.get();
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
+        if (wait) {
+            try {
+                future.get();
+            } catch (ExecutionException | InterruptedException e) {
+                AlertHandler.throwError();
+                throw new ProblemWhileWaitingException("Something went wrong while waiting for a future", e);
+            }
         }
     }
 
@@ -44,26 +48,6 @@ public class AlertHandler {
 
     public static void showAlertAndWait(Alert.AlertType type, String title, String content) {
         AlertHandler.showAlert(type, title, content, true);
-    }
-
-    public static Optional<ButtonType> showChoiceAlert(Alert.AlertType type, String title, String content, ArrayList<ButtonType> buttons) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.getButtonTypes().clear();
-        alert.getButtonTypes().addAll(buttons);
-        CompletableFuture<Optional<ButtonType>> future = new CompletableFuture<>();
-
-        Platform.runLater(() -> {
-            Optional<ButtonType> result = alert.showAndWait();
-            future.complete(result);
-        });
-        try {
-            return future.get();
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static boolean showChoiceAlertYesNo(Alert.AlertType type, String title, String content) {
@@ -90,8 +74,120 @@ public class AlertHandler {
             try {
                 return future.get().isPresent() && Objects.equals(future.get().get().getText(), "YES");
             } catch (ExecutionException | InterruptedException e) {
-                throw new RuntimeException(e);
+                AlertHandler.throwError();
+                throw new ProblemWhileWaitingException("Something went wrong while waiting for a future", e);
             }
+        }
+    }
+
+    public static boolean showConfirmationAlertAndWait(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+
+        CompletableFuture<Optional<ButtonType>> future = new CompletableFuture<>();
+
+        if (Platform.isFxApplicationThread()) {
+            Optional<ButtonType> result = alert.showAndWait();
+            return result.isPresent() && result.get() == ButtonType.OK;
+        } else {
+            Platform.runLater(() -> {
+                Optional<ButtonType> result = alert.showAndWait();
+                future.complete(result);
+            });
+            try {
+                return future.get().isPresent() && future.get().get() == ButtonType.OK;
+            } catch (ExecutionException | InterruptedException e) {
+                AlertHandler.throwError();
+                throw new ProblemWhileWaitingException("Something went wrong while waiting for a future", e);
+            }
+        }
+    }
+
+    public static String showCustomConfirmationAlertAndWait(String title, String content, ArrayList<String> buttonList) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.getButtonTypes().clear();
+
+        for (String button : buttonList) {
+            alert.getButtonTypes().add(new ButtonType(button));
+        }
+
+        CompletableFuture<Optional<ButtonType>> future = new CompletableFuture<>();
+
+        if (Platform.isFxApplicationThread()) {
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent()) {
+                return result.get().getText();
+            }
+            return "";
+        } else {
+            Platform.runLater(() -> {
+                Optional<ButtonType> result = alert.showAndWait();
+                future.complete(result);
+            });
+            try {
+                if (future.get().isPresent()) {
+                    return future.get().get().getText();
+                }
+                return "";
+            } catch (ExecutionException | InterruptedException e) {
+                AlertHandler.throwError();
+                throw new ProblemWhileWaitingException("Something went wrong while waiting for a future", e);
+            }
+        }
+    }
+
+    public static void throwError() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText("The program encountered an error it can not recover from. For further information, please look at the stack trace in the console! Shutting down...");
+
+        CompletableFuture<Optional<ButtonType>> future = new CompletableFuture<>();
+
+        if (Platform.isFxApplicationThread()) {
+            alert.showAndWait();
+            future.complete(Optional.empty());
+        } else {
+            Platform.runLater(() -> {
+                alert.showAndWait();
+                future.complete(Optional.empty());
+            });
+        }
+        try {
+            future.get();
+        } catch (ExecutionException | InterruptedException e) {
+            AlertHandler.throwError();
+            throw new ProblemWhileWaitingException("Something went wrong while waiting for a future", e);
+        }
+    }
+
+    public static void throwWarningAndWait(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+
+        CompletableFuture<Optional<ButtonType>> future = new CompletableFuture<>();
+
+        if (Platform.isFxApplicationThread()) {
+            alert.showAndWait();
+        } else {
+            Platform.runLater(() -> {
+                alert.showAndWait();
+                future.complete(Optional.empty());
+            });
+        }
+
+        try {
+            future.get();
+        } catch (ExecutionException | InterruptedException e) {
+            AlertHandler.throwError();
+            throw new ProblemWhileWaitingException("Something went wrong while waiting for a future", e);
         }
     }
 }

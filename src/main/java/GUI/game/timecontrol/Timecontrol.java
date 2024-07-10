@@ -1,5 +1,9 @@
 package GUI.game.timecontrol;
 
+import GUI.exceptions.InvalidTimecontrolException;
+
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -46,7 +50,7 @@ public class Timecontrol {
                 } while (endIndex != timecontrolString.length());
             }
         } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
-            throw new RuntimeException();
+            throw new InvalidTimecontrolException();
         }
     }
 
@@ -81,8 +85,8 @@ public class Timecontrol {
 
     @Override
     public String toString() {
-        if (this.startTime == 0) {
-            return "custom";
+        if (!this.isActive()) {
+            return "no timecontrol";
         }
         int minutes = this.startTime / 60;
         int seconds = this.startTime - minutes * 60;
@@ -114,8 +118,6 @@ public class Timecontrol {
             return false;
         } else if (this.increment != ((Timecontrol) obj).increment) {
             return false;
-        } else if (this.custom != ((Timecontrol) obj).custom) {
-            return false;
         } else if (this.timecontrolChangeMap.size() != ((Timecontrol) obj).timecontrolChangeMap.size()) {
             return false;
         } else {
@@ -128,8 +130,22 @@ public class Timecontrol {
         return true;
     }
 
-    public boolean hasNoStartValue() {
-        return this.startTime != 0;
+    public static ArrayList<Integer> convertByteTimeToArrayList(byte[] timeBytes) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if (timeBytes == null) {
+            for(int i = 0; i < timeBytes.length/4; i=i+4) {
+                list.add(0);
+            }
+        }
+        for (int i = 0; i < timeBytes.length; i=i+4) {
+            byte[] temp = {timeBytes[i], timeBytes[i+1], timeBytes[i+2], timeBytes[i+3]};
+            list.add(ByteBuffer.wrap(temp).getInt());
+        }
+        return list;
+    }
+
+    public boolean isActive() {
+        return !(this.startTime == 0 && this.increment == 0 && this.timecontrolChangeMap.isEmpty());
     }
 
     public boolean isCustom() {

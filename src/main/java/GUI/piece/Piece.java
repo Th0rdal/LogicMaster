@@ -1,5 +1,6 @@
 package GUI.piece;
 
+import GUI.controller.AlertHandler;
 import GUI.game.BoardCoordinate;
 import GUI.utilities.ImageLoader;
 import javafx.scene.image.ImageView;
@@ -37,15 +38,15 @@ public abstract class Piece {
      * @param imageView:  ImageView representing the image
      * @return Pane wrapped around the ImageView
      */
-    protected Pane prepareImage(ImageView imageView) {
+    protected Pane prepareImage(ImageView imageView, int size) {
         if (this.thisPane != null) {
             return this.thisPane;
         }
 
         //image config
         imageView.setPreserveRatio(true);
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
+        imageView.setFitWidth(size);
+        imageView.setFitHeight(size);
 
         //pane config
         Pane pane = new Pane();
@@ -94,12 +95,26 @@ public abstract class Piece {
                 return new Rook(new BoardCoordinate(colCounter, rowCounter), true);
         }
         String message = "piece value is unexpected (" + pieceChar + ")";
-        //TODO exchange with useful message and Error
-        throw new RuntimeException(message);
+        AlertHandler.throwError();
+        throw new IllegalArgumentException(message);
     }
 
-    public Pane getPieceImage() {
-        return this.prepareImage(new ImageView(ImageLoader.getImage(this.id, this.isWhite)));
+    public Pane getPieceImage(int size) {
+        return this.prepareImage(new ImageView(ImageLoader.getImage(this.id, this.isWhite)), size);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Piece other)) {
+            return false;
+        }
+        if (!(this.isWhite == other.isWhite)) {
+            return false;
+        }
+        if (this.id != other.id) {
+            return false;
+        }
+        return this.coordinate.equals(other.coordinate);
     }
 
     public int getLocationX() {

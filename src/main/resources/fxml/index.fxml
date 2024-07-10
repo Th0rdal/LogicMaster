@@ -17,44 +17,39 @@
       </TextField>
       <Button fx:id="startGameButton" layoutX="390.0" layoutY="125.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" text="start game" />
       <Button fx:id="loadButton" layoutX="390.0" layoutY="200.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" text="load from database" />
-      <Button fx:id="resetFenButton" layoutX="490.0" layoutY="556.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Reset FEN" />
-      <CheckBox fx:id="timeControlCheckBox" contentDisplay="RIGHT" layoutX="440.0" layoutY="275.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="150.0" selected="true" text="time control">
+      <Button fx:id="resetFenButton" layoutX="490.0" layoutY="555.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" text="Reset FEN" />
+      <CheckBox fx:id="timeControlCheckBox" contentDisplay="RIGHT" layoutX="440.0" layoutY="300.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="150.0" selected="true" text="time control">
          <font>
             <Font size="18.0" />
          </font>
       </CheckBox>
       <ChoiceBox fx:id="whitePlayerChoiceBox" layoutX="630.0" layoutY="321.0" prefWidth="150.0" visible="false" />
       <ChoiceBox fx:id="blackPlayerChoiceBox" layoutX="628.0" layoutY="366.0" prefWidth="150.0" visible="false" />
-      <CheckBox fx:id="whitePlayerHumanCheckBox" contentDisplay="RIGHT" layoutX="390.0" layoutY="320.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="200.0" selected="true" text="white player human">
+      <CheckBox fx:id="whitePlayerHumanCheckBox" contentDisplay="RIGHT" layoutX="390.0" layoutY="360.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="200.0" selected="true" text="white player human">
          <font>
             <Font size="18.0" />
          </font>
       </CheckBox>
-      <CheckBox fx:id="blackPlayerHumanCheckBox" contentDisplay="RIGHT" layoutX="390.0" layoutY="365.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="200.0" selected="true" text="black player human">
+      <CheckBox fx:id="blackPlayerHumanCheckBox" contentDisplay="RIGHT" layoutX="390.0" layoutY="420.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="200.0" selected="true" text="black player human">
          <font>
             <Font size="18.0" />
          </font>
       </CheckBox>
-      <CheckBox fx:id="whiteSideDownCheckBox" contentDisplay="RIGHT" layoutX="340.0" layoutY="410.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" prefHeight="25.0" prefWidth="250.0" selected="true" text="white side facing down">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </CheckBox>
-      <ChoiceBox fx:id="timeControlChoiceBox" layoutX="630.0" layoutY="275.0" prefHeight="20.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="timeControlChoiceBox" layoutX="630.0" layoutY="300.0" prefHeight="20.0" prefWidth="150.0" />
       <TextField fx:id="timeControlTextField" layoutX="800.0" layoutY="275.0" visible="false" />
-      <TextField fx:id="whitePlayerNameTextBox" layoutX="670.0" layoutY="321.0" />
-      <TextField fx:id="blackPlayerNameTextBox" layoutX="670.0" layoutY="366.0" />
-      <Label fx:id="whiteNameLabel" layoutX="600.0" layoutY="320.0" prefWidth="60.0" text="Name:">
+      <TextField fx:id="whitePlayerNameTextBox" layoutX="670.0" layoutY="360.0" />
+      <TextField fx:id="blackPlayerNameTextBox" layoutX="670.0" layoutY="420.0" />
+      <Label fx:id="whiteNameLabel" layoutX="600.0" layoutY="360.0" prefWidth="60.0" text="Name:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="blackNameLabel" layoutX="598.0" layoutY="365.0" prefWidth="60.0" text="Name:">
+      <Label fx:id="blackNameLabel" layoutX="600.0" layoutY="420.0" prefWidth="60.0" text="Name:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="deleteTimeControlButton" layoutX="819.0" layoutY="276.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="130.0" text="Delete Time control" />
+      <Button fx:id="deleteTimeControlButton" layoutX="820.0" layoutY="300.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="130.0" text="Delete Time control" />
       <Button fx:id="saveTimeControlButton" layoutX="970.0" layoutY="275.0" mnemonicParsing="false" text="add to config" visible="false" />
    </children>
 </AnchorPane>

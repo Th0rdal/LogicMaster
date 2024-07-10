@@ -1,22 +1,38 @@
 package GUI;
 
-import GUI.player.Algorithm.AIFile;
+import GUI.controller.AlertHandler;
+import GUI.exceptions.InvalidTimecontrolException;
+import GUI.player.algorithm.AIFile;
 import GUI.game.timecontrol.Timecontrol;
 import GUI.game.timecontrol.TimecontrolSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import javafx.scene.paint.Color;
 
+import GUI.exceptions.ConfigurationException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Stream;
 
 public class Config {
+    public static final String START_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    public static final int MAX_CHARACTER_NAME = 40;
+
+    // colors used for the board
+    public static final Color squareColorWhite = Color.LIGHTGRAY;
+    public static final Color squareColorBlack = Color.SIENNA;
+    public static final Color selectedMoveHistory = Color.LIGHTBLUE;
+    public static final Color selectedColor = Color.web("#C6EDC3");
+    public static final Color selectedTextColor = Color.BLUE;
+    public static final Color defaultTextColor = Color.BLACK;
+
     public static final String aiFilesPath = "algorithms";
     private static final ArrayList<AIFile> aiFiles = new ArrayList<>();
     private ArrayList<Timecontrol> timecontrol;
@@ -39,7 +55,8 @@ public class Config {
         try (FileWriter writer = new FileWriter("config.json")) {
              writer.write(json);
          } catch (IOException e) {
-             throw new RuntimeException(e);
+            AlertHandler.throwError();
+            throw new ConfigurationException("Failed to save configuration", e);
          }
     }
 
@@ -49,13 +66,17 @@ public class Config {
              Map<String, List<String>> data = gson.fromJson(reader, new TypeToken<Map<String, List<String>>>(){}.getType());
              this.timecontrol = new ArrayList<>();
              for (String temp : data.get("timecontrol")) {
-                 try {
+                 try { // ignored exception just so the error does not stop execution
                      this.timecontrol.add(new Timecontrol(temp));
-                 } catch (RuntimeException e) {}
+                 } catch (InvalidTimecontrolException ignored) {
+                     String message = MessageFormat.format("The timecontrol string '%s' is not valid.", temp);
+                     AlertHandler.throwWarningAndWait("invalid timecontrol", message);
+                 }
              }
              this.timecontrol.sort(Comparator.comparingInt(Timecontrol::getStartTime));
          } catch (IOException e) {
-             throw new RuntimeException(e);
+            AlertHandler.throwError();
+            throw new ConfigurationException("Failed to load configuration", e);
          }
     }
 
