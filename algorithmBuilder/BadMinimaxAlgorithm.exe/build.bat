@@ -2,11 +2,12 @@
 setlocal
 
 REM Standard paths
-set SRC_PATH=src\main\algorithm
-set TARGET_DIR=target
+set SRC_PATH=..\..\src\main\algorithm
+set TARGET_DIR=..\..\target
 set OBJECT_DIR=%TARGET_DIR%\object
 set ASSEMBLY_DIR=%TARGET_DIR%\assembly
-set ROOT_DIR=src\main\algorithm
+set ROOT_DIR=..\..\src\main\algorithm
+set EXE_TARGET_DIR=..\..\algorithms
 
 REM Compiler and flags
 set CC=gcc
@@ -14,7 +15,7 @@ set CFLAGS=-Wall -g -Wextra -pedantic -std=c11 -I%ROOT_DIR%\include
 
 
 REM Target executable
-set TARGET=%TARGET_DIR%\algorithm.exe
+set TARGET=%EXE_TARGET_DIR%\BadMinimaxAlgorithm.exe
 
 REM Remove old .o and .s files if they exist
 if exist "%OBJECT_DIR%\*.o" (
