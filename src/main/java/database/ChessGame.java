@@ -64,6 +64,8 @@ public class ChessGame {
     @DatabaseField
     private String endFen;
 
+    public ChessGame() {}
+
     /**
      * ChessGame constructor
      * optimization: create byte[] moves here and take ArrayList as argument, pass Player object insteead of the 4 strings
@@ -79,9 +81,6 @@ public class ChessGame {
      * @param startingFen: the fen notation that started the game
      * @param endFen: the fen notation that the board was in when it was saved
      */
-
-    public ChessGame() {}
-
     public ChessGame(
             byte[] moves,
             byte[] time,
