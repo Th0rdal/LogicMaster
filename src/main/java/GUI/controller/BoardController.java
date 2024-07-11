@@ -294,19 +294,31 @@ public class BoardController {
             if (!this.gameHandler.getPlayer(this.gameHandler.isTurnWhite()).isHuman()) {
                 return;
             }
+
             if (this.gameHandler.canDrawFiftyMoves()) {
                 this.setCheckmateAlert(CHECKMATE_TYPE.FIFTY_MOVE_RULE, this.gameHandler.isTurnWhite());
+                Move move = new Move(true);
+                try {
+                    this.moveQueue.put(move);
+                } catch (InterruptedException e) {
+                    AlertHandler.throwError();
+                    throw new ObjectInterruptedException("Move queue interrupted unexpectedly", e);
+                }
             } else {
-                String player = this.gameHandler.getPlayer(this.gameHandler.isTurnWhite()).getName();
-                boolean result = AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "Draw offer", player + " offered a draw. Do you want to accept?");
-                if (result) {
-                    Move move = new Move(true);
-                    try {
-                        this.moveQueue.put(move);
-                    } catch (InterruptedException e) {
-                        AlertHandler.throwError();
-                        throw new ObjectInterruptedException("Move queue interrupted unexpectedly", e);
+                if (this.gameHandler.getPlayer(!this.gameHandler.isTurnWhite()).isHuman()) {
+                    String player = this.gameHandler.getPlayer(this.gameHandler.isTurnWhite()).getName();
+                    boolean result = AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "Draw offer", player + " offered a draw. Do you want to accept?");
+                    if (result) {
+                        Move move = new Move(true);
+                        try {
+                            this.moveQueue.put(move);
+                        } catch (InterruptedException e) {
+                            AlertHandler.throwError();
+                            throw new ObjectInterruptedException("Move queue interrupted unexpectedly", e);
+                        }
                     }
+                } else {
+                    AlertHandler.showAlert(AlertType.INFORMATION, "draw declined", "The bot declined the draw.");
                 }
             }
         });
