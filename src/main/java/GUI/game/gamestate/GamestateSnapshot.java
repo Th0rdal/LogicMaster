@@ -15,7 +15,7 @@ public class GamestateSnapshot {
     private final ArrayList<Piece> pieces;
 
     // flags
-    private final boolean whiteQCastle, whiteKCastle, blackQCastle, blackKCastle;
+    private final boolean whiteQCastle, whiteKCastle, blackQCastle, blackKCastle, whiteTurn;
 
     private final BoardCoordinate enPassantCoordinates;
     private final int fullmoveCounter, halfmoveCounter;
@@ -38,6 +38,7 @@ public class GamestateSnapshot {
      * @param clockBlackPlayer
      */
     public GamestateSnapshot(ArrayList<Piece> pieces,
+                             boolean whiteTurn,
                              boolean whiteQCastle,
                              boolean whiteKCastle,
                              boolean blackQCastle,
@@ -72,6 +73,7 @@ public class GamestateSnapshot {
             }
             return null;
         }).collect(Collectors.toList());
+        this.whiteTurn = whiteTurn;
         this.whiteQCastle = whiteQCastle;
         this.whiteKCastle = whiteKCastle;
         this.blackQCastle = blackQCastle;
@@ -89,7 +91,7 @@ public class GamestateSnapshot {
     }
 
     public boolean isWhiteTurn() {
-        return this.fullmoveCounter%2 == 1;
+        return this.whiteTurn;
     }
 
     public Move getMove() {
@@ -142,6 +144,10 @@ public class GamestateSnapshot {
         } else {
             return this.clockBlackPlayer;
         }
+    }
+
+    public int getMoveCounter() {
+        return this.whiteTurn ? this.fullmoveCounter * 2 - 1: this.fullmoveCounter * 2;
     }
 
 }

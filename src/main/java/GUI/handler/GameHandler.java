@@ -161,7 +161,7 @@ public class GameHandler {
             }
 
 
-            this.gamestate.makeMove(move);
+            this.gamestate.makeMove(move, this.whiteTurn);
 
             if (!this.getPlayer(this.whiteTurn).isHuman()) {
                 Platform.runLater(this.boardController::afterMove);
@@ -170,12 +170,12 @@ public class GameHandler {
             Move finalMove = move;
             if (!this.inSnapshot) {
                 Platform.runLater(() -> {
-                    this.boardController.addMoveToMovelist(finalMove, this.gamestate.getOldFullmoveCounter());
+                    this.boardController.addMoveToMovelist(finalMove, this.gamestate.getMoveCounter());
                     this.boardController.loadPieces();
                 });
             } else {
                 Platform.runLater(() -> {
-                    this.boardController.addMoveToMovelist(finalMove, this.gamestate.getOldFullmoveCounter());
+                    this.boardController.addMoveToMovelist(finalMove, this.gamestate.getMoveCounter());
                 });
             }
 
@@ -264,9 +264,9 @@ public class GameHandler {
             AlertHandler.showAlert(Alert.AlertType.ERROR, "Error", "The fen notation is not valid!");
             return;
         }
-        this.startGamestateSnapshot = this.gamestate.getStartSnapshot(this.clockWhitePlayerCounter, this.clockBlackPlayerCounter);
+        this.startGamestateSnapshot = this.gamestate.getSnapshot(this.clockWhitePlayerCounter, this.clockBlackPlayerCounter);
 
-        this.whiteTurn = this.gamestate.getSideFromFullmoveCounter();
+        this.whiteTurn = this.gamestate.isWhiteTurn();
         this.snapshotHistory = new ArrayList<>();
 
         this.boardController.reloadMoveHistory();
@@ -398,15 +398,17 @@ public class GameHandler {
                 }
             }
             if (!(snapshot.isWhiteTurn() == this.gamestate.isWhiteTurn())) {
-                flag = false;
-            /*} else if (!(snapshot.canWhiteQCastle() == this.gamestate.canWhiteQCastle())
+                if (!(snapshot.getMoveCounter() <= 0)) {
+                    flag = false;
+                }
+            } else if (!(snapshot.canWhiteQCastle() == this.gamestate.canWhiteQCastle())
                 || !(snapshot.canWhiteKCastle() == this.gamestate.canWhiteKCastle())
                 || !(snapshot.canBlackKCastle() == this.gamestate.canBlackKCastle())
                 || !(snapshot.canBlackQCastle() == this.gamestate.canBlackQCastle())) {
 
                 flag = false;
             } else if (!(snapshot.getEnPassantCoordinates().equals(this.gamestate.getEnPassantCoordinates()))) {
-                flag = false;*/
+                flag = false;
             }
 
             if (flag) {
@@ -561,7 +563,7 @@ public class GameHandler {
             } else {
                 this.clockBlackPlayerCounter = timeList.get(i);
             }
-            this.gamestate.makeMove(moveList.get(i));
+            this.gamestate.makeMove(moveList.get(i), this.gamestate.isWhiteTurn());
             this.saveMoveSnapshot(moveList.get(i));
         }
         this.whiteTurn = this.gamestate.isWhiteTurn();
@@ -660,7 +662,7 @@ public class GameHandler {
 
     public GamestateSnapshot getSnapshot(int moveNumber) {
         for (GamestateSnapshot snapshot : this.snapshotHistory) {
-            if (snapshot.getFullmoveCounter() == moveNumber) {
+            if (snapshot.getMoveCounter() == moveNumber) {
                 this.inSnapshot = moveNumber != this.snapshotHistory.size();
                 return snapshot;
             }

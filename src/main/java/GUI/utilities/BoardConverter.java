@@ -80,7 +80,7 @@ public class BoardConverter {
                 blackQCastle,
                 en_passant.toString().isEmpty() ? "-" :  en_passant.toString(), // if en_passant is "" then it is a - in the fen notation
                 halfmoveClock,
-                fullmoveNumber);
+                fullmoveNumber-1);
 
         return gamestate;
     }

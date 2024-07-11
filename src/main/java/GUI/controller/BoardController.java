@@ -291,6 +291,9 @@ public class BoardController {
 
         // config buttons
         this.drawButton.setOnAction(event -> {
+            if (!this.gameHandler.getPlayer(this.gameHandler.isTurnWhite()).isHuman()) {
+                return;
+            }
             if (this.gameHandler.canDrawFiftyMoves()) {
                 this.setCheckmateAlert(CHECKMATE_TYPE.FIFTY_MOVE_RULE, this.gameHandler.isTurnWhite());
             } else {
@@ -507,6 +510,9 @@ public class BoardController {
             tempPane.getChildren().add(temp);
 
             tempPane.setOnMouseClicked(event -> {
+                if (this.selectedPane == tempPane) {
+                    return;
+                }
                 if (this.selectedHistoryTextPane != null) {
                     ((Text)this.selectedHistoryTextPane.getChildren().get(0)).setFill(Config.defaultTextColor);
                     this.selectedHistoryTextPane.getChildren().get(0).setStyle("");
@@ -554,7 +560,7 @@ public class BoardController {
         this.moveHistoryGridPane.getChildren().clear();
         this.moveHistoryGridPane.getRowConstraints().clear();
         for (GamestateSnapshot sn : this.gameHandler.getSnapshotHistory()) {
-            addMoveToMovelist(sn.getMove(), sn.getFullmoveCounter());
+            addMoveToMovelist(sn.getMove(), sn.getMoveCounter());
         }
     }
 

@@ -27,7 +27,8 @@ public class Gamestate {
     private int halfmoveCounter = 0; // half move counts moves since last pawn capture or pawn move
     private int fullmoveCounter = 0; // full move clock counts the total amount of moves
     private int oldHalfmoveCounter = 0;
-    private int oldFullmoveCounter = 1;
+    private int oldFullmoveCounter = 0;
+    private boolean whiteTurn;
 
     private final Semaphore semaphore = new Semaphore(1); // needed as more than one thread could concurrently do something (e.g., makeMove and snapshot at same time)
 
@@ -50,10 +51,7 @@ public class Gamestate {
         this.enPassantCoordinates = new BoardCoordinate(enPassant);
         this.halfmoveCounter = halfmoveClock;
         this.fullmoveCounter = fullmoveClock;
-        if (turn != this.isWhiteTurn()) {
-            AlertHandler.throwError();
-            throw new GamestateLoadingException("The side passed does not match the side calculated");
-        }
+        this.whiteTurn = turn;
     }
 
     /**
@@ -91,6 +89,7 @@ public class Gamestate {
         this.enPassantCoordinates = new BoardCoordinate(snapshot.getEnPassantCoordinates());
         this.fullmoveCounter = snapshot.getMove() == null ? snapshot.getFullmoveCounter() : snapshot.getFullmoveCounter()+1;
         this.halfmoveCounter = snapshot.getHalfmoveCounter();
+        this.whiteTurn = snapshot.isWhiteTurn();
     }
 
     /**
@@ -98,14 +97,15 @@ public class Gamestate {
      * It takes the clockCounters, because they are needed for GamestateSnapshot creation.
      * @param move: The move taken
      */
-    public void makeMove(Move move) {
+    public void makeMove(Move move, boolean whiteTurn) {
         try {
             this.semaphore.acquire();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            AlertHandler.throwError();
+            throw new ObjectInterruptedException("The semaphore was unexpectedly interrupted.", e);
         }
 
-        boolean whiteTurn = this.fullmoveCounter % 2 == 1;
+        this.whiteTurn = whiteTurn;
 
         Piece piece = this.getPieceAtCoordinates(move.getOldPosition());
         if (piece == null) {
@@ -143,7 +143,9 @@ public class Gamestate {
         }
 
         // update full and half move counter
-        this.oldFullmoveCounter = this.fullmoveCounter++;
+        if (this.whiteTurn) {
+            this.fullmoveCounter++;
+        }
         if (piece.getID() == PIECE_ID.PAWN || move.isCapture()) {
             this.oldHalfmoveCounter = this.halfmoveCounter;
             this.halfmoveCounter = 0;
@@ -197,20 +199,6 @@ public class Gamestate {
     }
 
     /**
-     * Checks if the there is a piece on the given coordinates.
-     * @param coordinates The coordinates to check
-     * @return true if there is a piece, else false
-     */
-    public boolean hasPiece(BoardCoordinate coordinates) {
-        // TODO check if needed
-        Piece piece = this.getPieceAtCoordinates(coordinates);
-        if (piece == null) { // return false if there is no piece at this coordinates
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Checks if there is a usable piece at the current location. Usable pieces is defined as a piece that
      * can be moved in the current turn. So all white pieces are usable pieces if it is currently white's turn.
      * @param coordinates The coordinates to check
@@ -224,50 +212,6 @@ public class Gamestate {
 
         return piece.isWhite() == whiteTurn;
 
-    }
-
-    /**
-     * loads a fresh new default board and resets all values needed: This is equivalent to the FEN notation
-     * that is saved in the variable START_POSITION
-     */
-    public void loadStartPosition() {
-        // TODO check if this is useful
-        // prob not, because a new Gamestate can just be created
-
-        // add all black pieces
-        for (int i = 1; i <= 8; i++) {
-            pieces.add(new Pawn(new BoardCoordinate(i, 7), false));
-        }
-        pieces.add(new Rook(new BoardCoordinate(1, 8), false));
-        pieces.add(new Rook(new BoardCoordinate(8, 8), false));
-        pieces.add(new King(new BoardCoordinate(5, 8), false));
-        pieces.add(new Queen(new BoardCoordinate(4, 8), false));
-        pieces.add(new Knight(new BoardCoordinate(2, 8), false));
-        pieces.add(new Knight(new BoardCoordinate(7, 8), false));
-        pieces.add(new Bishop(new BoardCoordinate(3, 8), false));
-        pieces.add(new Bishop(new BoardCoordinate(6, 8), false));
-
-        // add all white pieces
-        for (int i = 1; i <= 8; i++) {
-            pieces.add(new Pawn(new BoardCoordinate(i, 2), true));
-        }
-        pieces.add(new Rook(new BoardCoordinate(1, 1), true));
-        pieces.add(new Rook(new BoardCoordinate(8, 1), true));
-        pieces.add(new King(new BoardCoordinate(5, 1), true));
-        pieces.add(new Queen(new BoardCoordinate(4, 1), true));
-        pieces.add(new Knight(new BoardCoordinate(2, 1), true));
-        pieces.add(new Knight(new BoardCoordinate(7, 1), true));
-        pieces.add(new Bishop(new BoardCoordinate(3, 1), true));
-        pieces.add(new Bishop(new BoardCoordinate(6, 1), true));
-
-        // all Castling possible
-        this.whiteQCastle = true;
-        this.whiteKCastle = true;
-        this.blackQCastle = true;
-        this.blackKCastle = true;
-        this.halfmoveCounter = 0;
-        this.fullmoveCounter = 0;
-        this.enPassantCoordinates = new BoardCoordinate("-");
     }
 
     /**
@@ -294,6 +238,7 @@ public class Gamestate {
     public GamestateSnapshot getSnapshot(Move move, int whiteClockCounter, int blackClockCounter) {
         return new GamestateSnapshot(
                 this.pieces,
+                this.whiteTurn,
                 this.whiteQCastle,
                 this.whiteKCastle,
                 this.blackQCastle,
@@ -304,21 +249,6 @@ public class Gamestate {
                 whiteClockCounter,
                 blackClockCounter,
                 move);
-    }
-
-    public GamestateSnapshot getStartSnapshot(int whiteClockCounter, int blackClockCounter) {
-        return new GamestateSnapshot(
-                this.pieces,
-                this.whiteQCastle,
-                this.whiteKCastle,
-                this.blackQCastle,
-                this.blackKCastle,
-                this.enPassantCoordinates,
-                this.fullmoveCounter,
-                this.halfmoveCounter,
-                whiteClockCounter,
-                blackClockCounter,
-                null);
     }
 
     /**
@@ -342,10 +272,9 @@ public class Gamestate {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Gamestate)) {
+        if (!(obj instanceof Gamestate other)) {
             return false;
         }
-        Gamestate other = (Gamestate) obj;
         for (Piece piece : this.pieces) {
             if (!other.pieces.contains(piece)) {
                 return false;
@@ -408,16 +337,11 @@ public class Gamestate {
         return null;
     }
 
-    public boolean getSideFromFullmoveCounter() {
-        return this.fullmoveCounter % 2 == 1;
-    }
-
     public boolean isWhiteTurn() {
-        return this.fullmoveCounter%2 == 1;
+        return this.whiteTurn;
     }
 
-    public int getOldFullmoveCounter() {
-        return oldFullmoveCounter;
+    public int getMoveCounter() {
+        return this.whiteTurn ? this.fullmoveCounter * 2 - 1: this.fullmoveCounter * 2;
     }
-
 }
