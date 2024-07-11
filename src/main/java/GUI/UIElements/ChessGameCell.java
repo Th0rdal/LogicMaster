@@ -23,6 +23,9 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a single row element in the list for games to load
+ */
 public class ChessGameCell extends ListCell<ChessGame> {
     private static final Paint WON = Color.GREEN;
     private static final Paint LOST = Color.RED;
@@ -46,6 +49,11 @@ public class ChessGameCell extends ListCell<ChessGame> {
     @FXML
     private Button deleteButton;
 
+    /**
+     * updates/fills the row with data based on the ChessGame given
+     * @param item: the ChessGame it should represent
+     * @param empty: if the row should be empty
+     */
     @Override
     protected void updateItem(ChessGame item, boolean empty) {
         super.updateItem(item, empty);

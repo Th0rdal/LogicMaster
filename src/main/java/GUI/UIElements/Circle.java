@@ -2,6 +2,9 @@ package GUI.UIElements;
 
 import javafx.scene.paint.Color;
 
+/**
+ * represents a circle used to show the player what moves are possible
+ */
 public class Circle extends javafx.scene.shape.Circle{
 
     private static int circleRadius = 15;

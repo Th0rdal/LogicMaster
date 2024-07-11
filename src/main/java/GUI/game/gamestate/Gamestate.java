@@ -1,7 +1,6 @@
 package GUI.game.gamestate;
 
 import GUI.controller.AlertHandler;
-import GUI.exceptions.GamestateLoadingException;
 import GUI.exceptions.ObjectInterruptedException;
 import GUI.game.BoardCoordinate;
 import GUI.game.move.Move;
@@ -26,12 +25,22 @@ public class Gamestate {
     private BoardCoordinate enPassantCoordinates; // the coordinates of a field that can be taken by en Passant
     private int halfmoveCounter = 0; // half move counts moves since last pawn capture or pawn move
     private int fullmoveCounter = 0; // full move clock counts the total amount of moves
-    private int oldHalfmoveCounter = 0;
-    private int oldFullmoveCounter = 0;
     private boolean whiteTurn;
 
     private final Semaphore semaphore = new Semaphore(1); // needed as more than one thread could concurrently do something (e.g., makeMove and snapshot at same time)
 
+    /**
+     * This constructor is used to fill a new Gamestate with values
+     * @param pieces: an ArrayList of all pieces in form of piece objects
+     * @param turn: true if it is whites turn, else false
+     * @param whiteKCastle: true if king castling is possible for white, else false
+     * @param whiteQCastle: true if queen castling is possible for white, else false
+     * @param blackKCastle: true if king castling is possible for black, else false
+     * @param blackQCastle: true if queen castling is possible for black, else false
+     * @param enPassant: A string representing the en-passant position
+     * @param halfmoveClock: the current half move counter
+     * @param fullmoveClock: the current full move counter
+     */
     public Gamestate(
             ArrayList<Piece> pieces,
             boolean turn,
@@ -94,8 +103,8 @@ public class Gamestate {
 
     /**
      * This function handles everything that is needed to be done, when a move was made.
-     * It takes the clockCounters, because they are needed for GamestateSnapshot creation.
      * @param move: The move taken
+     * @param whiteTurn: the side that made the move (true if white)
      */
     public void makeMove(Move move, boolean whiteTurn) {
         try {
@@ -165,10 +174,7 @@ public class Gamestate {
             piece.makeMove(move.getNewPosition()); // make actual move
 
             if (piece.getID() == PIECE_ID.PAWN || move.isCapture()) {
-                this.oldHalfmoveCounter = this.halfmoveCounter;
                 this.halfmoveCounter = 0;
-            } else {
-                this.oldHalfmoveCounter = this.halfmoveCounter++;
             }
         }
 
@@ -232,6 +238,7 @@ public class Gamestate {
      * Checks if there is a usable piece at the current location. Usable pieces is defined as a piece that
      * can be moved in the current turn. So all white pieces are usable pieces if it is currently white's turn.
      * @param coordinates The coordinates to check
+     * @param whiteTurn: The side to check (true if white)
      * @return true if the piece is usable, else false
      */
     public boolean isUsablePiece(BoardCoordinate coordinates, boolean whiteTurn) {
@@ -281,7 +288,20 @@ public class Gamestate {
                 move);
     }
 
+    /**
+     * Creates a snapshot of the current state of the Gamestate object.
+     * @param whiteClockCounter: the remaining time of the white player
+     * @param blackClockCounter: the remaining time of the black player
+     * @return GamestateSnapshot instance representing the current Gamestate state
+     */
     public GamestateSnapshot getStartSnapshot (int whiteClockCounter, int blackClockCounter) {
+        try {
+            this.semaphore.acquire();
+        } catch (InterruptedException e) {
+            AlertHandler.throwError();
+            throw new ObjectInterruptedException("semaphore interrupted unexpectedly", e);
+        }
+
         return new GamestateSnapshot(
                 this.pieces,
                 !this.whiteTurn,
@@ -316,6 +336,12 @@ public class Gamestate {
         return snapshot;
     }
 
+    /**
+     * override the equal function of Gamestate to check if 2 gamestates are equal. The equality will be checked,
+     * by checking pieces, castling, move counters and en-passant coordinates
+     * @param obj: the other gamestate
+     * @return: true if the gamestates are equal
+     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Gamestate other)) {
@@ -387,6 +413,10 @@ public class Gamestate {
         return this.whiteTurn;
     }
 
+    /**
+     * returns the current move counter based on the full move counter
+     * @return int representing the current move
+     */
     public int getMoveCounter() {
         return this.whiteTurn ? this.fullmoveCounter * 2 - 1: this.fullmoveCounter * 2;
     }

@@ -1,5 +1,9 @@
 package GUI.player.algorithm;
 
+/**
+ * represents an algorithm in teh algorithm folder
+ * optimization can be record class?
+ */
 public class AIFile {
     private final String path;
     private final String name;

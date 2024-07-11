@@ -21,6 +21,9 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * handles loading and saving the configuration from config.json. Designed as singleton
+ */
 public class Config {
     public static final String START_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     public static final int MAX_CHARACTER_NAME = 40;
@@ -42,6 +45,10 @@ public class Config {
         this.loadConfig();
     }
 
+    /**
+     * returns the instance of config if it exists, else it creates it beforehand
+     * @return Config instance
+     */
     public static Config getInstance() {
         if(instance == null) {
             instance = new Config();
@@ -49,6 +56,9 @@ public class Config {
         return instance;
     }
 
+    /**
+     * saves the current Configuration to the config.json file
+     */
     public void saveConfig() {
         Gson gson = new GsonBuilder().registerTypeAdapter(Timecontrol.class, new TimecontrolSerializer()).setPrettyPrinting().create();
         String json = gson.toJson(Config.getInstance());
@@ -60,6 +70,9 @@ public class Config {
          }
     }
 
+    /**
+     * loads the current Configuration from the config.json file
+     */
     public void loadConfig() {
         Gson gson = new GsonBuilder().registerTypeAdapter(Timecontrol.class, new TimecontrolSerializer()).setPrettyPrinting().create();
         try (FileReader reader = new FileReader("config.json")) {
@@ -80,6 +93,10 @@ public class Config {
          }
     }
 
+    /**
+     * remove time control from the configuration
+     * @param timecontrol: the time control object to remove
+     */
     public void removeTimecontrol(Timecontrol timecontrol) {
         this.timecontrol.remove(timecontrol);
     }
@@ -92,6 +109,10 @@ public class Config {
         this.timecontrol = timecontrol;
     }
 
+    /**
+     * add a time control to the array
+     * @param timecontrol: the time control to add
+     */
     public void addTimecontrol(Timecontrol timecontrol) {
         for (Timecontrol temp : this.timecontrol) {
             if (temp.equals(timecontrol)) {
@@ -101,6 +122,10 @@ public class Config {
         this.timecontrol.add(timecontrol);
     }
 
+    /**
+     * gets all files that are in the algorithms folder (.gitkeep is an exception, because it is not seen as folder)
+     * @return: ArrayList of AIFiles with all files that are in teh algorithms folder
+     */
     public static ArrayList<AIFile> getAiFiles() {
         if (Config.aiFiles.isEmpty()) {
             Path directoryPath = Paths.get(Config.aiFilesPath);

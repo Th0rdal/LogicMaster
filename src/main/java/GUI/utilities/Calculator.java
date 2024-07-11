@@ -1,5 +1,8 @@
 package GUI.utilities;
 
+/**
+ * defines some calculations needed.
+ */
 public class Calculator {
 
     /**

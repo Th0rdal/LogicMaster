@@ -13,6 +13,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * The controller used by the gameSelection.fxml page
+ */
 public class GameSelectionController {
 
     @FXML
@@ -20,12 +23,15 @@ public class GameSelectionController {
     @FXML
     private ListView<ChessGame> gameList;
 
-    private GameHandler gameHandler;
+    private final GameHandler gameHandler;
 
     public GameSelectionController(GameHandler gameHandler) {
         this.gameHandler = gameHandler;
     }
 
+    /**
+     * creates the page visually and adds event listeners
+     */
     public void loadElements() {
         this.backButton.setOnAction(e -> {
             SceneHandler.getInstance().activate("index");

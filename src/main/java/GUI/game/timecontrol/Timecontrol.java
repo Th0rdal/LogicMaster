@@ -8,20 +8,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * represents a time control of a chess game
+ */
 public class Timecontrol {
     private final int startTime;
     private final int increment;
     private final HashMap<Integer, String> timecontrolChangeMap;
-    public static final Timecontrol zeroTimecontrol = new Timecontrol(0, 0, false); // used to display custom in index page
+    public static final Timecontrol zeroTimecontrol = new Timecontrol("no timecontrol"); // used to display custom in index page
     private final boolean custom;
 
-    public Timecontrol(int startTime, int increment, boolean custom) {
-        this.startTime = startTime;
-        this.increment = increment;
-        this.timecontrolChangeMap = new HashMap<>();
-        this.custom = custom;
-    }
-
+    /**
+     * Timecontrol constructor
+     * @param timecontrolString: the timecontrol in string representation
+     */
     public Timecontrol(String timecontrolString) {
         try {
             if (Objects.equals(timecontrolString, "no timecontrol")) {
@@ -61,6 +61,11 @@ public class Timecontrol {
         }
     }
 
+    /**
+     * used to interpret a start time (so if it has a . in it, it is correctly interpreted)
+     * @param startTimeString: the start time in string format
+     * @return int representing the time of the startTimeString in minutes
+     */
     private int interpretStartTimeString(String startTimeString) {
         if (startTimeString.contains(".")) {
             return Integer.parseInt(startTimeString.substring(0, startTimeString.indexOf("."))) * 60
@@ -69,10 +74,20 @@ public class Timecontrol {
         return Integer.parseInt(startTimeString) * 60;
     }
 
+    /**
+     * returns true if there are changes for the current move counter
+     * @param fullmoveCounter: the full move counter to check
+     * @return true if there are, else false
+     */
     public boolean hasTimecontrolSpecialChanges(int fullmoveCounter) {
         return this.timecontrolChangeMap.containsKey(fullmoveCounter);
     }
 
+    /**
+     * returns the changes to start time and increment in an array of size 2, based on the current full move. If there are no changes, it returns 0 for the values
+     * @param fullmoveCounter: the full move counter to use
+     * @return int array with start time and increment (start time index 0)
+     */
     public int[] getTimecontrolChanges(int fullmoveCounter) {
         if (!hasTimecontrolSpecialChanges(fullmoveCounter)) {
             return new int[]{0, 0};
@@ -82,6 +97,11 @@ public class Timecontrol {
                 this.interpretIncrement(temp.substring(temp.indexOf("+")+1))};
     }
 
+   /**
+     * used to interpret an increment (so if it has a . in it, it is correctly interpreted)
+     * @param incrementString: the increment in string format
+     * @return int representing the time of the incrementString in seconds
+     */
     public int interpretIncrement(String incrementString) {
         if (incrementString.contains(".")) {
             return Integer.parseInt(incrementString.substring(0, incrementString.indexOf("."))) * 60
@@ -137,6 +157,11 @@ public class Timecontrol {
         return true;
     }
 
+    /**
+     * converts the byte array of times into an ArrayList of integers
+     * @param timeBytes: the byte representation of the time after the move was made
+     * @return: ArrayList of integers representing the counter of time after the move was taken
+     */
     public static ArrayList<Integer> convertByteTimeToArrayList(byte[] timeBytes) {
         ArrayList<Integer> list = new ArrayList<>();
         if (timeBytes == null) {

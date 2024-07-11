@@ -37,6 +37,13 @@ public class ImageLoader {
 
 
     }
+
+    /**
+     * get the corresponding image based on piece id and color
+     * @param id: the id of the piece
+     * @param isWhite: the color of the piece
+     * @return: Image corresponding to the piece and color
+     */
     public static Image getImage(PIECE_ID id, boolean isWhite) {
         if (isWhite) {
             return switch (id) {

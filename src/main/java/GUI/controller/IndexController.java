@@ -48,6 +48,9 @@ public class IndexController {
      @FXML
      private Button saveTimeControlButton;
 
+     /**
+     * creates the page visually and adds event listeners
+     */
      public void loadElements(GameHandler gameHandler) {
          // defining actions
          this.startGameButton.setOnAction(e -> {

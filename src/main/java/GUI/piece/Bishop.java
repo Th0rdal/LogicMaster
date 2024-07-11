@@ -22,9 +22,4 @@ public class Bishop extends Piece{
         super(bishop);
     }
 
-    @Override
-    public void makeMove(BoardCoordinate newCoordinates) {
-        this.coordinate = newCoordinates;
-    }
-
 }

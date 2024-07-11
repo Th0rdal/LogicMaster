@@ -28,22 +28,4 @@ public class Pawn extends Piece{
         this.coordinate = newCoordinates;
     }
 
-    public Piece promote(PIECE_ID id) {
-        switch (id) {
-            case BISHOP -> {
-                return new Bishop(this.coordinate, this.isWhite);
-            }
-            case KNIGHT -> {
-                return new Knight(this.coordinate, this.isWhite);
-            }
-            case ROOK -> {
-                return new Rook(this.coordinate, this.isWhite);
-            }
-            case QUEEN -> {
-                return new Queen(this.coordinate, this.isWhite);
-            }
-        }
-        return null;
-    }
-
 }

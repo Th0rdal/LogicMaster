@@ -13,11 +13,8 @@ import GUI.piece.*;
 import GUI.UIElements.Circle;
 import GUI.utilities.*;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -36,8 +33,11 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * The controller used by the board.fxml page
+ */
 public class BoardController {
-
+    private static final int moveHistoryGridPaneHeight = 50;
     @FXML
     private GridPane visualBoard;
     @FXML
@@ -69,23 +69,21 @@ public class BoardController {
     @FXML
     private VBox leftSideBar;
 
-    private static final int UP_CLOCK_LABEL = 1;
-    private static final int DOWN_CLOCK_LABEL = 2;
-
     private BlockingQueue<Move> moveQueue = null;
     private ArrayList<Move> possibleMoveList;
 
     private Pane selectedPane;  //represents the currently selected pane
     private BoardCoordinate startCoordinates;   //saves the start coordinations of the selected pane
-    private boolean whiteSideDown = true;
+    private boolean whiteSideDown = true; // true if the starting position of the white side is down
     private GameHandler gameHandler;
-
-    private final int moveHistoryGridPaneHeight = 50;
 
     private Pane promotionSelectedPane = null;
     private StackPane selectedHistoryTextPane = null;
     private Move move = null;
 
+    /**
+     * mouse event being fired if a new move is made and the move list should set the new move as selected
+     */
     private static final MouseEvent mouseClickedHistoryTextSelected = new MouseEvent(
                 MouseEvent.MOUSE_CLICKED,
                 0, 0,
@@ -97,26 +95,7 @@ public class BoardController {
                 true, true,
                 null);
 
-    //promotion event handling
-    private final EventHandler<MouseEvent> onMouseMoveHandler = event -> {
-        if (this.promotionSelectedPane != null) {
-            if (this.promotionSelectedPane.getBoundsInParent().contains(event.getX(), event.getY())) {
-                return;
-            } else {
-                this.promotionSelectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
-            }
-        }
-        for (Node node : this.promotionPane.getChildren()) {
-            if (node instanceof Pane tempPane) {
-                if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) {
-                    promotionSelectedPane = tempPane;
-                    promotionSelectedPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
-                }
-            }
-        }
-    };
-
-    // player movement event handling
+    /** handles what happens when the mouse is pressed. Selects the current field for highlighting */
     private final EventHandler<MouseEvent> playerOnMousePressed = event -> {
         for (Node node : visualBoard.getChildren()) {
             if (node instanceof Pane tempPane && !(node instanceof StackPane)) {
@@ -140,7 +119,7 @@ public class BoardController {
                         }
                         if (AlertHandler.showConfirmationAlertAndWait("New game?",
                                 "You are currently in a snapshot of a previous move. Do you wish to start a new game from this position?")) {
-                            if (AlertHandler.showChoiceAlertYesNo(AlertType.CONFIRMATION, "save old game?", "Do you wish to save the game in the database?")) {
+                            if (AlertHandler.showConfirmationAlertAndWait("save old game?", "Do you wish to save the game in the database?")) {
                                 this.gameHandler.saveCurrentInDatabase();
                             }
                             new Thread(() -> { // new thread so javafx thread never has to wait for anything
@@ -205,6 +184,7 @@ public class BoardController {
         }
     };
 
+    /** handles mouse dragging when a piece is selected */
     private final EventHandler<MouseEvent> playerOnMouseDragged = event -> {
             if (selectedPane == null) {
                 return;
@@ -219,13 +199,15 @@ public class BoardController {
             tempView.setLayoutX(tempX);
             tempView.setLayoutY(tempY);
     };
+
+    /** handles when the mouse is released. If a pane is selected, it checks if a move is possible */
     private final EventHandler<MouseEvent> playerOnMouseReleased = event -> {
         if (selectedPane != null) {
             this.checkMovePossible((int) event.getX(), (int) event.getY());
         }
     };
 
-    //promotion event handler
+    /** handles mouse clicking while in the promotion pane */
     private final EventHandler<MouseEvent> onMouseClickHandler = event -> {
         if (event.getButton() == MouseButton.PRIMARY) {
             // chosen
@@ -255,6 +237,30 @@ public class BoardController {
         }
     };
 
+    /** handles the highlighting in the promotion pane */
+    private final EventHandler<MouseEvent> onMouseMoveHandler = event -> {
+        if (this.promotionSelectedPane != null) {
+            if (this.promotionSelectedPane.getBoundsInParent().contains(event.getX(), event.getY())) {
+                return;
+            } else {
+                this.promotionSelectedPane.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+            }
+        }
+        for (Node node : this.promotionPane.getChildren()) {
+            if (node instanceof Pane tempPane) {
+                if (tempPane.getBoundsInParent().contains(event.getX(), event.getY())) {
+                    promotionSelectedPane = tempPane;
+                    promotionSelectedPane.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, null, null)));
+                }
+            }
+        }
+    };
+
+
+    /**
+     * loads the promotion pane with the given pormotion possibilities
+     * @param isWhite: true if white promotes, else false
+     */
     public void loadPromotionPane(boolean isWhite) {
         //399 because of weird calc with border.
         ImageView view = new ImageView(ImageLoader.getImage(PIECE_ID.ROOK, isWhite));
@@ -325,7 +331,7 @@ public class BoardController {
             } else {
                 if (this.gameHandler.getPlayer(!this.gameHandler.isTurnWhite()).isHuman()) {
                     String player = this.gameHandler.getPlayer(this.gameHandler.isTurnWhite()).getName();
-                    boolean result = AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "Draw offer", player + " offered a draw. Do you want to accept?");
+                    boolean result = AlertHandler.showConfirmationAlertAndWait("Draw offer", player + " offered a draw. Do you want to accept?");
                     if (result) {
                         Move move = new Move(true);
                         try {
@@ -393,6 +399,9 @@ public class BoardController {
 
     }
 
+    /**
+     * loads the board. That consists in loading the board row headers, board column headers, the clocks and the pieces.
+     */
     public void loadBoard() {
         for (Node node : this.boardRowHeaders.getChildren()) {
             String text = this.whiteSideDown ? String.valueOf(8 - GridPane.getRowIndex(node)) : String.valueOf(GridPane.getRowIndex(node)+1);
@@ -418,6 +427,9 @@ public class BoardController {
         loadPieces();
     }
 
+    /**
+     * loads the pieces into the board. It uses the getPieces method from gameHandler to get the piece positions.
+     */
     public void loadPieces() {
         this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
         for (Piece piece : this.gameHandler.getPieces()) {
@@ -427,6 +439,10 @@ public class BoardController {
         }
     }
 
+    /**
+     * loads the pieces into the board. It gets the piece positions by using a snapshot from gameHandler.
+     * @param moveNumber: the move number of the snapshot to load
+     */
     public void loadPieces(int moveNumber) {
         this.visualBoard.getChildren().removeIf(node -> node instanceof Pane && !(node instanceof StackPane));
         for (Piece piece : this.gameHandler.getSnapshot(moveNumber).getPieces()) {
@@ -436,6 +452,10 @@ public class BoardController {
         }
     }
 
+    /**
+     * sets the event filter for the player to move pieces
+     * @param moveQueue: the queue to put the move in after it is done
+     */
     public void setPlayerEventHandling(BlockingQueue<Move> moveQueue) {
         visualBoard.addEventFilter(MouseEvent.MOUSE_PRESSED, this.playerOnMousePressed);
         visualBoard.addEventFilter(MouseEvent.MOUSE_DRAGGED, this.playerOnMouseDragged);
@@ -443,6 +463,9 @@ public class BoardController {
         this.moveQueue = moveQueue;
     }
 
+    /**
+     * removes the event filter (players can no longer move pieces)
+     */
     public void resetPlayerEventHandling() {
         visualBoard.removeEventFilter(MouseEvent.MOUSE_PRESSED, playerOnMousePressed);
         visualBoard.removeEventFilter(MouseEvent.MOUSE_DRAGGED, playerOnMouseDragged);
@@ -450,7 +473,7 @@ public class BoardController {
     }
 
     /**
-     * handles a made move
+     * checks if a move is possible based on the position of the mouse
      * @param x: x position of the mouse
      * @param y: y position of the mouse
      */
@@ -508,6 +531,9 @@ public class BoardController {
         }
     }
 
+    /**
+     * add a move to the move queue
+     */
     private void putMove() {
         try {
             this.moveQueue.put(move);
@@ -518,12 +544,19 @@ public class BoardController {
         this.afterMove();
     }
 
+    /**
+     * executes functions to be executed after a move was made.
+     * This is currently only turning the board if the corresponding check box is set
+     */
     public void afterMove() {
         if (this.turnBoardAfterMoveCheckBox.isSelected()) {
             this.turnBoardButton.fire();
         }
     }
 
+    /**
+     * resets the currently selected pane
+     */
     private void resetSelected() {
         ImageView tempView = (ImageView) selectedPane.getChildren().get(0);
         tempView.setLayoutX(0);
@@ -533,10 +566,15 @@ public class BoardController {
         visualBoard.getChildren().removeIf(node -> node instanceof Circle);
     }
 
-    public void addMoveToMovelist(Move move, int fullmovecounter) {
+    /**
+     * adds a move to the move list on the right side of the board.
+     * @param move: the move to add
+     * @param numberMove: the move number (used to calculate the position in the list)
+     */
+    public void addMoveToMovelist(Move move, int numberMove) {
         Platform.runLater(() -> {
-            int moveCounter = fullmovecounter - 1;
-            Text temp = new Text(fullmovecounter + ": " + move.toString()); //-1 because gamestate is already incremented
+            int moveCounter = numberMove - 1;
+            Text temp = new Text(numberMove + ": " + move.toString()); //-1 because gamestate is already incremented
             StackPane tempPane = new StackPane();
             tempPane.getChildren().add(temp);
 
@@ -552,7 +590,7 @@ public class BoardController {
                             (Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0,
                             ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':')));
                     int moveNumber = Integer.parseInt(temp.getText().substring(0, temp.getText().indexOf(':')));
-                    if (moveNumber !=  fullmovecounter || currentFieldNumber != fullmovecounter-1) {
+                    if (moveNumber !=  numberMove || currentFieldNumber != numberMove-1) {
                         this.loadPieces(moveNumber);
                     }
                 }
@@ -566,7 +604,7 @@ public class BoardController {
 
             // if selectedHistoryText is the last move taken or is empty, fire event
             if (this.selectedHistoryTextPane != null &&
-                    Integer.parseInt(((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0, ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))) + 1 == fullmovecounter) {
+                    Integer.parseInt(((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().substring(0, ((Text)this.selectedHistoryTextPane.getChildren().get(0)).getText().indexOf(':'))) + 1 == numberMove) {
                 temp.fireEvent(BoardController.mouseClickedHistoryTextSelected);
             } else if (this.selectedHistoryTextPane == null) {
                 temp.fireEvent(BoardController.mouseClickedHistoryTextSelected);
@@ -586,6 +624,9 @@ public class BoardController {
         });
     }
 
+    /**
+     * reloads the move history on the right side
+     */
     public void reloadMoveHistory() {
         this.selectedHistoryTextPane = null;
         this.moveHistoryGridPane.getChildren().clear();
@@ -595,6 +636,11 @@ public class BoardController {
         }
     }
 
+    /**
+     * sets an alert based on the checkmate type
+     * @param type: the type of ckeckmate
+     * @param whitePlayer: the side that lost
+     */
     public void setCheckmateAlert(CHECKMATE_TYPE type, boolean whitePlayer) {
         String text = switch (type) {
             case DRAW -> "The players agreed to a draw";
@@ -609,7 +655,7 @@ public class BoardController {
 
 
 
-        if (AlertHandler.showChoiceAlertYesNo(AlertType.INFORMATION, "Game over!!!", text)) {
+        if (AlertHandler.showConfirmationAlertAndWait("Game over!!!", text)) {
             this.gameHandler.saveCurrentInDatabase();
         }
     }

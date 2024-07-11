@@ -4,6 +4,9 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
+/**
+ * converts a TimeControl into a json representation for saving in json files
+ */
 public class TimecontrolSerializer implements JsonSerializer<Timecontrol> {
 
     @Override

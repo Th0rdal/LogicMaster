@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * Represents a move
- * IDEA: get this from the algorithm and convert it into this form to save it in the DB later on
+ * Represents a move on the board
  */
 public class Move {
 
@@ -27,11 +26,27 @@ public class Move {
     private boolean draw = false;
     private SPECIAL_MOVE specialMove; // represents if a special move was made (e.g., en passant)
 
+    /**
+     * only use this constructor if the move was a draw by agreement. It is used to communicate between controller and gameHandler
+     * @param draw: if it was a draw
+     */
     public Move(boolean draw) { // if a draw offer is accepted this is used to communicate with the GameHandler
         this.draw = draw;
         this.drawOffered = true;
     }
 
+    /**
+     * creates move based on all variables
+     * @param piece_ID: the id of the piece that made the move
+     * @param oldPosition: the position the piece was before the move was made
+     * @param newPosition: the position the piece was after the move was made
+     * @param capture: true if a piece was captured
+     * @param specialMove: the special move if one was made
+     * @param promotion_ID: the id of the piece that the given piece gets promoted to
+     * @param check: true if the piece made a check
+     * @param checkmate: true if the move checkmated the opponent
+     * @param draw: true if the game was a draw
+     */
     public Move(PIECE_ID piece_ID,
                 BoardCoordinate oldPosition,
                 BoardCoordinate newPosition,
@@ -53,6 +68,12 @@ public class Move {
         this.draw = draw;
     }
 
+    /**
+     * create a move out of its byte representation
+     * @param base
+     * @param base2
+     * @param extended
+     */
     public Move(byte base, byte base2, byte extended) {
         // base ->  3 bit piece, capture, check, checkmate, draw, none
         // base2 -> 3 bit posX end, 3 bit poxY end, promotion, en passant
@@ -89,6 +110,10 @@ public class Move {
 
     }
 
+    /**
+     * copy constructor
+     * @param move: move to copy
+     */
     public Move(Move move) {
         this.piece_ID = move.piece_ID;
         this.oldPosition = move.oldPosition;
@@ -102,6 +127,10 @@ public class Move {
         this.drawOffered = move.drawOffered;
     }
 
+    /**
+     * creates move based on full notation string
+     * @param moveString: the full notation string
+     */
     public Move(String moveString) {
         int counter = 0;
         try {
@@ -153,6 +182,10 @@ public class Move {
 
     }
 
+    /**
+     * overwrites the toString function of move
+     * @return: full notation string representation of the move
+     */
     @Override
     public String toString() {
         if (this.specialMove == SPECIAL_MOVE.QUEEN_CASTLE) {
@@ -188,10 +221,19 @@ public class Move {
         return builder.toString();
     }
 
+    /**
+     * checks if the pawn moved 2 squares
+     * @return: true if the pawn moved 2 squares
+     */
     public boolean pawnMoved2Squares() {
         return this.piece_ID == PIECE_ID.PAWN && Math.abs(this.oldPosition.getYLocation() - this.newPosition.getYLocation()) == 2;
     }
 
+    /**
+     * converts a byte array into an ArrayList of representing moves
+     * @param byteMoves: the byte array of moves
+     * @return: ArrayList of moves after converting them from the bytes
+     */
     public static ArrayList<Move> convertByteMovesToArrayList(byte[] byteMoves) {
         ArrayList<Move> moves = new ArrayList<>();
         for (int i = 0; i < byteMoves.length; i=i+3) {
@@ -200,6 +242,10 @@ public class Move {
         return moves;
     }
 
+    /**
+     * convert the move into byte representation
+     * @return: the move as byte array representation (always containing 3 bytes)
+     */
     public byte[] convertToByte() {
         // base ->  3 bit piece, capture, check, checkmate, draw, none
         // base2 -> 3 bit posX end, 3 bit poxY end, promotion, en passant
@@ -221,6 +267,11 @@ public class Move {
         return moveBytes;
     }
 
+    /**
+     * converts a byte representing the piece id to the PIECE_ID enum
+     * @param pieceByte: byte representation of the piece ID
+     * @return
+     */
     private PIECE_ID convertByteToPieceID(int pieceByte) {
         return switch (pieceByte) {
             case 0 -> PIECE_ID.PAWN;
@@ -236,6 +287,10 @@ public class Move {
         };
     }
 
+    /**
+     * converts a piece id into its byte representation
+     * @return: the piece id in byte representation
+     */
     private byte convertPieceIDToByte() {
         if (this.specialMove == SPECIAL_MOVE.KING_CASTLE) {
             return (byte) 6;
@@ -252,16 +307,42 @@ public class Move {
         };
     }
 
+    /**
+     * checks if this move is a castling move.
+     * @param coordinate: the end coordinates of the piece (needed, because if the move is a castle move, start and end coordinates are empty)
+     * @return
+     */
+    public boolean isCastlingMove(BoardCoordinate coordinate) {
+        if (this.specialMove == SPECIAL_MOVE.KING_CASTLE
+                && coordinate.equals(new BoardCoordinate("G1"))
+                && this.piece_ID == PIECE_ID.KING) {
+
+            return true;
+        } else if (this.specialMove == SPECIAL_MOVE.KING_CASTLE
+                && coordinate.equals(new BoardCoordinate("G8"))
+                && this.piece_ID == PIECE_ID.KING) {
+
+            return true;
+        }else if (this.specialMove == SPECIAL_MOVE.QUEEN_CASTLE
+                && coordinate.equals(new BoardCoordinate("C1"))
+                && this.piece_ID == PIECE_ID.KING) {
+
+            return true;
+        } else if (this.specialMove == SPECIAL_MOVE.QUEEN_CASTLE
+                && coordinate.equals(new BoardCoordinate("C8"))
+                && this.piece_ID == PIECE_ID.KING) {
+
+            return true;
+        }
+        return false;
+    }
+
     public BoardCoordinate getOldPosition() {
         return oldPosition;
     }
 
     public BoardCoordinate getNewPosition() {
         return newPosition;
-    }
-
-    public PIECE_ID getPiece_ID() {
-        return piece_ID;
     }
 
     public PIECE_ID getPromotion_ID() {
@@ -290,28 +371,4 @@ public class Move {
         return specialMove;
     }
 
-    public boolean isCastlingMove(BoardCoordinate coordinate) {
-        if (this.specialMove == SPECIAL_MOVE.KING_CASTLE
-                && coordinate.equals(new BoardCoordinate("G1"))
-                && this.piece_ID == PIECE_ID.KING) {
-
-            return true;
-        } else if (this.specialMove == SPECIAL_MOVE.KING_CASTLE
-                && coordinate.equals(new BoardCoordinate("G8"))
-                && this.piece_ID == PIECE_ID.KING) {
-
-            return true;
-        }else if (this.specialMove == SPECIAL_MOVE.QUEEN_CASTLE
-                && coordinate.equals(new BoardCoordinate("C1"))
-                && this.piece_ID == PIECE_ID.KING) {
-
-            return true;
-        } else if (this.specialMove == SPECIAL_MOVE.QUEEN_CASTLE
-                && coordinate.equals(new BoardCoordinate("C8"))
-                && this.piece_ID == PIECE_ID.KING) {
-
-            return true;
-        }
-        return false;
-    }
 }

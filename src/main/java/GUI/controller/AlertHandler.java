@@ -6,7 +6,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -15,6 +14,13 @@ public class AlertHandler {
     // all alert functions define alert twice. once in Platfor.runLater and once without. Alert can only be defined in javafx thread
 
 
+    /**
+     * shows the user an alert with the given title and content. If wait is set, the ui will wait until the user handles the alert
+     * @param type: the type of alert
+     * @param title: the title of the alert
+     * @param content: the body of the alert
+     * @param wait: true if the ui should wait for userinput
+     */
     private static void showAlert(Alert.AlertType type, String title, String content, boolean wait) {
         CompletableFuture<Optional<ButtonType>> future = new CompletableFuture<>();
         if (Platform.isFxApplicationThread()) {
@@ -44,54 +50,32 @@ public class AlertHandler {
         }
     }
 
+    /**
+     * A wrapper function for showAlert, which does not wait for the user to handle the alert
+     * @param type: the type of the alert
+     * @param title: the title of the alert
+     * @param content: the body of the alert
+     */
     public static void showAlert(Alert.AlertType type, String title, String content) {
         AlertHandler.showAlert(type, title, content, false);
     }
 
+    /**
+     * A wrapper function for showAlert, which makes the ui wait for the user to handle the alert
+     * @param type
+     * @param title
+     * @param content
+     */
     public static void showAlertAndWait(Alert.AlertType type, String title, String content) {
         AlertHandler.showAlert(type, title, content, true);
     }
 
-    public static boolean showChoiceAlertYesNo(Alert.AlertType type, String title, String content) {
-        CompletableFuture<Optional<ButtonType>> future = new CompletableFuture<>();
-
-        if (Platform.isFxApplicationThread()) {
-            Alert alert = new Alert(type);
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.setContentText(content);
-
-            ButtonType buttonYes = new ButtonType("YES");
-            ButtonType buttonNo = new ButtonType("NO");
-            alert.getButtonTypes().clear();
-            alert.getButtonTypes().addAll(buttonYes, buttonNo);
-
-            Optional<ButtonType> result = alert.showAndWait();
-            return result.isPresent() && result.get() == buttonYes;
-        } else {
-            Platform.runLater(() -> {
-                Alert alert = new Alert(type);
-                alert.setTitle(title);
-                alert.setHeaderText(null);
-                alert.setContentText(content);
-
-                ButtonType buttonYes = new ButtonType("YES");
-                ButtonType buttonNo = new ButtonType("NO");
-                alert.getButtonTypes().clear();
-                alert.getButtonTypes().addAll(buttonYes, buttonNo);
-
-                Optional<ButtonType> result = alert.showAndWait();
-                future.complete(result);
-            });
-            try {
-                return future.get().isPresent() && Objects.equals(future.get().get().getText(), "YES");
-            } catch (ExecutionException | InterruptedException e) {
-                AlertHandler.throwError();
-                throw new ProblemWhileWaitingException("Something went wrong while waiting for a future", e);
-            }
-        }
-    }
-
+    /**
+     * shows a confirmation alert and waits for the user to handle the alert. Returns true or false, depending on the button pressed
+     * @param title: the title of the alert
+     * @param content: the body of the alert
+     * @return: true if the yes button was pressed, otherwise false
+     */
     public static boolean showConfirmationAlertAndWait(String title, String content) {
         CompletableFuture<Optional<ButtonType>> future = new CompletableFuture<>();
 
@@ -122,6 +106,13 @@ public class AlertHandler {
         }
     }
 
+    /**
+     * shows a confirmation alert and waits for the user to handle the alert. The buttons can be given in a String ArrayList.
+     * @param title: the title of the alert
+     * @param content: the body of the alert
+     * @param buttonList: ArrayList of strings with all button names
+     * @return: the button string that was pressed
+     */
     public static String showCustomConfirmationAlertAndWait(String title, String content, ArrayList<String> buttonList) {
         CompletableFuture<Optional<ButtonType>> future = new CompletableFuture<>();
 
@@ -166,6 +157,9 @@ public class AlertHandler {
         }
     }
 
+    /**
+     * notifies the user that an error occurred
+     */
     public static void throwError() {
         CompletableFuture<Optional<ButtonType>> future = new CompletableFuture<>();
 
@@ -196,6 +190,11 @@ public class AlertHandler {
         }
     }
 
+    /**
+     * notifies the user that an error occurs and waits for the user to handle the alert
+     * @param title: the title of the alert
+     * @param content: the body of the alert
+     */
     public static void throwWarningAndWait(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);

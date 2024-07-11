@@ -12,17 +12,27 @@ import javafx.scene.layout.Pane;
 public abstract class Piece {
 
     protected BoardCoordinate coordinate; // coordinates of the piece
-    protected String path; // path to the image TODO replace with a new class that loads and returns based on id
+    protected String path; // path to the image
     protected PIECE_ID id; // piece ID
     protected boolean isWhite; // true if the piece is white
     private Pane thisPane = null;
 
+    /**
+     * piece constructor
+     * @param id: the id of the piece
+     * @param coordinate: the coordinates of the piece
+     * @param isWhite: the color of the piece
+     */
     public Piece(PIECE_ID id, BoardCoordinate coordinate, boolean isWhite) {
         this.id = id;
         this.coordinate = coordinate;
         this.isWhite = isWhite;
     }
 
+    /**
+     * copy constructor
+     * @param piece
+     */
     public Piece(Piece piece) {
         this.coordinate = piece.coordinate;
         this.path = piece.path;
@@ -31,11 +41,18 @@ public abstract class Piece {
         this.thisPane = piece.thisPane;
     }
 
-    public abstract void makeMove(BoardCoordinate newCoordinates); // change to be a move from a movelist
+    /**
+     * makes a move (changes the coordinates of the piece)
+     * @param newCoordinates: new coordinates after the move
+     */
+    public void makeMove(BoardCoordinate newCoordinates) {
+        this.coordinate = newCoordinates;
+    }
 
     /**
      * Prepares the Pane to be added to the board
      * @param imageView:  ImageView representing the image
+     * @param size: the size of the pane the image is in
      * @return Pane wrapped around the ImageView
      */
     protected Pane prepareImage(ImageView imageView, int size) {
@@ -99,6 +116,11 @@ public abstract class Piece {
         throw new IllegalArgumentException(message);
     }
 
+    /**
+     * returns the piece image in the given size as pane
+     * @param size: the size of the pane
+     * @return Pane with the image
+     */
     public Pane getPieceImage(int size) {
         return this.prepareImage(new ImageView(ImageLoader.getImage(this.id, this.isWhite)), size);
     }

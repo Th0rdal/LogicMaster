@@ -26,16 +26,16 @@ public class GamestateSnapshot {
 
     /**
      * Create GamestateSnapshot
-     * @param pieces
-     * @param whiteQCastle
-     * @param whiteKCastle
-     * @param blackQCastle
-     * @param blackKCastle
-     * @param enPassantCoordinates
-     * @param fullmoveCounter
-     * @param halfmoveCounter
-     * @param clockWhitePlayer
-     * @param clockBlackPlayer
+     * @param pieces: an ArrayList of all pieces in form of piece objects
+     * @param whiteKCastle: true if king castling is possible for white, else false
+     * @param whiteQCastle: true if queen castling is possible for white, else false
+     * @param blackKCastle: true if king castling is possible for black, else false
+     * @param blackQCastle: true if queen castling is possible for black, else false
+     * @param enPassantCoordinates: A string representing the en-passant position
+     * @param fullmoveCounter: the current full move counter
+     * @param halfmoveCounter: the current half move counter
+     * @param clockWhitePlayer: the current clock counter of white
+     * @param clockBlackPlayer: the current clock counter of black
      */
     public GamestateSnapshot(ArrayList<Piece> pieces,
                              boolean whiteTurn,
@@ -146,6 +146,10 @@ public class GamestateSnapshot {
         }
     }
 
+    /**
+     * returns the current move counter based on the full move counter
+     * @return int representing the current move
+     */
     public int getMoveCounter() {
         return this.whiteTurn ? this.fullmoveCounter * 2 - 1: this.fullmoveCounter * 2;
     }

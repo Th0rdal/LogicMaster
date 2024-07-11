@@ -22,6 +22,10 @@ public class Main extends Application{
         launch();
     }
 
+    /**
+     * starts javafx
+     * @param stage: the main stage (set by javafx)
+     */
     @Override
     public void start(Stage stage) {
         new Timecontrol("4+5/45:2+3/46:4+5").getTimecontrolChanges(45);

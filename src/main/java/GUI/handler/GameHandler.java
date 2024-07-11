@@ -56,6 +56,7 @@ public class GameHandler {
     private final Semaphore flagLock = new Semaphore(1);
     private final BlockingQueue<Move> moveQueue = new LinkedBlockingQueue<>(1);
     CompletableFuture<Boolean> future = new CompletableFuture<>();
+    private GAMESTATUS gamestatus;
 
     // TIME VARIABLES
     private Timeline clockWhitePlayer = null, clockBlackPlayer = null; // the clock objects
@@ -74,7 +75,6 @@ public class GameHandler {
     private boolean interruptFlag = false;
     private boolean gameInitialized = false;
     private boolean shutdownFlag = false;
-    private GAMESTATUS gamestatus;
     private int continueFromSnapshotFlag = 0; // if this is not 0, continue from the snapshot that contains the fullmoveCounter equal to this var
 
     private String startFen = "";
@@ -83,6 +83,9 @@ public class GameHandler {
         this.whiteTurn = true;
     }
 
+    /**
+     * contains the main gameloop for the game
+     */
     public void gameLoop() {
         Move move;
         this.gameInitialized = true;
@@ -218,6 +221,15 @@ public class GameHandler {
         this.stopClocks();
     }
 
+    /**
+     * configures all important parts and then start the game loop
+     * @param timecontrol: the time control to use
+     * @param whiteName: the name of the white player
+     * @param blackName: the name of the black player
+     * @param whiteAI: the name of the ai executable for white
+     * @param blackAI: the name of the ai executable for black
+     * @param fen: the starting fen notation to use
+     */
     public void startGame(Timecontrol timecontrol,
                           String whiteName,
                           String blackName,
@@ -282,6 +294,9 @@ public class GameHandler {
         this.gameLoop();
     }
 
+    /**
+     * makes javafx load the board and wait until it is loaded
+     */
     private void loadBoard() {
         Platform.runLater(() -> {
             this.boardController.loadBoard();
@@ -384,6 +399,10 @@ public class GameHandler {
         return true;
     }
 
+    /**
+     * checks if the move breaks the 3-fold repetition rule
+     * @return: true if the 3-fold repetition rule is broken
+     */
     private boolean checkMove3FoldRepetition() {
         int counter = 0;
         ArrayList<GamestateSnapshot> tempSnapshots = new ArrayList<>(this.snapshotHistory);
@@ -437,6 +456,9 @@ public class GameHandler {
         this.currentTimeRunning.play();
     }
 
+    /**
+     * stops the clock that is currently running
+     */
     private void stopClocks() {
         if (this.timecontrol.isActive()) {
             this.currentTimeRunning.stop();
@@ -459,16 +481,28 @@ public class GameHandler {
         }
     }
 
+    /**
+     * saves the current gamestate as a snapshot in the snapshotHistory
+     */
     public void saveCurrentSnapshot() {
         GamestateSnapshot snapshot = this.gamestate.getSnapshot(this.clockBlackPlayerCounter, this.clockWhitePlayerCounter);
         this.snapshotHistory.add(snapshot);
     }
 
+
+    /**
+     * saves the current gamestate as a snapshot in the snapshotHistory
+     * @param move: the move that was made
+     */
     public void saveMoveSnapshot(Move move) {
         GamestateSnapshot snapshot = this.gamestate.getSnapshot(move, this.clockBlackPlayerCounter, this.clockWhitePlayerCounter);
         this.snapshotHistory.add(snapshot);
     }
 
+    /**
+     * loads the snapshot corresponding with the moveNumber
+     * @param snapshotNumber: the number corresponding to the snapshot that should be loaded
+     */
     public void loadSnapshot(int snapshotNumber) {
         GamestateSnapshot currentSnapshot = this.getSnapshot(snapshotNumber);
         this.snapshotHistory.removeIf(snapshot -> snapshot.getFullmoveCounter() > snapshotNumber);
@@ -484,6 +518,9 @@ public class GameHandler {
         });
     }
 
+    /**
+     * saves the current game in the database
+     */
     public void saveCurrentInDatabase() {
         ArrayList<Byte> byteMoveList = new ArrayList<>();
         ArrayList<Integer> timeList = new ArrayList<>();
@@ -533,6 +570,10 @@ public class GameHandler {
         }
     }
 
+    /**
+     * loads the given game into the handler
+     * @param game: the game to load
+     */
     public void loadFromDatabaseAndStartGame(ChessGame game) {
         this.snapshotHistory = new ArrayList<>();
         this.setWhitePlayer(new Player(game.getWhitePlayerPath().isEmpty(), game.getWhitePlayerPath(), game.getWhitePlayerName()));
@@ -563,6 +604,11 @@ public class GameHandler {
         this.gameLoop();
     }
 
+    /**
+     * executes all moves given (used for calculation after loading a game from the database)
+     * @param moveList: the moves to execute
+     * @param timeList: the time from the database (for time reconstruction)
+     */
     private void executeMoveList(ArrayList<Move> moveList, ArrayList<Integer> timeList) {
         this.startGamestateSnapshot = this.gamestate.getStartSnapshot(clockWhitePlayerCounter, clockBlackPlayerCounter);
         for (int i = 0; i < moveList.size(); i++) {
@@ -583,14 +629,91 @@ public class GameHandler {
         });
     }
 
+    public void resetInterruptFlag() {
+        try {
+            this.flagLock.acquire();
+        } catch (InterruptedException e) {
+            AlertHandler.throwError();
+            throw new ObjectInterruptedException("semaphore interrupted unexpectedly", e);
+        }
+        this.interruptFlag = false;
+        this.flagLock.release();
+    }
+
+    public void setShutdownFlag() {
+        try {
+            this.flagLock.acquire();
+        } catch (InterruptedException e) {
+            AlertHandler.throwError();
+            throw new ObjectInterruptedException("semaphore interrupted unexpectedly", e);
+        }
+        this.shutdownFlag = true;
+        this.flagLock.release();
+    }
+
+    /**
+     * waits for the old gameHandler thread to finish before starting a new one
+     */
+    public void waitForOldThreadShutdown() {
+        try {
+            this.future.get();
+            this.future = this.future.newIncompleteFuture();
+        } catch (InterruptedException | ExecutionException e) {
+            AlertHandler.throwError();
+            throw new ObjectInterruptedException("future interrupted unexpectedly", e);
+        }
+    }
+
+    /**
+     * toggles the status of the currently running timer (play -> pause, pause -> play)
+     */
+    private void toggleRunningTime() {
+        if (!this.timecontrol.isActive()) {
+            return;
+        }
+        if (this.currentTimeRunning.getStatus() == Animation.Status.PAUSED) {
+            this.currentTimeRunning.play();
+        } else if (this.currentTimeRunning.getStatus() == Animation.Status.RUNNING) {
+            this.currentTimeRunning.pause();
+        }
+    }
+
+    /**
+     * returns if the piece is usable based not on the current gamestate, but on a snapshot of a previous gamestate
+     * @param coordinate: the coordinate to check
+     * @param moveCounter: the moveNumber corresponding to the snapshot to check
+     * @return
+     */
+    public boolean isUsablePieceSnapshot(BoardCoordinate coordinate, int moveCounter) {
+        GamestateSnapshot gamestateSnapshot = this.getSnapshot(moveCounter);
+        Piece piece = null;
+        for (Piece temp : gamestateSnapshot.getPieces()) {
+            if (temp.getCoordinates().equals(coordinate)) {
+                piece = temp;
+                break;
+            }
+        }
+        if (piece == null) {
+            return false;
+        }
+        boolean tempBool = (moveCounter + 1) % 2 == 1;
+        return piece.isWhite() == tempBool;
+    }
+
+    /**
+     * checks if the piece in the given location is usable (aka it is the same color as the current turn)
+     * @param coordinate: the coordinates to check
+     * @return: true if it is usable, else false
+     */
     public boolean isUsablePiece(BoardCoordinate coordinate) {
         return this.gamestate.isUsablePiece(coordinate, this.whiteTurn);
     }
 
-    public boolean isUsablePiece(BoardCoordinate coordinate, boolean turn) {
-        return this.gamestate.isUsablePiece(coordinate, turn);
-    }
-
+    /**
+     * returns all possible moves based on the coordinates given.
+     * @param coordinate: the coordinates to get all possible moves from
+     * @return
+     */
     public ArrayList<Move> getPossibleMovesForCoordinates(BoardCoordinate coordinate) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
         HashMap<String, ArrayList<Move>> temp = this.getPlayer(this.whiteTurn).executeGetPossibleMoves(this.gamestate, this.whiteTurn);
@@ -626,7 +749,9 @@ public class GameHandler {
         return this.whiteTurn;
     }
 
-    // setter
+    /**
+     * executed by the BoardController after it finished loading
+     */
     public void loadedBoard() {
         try {
             this.barrier.await();
@@ -634,14 +759,6 @@ public class GameHandler {
             AlertHandler.throwError();
             throw new ObjectInterruptedException("Barrier interrupted unexpectedly.", e);
         }
-    }
-
-    public void setGamestatusDrawAgreed() {
-        this.gamestatus = GAMESTATUS.DRAW;
-    }
-
-    public void setGamestatusCheckmateTime(boolean whiteTurn) {
-        this.gamestatus = whiteTurn ? GAMESTATUS.CHECKMATE_TIME_WHITE : GAMESTATUS.CHECKMATE_TIME_BLACK;
     }
 
     public void setWhitePlayer(Player player) {
@@ -686,22 +803,6 @@ public class GameHandler {
 
     public boolean isInSnapshot() {return this.inSnapshot;}
 
-    public boolean isUsablePieceSnapshot(BoardCoordinate coordinate, int moveCounter) {
-        GamestateSnapshot gamestateSnapshot = this.getSnapshot(moveCounter);
-        Piece piece = null;
-        for (Piece temp : gamestateSnapshot.getPieces()) {
-            if (temp.getCoordinates().equals(coordinate)) {
-                piece = temp;
-                break;
-            }
-        }
-        if (piece == null) {
-            return false;
-        }
-        boolean tempBool = (moveCounter + 1) % 2 == 1;
-        return piece.isWhite() == tempBool;
-    }
-
     public Player getPlayer(boolean whitePlayer) {
         return whitePlayer ? this.whitePlayer : this.blackPlayer;
     }
@@ -719,46 +820,4 @@ public class GameHandler {
         return this.gamestate.getHalfmoveCounter() >= 50;
     }
 
-    public void resetInterruptFlag() {
-        try {
-            this.flagLock.acquire();
-        } catch (InterruptedException e) {
-            AlertHandler.throwError();
-            throw new ObjectInterruptedException("semaphore interrupted unexpectedly", e);
-        }
-        this.interruptFlag = false;
-        this.flagLock.release();
-    }
-
-    public void setShutdownFlag() {
-        try {
-            this.flagLock.acquire();
-        } catch (InterruptedException e) {
-            AlertHandler.throwError();
-            throw new ObjectInterruptedException("semaphore interrupted unexpectedly", e);
-        }
-        this.shutdownFlag = true;
-        this.flagLock.release();
-    }
-
-    public void waitForOldThreadShutdown() {
-        try {
-            this.future.get();
-            this.future = this.future.newIncompleteFuture();
-        } catch (InterruptedException | ExecutionException e) {
-            AlertHandler.throwError();
-            throw new ObjectInterruptedException("future interrupted unexpectedly", e);
-        }
-    }
-
-    private void toggleRunningTime() {
-        if (!this.timecontrol.isActive()) {
-            return;
-        }
-        if (this.currentTimeRunning.getStatus() == Animation.Status.PAUSED) {
-            this.currentTimeRunning.play();
-        } else if (this.currentTimeRunning.getStatus() == Animation.Status.RUNNING) {
-            this.currentTimeRunning.pause();
-        }
-    }
 }

@@ -84,12 +84,23 @@ public class BoardConverter {
                 fullmoveNumber-1);
     }
 
+    /**
+     * checks if the fen notation is valid
+     * @param fen: the fen notation to check
+     * @return: true if it is valid, else false
+     */
     public static boolean validFEN(String fen) {
         Pattern fenPattern = Pattern.compile("^(([pnbrqkPNBRQK1-8]{1,8})\\/?){8}\\s+(b|w)\\s+(-|K?Q?k?q)\\s+(-|[a-h][3-6])\\s+(\\d+)\\s+(\\d+)\\s*");
         Matcher matcher = fenPattern.matcher(fen.strip());
         return matcher.matches();
     }
 
+    /**
+     * creates a fen out of the gamestate
+     * @param gamestate: the gamestate to create fen from
+     * @param whiteTurn: whose turn it currently is
+     * @return: the fen notation string
+     */
     public static String createFEN(Gamestate gamestate, boolean whiteTurn) {
         StringBuilder fen = new StringBuilder();
         String[][] piecesChars = new String[8][8];
@@ -142,41 +153,4 @@ public class BoardConverter {
 
         return fen.toString();
     }
-
-    /**
-     * Converts a board into a bitboard representation based on the
-     * algorithm.
-     * TODO write documents
-     * @param gamestate The board to create the bitboard from
-     * @return bitboard array
-     */
-    public static long[] toBitboard(Gamestate gamestate) {
-        long[] bitboard = new long[9];
-        for (int i = 0; i < 9; i++) {
-            bitboard[i] = 0;
-        }
-        int occupancy = 0;
-        int pawn = 1, knight = 2, bishop = 3, rook = 4, queen = 5, king = 6;
-        int white = 7, black = 8;
-
-        for (Piece piece : gamestate.getPieces()) {
-            long mask = 1L << piece.getCoordinates().getLocationInt();
-            bitboard[occupancy] |= mask;
-            switch (piece.getID()) {
-                case PAWN -> bitboard[pawn] |= mask;
-                case KNIGHT -> bitboard[knight] |= mask;
-                case BISHOP -> bitboard[bishop] |= mask;
-                case ROOK -> bitboard[rook] |= mask;
-                case QUEEN -> bitboard[queen] |= mask;
-                case KING -> bitboard[king] |= mask;
-            }
-            if (piece.isWhite()) {
-                bitboard[white] |= mask;
-            } else {
-                bitboard[black] |= mask;
-            }
-        }
-        return bitboard;
-    }
-
 }

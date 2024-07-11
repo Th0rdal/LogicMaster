@@ -2,6 +2,9 @@ package GUI.game.timecontrol;
 
 import javafx.util.StringConverter;
 
+/**
+ * A converter to convert TimeControl objects to their string representation, taking non-active TimeControl and representing it as custom
+ */
 public class TimecontrolChoiceBoxConverter extends StringConverter<Timecontrol> {
 
     @Override

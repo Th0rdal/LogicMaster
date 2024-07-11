@@ -22,9 +22,4 @@ public class Rook extends Piece{
         super(rook);
     }
 
-    @Override
-    public void makeMove(BoardCoordinate newCoordinates) {
-        this.coordinate = newCoordinates;
-    }
-
 }

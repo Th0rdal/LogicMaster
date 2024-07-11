@@ -22,9 +22,4 @@ public class Knight extends Piece{
         super(knight);
     }
 
-    @Override
-    public void makeMove(BoardCoordinate newCoordinates) {
-        this.coordinate = newCoordinates;
-    }
-
 }

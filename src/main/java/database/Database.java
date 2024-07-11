@@ -8,16 +8,22 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
+/**
+ * represents the connection to the database. It is implemented as a singleton
+ */
 public class Database {
 
     private static final String DB_URL = "jdbc:h2:file: ./src/main/resources/database/db";
     private static final String username = "user";
     private static final String password = "password";
-    private ConnectionSource connectionSource;
-    private Dao<ChessGame, Long> dao;
+    private final ConnectionSource connectionSource;
+    private final Dao<ChessGame, Long> dao;
 
     private static Database instance;
 
+    /**
+     * database constructor
+     */
     private Database() {
         try {
             this.connectionSource = new JdbcConnectionSource(Database.DB_URL, Database.username, Database.password);
@@ -29,6 +35,10 @@ public class Database {
         }
     }
 
+    /**
+     * get the Database instance and create one if it is not yet created
+     * @return Database object
+     */
     public static Database getInstance() {
         if (instance == null) {
             instance = new Database();
@@ -40,23 +50,4 @@ public class Database {
         return dao;
     }
 
-    public void close() {
-        if (connectionSource != null) {
-            try {
-                this.connectionSource.close();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        ChessGame game = new ChessGame();
-        try {
-            Database.getInstance().getDao().create(game);
-            Database.getInstance().getDao().queryForId(game.getId());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
