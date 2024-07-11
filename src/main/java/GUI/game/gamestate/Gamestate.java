@@ -301,8 +301,7 @@ public class Gamestate {
             AlertHandler.throwError();
             throw new ObjectInterruptedException("semaphore interrupted unexpectedly", e);
         }
-
-        return new GamestateSnapshot(
+        GamestateSnapshot temp = new GamestateSnapshot(
                 this.pieces,
                 !this.whiteTurn,
                 this.whiteQCastle,
@@ -315,6 +314,8 @@ public class Gamestate {
                 whiteClockCounter,
                 blackClockCounter,
                 null);
+        this.semaphore.release();
+        return temp;
     }
 
     /**
