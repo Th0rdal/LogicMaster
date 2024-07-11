@@ -37,6 +37,7 @@ public class BoardConverter {
                     whiteTurn = c == 'w';
                     continue;
                 case 2:
+                    // no need to check for -, because it has no extra effect. continue will skip the character and go to part 3
                     if (c == 'K') {
                         whiteKCastle = true;
                     } else if (c == 'Q') {
@@ -71,7 +72,7 @@ public class BoardConverter {
             }
         }
 
-        Gamestate gamestate = new Gamestate(
+        return new Gamestate(
                 pieces,
                 whiteTurn,
                 whiteKCastle,
@@ -81,8 +82,6 @@ public class BoardConverter {
                 en_passant.toString().isEmpty() ? "-" :  en_passant.toString(), // if en_passant is "" then it is a - in the fen notation
                 halfmoveClock,
                 fullmoveNumber-1);
-
-        return gamestate;
     }
 
     public static boolean validFEN(String fen) {
@@ -123,10 +122,14 @@ public class BoardConverter {
         fen.append(whiteTurn? 'w' : 'b');
 
         fen.append(" ");
-        fen.append(gamestate.canWhiteKCastle() ? 'K' : "");
-        fen.append(gamestate.canWhiteQCastle() ? 'Q' : "");
-        fen.append(gamestate.canBlackKCastle() ? 'k' : "");
-        fen.append(gamestate.canBlackQCastle() ? 'q' : "");
+        if (gamestate.canWhiteKCastle() || gamestate.canWhiteQCastle() || gamestate.canBlackKCastle() || gamestate.canBlackQCastle()) {
+            fen.append(gamestate.canWhiteKCastle() ? 'K' : "");
+            fen.append(gamestate.canWhiteQCastle() ? 'Q' : "");
+            fen.append(gamestate.canBlackKCastle() ? 'k' : "");
+            fen.append(gamestate.canBlackQCastle() ? 'q' : "");
+        } else {
+            fen.append("-");
+        }
 
         fen.append(" ");
         fen.append(gamestate.getEnPassantCoordinates().toLowerCaseString());
@@ -135,7 +138,7 @@ public class BoardConverter {
         fen.append(gamestate.getHalfmoveCounter());
 
         fen.append(" ");
-        fen.append(gamestate.getFullmoveCounter());
+        fen.append(gamestate.getFullmoveCounter() == 0 ? gamestate.getFullmoveCounter()+1 : gamestate.getFullmoveCounter());
 
         return fen.toString();
     }

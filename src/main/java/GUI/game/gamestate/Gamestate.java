@@ -107,50 +107,80 @@ public class Gamestate {
 
         this.whiteTurn = whiteTurn;
 
-        Piece piece = this.getPieceAtCoordinates(move.getOldPosition());
-        if (piece == null) {
-            AlertHandler.throwError();
-            throw new IllegalArgumentException("Piece is null in makeMove");
-        }
-        if (move.isCapture()) { // remove piece if already at end position
-            this.removePiece(move.getNewPosition());
-        } else if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) { // move Rook when castling
+        Piece piece;
+        if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) { // move Rook when castling
             if (whiteTurn) {
                 this.getPieceAtCoordinates(new BoardCoordinate("H1")).makeMove(new BoardCoordinate("F1"));
+                this.getPieceAtCoordinates(new BoardCoordinate("E1")).makeMove(new BoardCoordinate("G1"));
+                this.whiteQCastle = false;
                 this.whiteKCastle = false;
             } else {
                 this.getPieceAtCoordinates(new BoardCoordinate("H8")).makeMove(new BoardCoordinate("F8"));
+                this.getPieceAtCoordinates(new BoardCoordinate("E8")).makeMove(new BoardCoordinate("G8"));
                 this.blackKCastle = false;
+                this.blackQCastle = false;
             }
         } else if (move.getSpecialMove() == SPECIAL_MOVE.QUEEN_CASTLE) { // move rook when castling
             if (whiteTurn) {
                 this.getPieceAtCoordinates(new BoardCoordinate("A1")).makeMove(new BoardCoordinate("D1"));
+                this.getPieceAtCoordinates(new BoardCoordinate("E1")).makeMove(new BoardCoordinate("C1"));
                 this.whiteQCastle = false;
+                this.whiteKCastle = false;
             } else {
                 this.getPieceAtCoordinates(new BoardCoordinate("A8")).makeMove(new BoardCoordinate("D8"));
+                this.getPieceAtCoordinates(new BoardCoordinate("E8")).makeMove(new BoardCoordinate("C8"));
+                this.blackKCastle = false;
                 this.blackQCastle = false;
             }
-        } else if (move.getSpecialMove() == SPECIAL_MOVE.EN_PASSANT) {
-            this.removePiece(new BoardCoordinate(move.getNewPosition().getXLocation(), move.getNewPosition().getYLocation()-1));
-        }
-
-        piece.makeMove(move.getNewPosition()); // make actual move
-
-        // handle special move promotion
-        if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) {
+        } else {
+            piece = this.getPieceAtCoordinates(move.getOldPosition());
+            if (piece == null) {
+                AlertHandler.throwError();
+                throw new IllegalArgumentException("Piece is null in makeMove");
+            }
+            if (move.isCapture()) { // remove piece if already at end position
                 this.removePiece(move.getNewPosition());
-                this.pieces.add(this.createPromotionPiece(move, whiteTurn));
+            }  else if (move.getSpecialMove() == SPECIAL_MOVE.EN_PASSANT) {
+                this.removePiece(new BoardCoordinate(move.getNewPosition().getXLocation(), move.getNewPosition().getYLocation()-1));
+            }
+            if (piece.getID() == PIECE_ID.ROOK) {
+                if (move.getNewPosition().equals(new BoardCoordinate("A1"))) {
+                    this.whiteQCastle = false;
+                } else if (move.getNewPosition().equals(new BoardCoordinate("A8"))) {
+                    this.blackQCastle = false;
+                } else if (move.getNewPosition().equals(new BoardCoordinate("H1"))) {
+                    this.whiteKCastle = false;
+                } else if (move.getNewPosition().equals(new BoardCoordinate("H8"))) {
+                    this.blackKCastle = false;
+                }
+            } else if (piece.getID() == PIECE_ID.KING) {
+                if (piece.isWhite()) {
+                    this.whiteQCastle = false;
+                    this.whiteKCastle = false;
+                } else {
+                    this.blackKCastle = false;
+                    this.blackQCastle = false;
+                }
+            }
+            piece.makeMove(move.getNewPosition()); // make actual move
+
+            if (piece.getID() == PIECE_ID.PAWN || move.isCapture()) {
+                this.oldHalfmoveCounter = this.halfmoveCounter;
+                this.halfmoveCounter = 0;
+            } else {
+                this.oldHalfmoveCounter = this.halfmoveCounter++;
+            }
         }
 
         // update full and half move counter
         if (this.whiteTurn) {
             this.fullmoveCounter++;
         }
-        if (piece.getID() == PIECE_ID.PAWN || move.isCapture()) {
-            this.oldHalfmoveCounter = this.halfmoveCounter;
-            this.halfmoveCounter = 0;
-        } else {
-            this.oldHalfmoveCounter = this.halfmoveCounter++;
+
+        // handle special move promotion
+        if (move.getSpecialMove() == SPECIAL_MOVE.PROMOTION) {
+                this.removePiece(move.getNewPosition());
+                this.pieces.add(this.createPromotionPiece(move, whiteTurn));
         }
 
         //calculate new en Passant possible
@@ -249,6 +279,22 @@ public class Gamestate {
                 whiteClockCounter,
                 blackClockCounter,
                 move);
+    }
+
+    public GamestateSnapshot getStartSnapshot (int whiteClockCounter, int blackClockCounter) {
+        return new GamestateSnapshot(
+                this.pieces,
+                !this.whiteTurn,
+                this.whiteQCastle,
+                this.whiteKCastle,
+                this.blackQCastle,
+                this.blackKCastle,
+                this.enPassantCoordinates,
+                this.fullmoveCounter,
+                this.halfmoveCounter,
+                whiteClockCounter,
+                blackClockCounter,
+                null);
     }
 
     /**

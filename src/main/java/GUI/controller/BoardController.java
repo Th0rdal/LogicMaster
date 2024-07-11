@@ -175,7 +175,25 @@ public class BoardController {
             for (Move move : possibleMoveList) {
                 Circle tempCircle = new Circle();
                 if (move.getSpecialMove() == SPECIAL_MOVE.KING_CASTLE) {
-                    visualBoard.add(tempCircle, 6, 7);
+                    if (this.gameHandler.isTurnWhite()) {
+                        visualBoard.add(tempCircle,
+                                whiteSideDown ? 6 : 5,
+                                whiteSideDown ? 7 : 0);
+                    } else {
+                        visualBoard.add(tempCircle,
+                            whiteSideDown ? 6 : 5,
+                            whiteSideDown ? 0 : 7);
+                    }
+                } else if (move.getSpecialMove() == SPECIAL_MOVE.QUEEN_CASTLE) {
+                    if (this.gameHandler.isTurnWhite()) {
+                        visualBoard.add(tempCircle,
+                                whiteSideDown ? 2 : 3,
+                                whiteSideDown ? 7 : 0);
+                    } else {
+                        visualBoard.add(tempCircle,
+                            whiteSideDown ? 2 : 3,
+                            whiteSideDown ? 0 : 7);
+                    }
                 } else {
                     visualBoard.add(tempCircle,
                             whiteSideDown ? move.getNewPosition().getXLocation()-1 : 8 - move.getNewPosition().getXLocation(),
@@ -468,10 +486,11 @@ public class BoardController {
 
         this.move = null;
         for (Move move : this.possibleMoveList) {
-            if (move.getNewPosition().equals(tempCoordinates)) {
+            if (move.getNewPosition().equals(tempCoordinates) || move.isCastlingMove(tempCoordinates)) {
                 this.move = move;
             }
         }
+
         if (this.move != null) {
 
             this.resetSelected();

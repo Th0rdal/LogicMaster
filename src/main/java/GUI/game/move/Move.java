@@ -109,12 +109,14 @@ public class Move {
                 this.draw = true;
             } else if (Objects.equals(moveString, "O-O")) {
                 this.specialMove = SPECIAL_MOVE.KING_CASTLE;
-                this.oldPosition = new BoardCoordinate("E1");
-                this.newPosition = new BoardCoordinate("G1");
+                this.oldPosition = new BoardCoordinate("-");
+                this.newPosition = new BoardCoordinate("-");
+                this.piece_ID = PIECE_ID.KING;
             } else if (Objects.equals(moveString, "O-O-O")) {
                 this.specialMove = SPECIAL_MOVE.QUEEN_CASTLE;
-                this.oldPosition = new BoardCoordinate("E1");
-                this.newPosition = new BoardCoordinate("C1");
+                this.oldPosition = new BoardCoordinate("-");
+                this.newPosition = new BoardCoordinate("-");
+                this.piece_ID = PIECE_ID.KING;
             } else {
                 this.piece_ID = PIECE_ID.fromString(moveString.substring(counter, counter + 1));
                 counter = counter + 1;
@@ -288,4 +290,28 @@ public class Move {
         return specialMove;
     }
 
+    public boolean isCastlingMove(BoardCoordinate coordinate) {
+        if (this.specialMove == SPECIAL_MOVE.KING_CASTLE
+                && coordinate.equals(new BoardCoordinate("G1"))
+                && this.piece_ID == PIECE_ID.KING) {
+
+            return true;
+        } else if (this.specialMove == SPECIAL_MOVE.KING_CASTLE
+                && coordinate.equals(new BoardCoordinate("G8"))
+                && this.piece_ID == PIECE_ID.KING) {
+
+            return true;
+        }else if (this.specialMove == SPECIAL_MOVE.QUEEN_CASTLE
+                && coordinate.equals(new BoardCoordinate("C1"))
+                && this.piece_ID == PIECE_ID.KING) {
+
+            return true;
+        } else if (this.specialMove == SPECIAL_MOVE.QUEEN_CASTLE
+                && coordinate.equals(new BoardCoordinate("C8"))
+                && this.piece_ID == PIECE_ID.KING) {
+
+            return true;
+        }
+        return false;
+    }
 }

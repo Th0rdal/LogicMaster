@@ -136,6 +136,7 @@ public class GameHandler {
                             this.shutdownFlag = false;
                             this.future.complete(true);
                             this.flagLock.release();
+                            this.stopClocks();
                             return;
                         }
                         this.loadBoard();
@@ -149,6 +150,7 @@ public class GameHandler {
                         this.shutdownFlag = false;
                         this.future.complete(true);
                         this.flagLock.release();
+                        this.stopClocks();
                         return;
                     }
                     this.flagLock.release();
@@ -182,7 +184,7 @@ public class GameHandler {
             this.swapTurn();
 
             if (this.timecontrol.hasTimecontrolSpecialChanges(this.gamestate.getFullmoveCounter()-1)) {
-                int[] temp = this.timecontrol.getTimecontrolChanges(this.gamestate.getFullmoveCounter()-1);
+                int[] temp = this.timecontrol.getTimecontrolChanges(this.gamestate.getMoveCounter()-1);
                 this.clockBlackPlayerCounter += temp[0] * GameHandler.CLOCKBASETIME;
                 this.clockWhitePlayerCounter += temp[0] * GameHandler.CLOCKBASETIME;
                 this.increment = temp[1] * GameHandler.CLOCKBASETIME;
@@ -213,6 +215,7 @@ public class GameHandler {
             }
 
         } while (!Thread.currentThread().isInterrupted());
+        this.stopClocks();
     }
 
     public void startGame(Timecontrol timecontrol,
@@ -264,7 +267,7 @@ public class GameHandler {
             AlertHandler.showAlert(Alert.AlertType.ERROR, "Error", "The fen notation is not valid!");
             return;
         }
-        this.startGamestateSnapshot = this.gamestate.getSnapshot(this.clockWhitePlayerCounter, this.clockBlackPlayerCounter);
+        this.startGamestateSnapshot = this.gamestate.getStartSnapshot(this.clockWhitePlayerCounter, this.clockBlackPlayerCounter);
 
         this.whiteTurn = this.gamestate.isWhiteTurn();
         this.snapshotHistory = new ArrayList<>();
@@ -398,9 +401,7 @@ public class GameHandler {
                 }
             }
             if (!(snapshot.isWhiteTurn() == this.gamestate.isWhiteTurn())) {
-                if (!(snapshot.getMoveCounter() <= 0)) {
-                    flag = false;
-                }
+                flag = false;
             } else if (!(snapshot.canWhiteQCastle() == this.gamestate.canWhiteQCastle())
                 || !(snapshot.canWhiteKCastle() == this.gamestate.canWhiteKCastle())
                 || !(snapshot.canBlackKCastle() == this.gamestate.canBlackKCastle())
@@ -422,7 +423,7 @@ public class GameHandler {
      * This starts the clock
      * @param whiteStart if true, white made the first move, black if false
      */
-    public void startClocks(boolean whiteStart) {
+    private void startClocks(boolean whiteStart) {
         if (!this.timecontrol.isActive()) {
             return;
         }
@@ -434,6 +435,12 @@ public class GameHandler {
             this.currentTimeStopped = this.clockWhitePlayer;
         }
         this.currentTimeRunning.play();
+    }
+
+    private void stopClocks() {
+        if (this.timecontrol.isActive()) {
+            this.currentTimeRunning.stop();
+        }
     }
 
     /**
@@ -498,8 +505,8 @@ public class GameHandler {
 
         byte[] timeArray = new byte[timeList.size()*4];
         int counter = 0;
-        for (int i = 0; i < timeList.size(); i++) {
-            for (Byte tempByte : ByteBuffer.allocate(4).putInt(timeList.get(i)).array()) {
+        for (Integer integer : timeList) {
+            for (Byte tempByte : ByteBuffer.allocate(4).putInt(integer).array()) {
                 timeArray[counter] = tempByte;
                 counter++;
             }
@@ -543,7 +550,7 @@ public class GameHandler {
         ArrayList<Move> moveList = Move.convertByteMovesToArrayList(game.getMoves());
         ArrayList<Integer> timeList = Timecontrol.convertByteTimeToArrayList(game.getTime());
         this.executeMoveList(moveList, timeList);
-        if (!(Objects.equals(BoardConverter.loadFEN(game.getEndFen()), this.gamestate))) {
+        if (!(BoardConverter.loadFEN(game.getEndFen()).equals(this.gamestate))) {
             AlertHandler.throwError();
             throw new GameLoadedIncorrectlyException("The end fen string does not equal the calculated end gamestate");
         }
@@ -557,6 +564,7 @@ public class GameHandler {
     }
 
     private void executeMoveList(ArrayList<Move> moveList, ArrayList<Integer> timeList) {
+        this.startGamestateSnapshot = this.gamestate.getStartSnapshot(clockWhitePlayerCounter, clockBlackPlayerCounter);
         for (int i = 0; i < moveList.size(); i++) {
             if (this.gamestate.isWhiteTurn()) {
                 this.clockWhitePlayerCounter = timeList.get(i);
@@ -566,7 +574,9 @@ public class GameHandler {
             this.gamestate.makeMove(moveList.get(i), this.gamestate.isWhiteTurn());
             this.saveMoveSnapshot(moveList.get(i));
         }
-        this.whiteTurn = this.gamestate.isWhiteTurn();
+        if (!moveList.isEmpty()) {
+            this.whiteTurn = !this.gamestate.isWhiteTurn();
+        }
         Platform.runLater(() -> {
             this.boardController.reloadMoveHistory();
             this.boardController.loadPieces();
@@ -599,7 +609,7 @@ public class GameHandler {
         if (temp.containsKey(coordinate.toString())) {
             possibleMoves.addAll(temp.get(coordinate.toString()));
         }
-        if (piece.getID() == PIECE_ID.KING && piece.isWhite()) {
+        if (piece.getID() == PIECE_ID.KING) {
             if (temp.containsKey("CASTLE")) {
                 possibleMoves.addAll(temp.get("CASTLE"));
             }

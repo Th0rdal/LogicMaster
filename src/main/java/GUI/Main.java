@@ -1,12 +1,15 @@
 package GUI;
 
+import GUI.controller.AlertHandler;
 import GUI.controller.BoardController;
 import GUI.controller.GameSelectionController;
 import GUI.controller.IndexController;
+import GUI.exceptions.GameLoadedIncorrectlyException;
 import GUI.handler.GameHandler;
 import GUI.handler.SceneHandler;
 import GUI.game.timecontrol.Timecontrol;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -57,10 +60,15 @@ public class Main extends Application{
                     gameSelectionController.loadElements();
                 }
             });
-
+            stage.setOnCloseRequest(e -> {
+                Platform.exit();
+                System.exit(0);
+            });
+            stage.setTitle("LogicMaster");
             sceneHandler.activate("index");
         } catch (Exception e) {
-            e.printStackTrace();
+            AlertHandler.throwError();
+            throw new GameLoadedIncorrectlyException("the main stages could not be loaded.", e);
         }
     }
 }

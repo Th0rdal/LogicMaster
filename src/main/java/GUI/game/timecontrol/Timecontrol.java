@@ -24,6 +24,13 @@ public class Timecontrol {
 
     public Timecontrol(String timecontrolString) {
         try {
+            if (Objects.equals(timecontrolString, "no timecontrol")) {
+                startTime = 0;
+                increment = 0;
+                timecontrolChangeMap = new HashMap<>();
+                custom = false;
+                return;
+            }
             this.timecontrolChangeMap = new HashMap<>();
             int index;
             if (timecontrolString.startsWith("c: ")) {
