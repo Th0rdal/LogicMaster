@@ -1,0 +1,653 @@
+\doxysection{GUI.\+handler.\+Game\+Handler Class Reference}
+\hypertarget{class_g_u_i_1_1handler_1_1_game_handler}{}\label{class_g_u_i_1_1handler_1_1_game_handler}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ab47140603baead7be77a7512df33e121}{Game\+Handler}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a5496f1ca6b8149055659362411cce24c}{game\+Loop}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_aa21c707fba5bae3ecae592e4686cb870}{start\+Game}} (\mbox{\hyperlink{class_g_u_i_1_1game_1_1timecontrol_1_1_timecontrol}{Timecontrol}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a5e17e6ade0ba79d1f1d5bb6cdd00d2d2}{timecontrol}}, String white\+Name, String black\+Name, \mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_a_i_file}{AIFile}} white\+AI, \mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_a_i_file}{AIFile}} black\+AI, String fen)
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ae7c8c7216e6a5ff94d6cb0de118a56dd}{load\+Clocks}} (Label white\+Player\+Label, Label black\+Player\+Label)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_affe9a8d9ed99bf7aa64ef8ffc01f3742}{save\+Current\+Snapshot}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_aad26f0a8777ab47fd3607645fc93c2d7}{save\+Move\+Snapshot}} (\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} \mbox{\hyperlink{module-info_8java_a328d7c6e233f678ee3ee2608ae9ca0ee}{move}})
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ad554683ac98e78dc7ecf265a86311408}{load\+Snapshot}} (int snapshot\+Number)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a9f896dadbb94d1d60862f5619f45e4ae}{save\+Current\+In\+Database}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ab87772b50c4bfca51929dd98ce79919e}{load\+From\+Database\+And\+Start\+Game}} (\mbox{\hyperlink{classdatabase_1_1_chess_game}{Chess\+Game}} game)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a633bfd4bb3d9f708d246457521a8a424}{reset\+Interrupt\+Flag}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a663f02aebdc3fbcbe27394c2318e0c87}{set\+Shutdown\+Flag}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a1b6c958c857375fe3175399e1c70731d}{wait\+For\+Old\+Thread\+Shutdown}} ()
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_acbd50415225d4e3eb10b1472a6c6a693}{is\+Usable\+Piece\+Snapshot}} (\mbox{\hyperlink{class_g_u_i_1_1game_1_1_board_coordinate}{Board\+Coordinate}} coordinate, int move\+Counter)
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a122dd2225e9d886ee10db79de34937ad}{is\+Usable\+Piece}} (\mbox{\hyperlink{class_g_u_i_1_1game_1_1_board_coordinate}{Board\+Coordinate}} coordinate)
+\item 
+Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a9b5d23f34a5a1bdf58bf01b65f298c4f}{get\+Possible\+Moves\+For\+Coordinates}} (\mbox{\hyperlink{class_g_u_i_1_1game_1_1_board_coordinate}{Board\+Coordinate}} coordinate)
+\item 
+Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1piece_1_1_piece}{Piece}} $>$ \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a314117968a2dab4902dc34291ab074cc}{get\+Pieces}} ()
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ae50a32c52e17a14d6dc160406ded0e48}{is\+Turn\+White}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a8151bf01b2793b7e2bb11050b7547261}{loaded\+Board}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_accadbfe33eee7be720aab6fe204bb217}{set\+White\+Player}} (\mbox{\hyperlink{class_g_u_i_1_1player_1_1_player}{Player}} player)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a32e206beaf50c0786949698a55abf0ff}{set\+Black\+Player}} (\mbox{\hyperlink{class_g_u_i_1_1player_1_1_player}{Player}} player)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a65d7505d39e7d4888907d7dcf828c566}{set\+Interrupt\+Flag}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a28b3525306f8b217aa7a75115af888a7}{set\+Continue\+From\+Snapshot\+Flag}} (int number)
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate_snapshot}{Gamestate\+Snapshot}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a5c07fca3308d2ac21b68fa45f20a3118}{get\+Snapshot}} (int move\+Number)
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller}{Board\+Controller}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a9a375640a40ee6ab817f23f360d0eccf}{get\+Controller}} ()
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_aa43d46019680136994b4af43bd44b674}{is\+In\+Snapshot}} ()
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1player_1_1_player}{Player}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a0e9d6ee5c2f2d8b9026557947ce22114}{get\+Player}} (boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ad9166ca05ad4bd2b9b35352a0d16f0e8}{white\+Player}})
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a3d94a03fe12844af7e20c2c69edfd308}{set\+Controller}} (\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller}{Board\+Controller}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a7f236f5c914a230cf0a8e27041c7cf54}{board\+Controller}})
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a234ebbcf87765b8025f6d71b74c81e82}{is\+Game\+Initialized}} ()
+\item 
+Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate_snapshot}{Gamestate\+Snapshot}} $>$ \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a718fb7e5880a652e6c5c88934b9cbe6b}{get\+Snapshot\+History}} ()
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a45e4510b92f4b83076be9d2d7ff59742}{can\+Draw\+Fifty\+Moves}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Package Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Completable\+Future$<$ Boolean $>$ \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_aad42211b0be539771a91b9cc65286bfe}{future}} = new Completable\+Future$<$$>$()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a07a40605a2dd10c9a7ba9f545387dcca}{load\+Board}} ()
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a297ca2e2c2a8d5b1f1d8a8a3bc4bca35}{check\+Move3\+Fold\+Repetition}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a8c32316f3958128aaefa94a07b1b4994}{start\+Clocks}} (boolean white\+Start)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ace95c4c4672dc6b772500a64475c7164}{stop\+Clocks}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_aa1d15a65456b30fc6ce6618a13334915}{swap\+Turn}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a698e9ce330543980c22452933f7392df}{execute\+Move\+List}} (Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ move\+List, Array\+List$<$ Integer $>$ time\+List)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ac59538e0fe7fb0573efc50795d8fd827}{toggle\+Running\+Time}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1player_1_1_player}{Player}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ad9166ca05ad4bd2b9b35352a0d16f0e8}{white\+Player}}
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1player_1_1_player}{Player}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ab822f8de94ae4ec27a779bfd474b8b6a}{black\+Player}}
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a6fe458774ad8951059355f2dff162e98}{white\+Turn}}
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller}{Board\+Controller}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a7f236f5c914a230cf0a8e27041c7cf54}{board\+Controller}}
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate}{Gamestate}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a6233388dad77ce61637192d89f4b1a9c}{gamestate}}
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1timecontrol_1_1_timecontrol}{Timecontrol}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a5e17e6ade0ba79d1f1d5bb6cdd00d2d2}{timecontrol}}
+\item 
+final Cyclic\+Barrier \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a9faeca1f861d1d2a135a1d212e94b0d8}{barrier}} = new Cyclic\+Barrier(2)
+\item 
+final Semaphore \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a57da13d4436adca003389e85f3ede81c}{flag\+Lock}} = new Semaphore(1)
+\item 
+final Blocking\+Queue$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_aec32b6a7927a50f8e94561ace76bf592}{move\+Queue}} = new Linked\+Blocking\+Queue$<$$>$(1)
+\item 
+\mbox{\hyperlink{enum_g_u_i_1_1game_1_1gamestate_1_1_g_a_m_e_s_t_a_t_u_s}{GAMESTATUS}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a9f55390d6ddafcefbf53a03564ed6c26}{gamestatus}}
+\item 
+Timeline \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_adf552d0166fb89fc09e0fe0f147b3b7f}{clock\+White\+Player}} = null
+\item 
+Timeline \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a17c6a1c4398fe57b2886691796a68b2f}{clock\+Black\+Player}} = null
+\item 
+int \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a01ad003fe8d9da7d26b4baf3459f9f27}{clock\+Start\+Time}} = 0
+\item 
+int \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ae2e85f8d28b4494ee0217501c562c056}{clock\+White\+Player\+Counter}} = -\/1
+\item 
+int \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_af3a2f16af2678c7e808d8d433f389ef9}{clock\+Black\+Player\+Counter}} = -\/1
+\item 
+Timeline \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_af2de6ee53b4c048bb3604cd39c8a313b}{current\+Time\+Running}}
+\item 
+Timeline \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a75380fdd8db8cb10d0685d1e05b37d77}{current\+Time\+Stopped}}
+\item 
+int \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a561e0acfca3106e49ea94af12b05aeec}{increment}} = 0
+\item 
+Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate_snapshot}{Gamestate\+Snapshot}} $>$ \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a1c13fbda0f06a07c1533dec937f8a73a}{snapshot\+History}} = new Array\+List$<$$>$()
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate_snapshot}{Gamestate\+Snapshot}} \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a33fcb1178ab02bf213b07ede0f753e70}{start\+Gamestate\+Snapshot}} = null
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ab5173d1604e485b2f6d23633d29d6839}{in\+Snapshot}} = false
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a70014dee02e8b345ccbd04105426f15b}{interrupt\+Flag}} = false
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_aa05a322b7386eb4bfdfac3d54ea21eae}{game\+Initialized}} = false
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a9b96c069112a393909bf3b62fb50a2d0}{shutdown\+Flag}} = false
+\item 
+int \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a41563d7f6dfe7a065725abc1b7b31848}{continue\+From\+Snapshot\+Flag}} = 0
+\item 
+String \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a09c46ec72d80bc3654a5091816e8cf4c}{start\+Fen}} = "{}"{}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static final int \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_aff5ab67ab7b7b4b2dd5c2eed888344f4}{CLOCKBASETIME}} = 10
+\item 
+static final int \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_ae71153cf4948a5d6fef3139a62b08e64}{WAITTIME}} = 50
+\item 
+static final Time\+Unit \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a391ddd41fa809f6cd5bf20708368ed9a}{TIMEUNIT}} = Time\+Unit.\+MILLISECONDS
+\item 
+static final int \mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler_a261bfa92f5f3454cd12b961afce2f30c}{THREAD\+\_\+\+SLEEP\+\_\+\+TIME}} = 100
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ab47140603baead7be77a7512df33e121}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!GameHandler@{GameHandler}}
+\index{GameHandler@{GameHandler}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{GameHandler()}{GameHandler()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ab47140603baead7be77a7512df33e121} 
+GUI.\+handler.\+Game\+Handler.\+Game\+Handler (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a45e4510b92f4b83076be9d2d7ff59742}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!canDrawFiftyMoves@{canDrawFiftyMoves}}
+\index{canDrawFiftyMoves@{canDrawFiftyMoves}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{canDrawFiftyMoves()}{canDrawFiftyMoves()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a45e4510b92f4b83076be9d2d7ff59742} 
+boolean GUI.\+handler.\+Game\+Handler.\+can\+Draw\+Fifty\+Moves (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a297ca2e2c2a8d5b1f1d8a8a3bc4bca35}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!checkMove3FoldRepetition@{checkMove3FoldRepetition}}
+\index{checkMove3FoldRepetition@{checkMove3FoldRepetition}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{checkMove3FoldRepetition()}{checkMove3FoldRepetition()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a297ca2e2c2a8d5b1f1d8a8a3bc4bca35} 
+boolean GUI.\+handler.\+Game\+Handler.\+check\+Move3\+Fold\+Repetition (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+checks if the move breaks the 3-\/fold repetition rule \begin{DoxyReturn}{Returns}
+\+: true if the 3-\/fold repetition rule is broken 
+\end{DoxyReturn}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a698e9ce330543980c22452933f7392df}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!executeMoveList@{executeMoveList}}
+\index{executeMoveList@{executeMoveList}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{executeMoveList()}{executeMoveList()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a698e9ce330543980c22452933f7392df} 
+void GUI.\+handler.\+Game\+Handler.\+execute\+Move\+List (\begin{DoxyParamCaption}\item[{Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$}]{move\+List}{, }\item[{Array\+List$<$ Integer $>$}]{time\+List}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+executes all moves given (used for calculation after loading a game from the database) 
+\begin{DoxyParams}{Parameters}
+{\em move\+List} & the moves to execute \\
+\hline
+{\em time\+List} & the time from the database (for time reconstruction) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a5496f1ca6b8149055659362411cce24c}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!gameLoop@{gameLoop}}
+\index{gameLoop@{gameLoop}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{gameLoop()}{gameLoop()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a5496f1ca6b8149055659362411cce24c} 
+void GUI.\+handler.\+Game\+Handler.\+game\+Loop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+contains the main gameloop for the game \Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a9a375640a40ee6ab817f23f360d0eccf}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!getController@{getController}}
+\index{getController@{getController}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{getController()}{getController()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a9a375640a40ee6ab817f23f360d0eccf} 
+\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller}{Board\+Controller}} GUI.\+handler.\+Game\+Handler.\+get\+Controller (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a314117968a2dab4902dc34291ab074cc}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!getPieces@{getPieces}}
+\index{getPieces@{getPieces}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{getPieces()}{getPieces()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a314117968a2dab4902dc34291ab074cc} 
+Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1piece_1_1_piece}{Piece}} $>$ GUI.\+handler.\+Game\+Handler.\+get\+Pieces (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a0e9d6ee5c2f2d8b9026557947ce22114}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!getPlayer@{getPlayer}}
+\index{getPlayer@{getPlayer}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{getPlayer()}{getPlayer()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a0e9d6ee5c2f2d8b9026557947ce22114} 
+\mbox{\hyperlink{class_g_u_i_1_1player_1_1_player}{Player}} GUI.\+handler.\+Game\+Handler.\+get\+Player (\begin{DoxyParamCaption}\item[{boolean}]{white\+Player}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a9b5d23f34a5a1bdf58bf01b65f298c4f}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!getPossibleMovesForCoordinates@{getPossibleMovesForCoordinates}}
+\index{getPossibleMovesForCoordinates@{getPossibleMovesForCoordinates}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{getPossibleMovesForCoordinates()}{getPossibleMovesForCoordinates()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a9b5d23f34a5a1bdf58bf01b65f298c4f} 
+Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ GUI.\+handler.\+Game\+Handler.\+get\+Possible\+Moves\+For\+Coordinates (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1game_1_1_board_coordinate}{Board\+Coordinate}}}]{coordinate}{}\end{DoxyParamCaption})}
+
+returns all possible moves based on the coordinates given. 
+\begin{DoxyParams}{Parameters}
+{\em coordinate} & the coordinates to get all possible moves from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a5c07fca3308d2ac21b68fa45f20a3118}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!getSnapshot@{getSnapshot}}
+\index{getSnapshot@{getSnapshot}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{getSnapshot()}{getSnapshot()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a5c07fca3308d2ac21b68fa45f20a3118} 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate_snapshot}{Gamestate\+Snapshot}} GUI.\+handler.\+Game\+Handler.\+get\+Snapshot (\begin{DoxyParamCaption}\item[{int}]{move\+Number}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a718fb7e5880a652e6c5c88934b9cbe6b}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!getSnapshotHistory@{getSnapshotHistory}}
+\index{getSnapshotHistory@{getSnapshotHistory}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{getSnapshotHistory()}{getSnapshotHistory()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a718fb7e5880a652e6c5c88934b9cbe6b} 
+Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate_snapshot}{Gamestate\+Snapshot}} $>$ GUI.\+handler.\+Game\+Handler.\+get\+Snapshot\+History (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a234ebbcf87765b8025f6d71b74c81e82}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!isGameInitialized@{isGameInitialized}}
+\index{isGameInitialized@{isGameInitialized}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{isGameInitialized()}{isGameInitialized()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a234ebbcf87765b8025f6d71b74c81e82} 
+boolean GUI.\+handler.\+Game\+Handler.\+is\+Game\+Initialized (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_aa43d46019680136994b4af43bd44b674}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!isInSnapshot@{isInSnapshot}}
+\index{isInSnapshot@{isInSnapshot}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{isInSnapshot()}{isInSnapshot()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_aa43d46019680136994b4af43bd44b674} 
+boolean GUI.\+handler.\+Game\+Handler.\+is\+In\+Snapshot (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ae50a32c52e17a14d6dc160406ded0e48}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!isTurnWhite@{isTurnWhite}}
+\index{isTurnWhite@{isTurnWhite}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{isTurnWhite()}{isTurnWhite()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ae50a32c52e17a14d6dc160406ded0e48} 
+boolean GUI.\+handler.\+Game\+Handler.\+is\+Turn\+White (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a122dd2225e9d886ee10db79de34937ad}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!isUsablePiece@{isUsablePiece}}
+\index{isUsablePiece@{isUsablePiece}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{isUsablePiece()}{isUsablePiece()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a122dd2225e9d886ee10db79de34937ad} 
+boolean GUI.\+handler.\+Game\+Handler.\+is\+Usable\+Piece (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1game_1_1_board_coordinate}{Board\+Coordinate}}}]{coordinate}{}\end{DoxyParamCaption})}
+
+checks if the piece in the given location is usable (aka it is the same color as the current turn) 
+\begin{DoxyParams}{Parameters}
+{\em coordinate} & the coordinates to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\+: true if it is usable, else false 
+\end{DoxyReturn}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_acbd50415225d4e3eb10b1472a6c6a693}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!isUsablePieceSnapshot@{isUsablePieceSnapshot}}
+\index{isUsablePieceSnapshot@{isUsablePieceSnapshot}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{isUsablePieceSnapshot()}{isUsablePieceSnapshot()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_acbd50415225d4e3eb10b1472a6c6a693} 
+boolean GUI.\+handler.\+Game\+Handler.\+is\+Usable\+Piece\+Snapshot (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1game_1_1_board_coordinate}{Board\+Coordinate}}}]{coordinate}{, }\item[{int}]{move\+Counter}{}\end{DoxyParamCaption})}
+
+returns if the piece is usable based not on the current gamestate, but on a snapshot of a previous gamestate 
+\begin{DoxyParams}{Parameters}
+{\em coordinate} & the coordinate to check \\
+\hline
+{\em move\+Counter} & the move\+Number corresponding to the snapshot to check \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a07a40605a2dd10c9a7ba9f545387dcca}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!loadBoard@{loadBoard}}
+\index{loadBoard@{loadBoard}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{loadBoard()}{loadBoard()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a07a40605a2dd10c9a7ba9f545387dcca} 
+void GUI.\+handler.\+Game\+Handler.\+load\+Board (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+makes javafx load the board and wait until it is loaded \Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ae7c8c7216e6a5ff94d6cb0de118a56dd}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!loadClocks@{loadClocks}}
+\index{loadClocks@{loadClocks}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{loadClocks()}{loadClocks()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ae7c8c7216e6a5ff94d6cb0de118a56dd} 
+boolean GUI.\+handler.\+Game\+Handler.\+load\+Clocks (\begin{DoxyParamCaption}\item[{Label}]{white\+Player\+Label}{, }\item[{Label}]{black\+Player\+Label}{}\end{DoxyParamCaption})}
+
+Loads and configures the clocks 
+\begin{DoxyParams}{Parameters}
+{\em white\+Player\+Label} & The label to put the opponents time in \\
+\hline
+{\em black\+Player\+Label} & The label to put the players time in \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a8151bf01b2793b7e2bb11050b7547261}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!loadedBoard@{loadedBoard}}
+\index{loadedBoard@{loadedBoard}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{loadedBoard()}{loadedBoard()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a8151bf01b2793b7e2bb11050b7547261} 
+void GUI.\+handler.\+Game\+Handler.\+loaded\+Board (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+executed by the Board\+Controller after it finished loading \Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ab87772b50c4bfca51929dd98ce79919e}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!loadFromDatabaseAndStartGame@{loadFromDatabaseAndStartGame}}
+\index{loadFromDatabaseAndStartGame@{loadFromDatabaseAndStartGame}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{loadFromDatabaseAndStartGame()}{loadFromDatabaseAndStartGame()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ab87772b50c4bfca51929dd98ce79919e} 
+void GUI.\+handler.\+Game\+Handler.\+load\+From\+Database\+And\+Start\+Game (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classdatabase_1_1_chess_game}{Chess\+Game}}}]{game}{}\end{DoxyParamCaption})}
+
+loads the given game into the handler 
+\begin{DoxyParams}{Parameters}
+{\em game} & the game to load \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ad554683ac98e78dc7ecf265a86311408}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!loadSnapshot@{loadSnapshot}}
+\index{loadSnapshot@{loadSnapshot}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{loadSnapshot()}{loadSnapshot()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ad554683ac98e78dc7ecf265a86311408} 
+void GUI.\+handler.\+Game\+Handler.\+load\+Snapshot (\begin{DoxyParamCaption}\item[{int}]{snapshot\+Number}{}\end{DoxyParamCaption})}
+
+loads the snapshot corresponding with the move\+Number 
+\begin{DoxyParams}{Parameters}
+{\em snapshot\+Number} & the number corresponding to the snapshot that should be loaded \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a633bfd4bb3d9f708d246457521a8a424}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!resetInterruptFlag@{resetInterruptFlag}}
+\index{resetInterruptFlag@{resetInterruptFlag}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{resetInterruptFlag()}{resetInterruptFlag()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a633bfd4bb3d9f708d246457521a8a424} 
+void GUI.\+handler.\+Game\+Handler.\+reset\+Interrupt\+Flag (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a9f896dadbb94d1d60862f5619f45e4ae}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!saveCurrentInDatabase@{saveCurrentInDatabase}}
+\index{saveCurrentInDatabase@{saveCurrentInDatabase}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{saveCurrentInDatabase()}{saveCurrentInDatabase()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a9f896dadbb94d1d60862f5619f45e4ae} 
+void GUI.\+handler.\+Game\+Handler.\+save\+Current\+In\+Database (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+saves the current game in the database \Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_affe9a8d9ed99bf7aa64ef8ffc01f3742}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!saveCurrentSnapshot@{saveCurrentSnapshot}}
+\index{saveCurrentSnapshot@{saveCurrentSnapshot}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{saveCurrentSnapshot()}{saveCurrentSnapshot()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_affe9a8d9ed99bf7aa64ef8ffc01f3742} 
+void GUI.\+handler.\+Game\+Handler.\+save\+Current\+Snapshot (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+saves the current gamestate as a snapshot in the snapshot\+History \Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_aad26f0a8777ab47fd3607645fc93c2d7}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!saveMoveSnapshot@{saveMoveSnapshot}}
+\index{saveMoveSnapshot@{saveMoveSnapshot}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{saveMoveSnapshot()}{saveMoveSnapshot()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_aad26f0a8777ab47fd3607645fc93c2d7} 
+void GUI.\+handler.\+Game\+Handler.\+save\+Move\+Snapshot (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}}}]{move}{}\end{DoxyParamCaption})}
+
+saves the current gamestate as a snapshot in the snapshot\+History 
+\begin{DoxyParams}{Parameters}
+{\em move} & the move that was made \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a32e206beaf50c0786949698a55abf0ff}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!setBlackPlayer@{setBlackPlayer}}
+\index{setBlackPlayer@{setBlackPlayer}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{setBlackPlayer()}{setBlackPlayer()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a32e206beaf50c0786949698a55abf0ff} 
+void GUI.\+handler.\+Game\+Handler.\+set\+Black\+Player (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1player_1_1_player}{Player}}}]{player}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a28b3525306f8b217aa7a75115af888a7}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!setContinueFromSnapshotFlag@{setContinueFromSnapshotFlag}}
+\index{setContinueFromSnapshotFlag@{setContinueFromSnapshotFlag}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{setContinueFromSnapshotFlag()}{setContinueFromSnapshotFlag()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a28b3525306f8b217aa7a75115af888a7} 
+void GUI.\+handler.\+Game\+Handler.\+set\+Continue\+From\+Snapshot\+Flag (\begin{DoxyParamCaption}\item[{int}]{number}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a3d94a03fe12844af7e20c2c69edfd308}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!setController@{setController}}
+\index{setController@{setController}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{setController()}{setController()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a3d94a03fe12844af7e20c2c69edfd308} 
+void GUI.\+handler.\+Game\+Handler.\+set\+Controller (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller}{Board\+Controller}}}]{board\+Controller}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a65d7505d39e7d4888907d7dcf828c566}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!setInterruptFlag@{setInterruptFlag}}
+\index{setInterruptFlag@{setInterruptFlag}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{setInterruptFlag()}{setInterruptFlag()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a65d7505d39e7d4888907d7dcf828c566} 
+void GUI.\+handler.\+Game\+Handler.\+set\+Interrupt\+Flag (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a663f02aebdc3fbcbe27394c2318e0c87}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!setShutdownFlag@{setShutdownFlag}}
+\index{setShutdownFlag@{setShutdownFlag}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{setShutdownFlag()}{setShutdownFlag()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a663f02aebdc3fbcbe27394c2318e0c87} 
+void GUI.\+handler.\+Game\+Handler.\+set\+Shutdown\+Flag (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_accadbfe33eee7be720aab6fe204bb217}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!setWhitePlayer@{setWhitePlayer}}
+\index{setWhitePlayer@{setWhitePlayer}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{setWhitePlayer()}{setWhitePlayer()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_accadbfe33eee7be720aab6fe204bb217} 
+void GUI.\+handler.\+Game\+Handler.\+set\+White\+Player (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1player_1_1_player}{Player}}}]{player}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a8c32316f3958128aaefa94a07b1b4994}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!startClocks@{startClocks}}
+\index{startClocks@{startClocks}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{startClocks()}{startClocks()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a8c32316f3958128aaefa94a07b1b4994} 
+void GUI.\+handler.\+Game\+Handler.\+start\+Clocks (\begin{DoxyParamCaption}\item[{boolean}]{white\+Start}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+This starts the clock 
+\begin{DoxyParams}{Parameters}
+{\em white\+Start} & if true, white made the first move, black if false \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_aa21c707fba5bae3ecae592e4686cb870}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!startGame@{startGame}}
+\index{startGame@{startGame}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{startGame()}{startGame()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_aa21c707fba5bae3ecae592e4686cb870} 
+void GUI.\+handler.\+Game\+Handler.\+start\+Game (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1game_1_1timecontrol_1_1_timecontrol}{Timecontrol}}}]{timecontrol}{, }\item[{String}]{white\+Name}{, }\item[{String}]{black\+Name}{, }\item[{\mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_a_i_file}{AIFile}}}]{white\+AI}{, }\item[{\mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_a_i_file}{AIFile}}}]{black\+AI}{, }\item[{String}]{fen}{}\end{DoxyParamCaption})}
+
+configures all important parts and then start the game loop 
+\begin{DoxyParams}{Parameters}
+{\em timecontrol} & the time control to use \\
+\hline
+{\em white\+Name} & the name of the white player \\
+\hline
+{\em black\+Name} & the name of the black player \\
+\hline
+{\em white\+AI} & the name of the ai executable for white \\
+\hline
+{\em black\+AI} & the name of the ai executable for black \\
+\hline
+{\em fen} & the starting fen notation to use \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ace95c4c4672dc6b772500a64475c7164}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!stopClocks@{stopClocks}}
+\index{stopClocks@{stopClocks}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{stopClocks()}{stopClocks()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ace95c4c4672dc6b772500a64475c7164} 
+void GUI.\+handler.\+Game\+Handler.\+stop\+Clocks (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+stops the clock that is currently running \Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_aa1d15a65456b30fc6ce6618a13334915}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!swapTurn@{swapTurn}}
+\index{swapTurn@{swapTurn}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{swapTurn()}{swapTurn()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_aa1d15a65456b30fc6ce6618a13334915} 
+void GUI.\+handler.\+Game\+Handler.\+swap\+Turn (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+Swaps the turn and changes the running clock \Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ac59538e0fe7fb0573efc50795d8fd827}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!toggleRunningTime@{toggleRunningTime}}
+\index{toggleRunningTime@{toggleRunningTime}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{toggleRunningTime()}{toggleRunningTime()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ac59538e0fe7fb0573efc50795d8fd827} 
+void GUI.\+handler.\+Game\+Handler.\+toggle\+Running\+Time (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+toggles the status of the currently running timer (play -\/\texorpdfstring{$>$}{>} pause, pause -\/\texorpdfstring{$>$}{>} play) \Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a1b6c958c857375fe3175399e1c70731d}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!waitForOldThreadShutdown@{waitForOldThreadShutdown}}
+\index{waitForOldThreadShutdown@{waitForOldThreadShutdown}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{waitForOldThreadShutdown()}{waitForOldThreadShutdown()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a1b6c958c857375fe3175399e1c70731d} 
+void GUI.\+handler.\+Game\+Handler.\+wait\+For\+Old\+Thread\+Shutdown (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+waits for the old game\+Handler thread to finish before starting a new one 
+
+\doxysubsection{Field Documentation}
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a9faeca1f861d1d2a135a1d212e94b0d8}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!barrier@{barrier}}
+\index{barrier@{barrier}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{barrier}{barrier}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a9faeca1f861d1d2a135a1d212e94b0d8} 
+final Cyclic\+Barrier GUI.\+handler.\+Game\+Handler.\+barrier = new Cyclic\+Barrier(2)\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ab822f8de94ae4ec27a779bfd474b8b6a}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!blackPlayer@{blackPlayer}}
+\index{blackPlayer@{blackPlayer}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{blackPlayer}{blackPlayer}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ab822f8de94ae4ec27a779bfd474b8b6a} 
+\mbox{\hyperlink{class_g_u_i_1_1player_1_1_player}{Player}} GUI.\+handler.\+Game\+Handler.\+black\+Player\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a7f236f5c914a230cf0a8e27041c7cf54}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!boardController@{boardController}}
+\index{boardController@{boardController}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{boardController}{boardController}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a7f236f5c914a230cf0a8e27041c7cf54} 
+\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller}{Board\+Controller}} GUI.\+handler.\+Game\+Handler.\+board\+Controller\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_aff5ab67ab7b7b4b2dd5c2eed888344f4}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!CLOCKBASETIME@{CLOCKBASETIME}}
+\index{CLOCKBASETIME@{CLOCKBASETIME}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{CLOCKBASETIME}{CLOCKBASETIME}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_aff5ab67ab7b7b4b2dd5c2eed888344f4} 
+final int GUI.\+handler.\+Game\+Handler.\+CLOCKBASETIME = 10\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a17c6a1c4398fe57b2886691796a68b2f}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!clockBlackPlayer@{clockBlackPlayer}}
+\index{clockBlackPlayer@{clockBlackPlayer}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{clockBlackPlayer}{clockBlackPlayer}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a17c6a1c4398fe57b2886691796a68b2f} 
+Timeline GUI.\+handler.\+Game\+Handler.\+clock\+Black\+Player = null\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_af3a2f16af2678c7e808d8d433f389ef9}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!clockBlackPlayerCounter@{clockBlackPlayerCounter}}
+\index{clockBlackPlayerCounter@{clockBlackPlayerCounter}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{clockBlackPlayerCounter}{clockBlackPlayerCounter}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_af3a2f16af2678c7e808d8d433f389ef9} 
+int GUI.\+handler.\+Game\+Handler.\+clock\+Black\+Player\+Counter = -\/1\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a01ad003fe8d9da7d26b4baf3459f9f27}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!clockStartTime@{clockStartTime}}
+\index{clockStartTime@{clockStartTime}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{clockStartTime}{clockStartTime}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a01ad003fe8d9da7d26b4baf3459f9f27} 
+int GUI.\+handler.\+Game\+Handler.\+clock\+Start\+Time = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_adf552d0166fb89fc09e0fe0f147b3b7f}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!clockWhitePlayer@{clockWhitePlayer}}
+\index{clockWhitePlayer@{clockWhitePlayer}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{clockWhitePlayer}{clockWhitePlayer}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_adf552d0166fb89fc09e0fe0f147b3b7f} 
+Timeline GUI.\+handler.\+Game\+Handler.\+clock\+White\+Player = null\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ae2e85f8d28b4494ee0217501c562c056}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!clockWhitePlayerCounter@{clockWhitePlayerCounter}}
+\index{clockWhitePlayerCounter@{clockWhitePlayerCounter}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{clockWhitePlayerCounter}{clockWhitePlayerCounter}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ae2e85f8d28b4494ee0217501c562c056} 
+int GUI.\+handler.\+Game\+Handler.\+clock\+White\+Player\+Counter = -\/1\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a41563d7f6dfe7a065725abc1b7b31848}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!continueFromSnapshotFlag@{continueFromSnapshotFlag}}
+\index{continueFromSnapshotFlag@{continueFromSnapshotFlag}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{continueFromSnapshotFlag}{continueFromSnapshotFlag}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a41563d7f6dfe7a065725abc1b7b31848} 
+int GUI.\+handler.\+Game\+Handler.\+continue\+From\+Snapshot\+Flag = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_af2de6ee53b4c048bb3604cd39c8a313b}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!currentTimeRunning@{currentTimeRunning}}
+\index{currentTimeRunning@{currentTimeRunning}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{currentTimeRunning}{currentTimeRunning}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_af2de6ee53b4c048bb3604cd39c8a313b} 
+Timeline GUI.\+handler.\+Game\+Handler.\+current\+Time\+Running\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a75380fdd8db8cb10d0685d1e05b37d77}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!currentTimeStopped@{currentTimeStopped}}
+\index{currentTimeStopped@{currentTimeStopped}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{currentTimeStopped}{currentTimeStopped}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a75380fdd8db8cb10d0685d1e05b37d77} 
+Timeline GUI.\+handler.\+Game\+Handler.\+current\+Time\+Stopped\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a57da13d4436adca003389e85f3ede81c}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!flagLock@{flagLock}}
+\index{flagLock@{flagLock}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{flagLock}{flagLock}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a57da13d4436adca003389e85f3ede81c} 
+final Semaphore GUI.\+handler.\+Game\+Handler.\+flag\+Lock = new Semaphore(1)\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_aad42211b0be539771a91b9cc65286bfe}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!future@{future}}
+\index{future@{future}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{future}{future}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_aad42211b0be539771a91b9cc65286bfe} 
+Completable\+Future$<$Boolean$>$ GUI.\+handler.\+Game\+Handler.\+future = new Completable\+Future$<$$>$()\hspace{0.3cm}{\ttfamily [package]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_aa05a322b7386eb4bfdfac3d54ea21eae}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!gameInitialized@{gameInitialized}}
+\index{gameInitialized@{gameInitialized}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{gameInitialized}{gameInitialized}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_aa05a322b7386eb4bfdfac3d54ea21eae} 
+boolean GUI.\+handler.\+Game\+Handler.\+game\+Initialized = false\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a6233388dad77ce61637192d89f4b1a9c}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!gamestate@{gamestate}}
+\index{gamestate@{gamestate}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{gamestate}{gamestate}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a6233388dad77ce61637192d89f4b1a9c} 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate}{Gamestate}} GUI.\+handler.\+Game\+Handler.\+gamestate\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a9f55390d6ddafcefbf53a03564ed6c26}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!gamestatus@{gamestatus}}
+\index{gamestatus@{gamestatus}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{gamestatus}{gamestatus}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a9f55390d6ddafcefbf53a03564ed6c26} 
+\mbox{\hyperlink{enum_g_u_i_1_1game_1_1gamestate_1_1_g_a_m_e_s_t_a_t_u_s}{GAMESTATUS}} GUI.\+handler.\+Game\+Handler.\+gamestatus\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a561e0acfca3106e49ea94af12b05aeec}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!increment@{increment}}
+\index{increment@{increment}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{increment}{increment}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a561e0acfca3106e49ea94af12b05aeec} 
+int GUI.\+handler.\+Game\+Handler.\+increment = 0\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ab5173d1604e485b2f6d23633d29d6839}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!inSnapshot@{inSnapshot}}
+\index{inSnapshot@{inSnapshot}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{inSnapshot}{inSnapshot}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ab5173d1604e485b2f6d23633d29d6839} 
+boolean GUI.\+handler.\+Game\+Handler.\+in\+Snapshot = false\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a70014dee02e8b345ccbd04105426f15b}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!interruptFlag@{interruptFlag}}
+\index{interruptFlag@{interruptFlag}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{interruptFlag}{interruptFlag}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a70014dee02e8b345ccbd04105426f15b} 
+boolean GUI.\+handler.\+Game\+Handler.\+interrupt\+Flag = false\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_aec32b6a7927a50f8e94561ace76bf592}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!moveQueue@{moveQueue}}
+\index{moveQueue@{moveQueue}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{moveQueue}{moveQueue}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_aec32b6a7927a50f8e94561ace76bf592} 
+final Blocking\+Queue$<$\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}}$>$ GUI.\+handler.\+Game\+Handler.\+move\+Queue = new Linked\+Blocking\+Queue$<$$>$(1)\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a9b96c069112a393909bf3b62fb50a2d0}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!shutdownFlag@{shutdownFlag}}
+\index{shutdownFlag@{shutdownFlag}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{shutdownFlag}{shutdownFlag}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a9b96c069112a393909bf3b62fb50a2d0} 
+boolean GUI.\+handler.\+Game\+Handler.\+shutdown\+Flag = false\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a1c13fbda0f06a07c1533dec937f8a73a}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!snapshotHistory@{snapshotHistory}}
+\index{snapshotHistory@{snapshotHistory}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{snapshotHistory}{snapshotHistory}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a1c13fbda0f06a07c1533dec937f8a73a} 
+Array\+List$<$\mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate_snapshot}{Gamestate\+Snapshot}}$>$ GUI.\+handler.\+Game\+Handler.\+snapshot\+History = new Array\+List$<$$>$()\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a09c46ec72d80bc3654a5091816e8cf4c}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!startFen@{startFen}}
+\index{startFen@{startFen}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{startFen}{startFen}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a09c46ec72d80bc3654a5091816e8cf4c} 
+String GUI.\+handler.\+Game\+Handler.\+start\+Fen = "{}"{}\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a33fcb1178ab02bf213b07ede0f753e70}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!startGamestateSnapshot@{startGamestateSnapshot}}
+\index{startGamestateSnapshot@{startGamestateSnapshot}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{startGamestateSnapshot}{startGamestateSnapshot}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a33fcb1178ab02bf213b07ede0f753e70} 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate_snapshot}{Gamestate\+Snapshot}} GUI.\+handler.\+Game\+Handler.\+start\+Gamestate\+Snapshot = null\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a261bfa92f5f3454cd12b961afce2f30c}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!THREAD\_SLEEP\_TIME@{THREAD\_SLEEP\_TIME}}
+\index{THREAD\_SLEEP\_TIME@{THREAD\_SLEEP\_TIME}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{THREAD\_SLEEP\_TIME}{THREAD\_SLEEP\_TIME}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a261bfa92f5f3454cd12b961afce2f30c} 
+final int GUI.\+handler.\+Game\+Handler.\+THREAD\+\_\+\+SLEEP\+\_\+\+TIME = 100\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a5e17e6ade0ba79d1f1d5bb6cdd00d2d2}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!timecontrol@{timecontrol}}
+\index{timecontrol@{timecontrol}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{timecontrol}{timecontrol}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a5e17e6ade0ba79d1f1d5bb6cdd00d2d2} 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1timecontrol_1_1_timecontrol}{Timecontrol}} GUI.\+handler.\+Game\+Handler.\+timecontrol\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a391ddd41fa809f6cd5bf20708368ed9a}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!TIMEUNIT@{TIMEUNIT}}
+\index{TIMEUNIT@{TIMEUNIT}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{TIMEUNIT}{TIMEUNIT}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a391ddd41fa809f6cd5bf20708368ed9a} 
+final Time\+Unit GUI.\+handler.\+Game\+Handler.\+TIMEUNIT = Time\+Unit.\+MILLISECONDS\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ae71153cf4948a5d6fef3139a62b08e64}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!WAITTIME@{WAITTIME}}
+\index{WAITTIME@{WAITTIME}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{WAITTIME}{WAITTIME}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ae71153cf4948a5d6fef3139a62b08e64} 
+final int GUI.\+handler.\+Game\+Handler.\+WAITTIME = 50\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_ad9166ca05ad4bd2b9b35352a0d16f0e8}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!whitePlayer@{whitePlayer}}
+\index{whitePlayer@{whitePlayer}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{whitePlayer}{whitePlayer}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_ad9166ca05ad4bd2b9b35352a0d16f0e8} 
+\mbox{\hyperlink{class_g_u_i_1_1player_1_1_player}{Player}} GUI.\+handler.\+Game\+Handler.\+white\+Player\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1handler_1_1_game_handler_a6fe458774ad8951059355f2dff162e98}\index{GUI.handler.GameHandler@{GUI.handler.GameHandler}!whiteTurn@{whiteTurn}}
+\index{whiteTurn@{whiteTurn}!GUI.handler.GameHandler@{GUI.handler.GameHandler}}
+\doxysubsubsection{\texorpdfstring{whiteTurn}{whiteTurn}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1handler_1_1_game_handler_a6fe458774ad8951059355f2dff162e98} 
+boolean GUI.\+handler.\+Game\+Handler.\+white\+Turn\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/\+GUI/handler/\mbox{\hyperlink{_game_handler_8java}{Game\+Handler.\+java}}\end{DoxyCompactItemize}
