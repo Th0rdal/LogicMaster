@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['savebutton_0',['saveButton',['../class_g_u_i_1_1controller_1_1_board_controller.html#ad31ed83acbce83a6d77a23c6765ce636',1,'GUI::controller::BoardController']]],
+  ['savetimecontrolbutton_1',['saveTimeControlButton',['../class_g_u_i_1_1controller_1_1_index_controller.html#add060fd2d12ee6a15614649aa741df24',1,'GUI::controller::IndexController']]],
+  ['screenmap_2',['screenMap',['../class_g_u_i_1_1handler_1_1_scene_handler.html#a313448d14e9febd8da3f707ee58c2ccc',1,'GUI::handler::SceneHandler']]],
+  ['selectedcolor_3',['selectedColor',['../class_g_u_i_1_1_config.html#a8c08cbc25233a88ff772dd9abb466d91',1,'GUI::Config']]],
+  ['selectedhistorytextpane_4',['selectedHistoryTextPane',['../class_g_u_i_1_1controller_1_1_board_controller.html#af4b389ffeabffb6e75278f1a1a448a59',1,'GUI::controller::BoardController']]],
+  ['selectedmovehistory_5',['selectedMoveHistory',['../class_g_u_i_1_1_config.html#a53462a2a15b201f2c6b08a36e919bff7',1,'GUI::Config']]],
+  ['selectedpane_6',['selectedPane',['../class_g_u_i_1_1controller_1_1_board_controller.html#af9607521fdc10f49acdd61029a9bc353',1,'GUI::controller::BoardController']]],
+  ['selectedtextcolor_7',['selectedTextColor',['../class_g_u_i_1_1_config.html#a5b2ddfedba38dc66d5479cab0ac74d72',1,'GUI::Config']]],
+  ['semaphore_8',['semaphore',['../class_g_u_i_1_1game_1_1gamestate_1_1_gamestate.html#a90a8dd5f1c74b65957cf88e8bed14241',1,'GUI::game::gamestate::Gamestate']]],
+  ['shutdownflag_9',['shutdownFlag',['../class_g_u_i_1_1handler_1_1_game_handler.html#a9b96c069112a393909bf3b62fb50a2d0',1,'GUI::handler::GameHandler']]],
+  ['snapshothistory_10',['snapshotHistory',['../class_g_u_i_1_1handler_1_1_game_handler.html#a1c13fbda0f06a07c1533dec937f8a73a',1,'GUI::handler::GameHandler']]],
+  ['specialmove_11',['specialMove',['../class_g_u_i_1_1game_1_1move_1_1_move.html#acad2c0253946de88b13d483efbe1356d',1,'GUI::game::move::Move']]],
+  ['sql_12',['sql',['../module-info_8java.html#a30db5564bad23d0b978e78ad2caf062c',1,'module-info.java']]],
+  ['squarecolorblack_13',['squareColorBlack',['../class_g_u_i_1_1_config.html#a9386f5170c1a1e664e5405703e3e529f',1,'GUI::Config']]],
+  ['squarecolorwhite_14',['squareColorWhite',['../class_g_u_i_1_1_config.html#a64b8ed508440023c0f75bfc1ba36fd5f',1,'GUI::Config']]],
+  ['stage_15',['stage',['../class_g_u_i_1_1handler_1_1_scene_handler.html#ae28183879eaa6f4cd89e7750478c3b1d',1,'GUI::handler::SceneHandler']]],
+  ['stalemate_16',['STALEMATE',['../enum_g_u_i_1_1game_1_1gamestate_1_1_c_h_e_c_k_m_a_t_e___t_y_p_e.html#a1ff8cc300e10ee41fae2999f534081b5',1,'GUI.game.gamestate.CHECKMATE_TYPE.STALEMATE'],['../enum_g_u_i_1_1game_1_1gamestate_1_1_g_a_m_e_s_t_a_t_u_s.html#a03389ce382b866f3210913140f237fcf',1,'GUI.game.gamestate.GAMESTATUS.STALEMATE']]],
+  ['start_5fposition_17',['START_POSITION',['../class_g_u_i_1_1_config.html#a10ddd39a87acd2f8e4f8b62829d50a07',1,'GUI::Config']]],
+  ['startcoordinates_18',['startCoordinates',['../class_g_u_i_1_1controller_1_1_board_controller.html#abd51823832bb9145af7ace48fd539148',1,'GUI::controller::BoardController']]],
+  ['startfen_19',['startFen',['../class_g_u_i_1_1handler_1_1_game_handler.html#a09c46ec72d80bc3654a5091816e8cf4c',1,'GUI::handler::GameHandler']]],
+  ['startgamebutton_20',['startGameButton',['../class_g_u_i_1_1controller_1_1_index_controller.html#a05e1f1d85e87d0f3aab1a3019cd2edcd',1,'GUI::controller::IndexController']]],
+  ['startgamestatesnapshot_21',['startGamestateSnapshot',['../class_g_u_i_1_1handler_1_1_game_handler.html#a33fcb1178ab02bf213b07ede0f753e70',1,'GUI::handler::GameHandler']]],
+  ['startingfen_22',['startingFen',['../classdatabase_1_1_chess_game.html#a515484da0d8edf47a5efefbf9a0c4127',1,'database::ChessGame']]],
+  ['starttime_23',['startTime',['../class_g_u_i_1_1game_1_1timecontrol_1_1_timecontrol.html#a68b0f974e8038b732f18a977ea1b714b',1,'GUI::game::timecontrol::Timecontrol']]]
+];
