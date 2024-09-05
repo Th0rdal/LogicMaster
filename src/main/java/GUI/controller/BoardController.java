@@ -424,7 +424,11 @@ public class BoardController {
             this.clockBlackLabel.setVisible(false);
         }
 
-        loadPieces();
+        if (this.selectedHistoryTextPane == null) {
+            loadPieces();
+        } else {
+            this.selectedHistoryTextPane.fireEvent(BoardController.mouseClickedHistoryTextSelected);
+        }
     }
 
     /**
@@ -598,7 +602,7 @@ public class BoardController {
                 tempPane.setBackground(new Background(new BackgroundFill(Config.selectedMoveHistory, CornerRadii.EMPTY, Insets.EMPTY)));
 
                 ((Text) tempPane.getChildren().get(0)).setFill(Config.selectedTextColor);
-                ((Text)tempPane.getChildren().get(0)).setStyle("-fx-font-weight: bold;");
+                ((Text) tempPane.getChildren().get(0)).setStyle("-fx-font-weight: bold;");
                 this.selectedHistoryTextPane = tempPane;
             });
 
