@@ -145,6 +145,7 @@ public class GameHandler {
                         this.loadBoard();
                         this.flagLock.release();
                         this.toggleRunningTime();
+                        this.snapshotHistory.remove(this.snapshotHistory.size()-1);
                         continue;
                     } else if (this.continueFromSnapshotFlag != 0) {
                         this.loadSnapshot(this.continueFromSnapshotFlag);
