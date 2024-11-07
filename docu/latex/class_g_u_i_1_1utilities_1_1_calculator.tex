@@ -1,0 +1,50 @@
+\doxysection{GUI.\+utilities.\+Calculator Class Reference}
+\hypertarget{class_g_u_i_1_1utilities_1_1_calculator}{}\label{class_g_u_i_1_1utilities_1_1_calculator}\index{GUI.utilities.Calculator@{GUI.utilities.Calculator}}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static int \mbox{\hyperlink{class_g_u_i_1_1utilities_1_1_calculator_a7d390aa9c0d1fcd2144ed7dbe3e284b3}{round}} (int value, int position)
+\item 
+static String \mbox{\hyperlink{class_g_u_i_1_1utilities_1_1_calculator_a2d0d308d4775eefa87f043151530e6d1}{get\+Clock\+Time\+In\+Format}} (int time\+In\+Tens\+Of\+Second)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+defines some calculations needed. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_g_u_i_1_1utilities_1_1_calculator_a2d0d308d4775eefa87f043151530e6d1}\index{GUI.utilities.Calculator@{GUI.utilities.Calculator}!getClockTimeInFormat@{getClockTimeInFormat}}
+\index{getClockTimeInFormat@{getClockTimeInFormat}!GUI.utilities.Calculator@{GUI.utilities.Calculator}}
+\doxysubsubsection{\texorpdfstring{getClockTimeInFormat()}{getClockTimeInFormat()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1utilities_1_1_calculator_a2d0d308d4775eefa87f043151530e6d1} 
+static String GUI.\+utilities.\+Calculator.\+get\+Clock\+Time\+In\+Format (\begin{DoxyParamCaption}\item[{int}]{time\+In\+Tens\+Of\+Second}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Formats the time given into a format usable for the clock 
+\begin{DoxyParams}{Parameters}
+{\em time\+In\+Tens\+Of\+Second} & time left given in tens of seconds \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+String formatted for the clock 
+\end{DoxyReturn}
+\Hypertarget{class_g_u_i_1_1utilities_1_1_calculator_a7d390aa9c0d1fcd2144ed7dbe3e284b3}\index{GUI.utilities.Calculator@{GUI.utilities.Calculator}!round@{round}}
+\index{round@{round}!GUI.utilities.Calculator@{GUI.utilities.Calculator}}
+\doxysubsubsection{\texorpdfstring{round()}{round()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1utilities_1_1_calculator_a7d390aa9c0d1fcd2144ed7dbe3e284b3} 
+static int GUI.\+utilities.\+Calculator.\+round (\begin{DoxyParamCaption}\item[{int}]{value}{, }\item[{int}]{position}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Rounds value based on position. ONLY ROUNDS UP AT 85 OR LARGER (e.\+g., 230 -\/\texorpdfstring{$>$}{>} 200 / 290 -\/\texorpdfstring{$>$}{>} 300) 
+\begin{DoxyParams}{Parameters}
+{\em value} & value of the integer to round. \\
+\hline
+{\em position} & position round up to. 1 = ones position, 2 = tens position, ... \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/\+GUI/utilities/\mbox{\hyperlink{_calculator_8java}{Calculator.\+java}}\end{DoxyCompactItemize}

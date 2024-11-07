@@ -1,0 +1,526 @@
+\doxysection{GUI.\+controller.\+Board\+Controller Class Reference}
+\hypertarget{class_g_u_i_1_1controller_1_1_board_controller}{}\label{class_g_u_i_1_1controller_1_1_board_controller}\index{GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a1382b5fd3331cc983e1d6fd89e7be4b7}{load\+Promotion\+Pane}} (boolean is\+White)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_aeab57135f03607b8b9f09c2d3e30ec85}{load\+Elements}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a26f50f1fb4090e631e071224a225336b}{load\+Board}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a5052370b4d0014a1348a3850f60f1471}{load\+Pieces}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_aca28155662444f36f0314ca1e63a5705}{load\+Pieces}} (int move\+Number)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af5c1ad4dc513300411e5e6f04e8a9bd2}{set\+Player\+Event\+Handling}} (Blocking\+Queue$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a16d21dee6db43cd11b950dd3e96c0a3d}{move\+Queue}})
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a01cb7382eccdc8c847e54e15829e099f}{reset\+Player\+Event\+Handling}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_afaa0a4da24813a222d25097bf8ddcead}{after\+Move}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a36c1660cc9cd75c081f59ce3cf266265}{add\+Move\+To\+Movelist}} (\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af690140d37e93cd5e30e4cef84b6d0ee}{move}}, int number\+Move)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_abe30b02b89fcbedd2cdbf728ce9f4507}{reload\+Move\+History}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a75687737dd5c4faac381f81136712159}{set\+Checkmate\+Alert}} (\mbox{\hyperlink{enum_g_u_i_1_1game_1_1gamestate_1_1_c_h_e_c_k_m_a_t_e___t_y_p_e}{CHECKMATE\+\_\+\+TYPE}} type, boolean white\+Player)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_abfb8c90bd9717a034466179620b93532}{set\+Game\+Handler}} (\mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler}{Game\+Handler}} \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a2d951b910f0231928e244aa1e12b5a05}{game\+Handler}})
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a395cabd0ac2ef9740c97666242c5e90f}{check\+Move\+Possible}} (int x, int y)
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a4b5779803f6a111ec0fc08c84ee992c5}{put\+Move}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a146f72f3d77d54f4b5f8d8bbb86f3c2d}{reset\+Selected}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Grid\+Pane \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a2d6186198e8920bc07a6a3358f21cbb7}{visual\+Board}}
+\item 
+Anchor\+Pane \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a5bee7908a55cbffdd86791b5d3b7e5b1}{anchor\+Pane}}
+\item 
+Label \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_ad1fbfdcfda712b48cc8298ed0f5c698f}{clock\+White\+Label}}
+\item 
+Label \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a05e7684def856dc80b72ae590eeffbe2}{clock\+Black\+Label}}
+\item 
+Pane \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a94de428c754fceffe279e3a5d3657e32}{promotion\+Pane}}
+\item 
+Grid\+Pane \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a7c2f8ac8b44e8d64844dd72d5ca4baf3}{move\+History\+Grid\+Pane}}
+\item 
+Button \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a644cc74cc3d51bb9bfc6f5aac54074b4}{draw\+Button}}
+\item 
+Button \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a1485aee48c70a1411626286ad3fbfbb2}{back\+Button}}
+\item 
+Button \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_ad31ed83acbce83a6d77a23c6765ce636}{save\+Button}}
+\item 
+Scroll\+Pane \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a731626de44f523d84212a80e39726c6c}{move\+History\+Scroll\+Pane}}
+\item 
+Grid\+Pane \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a3879c496ba35ad4082cab7253ddda1d6}{board\+Row\+Headers}}
+\item 
+Grid\+Pane \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_ad0bea5b352c456cf82df954976506cdc}{board\+Column\+Headers}}
+\item 
+Check\+Box \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a3d98c769207d8bd4c28e11241ec94044}{turn\+Board\+After\+Move\+Check\+Box}}
+\item 
+Button \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a8935f6731ca07403882f7e3785f1ac63}{turn\+Board\+Button}}
+\item 
+VBox \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a26e8d6610bc223ff991e367a380013d4}{left\+Side\+Bar}}
+\item 
+Blocking\+Queue$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a16d21dee6db43cd11b950dd3e96c0a3d}{move\+Queue}} = null
+\item 
+Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a3a934ded32825347d60de20c960798a4}{possible\+Move\+List}}
+\item 
+Pane \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af9607521fdc10f49acdd61029a9bc353}{selected\+Pane}}
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1_board_coordinate}{Board\+Coordinate}} \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_abd51823832bb9145af7ace48fd539148}{start\+Coordinates}}
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_ac105a4393108ebd5d821f4ff3ef5fc26}{white\+Side\+Down}} = true
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler}{Game\+Handler}} \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a2d951b910f0231928e244aa1e12b5a05}{game\+Handler}}
+\item 
+Pane \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_add8e74bdc0556e355ccf67797c5077a2}{promotion\+Selected\+Pane}} = null
+\item 
+Stack\+Pane \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af4b389ffeabffb6e75278f1a1a448a59}{selected\+History\+Text\+Pane}} = null
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af690140d37e93cd5e30e4cef84b6d0ee}{move}} = null
+\item 
+final Event\+Handler$<$ Mouse\+Event $>$ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a775d3f1986210fbaadf7b5028b967f78}{player\+On\+Mouse\+Pressed}}
+\item 
+final Event\+Handler$<$ Mouse\+Event $>$ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_ac432f6f29ae4c396cf8f2469471cb72f}{player\+On\+Mouse\+Dragged}}
+\item 
+final Event\+Handler$<$ Mouse\+Event $>$ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a07638f9fcae082613102ab7b9084f7aa}{player\+On\+Mouse\+Released}}
+\item 
+final Event\+Handler$<$ Mouse\+Event $>$ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a512991fc521dad16b57cc4cefa3e8723}{on\+Mouse\+Click\+Handler}}
+\item 
+final Event\+Handler$<$ Mouse\+Event $>$ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a9d70c86b11a791a7e88207a4607362cb}{on\+Mouse\+Move\+Handler}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static final int \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a9f81bca48fd0dae24fd3aa622d75bc79}{move\+History\+Grid\+Pane\+Height}} = 50
+\item 
+static final Mouse\+Event \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a6455f4aa9471f44544bd61207d08a76f}{mouse\+Clicked\+History\+Text\+Selected}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The controller used by the board.\+fxml page 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a36c1660cc9cd75c081f59ce3cf266265}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!addMoveToMovelist@{addMoveToMovelist}}
+\index{addMoveToMovelist@{addMoveToMovelist}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{addMoveToMovelist()}{addMoveToMovelist()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a36c1660cc9cd75c081f59ce3cf266265} 
+void GUI.\+controller.\+Board\+Controller.\+add\+Move\+To\+Movelist (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}}}]{move}{, }\item[{int}]{number\+Move}{}\end{DoxyParamCaption})}
+
+adds a move to the move list on the right side of the board. 
+\begin{DoxyParams}{Parameters}
+{\em move} & the move to add \\
+\hline
+{\em number\+Move} & the move number (used to calculate the position in the list) \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_afaa0a4da24813a222d25097bf8ddcead}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!afterMove@{afterMove}}
+\index{afterMove@{afterMove}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{afterMove()}{afterMove()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_afaa0a4da24813a222d25097bf8ddcead} 
+void GUI.\+controller.\+Board\+Controller.\+after\+Move (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+executes functions to be executed after a move was made. This is currently only turning the board if the corresponding check box is set \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a395cabd0ac2ef9740c97666242c5e90f}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!checkMovePossible@{checkMovePossible}}
+\index{checkMovePossible@{checkMovePossible}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{checkMovePossible()}{checkMovePossible()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a395cabd0ac2ef9740c97666242c5e90f} 
+void GUI.\+controller.\+Board\+Controller.\+check\+Move\+Possible (\begin{DoxyParamCaption}\item[{int}]{x}{, }\item[{int}]{y}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+checks if a move is possible based on the position of the mouse 
+\begin{DoxyParams}{Parameters}
+{\em x} & x position of the mouse \\
+\hline
+{\em y} & y position of the mouse \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a26f50f1fb4090e631e071224a225336b}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!loadBoard@{loadBoard}}
+\index{loadBoard@{loadBoard}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{loadBoard()}{loadBoard()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a26f50f1fb4090e631e071224a225336b} 
+void GUI.\+controller.\+Board\+Controller.\+load\+Board (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+loads the board. That consists in loading the board row headers, board column headers, the clocks and the pieces. \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_aeab57135f03607b8b9f09c2d3e30ec85}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!loadElements@{loadElements}}
+\index{loadElements@{loadElements}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{loadElements()}{loadElements()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_aeab57135f03607b8b9f09c2d3e30ec85} 
+void GUI.\+controller.\+Board\+Controller.\+load\+Elements (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+creates the board visually and adds all the pieces based on the board variable adds event listeners for piece movement \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a5052370b4d0014a1348a3850f60f1471}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!loadPieces@{loadPieces}}
+\index{loadPieces@{loadPieces}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{loadPieces()}{loadPieces()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a5052370b4d0014a1348a3850f60f1471} 
+void GUI.\+controller.\+Board\+Controller.\+load\+Pieces (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+loads the pieces into the board. It uses the get\+Pieces method from game\+Handler to get the piece positions. \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_aca28155662444f36f0314ca1e63a5705}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!loadPieces@{loadPieces}}
+\index{loadPieces@{loadPieces}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{loadPieces()}{loadPieces()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_aca28155662444f36f0314ca1e63a5705} 
+void GUI.\+controller.\+Board\+Controller.\+load\+Pieces (\begin{DoxyParamCaption}\item[{int}]{move\+Number}{}\end{DoxyParamCaption})}
+
+loads the pieces into the board. It gets the piece positions by using a snapshot from game\+Handler. 
+\begin{DoxyParams}{Parameters}
+{\em move\+Number} & the move number of the snapshot to load \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a1382b5fd3331cc983e1d6fd89e7be4b7}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!loadPromotionPane@{loadPromotionPane}}
+\index{loadPromotionPane@{loadPromotionPane}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{loadPromotionPane()}{loadPromotionPane()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a1382b5fd3331cc983e1d6fd89e7be4b7} 
+void GUI.\+controller.\+Board\+Controller.\+load\+Promotion\+Pane (\begin{DoxyParamCaption}\item[{boolean}]{is\+White}{}\end{DoxyParamCaption})}
+
+loads the promotion pane with the given pormotion possibilities 
+\begin{DoxyParams}{Parameters}
+{\em is\+White} & true if white promotes, else false \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a4b5779803f6a111ec0fc08c84ee992c5}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!putMove@{putMove}}
+\index{putMove@{putMove}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{putMove()}{putMove()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a4b5779803f6a111ec0fc08c84ee992c5} 
+void GUI.\+controller.\+Board\+Controller.\+put\+Move (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+add a move to the move queue \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_abe30b02b89fcbedd2cdbf728ce9f4507}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!reloadMoveHistory@{reloadMoveHistory}}
+\index{reloadMoveHistory@{reloadMoveHistory}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{reloadMoveHistory()}{reloadMoveHistory()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_abe30b02b89fcbedd2cdbf728ce9f4507} 
+void GUI.\+controller.\+Board\+Controller.\+reload\+Move\+History (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+reloads the move history on the right side \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a01cb7382eccdc8c847e54e15829e099f}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!resetPlayerEventHandling@{resetPlayerEventHandling}}
+\index{resetPlayerEventHandling@{resetPlayerEventHandling}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{resetPlayerEventHandling()}{resetPlayerEventHandling()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a01cb7382eccdc8c847e54e15829e099f} 
+void GUI.\+controller.\+Board\+Controller.\+reset\+Player\+Event\+Handling (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+removes the event filter (players can no longer move pieces) \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a146f72f3d77d54f4b5f8d8bbb86f3c2d}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!resetSelected@{resetSelected}}
+\index{resetSelected@{resetSelected}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{resetSelected()}{resetSelected()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a146f72f3d77d54f4b5f8d8bbb86f3c2d} 
+void GUI.\+controller.\+Board\+Controller.\+reset\+Selected (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+resets the currently selected pane \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a75687737dd5c4faac381f81136712159}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!setCheckmateAlert@{setCheckmateAlert}}
+\index{setCheckmateAlert@{setCheckmateAlert}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{setCheckmateAlert()}{setCheckmateAlert()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a75687737dd5c4faac381f81136712159} 
+void GUI.\+controller.\+Board\+Controller.\+set\+Checkmate\+Alert (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{enum_g_u_i_1_1game_1_1gamestate_1_1_c_h_e_c_k_m_a_t_e___t_y_p_e}{CHECKMATE\+\_\+\+TYPE}}}]{type}{, }\item[{boolean}]{white\+Player}{}\end{DoxyParamCaption})}
+
+sets an alert based on the checkmate type 
+\begin{DoxyParams}{Parameters}
+{\em type} & the type of ckeckmate \\
+\hline
+{\em white\+Player} & the side that lost \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_abfb8c90bd9717a034466179620b93532}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!setGameHandler@{setGameHandler}}
+\index{setGameHandler@{setGameHandler}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{setGameHandler()}{setGameHandler()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_abfb8c90bd9717a034466179620b93532} 
+void GUI.\+controller.\+Board\+Controller.\+set\+Game\+Handler (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler}{Game\+Handler}}}]{game\+Handler}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_af5c1ad4dc513300411e5e6f04e8a9bd2}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!setPlayerEventHandling@{setPlayerEventHandling}}
+\index{setPlayerEventHandling@{setPlayerEventHandling}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{setPlayerEventHandling()}{setPlayerEventHandling()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_af5c1ad4dc513300411e5e6f04e8a9bd2} 
+void GUI.\+controller.\+Board\+Controller.\+set\+Player\+Event\+Handling (\begin{DoxyParamCaption}\item[{Blocking\+Queue$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$}]{move\+Queue}{}\end{DoxyParamCaption})}
+
+sets the event filter for the player to move pieces 
+\begin{DoxyParams}{Parameters}
+{\em move\+Queue} & the queue to put the move in after it is done \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a5bee7908a55cbffdd86791b5d3b7e5b1}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!anchorPane@{anchorPane}}
+\index{anchorPane@{anchorPane}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{anchorPane}{anchorPane}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a5bee7908a55cbffdd86791b5d3b7e5b1} 
+Anchor\+Pane GUI.\+controller.\+Board\+Controller.\+anchor\+Pane\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a1485aee48c70a1411626286ad3fbfbb2}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!backButton@{backButton}}
+\index{backButton@{backButton}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{backButton}{backButton}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a1485aee48c70a1411626286ad3fbfbb2} 
+Button GUI.\+controller.\+Board\+Controller.\+back\+Button\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_ad0bea5b352c456cf82df954976506cdc}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!boardColumnHeaders@{boardColumnHeaders}}
+\index{boardColumnHeaders@{boardColumnHeaders}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{boardColumnHeaders}{boardColumnHeaders}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_ad0bea5b352c456cf82df954976506cdc} 
+Grid\+Pane GUI.\+controller.\+Board\+Controller.\+board\+Column\+Headers\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a3879c496ba35ad4082cab7253ddda1d6}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!boardRowHeaders@{boardRowHeaders}}
+\index{boardRowHeaders@{boardRowHeaders}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{boardRowHeaders}{boardRowHeaders}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a3879c496ba35ad4082cab7253ddda1d6} 
+Grid\+Pane GUI.\+controller.\+Board\+Controller.\+board\+Row\+Headers\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a05e7684def856dc80b72ae590eeffbe2}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!clockBlackLabel@{clockBlackLabel}}
+\index{clockBlackLabel@{clockBlackLabel}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{clockBlackLabel}{clockBlackLabel}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a05e7684def856dc80b72ae590eeffbe2} 
+Label GUI.\+controller.\+Board\+Controller.\+clock\+Black\+Label\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_ad1fbfdcfda712b48cc8298ed0f5c698f}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!clockWhiteLabel@{clockWhiteLabel}}
+\index{clockWhiteLabel@{clockWhiteLabel}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{clockWhiteLabel}{clockWhiteLabel}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_ad1fbfdcfda712b48cc8298ed0f5c698f} 
+Label GUI.\+controller.\+Board\+Controller.\+clock\+White\+Label\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a644cc74cc3d51bb9bfc6f5aac54074b4}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!drawButton@{drawButton}}
+\index{drawButton@{drawButton}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{drawButton}{drawButton}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a644cc74cc3d51bb9bfc6f5aac54074b4} 
+Button GUI.\+controller.\+Board\+Controller.\+draw\+Button\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a2d951b910f0231928e244aa1e12b5a05}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!gameHandler@{gameHandler}}
+\index{gameHandler@{gameHandler}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{gameHandler}{gameHandler}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a2d951b910f0231928e244aa1e12b5a05} 
+\mbox{\hyperlink{class_g_u_i_1_1handler_1_1_game_handler}{Game\+Handler}} GUI.\+controller.\+Board\+Controller.\+game\+Handler\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a26e8d6610bc223ff991e367a380013d4}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!leftSideBar@{leftSideBar}}
+\index{leftSideBar@{leftSideBar}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{leftSideBar}{leftSideBar}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a26e8d6610bc223ff991e367a380013d4} 
+VBox GUI.\+controller.\+Board\+Controller.\+left\+Side\+Bar\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a6455f4aa9471f44544bd61207d08a76f}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!mouseClickedHistoryTextSelected@{mouseClickedHistoryTextSelected}}
+\index{mouseClickedHistoryTextSelected@{mouseClickedHistoryTextSelected}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{mouseClickedHistoryTextSelected}{mouseClickedHistoryTextSelected}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a6455f4aa9471f44544bd61207d08a76f} 
+final Mouse\+Event GUI.\+controller.\+Board\+Controller.\+mouse\+Clicked\+History\+Text\+Selected\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \textcolor{keyword}{new}\ MouseEvent(}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MouseEvent.MOUSE\_CLICKED,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,\ 0,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,\ 0,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ MouseButton.PRIMARY,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1,\ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{true},\ \textcolor{keyword}{true},\ \textcolor{keyword}{true},\ \textcolor{keyword}{true},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{true},\ \textcolor{keyword}{true},\ \textcolor{keyword}{true},\ \textcolor{keyword}{true},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{true},\ \textcolor{keyword}{true},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{null})}
+
+\end{DoxyCode}
+mouse event being fired if a new move is made and the move list should set the new move as selected \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_af690140d37e93cd5e30e4cef84b6d0ee}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!move@{move}}
+\index{move@{move}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{move}{move}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_af690140d37e93cd5e30e4cef84b6d0ee} 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} GUI.\+controller.\+Board\+Controller.\+move = null\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a7c2f8ac8b44e8d64844dd72d5ca4baf3}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!moveHistoryGridPane@{moveHistoryGridPane}}
+\index{moveHistoryGridPane@{moveHistoryGridPane}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{moveHistoryGridPane}{moveHistoryGridPane}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a7c2f8ac8b44e8d64844dd72d5ca4baf3} 
+Grid\+Pane GUI.\+controller.\+Board\+Controller.\+move\+History\+Grid\+Pane\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a9f81bca48fd0dae24fd3aa622d75bc79}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!moveHistoryGridPaneHeight@{moveHistoryGridPaneHeight}}
+\index{moveHistoryGridPaneHeight@{moveHistoryGridPaneHeight}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{moveHistoryGridPaneHeight}{moveHistoryGridPaneHeight}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a9f81bca48fd0dae24fd3aa622d75bc79} 
+final int GUI.\+controller.\+Board\+Controller.\+move\+History\+Grid\+Pane\+Height = 50\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a731626de44f523d84212a80e39726c6c}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!moveHistoryScrollPane@{moveHistoryScrollPane}}
+\index{moveHistoryScrollPane@{moveHistoryScrollPane}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{moveHistoryScrollPane}{moveHistoryScrollPane}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a731626de44f523d84212a80e39726c6c} 
+Scroll\+Pane GUI.\+controller.\+Board\+Controller.\+move\+History\+Scroll\+Pane\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a16d21dee6db43cd11b950dd3e96c0a3d}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!moveQueue@{moveQueue}}
+\index{moveQueue@{moveQueue}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{moveQueue}{moveQueue}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a16d21dee6db43cd11b950dd3e96c0a3d} 
+Blocking\+Queue$<$\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}}$>$ GUI.\+controller.\+Board\+Controller.\+move\+Queue = null\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a512991fc521dad16b57cc4cefa3e8723}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!onMouseClickHandler@{onMouseClickHandler}}
+\index{onMouseClickHandler@{onMouseClickHandler}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{onMouseClickHandler}{onMouseClickHandler}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a512991fc521dad16b57cc4cefa3e8723} 
+final Event\+Handler$<$Mouse\+Event$>$ GUI.\+controller.\+Board\+Controller.\+on\+Mouse\+Click\+Handler\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \textcolor{keyword}{event}\ -\/>\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (event.getButton()\ ==\ MouseButton.PRIMARY)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ PIECE\_ID\ \textcolor{keywordtype}{id}\ =\ \textcolor{keywordflow}{switch}\ (this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_add8e74bdc0556e355ccf67797c5077a2}{promotionSelectedPane}}.getId())\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{stringliteral}{"{}KNIGHT"{}}\ -\/>\ PIECE\_ID.KNIGHT;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{stringliteral}{"{}QUEEN"{}}\ -\/>\ PIECE\_ID.QUEEN;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{stringliteral}{"{}BISHOP"{}}\ -\/>\ PIECE\_ID.BISHOP;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{stringliteral}{"{}ROOK"{}}\ -\/>\ PIECE\_ID.ROOK;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}\ -\/>\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ String\ message\ =\ MessageFormat.format(\textcolor{stringliteral}{"{}Promoting\ piece\ into\ something\ that\ is\ not\ allowed\ (\{0\})"{}},\ this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_add8e74bdc0556e355ccf67797c5077a2}{promotionSelectedPane}}.getId());}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ AlertHandler.throwError();}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{throw}\ \textcolor{keyword}{new}\ IllegalArgumentException(message);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}}\ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af690140d37e93cd5e30e4cef84b6d0ee}{move}}\ :\ this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a3a934ded32825347d60de20c960798a4}{possibleMoveList}})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af690140d37e93cd5e30e4cef84b6d0ee}{move}}.\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move_a437d139e686eb40b0bbc97f917f615d1}{getSpecialMove}}()\ ==\ \mbox{\hyperlink{enum_g_u_i_1_1game_1_1move_1_1_s_p_e_c_i_a_l___m_o_v_e}{SPECIAL\_MOVE}}.\mbox{\hyperlink{enum_g_u_i_1_1game_1_1move_1_1_s_p_e_c_i_a_l___m_o_v_e_aee7976291806b2c54842541cdd0fe56c}{PROMOTION}}\ \&\&\ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af690140d37e93cd5e30e4cef84b6d0ee}{move}}.\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move_aa9cd9db395212d920301fb6affde5309}{getPromotion\_ID}}()\ ==\ \textcolor{keywordtype}{id})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this.move\ =\ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af690140d37e93cd5e30e4cef84b6d0ee}{move}};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a94de428c754fceffe279e3a5d3657e32}{promotionPane}}.setOnMouseMoved(\textcolor{keyword}{null});}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a94de428c754fceffe279e3a5d3657e32}{promotionPane}}.setOnMouseClicked(\textcolor{keyword}{null});}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a94de428c754fceffe279e3a5d3657e32}{promotionPane}}.setVisible(\textcolor{keyword}{false});}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a4b5779803f6a111ec0fc08c84ee992c5}{putMove}}();}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (event.getButton()\ ==\ MouseButton.SECONDARY)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a94de428c754fceffe279e3a5d3657e32}{promotionPane}}.setVisible(!this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a94de428c754fceffe279e3a5d3657e32}{promotionPane}}.isVisible());}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+handles mouse clicking while in the promotion pane \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a9d70c86b11a791a7e88207a4607362cb}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!onMouseMoveHandler@{onMouseMoveHandler}}
+\index{onMouseMoveHandler@{onMouseMoveHandler}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{onMouseMoveHandler}{onMouseMoveHandler}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a9d70c86b11a791a7e88207a4607362cb} 
+final Event\+Handler$<$Mouse\+Event$>$ GUI.\+controller.\+Board\+Controller.\+on\+Mouse\+Move\+Handler\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \textcolor{keyword}{event}\ -\/>\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_add8e74bdc0556e355ccf67797c5077a2}{promotionSelectedPane}}\ !=\ \textcolor{keyword}{null})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_add8e74bdc0556e355ccf67797c5077a2}{promotionSelectedPane}}.getBoundsInParent().contains(event.getX(),\ event.getY()))\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_add8e74bdc0556e355ccf67797c5077a2}{promotionSelectedPane}}.setBackground(\textcolor{keyword}{new}\ Background(\textcolor{keyword}{new}\ BackgroundFill(Color.TRANSPARENT,\ \textcolor{keyword}{null},\ \textcolor{keyword}{null})));}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (Node\ node\ :\ this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a94de428c754fceffe279e3a5d3657e32}{promotionPane}}.getChildren())\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (node\ instanceof\ Pane\ tempPane)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tempPane.getBoundsInParent().contains(event.getX(),\ event.getY()))\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_add8e74bdc0556e355ccf67797c5077a2}{promotionSelectedPane}}\ =\ tempPane;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_add8e74bdc0556e355ccf67797c5077a2}{promotionSelectedPane}}.setBackground(\textcolor{keyword}{new}\ Background(\textcolor{keyword}{new}\ BackgroundFill(Color.LIGHTBLUE,\ \textcolor{keyword}{null},\ \textcolor{keyword}{null})));}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+handles the highlighting in the promotion pane \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_ac432f6f29ae4c396cf8f2469471cb72f}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!playerOnMouseDragged@{playerOnMouseDragged}}
+\index{playerOnMouseDragged@{playerOnMouseDragged}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{playerOnMouseDragged}{playerOnMouseDragged}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_ac432f6f29ae4c396cf8f2469471cb72f} 
+final Event\+Handler$<$Mouse\+Event$>$ GUI.\+controller.\+Board\+Controller.\+player\+On\+Mouse\+Dragged\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \textcolor{keyword}{event}\ -\/>\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af9607521fdc10f49acdd61029a9bc353}{selectedPane}}\ ==\ \textcolor{keyword}{null})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af9607521fdc10f49acdd61029a9bc353}{selectedPane}}.toFront();}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ ImageView\ tempView\ =\ (ImageView)\ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af9607521fdc10f49acdd61029a9bc353}{selectedPane}}.getChildren().get(0);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ tempX\ =\ \textcolor{keyword}{event}.getX()\ -\/\ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af9607521fdc10f49acdd61029a9bc353}{selectedPane}}.localToParent(0,\ 0).getX()\ -\/\ (tempView.getFitWidth()\ /\ 2);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ tempY\ =\ \textcolor{keyword}{event}.getY()\ -\/\ \mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af9607521fdc10f49acdd61029a9bc353}{selectedPane}}.localToParent(0,\ 0).getY()\ -\/\ (tempView.getFitHeight()\ /\ 2);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ tempView.setLayoutX(tempX);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ tempView.setLayoutY(tempY);}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+handles mouse dragging when a piece is selected \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a775d3f1986210fbaadf7b5028b967f78}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!playerOnMousePressed@{playerOnMousePressed}}
+\index{playerOnMousePressed@{playerOnMousePressed}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{playerOnMousePressed}{playerOnMousePressed}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a775d3f1986210fbaadf7b5028b967f78} 
+final Event\+Handler$<$Mouse\+Event$>$ GUI.\+controller.\+Board\+Controller.\+player\+On\+Mouse\+Pressed\hspace{0.3cm}{\ttfamily [private]}}
+
+handles what happens when the mouse is pressed. Selects the current field for highlighting \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a07638f9fcae082613102ab7b9084f7aa}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!playerOnMouseReleased@{playerOnMouseReleased}}
+\index{playerOnMouseReleased@{playerOnMouseReleased}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{playerOnMouseReleased}{playerOnMouseReleased}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a07638f9fcae082613102ab7b9084f7aa} 
+final Event\+Handler$<$Mouse\+Event$>$ GUI.\+controller.\+Board\+Controller.\+player\+On\+Mouse\+Released\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \textcolor{keyword}{event}\ -\/>\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_af9607521fdc10f49acdd61029a9bc353}{selectedPane}}\ !=\ \textcolor{keyword}{null})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ this.\mbox{\hyperlink{class_g_u_i_1_1controller_1_1_board_controller_a395cabd0ac2ef9740c97666242c5e90f}{checkMovePossible}}((\textcolor{keywordtype}{int})\ event.getX(),\ (\textcolor{keywordtype}{int})\ event.getY());}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+handles when the mouse is released. If a pane is selected, it checks if a move is possible \Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a3a934ded32825347d60de20c960798a4}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!possibleMoveList@{possibleMoveList}}
+\index{possibleMoveList@{possibleMoveList}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{possibleMoveList}{possibleMoveList}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a3a934ded32825347d60de20c960798a4} 
+Array\+List$<$\mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}}$>$ GUI.\+controller.\+Board\+Controller.\+possible\+Move\+List\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a94de428c754fceffe279e3a5d3657e32}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!promotionPane@{promotionPane}}
+\index{promotionPane@{promotionPane}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{promotionPane}{promotionPane}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a94de428c754fceffe279e3a5d3657e32} 
+Pane GUI.\+controller.\+Board\+Controller.\+promotion\+Pane\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_add8e74bdc0556e355ccf67797c5077a2}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!promotionSelectedPane@{promotionSelectedPane}}
+\index{promotionSelectedPane@{promotionSelectedPane}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{promotionSelectedPane}{promotionSelectedPane}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_add8e74bdc0556e355ccf67797c5077a2} 
+Pane GUI.\+controller.\+Board\+Controller.\+promotion\+Selected\+Pane = null\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_ad31ed83acbce83a6d77a23c6765ce636}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!saveButton@{saveButton}}
+\index{saveButton@{saveButton}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{saveButton}{saveButton}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_ad31ed83acbce83a6d77a23c6765ce636} 
+Button GUI.\+controller.\+Board\+Controller.\+save\+Button\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_af4b389ffeabffb6e75278f1a1a448a59}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!selectedHistoryTextPane@{selectedHistoryTextPane}}
+\index{selectedHistoryTextPane@{selectedHistoryTextPane}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{selectedHistoryTextPane}{selectedHistoryTextPane}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_af4b389ffeabffb6e75278f1a1a448a59} 
+Stack\+Pane GUI.\+controller.\+Board\+Controller.\+selected\+History\+Text\+Pane = null\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_af9607521fdc10f49acdd61029a9bc353}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!selectedPane@{selectedPane}}
+\index{selectedPane@{selectedPane}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{selectedPane}{selectedPane}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_af9607521fdc10f49acdd61029a9bc353} 
+Pane GUI.\+controller.\+Board\+Controller.\+selected\+Pane\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_abd51823832bb9145af7ace48fd539148}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!startCoordinates@{startCoordinates}}
+\index{startCoordinates@{startCoordinates}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{startCoordinates}{startCoordinates}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_abd51823832bb9145af7ace48fd539148} 
+\mbox{\hyperlink{class_g_u_i_1_1game_1_1_board_coordinate}{Board\+Coordinate}} GUI.\+controller.\+Board\+Controller.\+start\+Coordinates\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a3d98c769207d8bd4c28e11241ec94044}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!turnBoardAfterMoveCheckBox@{turnBoardAfterMoveCheckBox}}
+\index{turnBoardAfterMoveCheckBox@{turnBoardAfterMoveCheckBox}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{turnBoardAfterMoveCheckBox}{turnBoardAfterMoveCheckBox}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a3d98c769207d8bd4c28e11241ec94044} 
+Check\+Box GUI.\+controller.\+Board\+Controller.\+turn\+Board\+After\+Move\+Check\+Box\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a8935f6731ca07403882f7e3785f1ac63}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!turnBoardButton@{turnBoardButton}}
+\index{turnBoardButton@{turnBoardButton}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{turnBoardButton}{turnBoardButton}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a8935f6731ca07403882f7e3785f1ac63} 
+Button GUI.\+controller.\+Board\+Controller.\+turn\+Board\+Button\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_a2d6186198e8920bc07a6a3358f21cbb7}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!visualBoard@{visualBoard}}
+\index{visualBoard@{visualBoard}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{visualBoard}{visualBoard}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_a2d6186198e8920bc07a6a3358f21cbb7} 
+Grid\+Pane GUI.\+controller.\+Board\+Controller.\+visual\+Board\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1controller_1_1_board_controller_ac105a4393108ebd5d821f4ff3ef5fc26}\index{GUI.controller.BoardController@{GUI.controller.BoardController}!whiteSideDown@{whiteSideDown}}
+\index{whiteSideDown@{whiteSideDown}!GUI.controller.BoardController@{GUI.controller.BoardController}}
+\doxysubsubsection{\texorpdfstring{whiteSideDown}{whiteSideDown}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1controller_1_1_board_controller_ac105a4393108ebd5d821f4ff3ef5fc26} 
+boolean GUI.\+controller.\+Board\+Controller.\+white\+Side\+Down = true\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/\+GUI/controller/\mbox{\hyperlink{_board_controller_8java}{Board\+Controller.\+java}}\end{DoxyCompactItemize}
