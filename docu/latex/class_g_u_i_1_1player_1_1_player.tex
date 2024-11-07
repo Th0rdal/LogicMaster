@@ -1,0 +1,165 @@
+\doxysection{GUI.\+player.\+Player Class Reference}
+\hypertarget{class_g_u_i_1_1player_1_1_player}{}\label{class_g_u_i_1_1player_1_1_player}\index{GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_a1f10dbc34460388ddfdc1b3ab23f4754}{Player}} (boolean is\+Player, String \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_a4352a5bc0f6d067f613a75c7c1fc464c}{path\+To\+Executable}}, String \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_ab7409fd8fbdc8a501cbcb0482fb41cce}{name}})
+\item 
+String \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_a8edc7de7566dec55b519517c0ab01730}{get\+Name}} ()
+\item 
+boolean \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_a4b820a39e14e598d6b2c2df6d79ff953}{is\+Human}} ()
+\item 
+void \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_af9937e8e4ebe1b666f04ddc7c0f7fb6d}{execute\+Algorithm}} (\mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate}{Gamestate}} \mbox{\hyperlink{module-info_8java_a65ae893cb1384263633ae42f2decf848}{gamestate}}, boolean white\+Turn, Blocking\+Queue$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ move\+Queue)  throws Interrupted\+Exception 
+\item 
+Hash\+Map$<$ String, Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ $>$ \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_a113b2d17e0cadec4574960b888245624}{execute\+Get\+Possible\+Moves}} (\mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate}{Gamestate}} \mbox{\hyperlink{module-info_8java_a65ae893cb1384263633ae42f2decf848}{gamestate}}, boolean white\+Turn)
+\item 
+String \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_a8cb0a999689a83a075cdc5d224face78}{get\+Path}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+final boolean \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_aab6e45be5e8beee2f245b1d7ffc3fc90}{is\+Human}}
+\item 
+final \mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base}{Algorithm\+Handler\+Base}} \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_ada2fcaa7abe75238e3805dc5c12ba2c2}{algorithm\+Handler}}
+\item 
+final String \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_ab7409fd8fbdc8a501cbcb0482fb41cce}{name}}
+\item 
+final String \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_a4352a5bc0f6d067f613a75c7c1fc464c}{path\+To\+Executable}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static final String \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_a896405f1f483ebb6cfc7768fcda28b3f}{DEFAULTNAME}} = "{}Bad\+Minimax"{}
+\item 
+static final String \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_a7e67a7dc1edb5996e8d39fd380f5d3c4}{DEFAULTALGORITHMPATH}} = "{}algorithms/"{} + DEFAULTNAME
+\item 
+static final String \mbox{\hyperlink{class_g_u_i_1_1player_1_1_player_a5538d65a119d9e0e8226069e26992978}{DEFAULTNAMEPREFIX}} = "{}GUI.\+player.\+algorithm."{}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This class saves all player information as well as AI information if it is an AI player. It will use FEN notation as default, but if a different algorithm with different requirements is used, 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_g_u_i_1_1player_1_1_player_a1f10dbc34460388ddfdc1b3ab23f4754}\index{GUI.player.Player@{GUI.player.Player}!Player@{Player}}
+\index{Player@{Player}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{Player()}{Player()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_a1f10dbc34460388ddfdc1b3ab23f4754} 
+GUI.\+player.\+Player.\+Player (\begin{DoxyParamCaption}\item[{boolean}]{is\+Player}{, }\item[{String}]{path\+To\+Executable}{, }\item[{String}]{name}{}\end{DoxyParamCaption})}
+
+constructor to create a new player. It will dynamically load the needed Algorithm\+Handler\+Base extending class. 
+\begin{DoxyParams}{Parameters}
+{\em is\+Player} & true if the player is human \\
+\hline
+{\em path\+To\+Executable} & the path to the algorithm used ("{}"{} if the player is human) \\
+\hline
+{\em name} & the name of the player/algorithm \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_g_u_i_1_1player_1_1_player_af9937e8e4ebe1b666f04ddc7c0f7fb6d}\index{GUI.player.Player@{GUI.player.Player}!executeAlgorithm@{executeAlgorithm}}
+\index{executeAlgorithm@{executeAlgorithm}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{executeAlgorithm()}{executeAlgorithm()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_af9937e8e4ebe1b666f04ddc7c0f7fb6d} 
+void GUI.\+player.\+Player.\+execute\+Algorithm (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate}{Gamestate}}}]{gamestate}{, }\item[{boolean}]{white\+Turn}{, }\item[{Blocking\+Queue$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$}]{move\+Queue}{}\end{DoxyParamCaption}) throws Interrupted\+Exception}
+
+executes the algorithm to get the best possible move by calling its algorithm\+Handler 
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the gamestate to check \\
+\hline
+{\em white\+Turn} & whose turn it currently is \\
+\hline
+{\em move\+Queue} & the move queue to put the result in after calculation \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Interrupted\+Exception} & if there was a problem adding the move to the queue \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{class_g_u_i_1_1player_1_1_player_a113b2d17e0cadec4574960b888245624}\index{GUI.player.Player@{GUI.player.Player}!executeGetPossibleMoves@{executeGetPossibleMoves}}
+\index{executeGetPossibleMoves@{executeGetPossibleMoves}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{executeGetPossibleMoves()}{executeGetPossibleMoves()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_a113b2d17e0cadec4574960b888245624} 
+Hash\+Map$<$ String, Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ $>$ GUI.\+player.\+Player.\+execute\+Get\+Possible\+Moves (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_u_i_1_1game_1_1gamestate_1_1_gamestate}{Gamestate}}}]{gamestate}{, }\item[{boolean}]{white\+Turn}{}\end{DoxyParamCaption})}
+
+executes the algorithm to get all possible moves from the given gamestate 
+\begin{DoxyParams}{Parameters}
+{\em gamestate} & the gamestate to use \\
+\hline
+{\em white\+Turn} & whose turn it currently is \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+All possible moves as a Hashmap with a String representation of the starting position as the key and an Array\+List of all possible moves as the value 
+\end{DoxyReturn}
+\Hypertarget{class_g_u_i_1_1player_1_1_player_a8edc7de7566dec55b519517c0ab01730}\index{GUI.player.Player@{GUI.player.Player}!getName@{getName}}
+\index{getName@{getName}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_a8edc7de7566dec55b519517c0ab01730} 
+String GUI.\+player.\+Player.\+get\+Name (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1player_1_1_player_a8cb0a999689a83a075cdc5d224face78}\index{GUI.player.Player@{GUI.player.Player}!getPath@{getPath}}
+\index{getPath@{getPath}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{getPath()}{getPath()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_a8cb0a999689a83a075cdc5d224face78} 
+String GUI.\+player.\+Player.\+get\+Path (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+\Hypertarget{class_g_u_i_1_1player_1_1_player_a4b820a39e14e598d6b2c2df6d79ff953}\index{GUI.player.Player@{GUI.player.Player}!isHuman@{isHuman}}
+\index{isHuman@{isHuman}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{isHuman()}{isHuman()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_a4b820a39e14e598d6b2c2df6d79ff953} 
+boolean GUI.\+player.\+Player.\+is\+Human (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{class_g_u_i_1_1player_1_1_player_ada2fcaa7abe75238e3805dc5c12ba2c2}\index{GUI.player.Player@{GUI.player.Player}!algorithmHandler@{algorithmHandler}}
+\index{algorithmHandler@{algorithmHandler}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{algorithmHandler}{algorithmHandler}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_ada2fcaa7abe75238e3805dc5c12ba2c2} 
+final \mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base}{Algorithm\+Handler\+Base}} GUI.\+player.\+Player.\+algorithm\+Handler\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1player_1_1_player_a7e67a7dc1edb5996e8d39fd380f5d3c4}\index{GUI.player.Player@{GUI.player.Player}!DEFAULTALGORITHMPATH@{DEFAULTALGORITHMPATH}}
+\index{DEFAULTALGORITHMPATH@{DEFAULTALGORITHMPATH}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{DEFAULTALGORITHMPATH}{DEFAULTALGORITHMPATH}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_a7e67a7dc1edb5996e8d39fd380f5d3c4} 
+final String GUI.\+player.\+Player.\+DEFAULTALGORITHMPATH = "{}algorithms/"{} + DEFAULTNAME\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1player_1_1_player_a896405f1f483ebb6cfc7768fcda28b3f}\index{GUI.player.Player@{GUI.player.Player}!DEFAULTNAME@{DEFAULTNAME}}
+\index{DEFAULTNAME@{DEFAULTNAME}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{DEFAULTNAME}{DEFAULTNAME}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_a896405f1f483ebb6cfc7768fcda28b3f} 
+final String GUI.\+player.\+Player.\+DEFAULTNAME = "{}Bad\+Minimax"{}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1player_1_1_player_a5538d65a119d9e0e8226069e26992978}\index{GUI.player.Player@{GUI.player.Player}!DEFAULTNAMEPREFIX@{DEFAULTNAMEPREFIX}}
+\index{DEFAULTNAMEPREFIX@{DEFAULTNAMEPREFIX}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{DEFAULTNAMEPREFIX}{DEFAULTNAMEPREFIX}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_a5538d65a119d9e0e8226069e26992978} 
+final String GUI.\+player.\+Player.\+DEFAULTNAMEPREFIX = "{}GUI.\+player.\+algorithm."{}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1player_1_1_player_aab6e45be5e8beee2f245b1d7ffc3fc90}\index{GUI.player.Player@{GUI.player.Player}!isHuman@{isHuman}}
+\index{isHuman@{isHuman}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{isHuman}{isHuman}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_aab6e45be5e8beee2f245b1d7ffc3fc90} 
+final boolean GUI.\+player.\+Player.\+is\+Human\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1player_1_1_player_ab7409fd8fbdc8a501cbcb0482fb41cce}\index{GUI.player.Player@{GUI.player.Player}!name@{name}}
+\index{name@{name}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_ab7409fd8fbdc8a501cbcb0482fb41cce} 
+final String GUI.\+player.\+Player.\+name\hspace{0.3cm}{\ttfamily [private]}}
+
+\Hypertarget{class_g_u_i_1_1player_1_1_player_a4352a5bc0f6d067f613a75c7c1fc464c}\index{GUI.player.Player@{GUI.player.Player}!pathToExecutable@{pathToExecutable}}
+\index{pathToExecutable@{pathToExecutable}!GUI.player.Player@{GUI.player.Player}}
+\doxysubsubsection{\texorpdfstring{pathToExecutable}{pathToExecutable}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1_player_a4352a5bc0f6d067f613a75c7c1fc464c} 
+final String GUI.\+player.\+Player.\+path\+To\+Executable\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/\+GUI/player/\mbox{\hyperlink{_player_8java}{Player.\+java}}\end{DoxyCompactItemize}

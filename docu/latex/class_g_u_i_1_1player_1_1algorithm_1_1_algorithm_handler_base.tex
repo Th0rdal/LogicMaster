@@ -1,0 +1,58 @@
+\doxysection{GUI.\+player.\+algorithm.\+Algorithm\+Handler\+Base Class Reference}
+\hypertarget{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base}{}\label{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base}\index{GUI.player.algorithm.AlgorithmHandlerBase@{GUI.player.algorithm.AlgorithmHandlerBase}}
+Inheritance diagram for GUI.\+player.\+algorithm.\+Algorithm\+Handler\+Base\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+abstract \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} \mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base_a4bec7593f9c35463df022ada3293c69f}{calculate\+Move}} (String fen)
+\item 
+abstract Hash\+Map$<$ String, Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ $>$ \mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base_aff3be23fa16bc018bc5d8350bcb9ca82}{calculate\+Possible\+Moves}} (String fen)
+\item 
+abstract void \mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base_accdf3f2812f3358e9ac4ce9ec3fefea3}{set\+Parameter}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+base class for all algorithm classes (one needed for each algorithm used) 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base_a4bec7593f9c35463df022ada3293c69f}\index{GUI.player.algorithm.AlgorithmHandlerBase@{GUI.player.algorithm.AlgorithmHandlerBase}!calculateMove@{calculateMove}}
+\index{calculateMove@{calculateMove}!GUI.player.algorithm.AlgorithmHandlerBase@{GUI.player.algorithm.AlgorithmHandlerBase}}
+\doxysubsubsection{\texorpdfstring{calculateMove()}{calculateMove()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base_a4bec7593f9c35463df022ada3293c69f} 
+abstract \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} GUI.\+player.\+algorithm.\+Algorithm\+Handler\+Base.\+calculate\+Move (\begin{DoxyParamCaption}\item[{String}]{fen}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_bad_minimax_a26a3377ecde49edce95e20c1f518b070}{GUI.\+player.\+algorithm.\+Bad\+Minimax}}.
+
+\Hypertarget{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base_aff3be23fa16bc018bc5d8350bcb9ca82}\index{GUI.player.algorithm.AlgorithmHandlerBase@{GUI.player.algorithm.AlgorithmHandlerBase}!calculatePossibleMoves@{calculatePossibleMoves}}
+\index{calculatePossibleMoves@{calculatePossibleMoves}!GUI.player.algorithm.AlgorithmHandlerBase@{GUI.player.algorithm.AlgorithmHandlerBase}}
+\doxysubsubsection{\texorpdfstring{calculatePossibleMoves()}{calculatePossibleMoves()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base_aff3be23fa16bc018bc5d8350bcb9ca82} 
+abstract Hash\+Map$<$ String, Array\+List$<$ \mbox{\hyperlink{class_g_u_i_1_1game_1_1move_1_1_move}{Move}} $>$ $>$ GUI.\+player.\+algorithm.\+Algorithm\+Handler\+Base.\+calculate\+Possible\+Moves (\begin{DoxyParamCaption}\item[{String}]{fen}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_bad_minimax_aa87dce4a38383761e93b62cbd2926bf9}{GUI.\+player.\+algorithm.\+Bad\+Minimax}}.
+
+\Hypertarget{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base_accdf3f2812f3358e9ac4ce9ec3fefea3}\index{GUI.player.algorithm.AlgorithmHandlerBase@{GUI.player.algorithm.AlgorithmHandlerBase}!setParameter@{setParameter}}
+\index{setParameter@{setParameter}!GUI.player.algorithm.AlgorithmHandlerBase@{GUI.player.algorithm.AlgorithmHandlerBase}}
+\doxysubsubsection{\texorpdfstring{setParameter()}{setParameter()}}
+{\footnotesize\ttfamily \label{class_g_u_i_1_1player_1_1algorithm_1_1_algorithm_handler_base_accdf3f2812f3358e9ac4ce9ec3fefea3} 
+abstract void GUI.\+player.\+algorithm.\+Algorithm\+Handler\+Base.\+set\+Parameter (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [abstract]}}
+
+
+
+Reimplemented in \mbox{\hyperlink{class_g_u_i_1_1player_1_1algorithm_1_1_bad_minimax_a4d6721e123a33275df171476d52e4763}{GUI.\+player.\+algorithm.\+Bad\+Minimax}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/main/java/\+GUI/player/algorithm/\mbox{\hyperlink{_algorithm_handler_base_8java}{Algorithm\+Handler\+Base.\+java}}\end{DoxyCompactItemize}
