@@ -12,6 +12,8 @@ import GUI.handler.SceneHandler;
 import GUI.piece.*;
 import GUI.UIElements.Circle;
 import GUI.utilities.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,6 +30,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import javafx.scene.control.Alert.AlertType;
+import javafx.util.Duration;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -68,6 +71,12 @@ public class BoardController {
     private Button turnBoardButton;
     @FXML
     private VBox leftSideBar;
+    @FXML
+    private ProgressBar evaluationBar;
+    @FXML
+    private Label whiteEvaluation;
+    @FXML
+    private Label blackEvaluation;
 
     private BlockingQueue<Move> moveQueue = null;
     private ArrayList<Move> possibleMoveList;
@@ -80,6 +89,8 @@ public class BoardController {
     private Pane promotionSelectedPane = null;
     private StackPane selectedHistoryTextPane = null;
     private Move move = null;
+
+    private Timeline evaluationBarAnimationTimeline;
 
     /**
      * mouse event being fired if a new move is made and the move list should set the new move as selected
@@ -397,6 +408,14 @@ public class BoardController {
         this.moveHistoryGridPane.setHgap(12);
         this.moveHistoryScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
+        this.evaluationBar.setScaleX(-1.0);
+        this.evaluationBar.setStyle("-fx-accent: black;");
+        /*this.whiteEvaluation.setText("2.0");
+        this.blackEvaluation.setText("1.0");
+        this.evaluationBar.setScaleX(-1.0);
+        this.evaluationBar.setStyle("-fx-accent: black;"); // Change color to green
+        this.evaluationBar.setProgress(0.87);*/
+
     }
 
     /**
@@ -539,6 +558,7 @@ public class BoardController {
      * add a move to the move queue
      */
     private void putMove() {
+        this.changeEvaluationBar(-3.9);
         try {
             this.moveQueue.put(move);
         } catch (InterruptedException e) {
@@ -668,4 +688,36 @@ public class BoardController {
         this.gameHandler = gameHandler;
     }
 
+    public void changeEvaluationBar(double evaluationValue) {
+        double finalNewValue;
+
+        if (evaluationValue < 1 && evaluationValue > -1) {
+            finalNewValue = (-1 * evaluationValue/2) + 0.5;
+        } else {
+            finalNewValue = (-1 * evaluationValue/10) + 0.5;
+        }
+
+        if (evaluationValue > 0) {
+            this.whiteEvaluation.setText(String.valueOf(evaluationValue));
+            this.whiteEvaluation.setVisible(true);
+            this.blackEvaluation.setVisible(false);
+        } else if (evaluationValue < 0) {
+            this.blackEvaluation.setText(String.valueOf(evaluationValue));
+            this.whiteEvaluation.setVisible(false);
+            this.blackEvaluation.setVisible(true);
+        } else {
+            this.whiteEvaluation.setText("0");
+            this.blackEvaluation.setText("0");
+            this.whiteEvaluation.setVisible(true);
+            this.blackEvaluation.setVisible(true);
+        }
+
+        this.evaluationBarAnimationTimeline = new Timeline(
+            new KeyFrame(Duration.seconds(0.01), event -> {
+                this.evaluationBar.setProgress(this.evaluationBar.getProgress() + (finalNewValue /500));
+            })
+        );
+        this.evaluationBarAnimationTimeline.setCycleCount(500);
+        this.evaluationBarAnimationTimeline.play();
+    }
 }

@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <StackPane layoutX="140.0" layoutY="50.0" prefHeight="800.0" prefWidth="800.0">
          <children>
@@ -189,5 +190,8 @@
             <Insets top="235.0" />
          </padding>
       </VBox>
+      <ProgressBar fx:id="evaluationBar" layoutX="240.0" layoutY="12.0" prefHeight="25.0" prefWidth="600.0" progress="0.0" />
+      <Label fx:id="whiteEvaluation" alignment="CENTER" contentDisplay="CENTER" layoutX="140.0" layoutY="5.0" prefHeight="40.0" prefWidth="85.0" text="Label" textAlignment="CENTER" />
+      <Label fx:id="blackEvaluation" alignment="CENTER" contentDisplay="CENTER" layoutX="855.0" layoutY="5.0" prefHeight="40.0" prefWidth="85.0" text="Label" textAlignment="CENTER" />
    </children>
 </AnchorPane>
